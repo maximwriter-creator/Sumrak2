@@ -1,0 +1,24 @@
+{
+  "name": "sumrak2096",
+  "version": "1.0.0",
+  "description": "Генератор и лист персонажа для НРИ Сумрак 2096",
+  "main": "index.js",
+  "scripts": {
+    "build": "python3 build_www.py",
+    "sync": "python3 build_www.py && npx cap sync android"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@capacitor/android": "^8.5.2",
+    "@capacitor/app": "^8.1.2",
+    "@capacitor/cli": "^8.5.2",
+    "@capacitor/core": "^8.5.2",
+    "@capacitor/filesystem": "^8.1.4",
+    "@capacitor/share": "^8.0.3",
+    "@fontsource/pt-sans": "^5.3.0",
+    "@fontsource/pt-sans-narrow": "^5.3.0",
+    "@fontsource/pt-serif": "^5.3.0"
+  }
+}

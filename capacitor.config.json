@@ -1,0 +1,8 @@
+{
+  "appId": "ru.sumrak2096.app",
+  "appName": "Сумрак 2096",
+  "webDir": "www",
+  "android": {
+    "backgroundColor": "#16151D"
+  }
+}

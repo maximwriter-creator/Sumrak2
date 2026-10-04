@@ -57,6 +57,8 @@ textarea.inp{width:100%;min-height:70px;resize:vertical;font-family:var(--serif)
 .toolbar{flex-direction:column;align-items:stretch}
 #charSel{width:100%;flex:none}
 .titlerow .title{min-width:0;overflow-wrap:anywhere}
+.titlerow>.btn,.titlerow>.iconbtn{flex:none}
+@media (max-width:820px){.titlerow{flex-wrap:nowrap;gap:6px}.titlerow .title{flex:1 1 auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:24px}.titlerow .iconbtn{width:36px}}
 .rbtn .rtxt{display:flex;flex-direction:column;min-width:0;text-align:left}
 .rbtn .rttl{font-size:17px;line-height:1.2}
 .rbtn .rst{font-family:var(--sans);font-size:12px;color:var(--muted)}
@@ -203,7 +205,7 @@ body.panel-open .wrap{padding-bottom:200px}
 .stile .stbtn{display:grid!important;grid-template-columns:22px minmax(0,1fr)!important;grid-template-rows:auto auto;align-content:center;row-gap:6px!important;column-gap:7px!important;min-height:86px;padding:10px 10px!important}
 .stile .stbtn .sico{grid-row:1;grid-column:1}
 .stile .stbtn .sname{grid-row:1;grid-column:2;white-space:nowrap;overflow:hidden}
-.stile .stbtn .sval{grid-row:2;grid-column:1/-1;justify-self:start;margin:0!important;font-size:1.5em;line-height:1}
+.stile .stbtn .sval{grid-row:2;grid-column:1/-1;justify-self:start;margin:0!important;font-size:28px;line-height:1}
 .stbtn,.trk input,.trk select,.trk label,.trk .trkl,.stile{box-sizing:border-box}
 .trk input,.trk select{width:100%;min-width:0}
 .trk{gap:12px 14px!important}
@@ -284,15 +286,23 @@ details.sec>summary>h3{width:100%}
 .sheet h3{border-bottom:0!important}
 details.sec>summary>h3{border-bottom:0!important}
 .dgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:12px 0 6px}
-.dblk{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:9px 12px;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:2px 8px}
+.dblk{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:9px 12px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:2px 10px;text-align:left;color:var(--ink);font:inherit;min-width:0}
+.dbtn{cursor:pointer;width:100%}
+.dblk,.dbtn{box-sizing:border-box}
+#sheet details.sec *{box-sizing:border-box}
+.dbtn:hover{border-color:var(--accent)}
+.dbtn:active{transform:translateY(1px)}
+.dblk .dval{white-space:nowrap;margin-left:auto}
+.dblk .dname{white-space:normal;min-width:0}
 .dblk .dname{font-family:var(--narrow);font-size:15px;text-align:left;display:inline-flex;align-items:center;gap:5px}
 .dblk .dval{font-family:var(--narrow);font-weight:700;font-size:22px;justify-self:end}
-.dblk .note{grid-column:1/-1;font-size:13px}
+.dblk .note{flex:1 0 100%;font-size:13px}
 #sheet details.sec .entry .secin .iblk{background:var(--panel)}
 #arsBody .entry,#catBody .entry,#favBody .entry,#modBody .entry{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:10px 12px;margin:8px 0}
 #arsBody h4,#catBody h4{margin-top:14px!important}
 .inflres{display:flex;gap:12px;align-items:center;margin-top:10px;padding:10px 12px;border-radius:6px;border-left:3px solid var(--ok);background:color-mix(in srgb,var(--ok) 8%,transparent)}
 .inflres.bad{border-left-color:var(--warn);background:color-mix(in srgb,var(--warn) 8%,transparent)}
+.chg{outline:2px solid #2fbf71!important;outline-offset:2px;box-shadow:0 0 0 5px color-mix(in srgb,#2fbf71 18%,transparent)!important;transition:outline-color .4s}
 .newdot{display:inline-block;width:10px;height:10px;border-radius:50%;background:#2fbf71;box-shadow:0 0 0 3px color-mix(in srgb,#2fbf71 25%,transparent);margin-left:8px;flex:none;animation:pulse 1.6s ease-in-out infinite}
 @keyframes pulse{50%{box-shadow:0 0 0 6px color-mix(in srgb,#2fbf71 10%,transparent)}}
 @media (prefers-reduced-motion:reduce){.newdot{animation:none}}
@@ -301,6 +311,22 @@ details.sec>summary>h3{border-bottom:0!important}
 .kitopt{display:flex;flex-direction:column;align-items:flex-start;gap:3px;text-align:left;border:1.5px solid var(--line);background:var(--panel);border-radius:6px;padding:9px 11px;cursor:pointer}
 .kitopt:hover{border-color:var(--base)}
 .kitopt .note{font-size:13.5px}
+.fivebox{margin:12px 0;padding:12px 14px;border:2px solid var(--base);border-radius:8px;background:color-mix(in srgb,var(--base) 12%,transparent);display:flex;flex-direction:column;gap:10px}
+.bigbtn{font-size:17px;padding:11px 16px;background:var(--base)!important;border-color:var(--base)!important;color:#fff!important}
+.statrow{box-sizing:border-box}
+.statrow.asg,.statrow.unasg{padding:6px 12px 6px 10px;border-radius:0 6px 6px 0;margin:3px 0;border-bottom:0}
+.statrow .tot{padding-right:2px}
+.statrow>span:first-child{display:flex;align-items:center;gap:5px;white-space:nowrap;min-width:0;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:420px){.statgrid .statrow{grid-template-columns:minmax(0,1fr) 62px 32px;gap:6px}.statrow>span:first-child{font-size:15px}}
+@media (max-width:340px){.statgrid .statrow{grid-template-columns:minmax(0,1fr) 56px 28px;gap:5px}.statrow>span:first-child{font-size:13.5px;gap:3px}.statrow.asg,.statrow.unasg{padding:6px 8px 6px 7px}}
+.groups .group .opt{overflow-wrap:anywhere;hyphens:auto}
+.statrow.unasg{border-left:4px solid var(--base);padding-left:8px;background:color-mix(in srgb,var(--base) 8%,transparent)}
+.statrow.asg{border-left:4px solid var(--ok);padding-left:8px;background:color-mix(in srgb,var(--ok) 7%,transparent)}
+.groups .group{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 10px 6px}
+.groups .group h4{font-size:16px!important;color:var(--accent)!important;margin:0 0 6px!important}
+.groups .group .opt{display:block;width:100%;background:var(--panel);border:1px solid var(--line);border-radius:6px;margin:0 0 6px;padding:8px 10px;box-sizing:border-box}
+.groups .group .opt[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.groups>.opt{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:9px 11px;box-sizing:border-box}
 .usedtag{display:inline-block;margin-top:4px;padding:1px 8px;border:1.5px solid var(--warn);color:var(--warn);border-radius:3px;font-family:var(--narrow);font-size:14px;transform:rotate(-2deg);text-transform:uppercase;letter-spacing:.04em}
 .editable:hover{background:color-mix(in srgb,var(--accent) 6%,transparent)}
 .basestat{color:var(--base);font-weight:700}
@@ -398,7 +424,7 @@ img,svg,canvas{max-width:100%}
   <header class="top">
     <div>
       <div class="brand">Сумрак 2096, генерация по Книге игрока</div>
-      <div class="titlerow"><div class="title" id="hdrName">Новый оперативник</div><button class="btn small" id="delBtn" style="color:var(--warn)" title="Удалить этого персонажа">Удалить</button><button class="iconbtn" id="ioBtn" title="Файл: сохранить, загрузить, перенести персонажа" aria-label="Файл"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M12 11v6m-3-3 3 3 3-3"/></svg></button></div>
+      <div class="titlerow"><div class="title" id="hdrName">Новый оперативник</div><button class="btn small" id="delBtn" style="color:var(--warn)" title="Удалить этого персонажа">Удалить</button><button class="iconbtn" id="soundBtn" title="Звук" aria-label="Звук" aria-pressed="true"></button><button class="iconbtn" id="ioBtn" title="Файл: сохранить, загрузить, перенести персонажа" aria-label="Файл"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M12 11v6m-3-3 3 3 3-3"/></svg></button></div>
     </div>
     <div class="toolbar">
       <select class="sel" id="charSel" aria-label="Персонаж"></select>
@@ -446,6 +472,10 @@ img,svg,canvas{max-width:100%}
   <p class="note">Таланты своего класса идут со скидкой 50% с округлением вверх. Требования к характеристикам проверяются автоматически, остальные отмечены «?».</p>
   <div id="catBody"></div>
 </dialog>
+<dialog id="soundDlg" style="max-width:min(480px,94vw)">
+  <div class="inline" style="justify-content:space-between"><h3 style="font-family:var(--narrow);margin:0">Звуки</h3><button class="btn" id="soundClose">Закрыть</button></div>
+  <div id="soundBody"></div>
+</dialog>
 <dialog id="confirmDlg" style="max-width:min(420px,92vw)">
   <p id="confirmText" style="font-size:16px;margin:4px 0 14px"></p>
   <div class="inline" style="justify-content:flex-end"><button class="btn" id="confirmNo">Отмена</button><button class="btn primary" id="confirmYes">Подтвердить</button></div>
@@ -470,6 +500,7 @@ img,svg,canvas{max-width:100%}
     <div id="fateUfRes" style="margin-top:6px"></div>
   </div>
   <details><summary>Что даёт активация</summary><ul class="rules" style="margin:4px 0;padding-left:20px"><li>Перебросить почти любой куб, кроме бросков на Безудержные Силы.</li><li>Добавить +1 к любому броску, даже уже совершённому.</li><li>Добавить +1 к любой характеристике на 10 минут.</li><li>Добавить 1 очко урона к своему броску.</li><li>Добавить 5 к своей инициативе.</li><li>Получить 3 очка любой кармы, не чаще раза в два часа.</li><li>Получить на 1 очко урона меньше, не чаще раза в два часа.</li></ul></details>
+  <div id="fateUses"></div>
   <h4 style="font-family:var(--narrow);margin:12px 0 4px">Другое</h4>
   <p class="note">Сжигается очко навсегда и только в крайнем случае: чтобы избежать смерти, отменить Безудержные Силы и т.п. Особые способы использования есть у класса и Отметки судьбы.</p>
   <div class="inline"><button class="btn small" id="fateBurn" style="color:var(--warn)">Сжечь очко</button><button class="btn small" id="fateUnburn">Вернуть сожжённое</button><button class="btn small" id="fateReset">Миссия завершена: вернуть активированные</button></div>
@@ -586,6 +617,8 @@ function walk(fx, ans, path, src, ctx, out){
     else if(t==="gearfx"){ out.choices.push({type:"gearfx",path:p,label:f[1],flt:f[2],sel:ans[p]||null}); if(ans[p]) (out.gearfx=out.gearfx||[]).push({gid:ans[p],eff:f[3],label:f[1]}); }
     else if(t==="dice"){ const r=ans[p]; out.choices.push({type:"dice",path:p,n:f[2],sides:f[3],label:f[5],r}); if(r==null) out.pending++; else { const v=r*f[4]; out.mods.push({k:f[1],v,src}); ctx.apply(f[1],v); } }
     else if(t==="item"){ (out.items=out.items||[]).push({path:p,name:f[1],qty:f[2]||1,desc:f[3]||"",src}); }
+    else if(["rankup","requests","premission","blessfloor","karmaswap","fateuses"].includes(t)){ (out.flags=out.flags||[]).push(f); }
+    else if(t==="bigfavors"){ out.choices.push({type:"bigfavors",path:p,done:ans[p]||null}); if(!ans[p]) out.pending++; }
     else if(t==="ksplit"){ const l=ans[p]; out.choices.push({type:"ksplit",path:p,total:f[1],l}); if(l==null) out.pending++; else { const lv=Math.max(0,Math.min(f[1],Number(l))); if(lv){out.mods.push({k:"light",v:lv,src});ctx.apply("light",lv);} if(f[1]-lv){out.mods.push({k:"dark",v:f[1]-lv,src});ctx.apply("dark",f[1]-lv);} } }
     else if(t==="itemchoice"){ const sel=ans[p]; out.choices.push({type:"itemchoice",path:p,label:f[1],where:f[2],q:f[3],sel}); if(sel==null) out.pending++; }
     else if(t==="talent"){ out.notes.push({text:"Талант: "+f[1],src,desc:f[2]||null,tal:f[1]}); }
@@ -687,7 +720,8 @@ function compute(c){
   if(thanks>=2){ const v=Math.floor(thanks/2); mer.mods.push({k:"infl",v,src:"Благодарности"}); ctx.apply("infl",v); }
   steps.merits = mer;
   const spent=(c.buys||[]).reduce((a,b)=>a+(Number(b.cost)||0),0);
-  const hp = (c.stats.hp??0)+extra.hp, fate=(c.stats.fate??0)+extra.fate;
+  const hp = (c.stats.hp??0)+extra.hp; let fate=(c.stats.fate??0)+extra.fate;
+  if(c.missionFate){const L=(extra.light||0)+(c.adj.light||0),D=(extra.dark||0)+(c.adj.dark||0);if(L===D)fate+=c.missionFate;}
   return {stepItems,temps,meritOut,spent,base,tot,extra,steps,pool,hp,fate,cl,nat,vr,pr,ch,fl,mark:c.mark.i!=null?BOOK.fates[c.mark.i]:null};
 }
 function isFinished(c){if(c.reopen)return false;if(c.finished)return true;const R=compute(c);return [0,1,2,3,4,5,6].every(i=>stepStatus(c,R,i)==="done");}
@@ -771,14 +805,34 @@ function sectionize(){
 }
 /* перестановка блоков */
 /* ---------- непросмотренные обновления ---------- */
-function hashStr(t){let h=0;for(let i=0;i<t.length;i++){h=(h*31+t.charCodeAt(i))|0;}return h;}
-function secHash(d){const body=[...d.children].filter(n=>n.tagName!=="SUMMARY");let t=body.map(n=>n.textContent).join("|");d.querySelectorAll("input,select,textarea").forEach(i=>{t+="|"+(i.type==="checkbox"?i.checked:i.value);});return hashStr(t.replace(/\s+/g," "));}
+function secSigs(){
+  const R=compute(C), J=x=>JSON.stringify(x), out={};
+  const tr={light:(R.extra.light||0)+(C.adj.light||0),dark:(R.extra.dark||0)+(C.adj.dark||0),ins:Math.max(0,(R.extra.ins||0)+(C.adj.ins||0)),xp:(R.extra.xp||0)+(C.adj.xp||0)-R.spent,infl:(R.extra.infl||0)+(C.adj.infl||0)};
+  out["Общие сведения"]={"o:name":C.name||"","o:rank":rankNum(),"o:cls":C.cls.i,"o:par":C.parents.i,"o:birth":[C.birth.nation,C.birth.variant],"o:char":C.char.i,"o:mark":C.mark.i,"o:flaw":C.flaw.on?C.flaw.i:null,"o:fate":[R.fate,C.fateUsed||0,C.fateBurned||0],"o:hp":R.hp};
+  const st={};STATS.forEach(([k])=>st["s:"+k]=R.tot[k]);out["Характеристики"]=st;
+  const t={};Object.keys(tr).forEach(k=>t["t:"+k]=tr[k]);out["Трекеры"]=t;
+  const g={};C.gear.forEach(x=>g["g:"+x.id]=J([x.name,x.qty,x.mods||[],x.on,x.dose,x.note]));out["Снаряжение"]=g;
+  const m={};C.merits.forEach(x=>m["m:"+x.id]=J([x.title,x.used,x.ans,x.text]));out["Заслуги"]=m;
+  const b={};C.buys.filter(x=>x.tid!=null).forEach(x=>b["b:"+x.tid]=(b["b:"+x.tid]||0)+1);(R.steps.merits.notes||[]).concat(...["cls","birth","parents","char","flaw"].map(k=>R.steps[k].notes)).filter(n=>/^(Талант|Навык)/.test(n.text)).forEach(n=>b["n:"+n.text]=1);out["Таланты"]=b;
+  const bl={};blessings(R).forEach(x=>bl["bl:"+x.f]=x.tier);out["Благословения сил"]=bl;
+  out["Состояние и ранения"]={"w":J(C.wound||{})};
+  out["Психические расстройства"]={"d":J((C.disorders||[]).map(x=>x.id))};
+  out["Детали и особенности"]={"d":J([C.cls.i,C.birth,C.parents.i,C.char.i,C.mark.i,C.flaw.i])};
+  out["Прошедшие игры"]={"d":J(C.missions||[])};
+  out["Временные эффекты"]={"d":J(R.temps.map(x=>[x.label,x.st]))};
+  return out;
+}
+const sigDiff=(a,b)=>{const ch=[];Object.keys(b).forEach(k=>{if(JSON.stringify(a[k])!==JSON.stringify(b[k]))ch.push(k);});return ch;};
+function flashChanged(d,keys){keys.forEach(k=>{const el=d.querySelector(`[data-ik="${CSS.escape(k)}"]`);const box=el?(el.closest(".kvi")||el):null;if(box){box.classList.add("chg");setTimeout(()=>box.classList.remove("chg"),6000);}});}
 function markUnseen(){
-  if(STEP!==7) return; C.seen=C.seen||{};
-  document.querySelectorAll("#sheet > details.sec").forEach(d=>{const k=d.dataset.sec;if(k==="История изменений")return;const h=secHash(d);const sm=d.querySelector("summary h3");
-    if(d.open||C.seen[k]==null){C.seen[k]=h;}
-    else if(C.seen[k]!==h&&sm&&!sm.querySelector(".newdot")) sm.insertAdjacentHTML("beforeend",`<span class="newdot" title="Есть непросмотренные изменения" aria-label="есть изменения"></span>`);
-    if(!d.dataset.seenhook){d.dataset.seenhook=1;d.addEventListener("toggle",()=>{if(d.open){C.seen[k]=secHash(d);const x=d.querySelector(".newdot");if(x)x.remove();save();}});}
+  if(STEP!==7) return; C.seenSig=C.seenSig||{}; const sigs=secSigs();
+  document.querySelectorAll("#sheet > details.sec").forEach(d=>{const k=d.dataset.sec;const cur=sigs[k];if(!cur)return;const sm=d.querySelector("summary h3");
+    const prev=C.seenSig[k];
+    if(!prev){C.seenSig[k]=cur;}
+    else{const ch=sigDiff(prev,cur).concat(Object.keys(prev).filter(x=>!(x in cur)));
+      if(d.open){if(ch.length)flashChanged(d,ch);C.seenSig[k]=cur;}
+      else if(ch.length&&sm&&!sm.querySelector(".newdot")) sm.insertAdjacentHTML("beforeend",`<span class="newdot" title="Есть непросмотренные изменения" aria-label="есть изменения"></span>`);}
+    if(!d.dataset.seenhook){d.dataset.seenhook=1;d.addEventListener("toggle",()=>{if(d.open){const now=secSigs()[k];const pv=C.seenSig[k]||now;flashChanged(d,sigDiff(pv,now));C.seenSig[k]=now;const x=d.querySelector(".newdot");if(x)x.remove();save();}});}
   });
 }
 /* ---------- история изменений ---------- */
@@ -863,6 +917,11 @@ function choicesUI(out,scope){
     const fold=scope.startsWith("merit:")&&!EDITG.has(scope+"|"+ch.path);
     if(fold&&ch.type==="pick"&&ch.chosen.length===ch.count) return `<div class="note" style="margin-top:6px">Выбрано: ${ch.chosen.map(k=>`<b>${LABEL[k]} ${sgn(ch.v)}</b>`).join(", ")} <button class="jump ph noprint" data-chedit="${scope}|${ch.path}">изменить</button></div>`;
     if(fold&&ch.type==="opt"&&ch.sel!=null) return `<div class="note" style="margin-top:6px">Выбрано: <b>${esc(ch.options[ch.sel])}</b> <button class="jump ph noprint" data-chedit="${scope}|${ch.path}">изменить</button></div>`;
+    if(ch.type==="bigfavors"){
+      if(ch.done) return `<div class="okbox">Получено Больших одолжений: ${ch.done.n} (${esc(ch.done.fac)}). Они добавлены в заслуги.</div>`;
+      const facs=BOOK.favors.filter(f=>f.name!=="МИСП").map(f=>f.name);
+      return `<div class="choice"><div class="q">d3 Больших одолжений от страны или ордена</div><div class="inline"><select class="sel" data-bigfac="${scope}|${ch.path}">${facs.map(f=>`<option ${BIGFAC===f?"selected":""}>${esc(f)}</option>`).join("")}</select><button class="btn small primary" data-bigroll="${scope}|${ch.path}">Бросить d3 и получить</button></div></div>`;
+    }
     if(ch.type==="ksplit"){
       return `<div class="choice"><div class="q">${ch.total} очков любой кармы: распределите</div><div class="inline"><label class="note inline" style="gap:6px">В светлую <input class="inp" type="number" min="0" max="${ch.total}" value="${ch.l??""}" placeholder="0–${ch.total}" data-ksplit="${scope}|${ch.path}" style="width:70px"></label><span class="note">${ch.l!=null?`светлой ${ch.l}, тёмной ${ch.total-ch.l}`:"остальное уйдёт в тёмную"}</span></div></div>`;
     }
@@ -975,14 +1034,14 @@ function stStats(R){
     <p class="note">Нажмите на кубик, чтобы отбросить его. Остаются 10 результатов. Значения можно исправить, если бросали свои кубы.</p>
     <details><summary>Ввести свои результаты</summary><div class="chips">${s.pool.map((v,i)=>`<span class="chip"><input type="number" min="1" max="5" value="${v}" data-poolv="${i}" aria-label="Куб ${i+1}"></span>`).join("")}</div></details>`:"";
   let fiveUI="";
-  if(s.pool.length&&s.drop!=null&&fives>2) fiveUI = C.settings.fives?`<div class="warnbox">Среди оставленных ${fives} пятёрки. По правилу лишние перебрасываются, повторная пятёрка остаётся. <button class="btn small" id="rerollFives">Перебросить ${fives-2}</button></div>`:`<div class="note">Пятёрок больше двух, переброс отключён в правилах группы.</div>`;
+  if(s.pool.length&&s.drop!=null&&fives>2) fiveUI = C.settings.fives?`<div class="fivebox"><div><b>Среди оставленных ${fives} пятёрки.</b> По правилу пятёрки сверх двух перебрасываются, повторная пятёрка остаётся.</div><button class="btn primary bigbtn" id="rerollFives">Перебросить ${fives-2} ${fives-2===1?"пятёрку":"пятёрки"}</button></div>`:`<div class="note">Пятёрок больше двух, переброс отключён в правилах группы.</div>`;
   const opts=(k)=>{const cur=s.assign[k];const vals=[1,2,3,4,5].filter(v=>(avail[v]||0)>0||Number(cur)===v);return `<select class="sel" data-assign="${k}" aria-label="${LABEL[k]}" ${s.drop==null?"disabled":""}><option value="">—</option>${vals.map(v=>`<option ${Number(cur)===v?"selected":""}>${v}</option>`).join("")}</select>`;};
   const left=Object.entries(avail).filter(([,n])=>n>0).map(([v,n])=>n>1?`${v}×${n}`:v).join(", ");
   const dropWarn=s.pool.length&&s.drop==null?`<div class="warnbox orange">Сначала отбросьте один из 11 кубиков: нажмите на него. Без этого распределять значения нельзя.</div>`:"";
   return `<h2>Характеристики</h2><p class="lead">Бросьте 11 кубов d10/2 с округлением вверх, отбросьте один и распределите 10 результатов. База каждой характеристики ${R.base}.</p>
   <div class="card"><div class="rollrow"><button class="btn primary" id="rollPool">${s.pool.length?"Перебросить все 11":"Бросить 11 кубов"}</button></div>${dropWarn}${poolUI}${fiveUI}</div>
   ${s.pool.length?`<div class="card"><h3>Распределение</h3><p class="note">${s.drop==null?"Сначала отбросьте один кубик.":(left?"Осталось распределить: "+left:"Все результаты распределены.")}</p>
-  <div class="statgrid">${STATS.map(([k,n,t])=>`<div class="statrow"><span class="${baseKeys.includes(k)?"basestat":""}" ${baseKeys.includes(k)?'title="Базовая характеристика класса"':""}>${icon(k)} ${n}</span>${opts(k)}<span class="tot" title="С учётом всех модификаторов">${R.tot[k]}</span></div>`).join("")}</div>
+  <div class="statgrid">${STATS.map(([k,n,t])=>`<div class="statrow ${s.drop!=null?(s.assign[k]!=null?"asg":"unasg"):""}"><span class="${baseKeys.includes(k)?"basestat":""}" ${baseKeys.includes(k)?'title="Базовая характеристика класса"':""}>${icon(k)} ${n}</span>${opts(k)}<span class="tot" title="С учётом всех модификаторов">${R.tot[k]}</span></div>`).join("")}</div>
   <p class="note">Справа итог с учётом класса и уже выбранных шагов.</p>${baseStatsUI(R)}</div>`:""}
   <div class="card grid2">
     <div><h3>Очки здоровья</h3><div class="inline">${C.stats.hp!=null?stamp(C.stats.hp,"hp"):""}<button class="btn" id="rollHp">Бросить d5+10</button><input class="inp" type="number" style="width:70px" data-num="hp" value="${C.stats.hp??""}" aria-label="Очки здоровья"></div>${R.extra.hp?`<p class="note">С модификаторами: ${R.hp}</p>`:""}</div>
@@ -1038,7 +1097,7 @@ function stSheet(R){
   const bk=parseBase(C).keys;
   const TILE_ORDER=["rng","mel","str","agi","wil","tou","int","wit","per","cha"];
   const statRows = TILE_ORDER.map(k=>{const n=LABEL[k];const ms=modsFor(R,k);const base=bk.includes(k);
-    return `<div class="stile ${base?"isbase":""}" style="--len:${Math.max(n.length,11)}"><button class="stbtn" data-roll="${k}" title="Бросить d20 на ${n}${base?" (базовая характеристика класса)":""}">${icon(k,"ico sico")}<span class="sname">${n}</span><span class="sval">${R.tot[k]}</span></button>
+    return `<div data-ik="s:${k}" class="stile ${base?"isbase":""}" style="--len:${Math.max(n.length,11)}"><button class="stbtn" data-roll="${k}" title="Бросить d20 на ${n}${base?" (базовая характеристика класса)":""}">${icon(k,"ico sico")}<span class="sname">${n}</span><span class="sval">${R.tot[k]}</span></button>
     ${upBtn(R,k,n)}
     ${ms.length||statLevel(k)?`<div class="smods mods">${ms.map(m=>`<span class="${m.v>0?"pos":"neg"}">${sgn(m.v)} (${esc(m.src)})</span>`).join(" ")}${statLevel(k)?` <button class="jump ph noprint" data-unstat="${k}">отменить прокачку</button>`:""}</div>`:""}</div>`;}).join("");
   const sectionH=(title,html,id="")=>html?`<details class="entry" ${id?`id="det-${id}"`:""}><summary><h5 style="display:inline">${title}</h5></summary><div class="secin">${html}</div></details>`:"";
@@ -1050,16 +1109,16 @@ function stSheet(R){
   <h3>Общие сведения</h3>
   <div class="kv">
     <div>Имя</div><div>${txtField("name","Указать имя")}</div>
-    <div>Звание</div><div><b>${rankTitle()}</b> <span class="note">по рангу ${rankNum()}</span>${careerBonusUI()}</div>
+    <div>Звание</div><div><b>${rankTitle()}</b> <span class="note">по рангу ${rankNum()}${rankBonus()?` (+${rankBonus()} от одолжения)`:""}</span>${careerBonusUI()}</div>
     <div>Ранг талантов</div><div>${txtField("rankLvl","Указать ранг")} <span class="note noprint">открывает таланты этого ранга и ниже</span></div>
-    <div>Класс</div><div>${cl?`<button class="jump" data-jump="cls">${esc(cl.variant)} (${esc(cl.group)})</button>`:"—"}</div>
+    <div>Класс</div><div data-ik="o:cls">${cl?`<button class="jump" data-jump="cls">${esc(cl.variant)} (${esc(cl.group)})</button>`:"—"}</div>
     <div>Родители</div><div>${R.pr?`<button class="jump" data-jump="parents">${esc(R.pr.name)}</button>`:"—"}</div>
     <div>Место рождения</div><div>${R.vr?`<button class="jump" data-jump="birth">${birthStr}</button>`:birthStr}</div>
     <div>Характер</div><div>${R.ch?`<button class="jump" data-jump="char">${esc(R.ch.name)}</button>`:"—"}</div>
     <div>Отметка судьбы</div><div>${R.mark?`<button class="jump" data-jump="mark">${esc(R.mark.name)}</button>`:"—"}</div>
     <div>Недостаток</div><div>${R.fl?`<button class="jump" data-jump="flaw">${esc(R.fl.name)}</button>`:"—"}</div>
-    <div>Очки судьбы</div><div>${C.stats.fate!=null?(()=>{const tot=R.fate-(c.fateBurned||0),used=Math.min(c.fateUsed||0,tot);return `<b>${tot-used}</b> из ${tot}${used?` <span class="note">(активировано ${used})</span>`:""}${c.fateBurned?` <span class="note">сожжено ${c.fateBurned}</span>`:""} <button class="btn small noprint" id="openFate" style="margin-left:6px">Использовать</button>`;})():"—"}</div>
-    <div>Очки здоровья</div><div><b>${C.stats.hp!=null?R.hp:"—"}</b></div>
+    <div>Очки судьбы</div><div data-ik="o:fate">${C.stats.fate!=null?(()=>{const tot=R.fate-(c.fateBurned||0),used=Math.min(c.fateUsed||0,tot);return `<b>${tot-used}</b> из ${tot}${used?` <span class="note">(активировано ${used})</span>`:""}${c.fateBurned?` <span class="note">сожжено ${c.fateBurned}</span>`:""} <button class="btn small noprint" id="openFate" style="margin-left:6px">Использовать</button>`;})():"—"}</div>
+    <div>Очки здоровья</div><div data-ik="o:hp"><b>${C.stats.hp!=null?R.hp:"—"}</b></div>
   </div>
   <h3>Характеристики</h3>
   <div class="noprint" style="margin:-2px 0 6px"><button class="btn small" id="toggleMods" aria-pressed="${SHOWMODS}">${SHOWMODS?"Скрыть модификаторы":"Модификаторы"}</button></div>
@@ -1067,24 +1126,25 @@ function stSheet(R){
   ${baseStatsUI(R)}
   ${(c.ufMods||[]).length?`<p class="note noprint">Постоянные изменения от Безудержных Сил: ${(c.ufMods||[]).map(m=>`${LABEL[m.k]} ${sgn(m.v)} <button class="del" data-delufm="${m.id}" title="Отменить">✕</button>`).join(", ")}</p>`:""}
   <div class="dgrid">
-  <div class="dblk"><button class="jump dname" data-rollres="${res}" title="Бросок на Устойчивость">${icon("tou")} Устойчивость</button><button class="jump dval" data-rollres="${res}">${res}</button><div class="note">по Стойкости ${R.tot.tou}</div></div>
+  <button class="dblk dbtn" data-rollres="${res}" title="Бросок на Устойчивость"><span class="dname">${icon("tou")} Устойчивость</span><span class="dval">${res}</span><span class="note">по Стойкости ${R.tot.tou}</span></button>
   ${(()=>{const ai=armorInfo(R);const ps=c.gear.filter(g=>g.on!==false).map(g=>profile(g,R)).filter(p=>p&&p.armor!=null);if(!ps.length)return "";const d=ps.filter(p=>p.dur!=null).reduce((s,p)=>s+p.dur,0);return `<div class="dblk"><span class="dname">${icon("tou")} Броня</span><span class="dval">${ai.armor}</span><div class="note">${d?"прочность "+d:"надетая броня и щит"}</div></div>`;})()}
   ${(()=>{const ps=c.gear.filter(g=>g.on!==false).map(g=>profile(g,R)).filter(p=>p&&p.kind==="armor");const cls=ps.length?(String(ps[0].line).match(/(лёгкая|легкая|средняя|тяжелая|тяжёлая)/i)||[])[1]:"";const v=!ps.length?2:/легк|лёгк/i.test(cls)?2:/средн/i.test(cls)?3:/тяж/i.test(cls)?4:null;return v?`<div class="dblk"><span class="dname">${icon("agi")} Парирование и Уклонение</span><span class="dval">−${v}</span><div class="note">${ps.length?"броня: "+cls.toLowerCase():"без брони"}</div></div>`:"";})()}
-  <div class="dblk"><button class="jump dname" data-rollini="${ini}" title="Бросить инициативу">${icon("agi")} Инициатива</button><button class="jump dval" data-rollini="${ini}">${ini} − d20</button><div class="note">по Ловкости ${R.tot.agi}${R.extra.ini?", "+sgn(R.extra.ini)+" бонус":""}</div></div>
+  <button class="dblk dbtn" data-rollini="${ini}" title="Бросить инициативу"><span class="dname">${icon("agi")} Инициатива</span><span class="dval">${ini}&nbsp;−&nbsp;d20</span><span class="note">по Ловкости ${R.tot.agi}${R.extra.ini?", "+sgn(R.extra.ini)+" бонус":""}</span></button>
   </div>
-  <p class="note">Устойчивость снижает урон без брони или при исчерпанной прочности брони. Инициатива: удвоенная Ловкость минус d20. <span class="noprint">Нажмите на характеристику, чтобы бросить d20, или на инициативу, чтобы бросить её.</span></p>
+  <p class="note">Устойчивость снижает урон без брони или при исчерпанной прочности брони. Инициатива: удвоенная Ловкость минус d20. <span class="noprint">Нажмите на любой блок характеристики, Устойчивости или Инициативы, чтобы бросить d20.</span></p>
   ${c.manual.length?`<div class="noprint card" style="margin-top:12px"><h4 style="margin-top:0">Ручные модификаторы</h4><p class="note">Этот раздел убран. Ниже модификаторы, добавленные раньше: они ещё учитываются, удалите их, если они больше не нужны.</p>
   ${c.manual.map(m=>`<div class="inline" style="margin:6px 0"><select class="sel" data-man="${m.id}|k">${[...STATS.map(s=>s[0]),"hp","fate","res","ini"].map(k=>`<option value="${k}" ${m.k===k?"selected":""}>${LABEL[k]}</option>`).join("")}</select><input class="inp" type="number" style="width:70px" data-man="${m.id}|v" value="${m.v}"><input class="inp" data-man="${m.id}|src" value="${esc(m.src)}" placeholder="Источник"><button class="del" data-delman="${m.id}">Удалить</button></div>`).join("")}
 </div>`:""}
   <h3>Трекеры</h3>
-  <div class="trk">${[["light","Светлая карма"],["dark","Тёмная карма"],["ins","Безумие"],["xp","Опыт (EXP)"],["infl","Влияние"]].map(([k,n])=>`<div class="trkl"><span class="inline" style="justify-content:space-between;gap:4px;flex-wrap:nowrap"><span>${icon(k)} ${n}</span>${k==="infl"?`<button class="btn small noprint" id="openInfl" style="padding:2px 8px">Запрос</button>`:""}</span><div class="trkrow"><input class="inp" type="number" data-trk="${k}" value="${tr[k]}" aria-label="${n}" ${(k==="light"||k==="dark")&&hasMedBless(R)?"readonly title=\"Карма меняется через блок «Получить» с учётом Благословения\"":""}>${(k==="light"||k==="dark")&&hasMedBless(R)?"":`<button class="pm noprint" data-trkd="${k}|-1" aria-label="Уменьшить ${n}">−</button><button class="pm noprint" data-trkd="${k}|1" aria-label="Увеличить ${n}">+</button>`}</div></div>`).join("")}</div>
+  <div class="trk">${[["light","Светлая карма"],["dark","Тёмная карма"],["ins","Безумие"],["xp","Опыт (EXP)"],["infl","Влияние"]].map(([k,n])=>`<div class="trkl" data-ik="t:${k}"><span class="inline" style="justify-content:space-between;gap:4px;flex-wrap:nowrap"><span>${icon(k)} ${n}</span>${k==="infl"?`<button class="btn small noprint" id="openInfl" style="padding:2px 8px">Запрос</button>`:""}</span><div class="trkrow"><input class="inp" type="number" data-trk="${k}" value="${tr[k]}" aria-label="${n}" ${(k==="light"||k==="dark")&&hasMedBless(R)?"readonly title=\"Карма меняется через блок «Получить» с учётом Благословения\"":""}>${(k==="light"||k==="dark")&&hasMedBless(R)?"":`<button class="pm noprint" data-trkd="${k}|-1" aria-label="Уменьшить ${n}">−</button><button class="pm noprint" data-trkd="${k}|1" aria-label="Увеличить ${n}">+</button>`}</div></div>`).join("")}</div>
   ${hasMedBless(R)?gainUI(R):""}
+  ${meritFlags("karmaswap").length?`<div class="gainbox noprint"><div class="note">Ритуал Заходящего солнца: 2 очка кармы → 1 очко противоположной</div><div class="inline" style="margin-top:6px"><button class="btn small" data-swap="light">2 светлой → 1 тёмная</button><button class="btn small" data-swap="dark">2 тёмной → 1 светлая</button></div></div>`:""}
   ${(()=>{const act=R.temps.filter(t=>t.active);return act.length?`<h3>Временные эффекты</h3><div class="noprint inline" style="margin-bottom:6px"><button class="btn small" id="tempAll">Миссия завершена: уменьшить все на 1</button></div>${act.map(t=>`<div class="entry"><b>${esc(t.label)}</b> <span class="note">от «${esc(t.title)}», осталось миссий: <b>${t.st.left}</b></span> <button class="btn small noprint" data-tempdec="merit:${t.mid}|${t.path}">Миссия прошла</button></div>`).join("")}`:"";})()}
   ${woundUI(R)}
   ${disorderUI(R,tr)}
   <h3>Снаряжение</h3>
   <div class="scroll"><table class="tbl geartbl"><thead><tr><th>Предмет</th><th>Кол-во</th><th class="noprint"></th></tr></thead><tbody>
-  ${c.gear.map(g=>`<tr><td>${g.opts?`<div style="font-weight:700;padding:6px 0">${esc(g.name)}</div>${g.picked?"":`<div class="note noprint">Выбор не сделан: по умолчанию первый вариант. <button class="jump ph" data-go="0">Выбрать в создании</button></div>`}`:(g.src!=="class"&&g.ref==null?(EDITG.has(g.id)?`<input class="inp" style="width:100%;font-weight:700" data-gear="${g.id}|name" value="${esc(g.name)}" placeholder="Название предмета">`:`<button class="ownname" data-gearedit="${g.id}" title="Нажмите, чтобы изменить название и описание">${esc(g.name||"Без названия")}</button>`):`<div style="font-weight:700;padding:6px 0">${esc(g.name)}</div>`)}${(()=>{const r=gearRef(g);if(r==null)return "";const p=profile(g,R);const ms=(g.mods||[]).map(i=>MODBYI[i]).filter(Boolean);const can=modsFor_item(g).length;
+  ${c.gear.map(g=>`<tr data-ik="g:${g.id}"><td>${g.opts?`<div style="font-weight:700;padding:6px 0">${esc(g.name)}</div>${g.picked?"":`<div class="note noprint">Выбор не сделан: по умолчанию первый вариант. <button class="jump ph" data-go="0">Выбрать в создании</button></div>`}`:(g.src!=="class"&&g.ref==null?(EDITG.has(g.id)?`<input class="inp" style="width:100%;font-weight:700" data-gear="${g.id}|name" value="${esc(g.name)}" placeholder="Название предмета">`:`<button class="ownname" data-gearedit="${g.id}" title="Нажмите, чтобы изменить название и описание">${esc(g.name||"Без названия")}</button>`):`<div style="font-weight:700;padding:6px 0">${esc(g.name)}</div>`)}${(()=>{const r=gearRef(g);if(r==null)return "";const p=profile(g,R);const ms=(g.mods||[]).map(i=>MODBYI[i]).filter(Boolean);const can=modsFor_item(g).length;
    let h=p?`<div style="margin-top:4px;font-size:14.5px">${esc(p.line)}${p.kind==="ranged"||p.kind==="melee"?`. <b>${p.skill==="rng"?"ДБ":"ББ"} ${p.total}</b>${p.hit?` <span class="note">(${sgn(p.hit)} от улучшений)</span>`:""}<div class="noprint" style="margin-top:6px"><button class="btn small primary" data-shoot="${g.id}">${p.kind==="ranged"?"Стрелять":"Атаковать"}</button></div>`:""}${p.melee?`. Удар в ближнем бою +${p.melee} урона`:""}${p.notes.length?`<div class="note">${esc(p.notes.join("; "))}</div>`:""}</div>`:`<div class="note" style="margin-top:4px">${esc(ARS[r].text)}</div>`;
    if(ms.length) h+=`<div class="pillset" style="margin-top:4px">${ms.map(m=>`<span class="pill" style="cursor:default">${esc(m.name)}<button class="del noprint" data-modoff="${g.id}|${m.i}" aria-label="Снять ${esc(m.name)}" style="margin-left:4px">×</button></span>`).join("")}</div>`;
    if(p&&(p.kind==="armor"||p.kind==="shield"||p.kind==="shieldplain")) h+=`<label class="note inline noprint" style="gap:4px;margin-top:4px"><input type="checkbox" data-gearon="${g.id}" ${g.on!==false?"checked":""}> надето</label>`;
@@ -1131,12 +1191,13 @@ const BLESS={
 };
 function karma(R){return {light:(R.extra.light||0)+(C.adj.light||0),dark:(R.extra.dark||0)+(C.adj.dark||0)};}
 function blessings(R){
-  const k=karma(R),out=[];
+  const k=karma(R),out=[];const floors=meritFlags("blessfloor").map(x=>x.f[1]);
   ["light","dark"].forEach(f=>{const v=k[f];let t=0;BLESS[f].tiers.forEach((x,i)=>{if(v>=x[0])t=i+1;});
     const next=BLESS[f].tiers[t];out.push({f,tier:t,next:next?`до ${({"Малое":"малого","Среднее":"среднего","Большое":"большого"})[next[1]]}: ещё ${next[0]-v} ${f==="light"?"светлой":"тёмной"} кармы`:"максимум"});});
   const mn=Math.min(k.light,k.dark),df=Math.abs(k.light-k.dark);let t=0;
   BLESS.dusk.tiers.forEach((x,i)=>{if(mn>=x[0]&&df<=x[3])t=i+1;});
   const nx=BLESS.dusk.tiers[t];
+  if(floors.length){const hi=f=>(out.find(b=>b.f===f)||{tier:f==="dusk"?t:0}).tier;["light","dark"].forEach(f=>{const b=out.find(x=>x.f===f);if(floors.includes(f)&&b&&b.tier<1&&!["light","dark","dusk"].some(o=>o!==f&&(o==="dusk"?t:hi(o))>=2)){b.tier=1;b.next+=" (не ниже Малого: одолжение Ордена)";}});if(floors.includes("dusk")&&t<1&&!["light","dark"].some(o=>hi(o)>=2))t=1;}
   out.push({f:"dusk",tier:t,next:nx?`нужно ${nx[0]}+ каждой кармы при разнице не больше ${nx[3]} (сейчас ${k.light}/${k.dark}, разница ${df})`:"максимум"});
   return out;
 }
@@ -1144,7 +1205,7 @@ function blessTier(R){return Math.max(...blessings(R).map(b=>b.tier));}
 function blessUI(R){
   const bs=blessings(R);
   const has=bs.filter(b=>b.tier>0);
-  return (has.length?has.map(b=>{const x=BLESS[b.f].tiers[b.tier-1];return `<div class="entry"><h5 style="margin:0">${talToggle("bl"+b.f,`${x[1]} Благословение ${BLESS[b.f].name}`)}</h5>${talBody("bl"+b.f,`<div class="note">Условие: ${b.f==="dusk"?`${x[0]}+ каждой кармы, разница не больше ${x[3]}`:`${x[0]}+ очков ${b.f==="light"?"светлой":"тёмной"} кармы`}</div><div class="rules">${paras(x[2])}</div>`)}</div>`;}).join(""):`<p class="note">Благословений пока нет.</p>`)
+  return (has.length?has.map(b=>{const x=BLESS[b.f].tiers[b.tier-1];return `<div class="entry" data-ik="bl:${b.f}"><h5 style="margin:0">${talToggle("bl"+b.f,`${x[1]} Благословение ${BLESS[b.f].name}`)}</h5>${talBody("bl"+b.f,`<div class="note">Условие: ${b.f==="dusk"?`${x[0]}+ каждой кармы, разница не больше ${x[3]}`:`${x[0]}+ очков ${b.f==="light"?"светлой":"тёмной"} кармы`}</div><div class="rules">${paras(x[2])}</div>`)}</div>`;}).join(""):`<p class="note">Благословений пока нет.</p>`)
    +`<div class="note noprint" style="margin-top:6px">${bs.map(b=>`${BLESS[b.f].name.replace(/^./,c=>c.toUpperCase())}: ${b.next}`).join(". ")}.</div>`;
 }
 
@@ -1152,7 +1213,7 @@ function blessUI(R){
 const ARS = BOOK.arsenal||[];
 const anorm=s=>String(s).toLowerCase().replace(/ё/g,"е").replace(/[“”"]/g,"«").replace(/\s+/g," ").trim();
 const aq=s=>{const m=String(s).match(/[«"“]([^»"”]+)[»"”]/);return m?anorm(m[1]):null;};
-const stems=s=>anorm(s).replace(/\([^)]*\)/g," ").replace(/[«»]/g," ").split(/[\s\-]+/).filter(w=>w.length>=3&&!/^(для|или|мисп)$/.test(w)).map(w=>w.replace(/[аеиоуыяюйь]+$/,"").slice(0,5));
+const stems=s=>anorm(s).replace(/\([^)]*\)/g," ").replace(/[«»]/g," ").split(/[\s\-]+/).filter(w=>w.length>=3&&!/^(для|или|мисп)$/.test(w)).map(w=>w.replace(/[аеиоуыяюйь]+$/,"").slice(0,8));
 function matchArsenal(name){
   if(!name) return null;
   const q=aq(name);
@@ -1414,7 +1475,7 @@ function boughtUI(R){
   return Object.entries(by).map(([i,bs])=>{const t=TAL[i];const lv=bs.length;const sum=bs.reduce((a,b)=>a+b.cost,0);const free=bs.filter(b=>b.free);const costTxt=free.length===bs.length?`получен бесплатно`:`${sum} EXP${free.length?", часть уровней бесплатно":""}`;
     const where=t.group==="МИСП"?"Общий МИСП":(t.sub==="Общие"?t.group:t.sub);
     const key="b"+i;
-    return `<div class="entry"><div class="inline" style="justify-content:space-between"><h5 style="margin:0">${talToggle(key,esc(t.name)+(t.costs.length>1?" ("+lv+")":""))} <span class="note">(${esc(where)}${t.rank?", Ранг "+t.rank:""}) — ${costTxt}</span></h5><button class="del noprint" data-unbuy="${i}">${lv>1?"Снять уровень":(free.length===bs.length?"Убрать":"Вернуть опыт")}</button></div>${free.length?`<input class="inp" style="width:100%;margin-top:4px" data-buyhow="${free[0].id}" value="${esc(free[0].how||"")}" placeholder="Откуда получен: одолжение, мастер, особенность">`:""}${talBody(key,`${t.req&&!/^нет$/i.test(t.req)?`<div class="note">Требования: ${esc(t.req)}</div>`:""}<div class="rules">${paras(t.text)}</div>`)}</div>`;}).join("");
+    return `<div class="entry" data-ik="b:${i}"><div class="inline" style="justify-content:space-between"><h5 style="margin:0">${talToggle(key,esc(t.name)+(t.costs.length>1?" ("+lv+")":""))} <span class="note">(${esc(where)}${t.rank?", Ранг "+t.rank:""}) — ${costTxt}</span></h5><button class="del noprint" data-unbuy="${i}">${lv>1?"Снять уровень":(free.length===bs.length?"Убрать":"Вернуть опыт")}</button></div>${free.length?`<input class="inp" style="width:100%;margin-top:4px" data-buyhow="${free[0].id}" value="${esc(free[0].how||"")}" placeholder="Откуда получен: одолжение, мастер, особенность">`:""}${talBody(key,`${t.req&&!/^нет$/i.test(t.req)?`<div class="note">Требования: ${esc(t.req)}</div>`:""}<div class="rules">${paras(t.text)}</div>`)}</div>`;}).join("");
 }
 function renderCatalog(){
   const R=compute(C); const cl=R.cl; const xp=xpAvail(R);
@@ -1445,8 +1506,12 @@ function renderCatalog(){
   $("#catXp").textContent=`Доступно опыта: ${xp}. Ранг талантов: ${C.rankLvl}.`+(sciLeft()?` Скидка 3 опыта (родители — научные сотрудники) ещё на ${sciLeft()} талант(а).`:"");
 }
 const RANKS=["Оперативник","Штаб-сержант","Мл. лейтенант","Лейтенант","Ст. лейтенант","Капитан","Майор"];
-function rankNum(){return Math.max(1,Math.min(7,parseInt(C.rankLvl,10)||1));}
+let BIGFAC="Европейский Доминион";
+function meritFlags(type){return C.merits.flatMap(m=>(m.fx||[]).filter(f=>f[0]===type).map(f=>({f,m})));}
+function rankBonus(){return meritFlags("rankup").length;}
+function rankNum(){return Math.max(1,Math.min(7,(parseInt(C.rankLvl,10)||1)+rankBonus()));}
 function rankTitle(){return RANKS[rankNum()-1];}
+function addFavorMerit(fa,tier,extra){const n=rnd(3)*10+rnd(3),e=fa.tiers[tier].find(x=>x.n===n)||fa.tiers[tier][0];const mid=uid();C.merits.push(Object.assign({id:mid,book:true,title:favTitle(fa,tier)+" "+favNo(e.n),text:e.text,fx:e.fx||[],ans:{},ref:fa.name+"|"+tier+"|"+e.n},extra||{}));(e.fx||[]).filter(f=>f[0]==="item").forEach(f=>{const r=exactArsenal(f[1]);C.gear.push({id:uid(),name:f[1],qty:f[2]||1,note:f[3]||"",src:"favor",mid,ref:r??null});});return C.merits[C.merits.length-1];}
 function careerBonusUI(){const ch=C.char.i!=null?BOOK.chars[C.char.i].name:"";if(ch!=="Карьерист")return "";const got=C.careerRank||1,r=rankNum();if(r<=got)return "";
   let xp=0;for(let i=got+1;i<=r;i++)xp+=i*4;return `<div class="noprint" style="margin-top:4px"><button class="btn small" data-career="${r}|${xp}">Карьерист: получить ${xp} опыта за новый ранг</button></div>`;}
 function txtView(k,ph){return C[k]?`<button class="ownname" data-txtedit="${k}" title="Нажмите, чтобы изменить">${esc(C[k])}</button>`:`<button class="jump ph noprint" data-txtedit="${k}">${ph}</button>`;}
@@ -1467,6 +1532,7 @@ function favorEffects(gid){return STEPGFX.filter(x=>x.gid===gid).map(x=>({eff:x.
 function durRoll(dur){if(dur==="1")return 1;const m=String(dur).match(/^d(\d+)(?:\+(\d+))?$/);return m?rnd(Number(m[1]))+Number(m[2]||0):1;}
 const ROLLS=[];
 let ROLLMOD=0;
+function fateOffer(r){if(r!==19&&r!==20)return;try{const f=fateInfo();if(C.stats.fate==null||f.left<=0)return;setTimeout(()=>askConfirm(`Выпало ${r}. Потратить Очко судьбы, чтобы перебросить? Доступно ${f.left}.`,()=>{renderFate("");$("#fateUf").hidden=true;$("#fateDlg").showModal();}),450);}catch(e){}}
 function showRoll(name,v,r,ini){
   if(v!=null&&ROLLMOD){v=v+ROLLMOD;name=name+` (${sgn(ROLLMOD)})`;}
   const wp=v!=null?woundPen():0; if(wp){v=v+wp;name=name+` (ранение ${sgn(wp)})`;}
@@ -1485,6 +1551,7 @@ function showRoll(name,v,r,ini){
   $("#rollLog").innerHTML=ROLLS.slice(1).map(x=>`<li>${esc(x)}</li>`).join("");
   showPanel();
   const st=$("#rollNow .stamp");if(st)setTimeout(()=>st.classList.remove("hit"),400);
+  if(v!=null&&!/Очко судьбы/.test(name))fateOffer(r);
 }
 function showDamage(name,expr,rolls,flat,sum,bs){
   LASTSTAMP="roll";
@@ -1498,7 +1565,7 @@ function fateCost(k){const R=compute(C);let c=5,why=[];const t=touchOpt();if(t&&
   if(R.fl&&R.fl.name==="Слабая связь с Великими Силами"){c+=3;why.push("Слабая связь +3");}
   const baikal=R.vr&&R.vr.name==="Байкальские отшельники";return {c,why,baikal};}
 function fateInfo(){const R=compute(C);const tot=R.fate-(C.fateBurned||0);const used=Math.min(C.fateUsed||0,tot);return {R,tot,used,left:tot-used};}
-function renderFate(msg){const f=fateInfo();["light","dark"].forEach(k=>{const fc=fateCost(k);const b=$(k==="light"?"#fateLight":"#fateDark");if(b)b.textContent=`За ${fc.c}${fc.baikal?"−d5":""} ${k==="light"?"светлой":"тёмной"} кармы`;});$("#fateState").textContent=`Доступно ${f.left} из ${f.tot}${f.used?", активировано "+f.used:""}${C.fateBurned?", сожжено "+C.fateBurned:""}.`;if(msg!=null)$("#fateRes").innerHTML=msg;
+function renderFate(msg){const f=fateInfo();const fu=meritFlags("fateuses");const el=$("#fateUses");if(el)el.innerHTML=fu.length?`<h4 style="font-family:var(--narrow);margin:12px 0 4px">Особые способы от заслуг</h4>${fu.map(({m})=>`<details class="iblk"><summary>${esc(m.title)}</summary><div class="rules">${paras(m.text)}</div></details>`).join("")}`:"";["light","dark"].forEach(k=>{const fc=fateCost(k);const b=$(k==="light"?"#fateLight":"#fateDark");if(b)b.textContent=`За ${fc.c}${fc.baikal?"−d5":""} ${k==="light"?"светлой":"тёмной"} кармы`;});$("#fateState").textContent=`Доступно ${f.left} из ${f.tot}${f.used?", активировано "+f.used:""}${C.fateBurned?", сожжено "+C.fateBurned:""}.`;if(msg!=null)$("#fateRes").innerHTML=msg;
   ["fateTest","fateLight","fateDark","fateBurn"].forEach(id=>$("#"+id).disabled=f.left<=0);$("#fateUnburn").disabled=!C.fateBurned;$("#fateReset").disabled=!f.used;}
 function fateActivate(how){const f=fateInfo();if(f.left<=0)return;
   if(how==="test"){const v=f.R.tot.wil+woundPen(f.R),r=rnd(20);const ok=r!==20&&(r===1||r<=v);showRoll("Воля (Очко судьбы)",v,r);if(!ok){renderFate(`Тест на Волю ${v}: выпало ${r}, провал. Очко не активировано.`);return;} var tmsg=`Тест на Волю ${v}: выпало ${r}, успех. `;}
@@ -1815,7 +1882,7 @@ function runTest(R){
     const crit=rs.includes(20)?"Критический провал":rs.every(x=>x===1)?"Критический успех":"";
     const ok=!rs.includes(20)&&(rs.every(x=>x<=v)||rs.every(x=>x===1));
     const verdict=(crit?crit+", ":"")+(ok?"успех, ":"провал, ")+degText(v,worst);
-    pushLog(`${type} тест, ${nm}: ${rs.join(", ")} — ${verdict}`);panel(`${type} тест: ${nm}${n>1?", кубы "+rs.join(", "):""}`,worst,esc(verdict.charAt(0).toUpperCase()+verdict.slice(1)),ok?"ok":"bad");return;}
+    pushLog(`${type} тест, ${nm}: ${rs.join(", ")} — ${verdict}`);fateOffer(worst);panel(`${type} тест: ${nm}${n>1?", кубы "+rs.join(", "):""}`,worst,esc(verdict.charAt(0).toUpperCase()+verdict.slice(1)),ok?"ok":"bad");return;}
   if(TEST.type==="opposed"){
     const o=Number(TEST.opp)||0,a=rnd(20),b=rnd(20);
     const sa=a===20?-99:a===1?99:v-a, sb=b===20?-99:b===1?99:o-b;
@@ -1848,6 +1915,7 @@ function renderInfl(){
   $("#inflBody").innerHTML=`<p style="margin:6px 0">Влияние: <b>${v}</b>${sum?`, с бонусами <b>${v+sum}</b>`:""}. Бросок d20, успех если выпало не больше значения.</p>
   <label class="note" style="display:flex;flex-direction:column;gap:4px;margin:8px 0">Сложность запроса <select class="sel" id="inflType">${[["normal","Обычный запрос"],["hard","Сложный запрос (2d20)"],["impossible","Невозможный запрос (3d20)"]].map(([k,n])=>`<option value="${k}" ${INFL.type===k?"selected":""}>${n}</option>`).join("")}</select></label>
   ${bs.length?`<div style="margin:8px 0"><div class="note">Бонусы:</div>${bs.map(b=>`<label class="inline note" style="gap:8px;margin:6px 0;align-items:flex-start;flex-wrap:nowrap;${b.used?"opacity:.5":""}"><input type="checkbox" data-inflchk="${b.key}" ${INFL.checks[b.key]&&!b.used?"checked":""} ${b.used?"disabled":""}> <span>${esc(b.label)}${b.used?" — уже использован":""}</span></label>`).join("")}</div>`:`<p class="note">Бонусов от талантов и одолжений к запросам нет.</p>`}
+  ${(()=>{const rq=meritFlags("requests").filter(x=>!x.m.used);if(!rq.length)return "";const m=rq[0].m;if(m.reqLeft==null)m.reqLeft=rq[0].f[1];return `<label class="inline note" style="gap:8px;margin:8px 0;align-items:flex-start;flex-wrap:nowrap"><input type="checkbox" id="inflExtra" ${INFL.extra?"checked":""}> <span>Дополнительный запрос от «${esc(m.title)}» (осталось ${m.reqLeft}). Обычный запрос по нему проходит автоматически.</span></label>`;})()}
   <label class="note inline" style="gap:6px;margin:6px 0">Другой модификатор <input class="inp" type="number" id="inflMod" value="${INFL.mod}" style="width:70px"></label>
   <p class="note">${inflSpecial()?"Место рождения Индия: у обычного запроса 19 не автоматический провал, а 20 тратит один запрос вместо двух; у сложного и невозможного 19 не даёт лишних степеней провала, а 20 даёт 3 вместо 7.":"Обычный запрос: 19 — автоматический провал, 20 — провал и тратит два запроса. Сложный и невозможный: 19 — ещё 3 степени провала, 20 — ещё 7."}</p>
   <div class="inline"><button class="btn primary" id="inflRoll">Бросить запрос</button>${honest&&INFL.revealed&&INFL.last&&!INFL.last.ok&&!INFL.rerolled?`<button class="btn" id="inflReroll">Перебросить (Честность)</button>`:""}</div>
@@ -1856,6 +1924,9 @@ function renderInfl(){
 }
 function inflRoll(){
   const R=compute(C), v0=inflValue(R), bs=inflBonuses(R);
+  const rq=INFL.extra?meritFlags("requests").filter(x=>!x.m.used)[0]:null;
+  if(rq){const m=rq.m;if(m.reqLeft==null)m.reqLeft=rq.f[1];m.reqLeft--;if(m.reqLeft<=0){m.used=true;INFL.extra=false;}
+    if(INFL.type==="normal"){LASTSTAMP="infl";INFL.last={ok:true,r:"✓",html:`<b>Обычный запрос по одолжению «${esc(m.title)}»</b>: снаряжение выдаётся автоматически. Осталось запросов: ${Math.max(0,m.reqLeft)}.`};pushLog("Запрос на Влияние (одолжение МИСП): автоматический успех");save();return;}}
   const used=bs.filter(b=>INFL.checks[b.key]&&!b.used);
   const v=v0+used.reduce((a,b)=>a+b.v,0)+(Number(INFL.mod)||0);
   const n=INFL.type==="normal"?1:INFL.type==="hard"?2:3, rs=Array.from({length:n},()=>rnd(20)), worst=Math.max(...rs), ind=inflSpecial();
@@ -1872,7 +1943,7 @@ function inflRoll(){
   used.filter(b=>b.once).forEach(b=>{const m=C.merits.find(x=>x.id===b.mid);if(m)m.used=true;});
   const typeN={normal:"Обычный",hard:"Сложный",impossible:"Невозможный"}[INFL.type];
   LASTSTAMP="infl"; INFL.last={ok,r:worst,html:`<b>${typeN} запрос, Влияние ${v}${v!==v0?` (${v0} ${sgn(v-v0)})`:""}: выпало ${rs.join(", ")}</b>. ${ok?"Успех":"Провал"}, ${deg}. ${note}${used.some(b=>b.once)?" Одноразовый бонус израсходован.":""}`};
-  pushLog(`Запрос на Влияние ${v}: ${rs.join(", ")} — ${ok?"успех":"провал"}, ${deg}`);
+  pushLog(`Запрос на Влияние ${v}: ${rs.join(", ")} — ${ok?"успех":"провал"}, ${deg}`);fateOffer(worst);
   save();
 }
 /* ---------- начало и конец миссии ---------- */
@@ -1883,6 +1954,8 @@ function missionItems(){
   if(ch==="Творческая личность") it.start.push({key:"creative",label:"Творческая личность (если характер раскрыт): снизить Безумие на d5",def:false});
   if(vr==="Город-Святилище") it.start.push({key:"sanct",label:"Город-Святилище: +7 кармы, не снижается Благословением",def:true,karma:true});
   if(R.pr&&R.pr.name==="Воины Ордена") it.start.push({key:"order",label:"Воины Ордена: потратить 8 кармы, чтобы +1 к характеристике до конца миссии",def:false,karma:true,stat:true});
+  meritFlags("premission").forEach(({f,m})=>{if(f[1]==="karma7")it.start.push({key:"k7_"+m.id,label:`${m.title}: +7 ${f[2]==="light"?"светлой":f[2]==="dark"?"тёмной":"любой"} кармы, не снижается Благословением`,def:true,karma:f[2]==="any",kfix:f[2]});
+    if(f[1]==="duskfate"){const k=karma(R);it.start.push({key:"df_"+m.id,label:`${m.title}: d3 дополнительных Очков судьбы, пока светлой и тёмной кармы поровну (сейчас ${k.light}/${k.dark})`,def:k.light===k.dark});}});
   if(R.mark&&R.mark.name==="Душа единения") it.start.push({key:"soul",label:"Душа единения: d3+1 Очков судьбы для союзников",def:true});
   const act=R.temps.filter(t=>t.active).length;
   it.end.push({key:"temps",label:`Временные эффекты одолжений: уменьшить срок на 1 миссию${act?` (активных: ${act})`:" (активных нет)"}`,def:act>0});
@@ -1913,9 +1986,13 @@ function missionRun(phase){
     if(MISSION.sel.creative){const r=rnd(5);C.adj.ins=(C.adj.ins||0)-r;res.push(`Творческая личность: Безумие −${r}.`);}
     if(MISSION.sel.sanct){const k=MISSION.kk||"light";C.adj[k]=(C.adj[k]||0)+7;res.push(`Город-Святилище: +7 ${k==="light"?"светлой":"тёмной"} кармы.`);}
     if(MISSION.sel.order){const k=MISSION.kk||"light",st=MISSION.ks||"rng",have=(R.extra[k]||0)+(C.adj[k]||0);if(have<8)res.push(`Воины Ордена: не хватает ${k==="light"?"светлой":"тёмной"} кармы (${have} из 8).`);else{C.adj[k]=(C.adj[k]||0)-8;C.missionMods=(C.missionMods||[]).concat([{k:st,v:1,src:"Воины Ордена, до конца миссии"}]);res.push(`Воины Ордена: −8 кармы, ${LABEL[st]} +1 до конца миссии.`);}}
+    meritFlags("premission").forEach(({f,m})=>{if(f[1]==="karma7"&&MISSION.sel["k7_"+m.id]){const k=f[2]==="any"?(MISSION.kk||"light"):f[2];C.adj[k]=(C.adj[k]||0)+7;res.push(`${m.title}: +7 ${k==="light"?"светлой":"тёмной"} кармы.`);}
+      if(f[1]==="duskfate"&&MISSION.sel["df_"+m.id]){const kk=karma(R);if(kk.light!==kk.dark)res.push("Баланс кармы нарушен: дополнительных Очков судьбы нет.");else{const r=rnd(3);C.missionFate=r;res.push(`Истинное равновесие: +${r} Очков судьбы до конца миссии или нарушения баланса.`);}}});
     if(MISSION.sel.soul){const r=rnd(3)+1;res.push(`Душа единения: союзникам доступно ${r} Очков судьбы на эту миссию.`);}
   } else {
     C.missionCount=(C.missionCount||0)+1;
+    if(C.missionFate){res.push("Дополнительные Очки судьбы равновесия сняты.");C.missionFate=0;}
+    meritFlags("requests").forEach(({m})=>{if(m.reqLeft!=null&&m.reqLeft<3&&!m.used){}});
     if(MISSION.sel.mmods&&(C.missionMods||[]).length){res.push("Сняты бонусы до конца миссии.");C.missionMods=[];}
     if(MISSION.sel.patriot&&C.missionCount%5===0){const r=rnd(6),tier=r<=3?"Малое":r<=5?"Среднее":"Большое";const af=aristoFaction();const fac=af.fac||C.parents.ans.aristoFac;const fa=fac&&BOOK.favors.find(f=>f.name===fac);
       if(fa){const n=rnd(3)*10+rnd(3),e=fa.tiers[tier].find(x=>x.n===n)||fa.tiers[tier][0];const mid=uid();C.merits.push({id:mid,book:true,title:favTitle(fa,tier)+" "+favNo(e.n),text:e.text,fx:e.fx||[],ans:{},ref:fa.name+"|"+tier+"|"+e.n});(e.fx||[]).filter(f=>f[0]==="item").forEach(f=>{const rr=exactArsenal(f[1]);C.gear.push({id:uid(),name:f[1],qty:f[2]||1,note:f[3]||"",src:"favor",mid,ref:rr??null});});res.push(`Патриот: d6 = ${r}, ${tier.toLowerCase()} одолжение ${favNo(e.n)} добавлено в заслуги.`);}
@@ -1966,7 +2043,7 @@ function gainApply(){
 function meritsUI(R){
   const pend=C.merits.filter(m=>R.meritOut[m.id]&&R.meritOut[m.id].pending).length;
   return C.merits.map(e=>{const o=R.meritOut[e.id];
-    return `<div class="entry" ${e.used?'style="opacity:.75"':""}><div class="inline" style="justify-content:space-between">${e.book?`<h5 style="margin:0">${talToggle("m"+e.id,esc(e.title))}</h5>`:(EDITG.has(e.id)?`<input class="inp" style="flex:1;min-width:200px;font-weight:700" data-le="merits|${e.id}|title" value="${esc(e.title)}" placeholder="Название заслуги">`:`<h5 style="margin:0">${talToggle("m"+e.id,esc(e.title||"Без названия"))}</h5>`)}<span class="inline" style="gap:8px">${!e.book&&!EDITG.has(e.id)?`<button class="jump ph noprint" data-meritedit="${e.id}">изменить</button>`:""}<button class="del noprint" data-delle="merits|${e.id}">Удалить</button></span></div>${e.used?`<div class="usedtag">израсходовано</div>`:""}
+    return `<div class="entry" data-ik="m:${e.id}" ${e.used?'style="opacity:.75"':""}><div class="inline" style="justify-content:space-between">${e.book?`<h5 style="margin:0">${talToggle("m"+e.id,esc(e.title))}</h5>`:(EDITG.has(e.id)?`<input class="inp" style="flex:1;min-width:200px;font-weight:700" data-le="merits|${e.id}|title" value="${esc(e.title)}" placeholder="Название заслуги">`:`<h5 style="margin:0">${talToggle("m"+e.id,esc(e.title||"Без названия"))}</h5>`)}<span class="inline" style="gap:8px">${!e.book&&!EDITG.has(e.id)?`<button class="jump ph noprint" data-meritedit="${e.id}">изменить</button>`:""}<button class="del noprint" data-delle="merits|${e.id}">Удалить</button></span></div>${e.used?`<div class="usedtag">израсходовано</div>`:""}
     ${e.book?`${talBody("m"+e.id,`<div class="rules">${paras(e.text)}</div><div class="noprint" style="margin-top:4px"><button class="btn small" data-usedtog="${e.id}">${e.used?"Вернуть (не израсходовано)":"Отметить израсходованным"}</button></div>`)}${o?choicesUI(o,"merit:"+e.id)+fxSummary(o):""}`
       :(EDITG.has(e.id)?`<textarea class="inp" style="margin-top:6px" data-le="merits|${e.id}|text" placeholder="Описание: за что получено, что даёт">${esc(e.text)}</textarea><button class="btn small primary noprint" data-meritdone="${e.id}" style="margin-top:6px">Готово</button>`:(e.text?talBody("m"+e.id,`<div class="rules" style="white-space:pre-wrap">${esc(e.text)}</div>`):""))}</div>`;}).join("")
    +(pend?`<div class="warnbox noprint">У ${pend} заслуг не сделан выбор характеристики.</div>`:"")
@@ -2018,7 +2095,7 @@ document.addEventListener("click",e=>{
     const ok=r!==20&&(r===1||r<=v);const deg=ok?(v-r>0?`степеней успеха ${v-r}`:"базовый успех"):`степеней провала ${r-v}`;let dm="";
     if(ok&&p.dice){const m=p.dice.match(/(\d+)d(\d+)/);const rolls=Array.from({length:Number(m[1])},()=>rnd(Number(m[2])));const sum=rolls.reduce((a,b)=>a+b,0)+p.flat;dm=` Урон: <b>${sum}</b> (${rolls.join("+")}${p.flat?sgn(p.flat):""}${p.bs.length?", плюс "+p.bs.join(""):""}).`;}
     LASTSTAMP="roll";$("#rollNow").innerHTML=`<div class="big">${esc(g.name)}: ${p.skill==="rng"?"ДБ":"ББ"} ${v}${wp?` (ранение ${sgn(wp)})`:""}${ROLLMOD?` (${sgn(ROLLMOD)})`:""}</div><div class="inline" style="margin-top:4px">${stamp(r,"roll")}<span class="verdict ${ok?"ok":"bad"}">${r===1?"Критический успех, ":r===20?"Критический провал, ":""}${ok?"попадание":"промах"}, ${deg}.</span></div>${dm?`<div style="margin-top:6px;font-size:15px">${dm}</div>`:""}`;
-    pushLog(`${g.name}: ${r} против ${v} — ${ok?"попадание":"промах"}${dm?dm.replace(/<[^>]+>/g,""):""}`);showPanel();const st=$("#rollNow .stamp");if(st)setTimeout(()=>st.classList.remove("hit"),400);return;}
+    pushLog(`${g.name}: ${r} против ${v} — ${ok?"попадание":"промах"}${dm?dm.replace(/<[^>]+>/g,""):""}`);showPanel();fateOffer(r);const st=$("#rollNow .stamp");if(st)setTimeout(()=>st.classList.remove("hit"),400);return;}
   if(d.atk){const g=C.gear.find(x=>x.id===d.atk),R=compute(C),p=profile(g,R);showRoll(`${g.name}: ${p.skill==="rng"?"ДБ":"ББ"}`,p.total,rnd(20));return;}
   if(d.dmg){const g=C.gear.find(x=>x.id===d.dmg),R=compute(C),p=profile(g,R);const m=p.dice.match(/(\d+)d(\d+)/);const rolls=Array.from({length:Number(m[1])},()=>rnd(Number(m[2])));const sum=rolls.reduce((a,b)=>a+b,0)+p.flat;showDamage(g.name,p.dmg,rolls,p.flat,sum,p.bs);return;}
   if(d.rollres!=null){showRoll("Устойчивость",Number(d.rollres),rnd(20));return;}
@@ -2035,6 +2112,8 @@ document.addEventListener("click",e=>{
   if(d.trkd){const [k,dv]=d.trkd.split("|");const R=compute(C);const derived={light:R.extra.light||0,dark:R.extra.dark||0,xp:(R.extra.xp||0)-R.spent,ins:R.extra.ins||0,infl:R.extra.infl||0}[k];
     const cur=k==="ins"?Math.max(0,derived+(C.adj.ins||0)):derived+(C.adj[k]||0);const nv=Math.max(k==="xp"?-999:0,cur+Number(dv));C.adj[k]=(C.adj[k]||0)+(nv-cur);render();return;}
   if(d.career){const [r,xp]=d.career.split("|").map(Number);C.adj.xp=(C.adj.xp||0)+xp;C.careerRank=r;render();toast("Карьерист: +"+xp+" опыта");return;}
+  if(d.swap){const k=d.swap,o=k==="light"?"dark":"light",R=compute(C),have=(R.extra[k]||0)+(C.adj[k]||0);if(have<2){toast("Не хватает кармы");return;}C.adj[k]=(C.adj[k]||0)-2;C.adj[o]=(C.adj[o]||0)+1;toast("Ритуал проведён");render();return;}
+  if(d.bigroll){const [sc,p]=d.bigroll.split("|");const o=scopeObj(sc);const fa=BOOK.favors.find(f=>f.name===BIGFAC);if(!fa||!o)return;const n=rnd(3);const got=[];for(let i=0;i<n;i++)got.push(addFavorMerit(fa,"Большое",{fromMid:sc.slice(6)}).title);o.ans[p]={n,fac:BIGFAC,titles:got};LASTSTAMP="big";toast(`d3 = ${n}: получено ${n} одолжений`);render();return;}
   if(d.aristo){aristoRoll();render();return;}
   if(d.crit){const [l,h]=d.crit.split("|");critApply(Number(l),h);render();return;}
   if(d.critaid){const w=W();w.perm=Math.min(Number(w.perm)||0,Number(d.critaid));w.critMsg=(w.critMsg||"").replace(/<button[^>]*data-critaid[^<]*<\/button>/,"Медпомощь оказана: постоянный штраф "+d.critaid+".");render();return;}
@@ -2168,6 +2247,7 @@ document.addEventListener("change",e=>{
   if(d.acav){const key=d.acav,v=Number(t.value)||0,A=C.academy;A.mods=A.mods||{};if(key.startsWith("m:"))A.mods[key.slice(2)]=v;else A[key]=v;setTimeout(render,0);return;}
   if(t.id==="dpMod"){DPOOL.mod=Number(t.value)||0;render();return;}
   if(d.wound){const w=W();if(d.wound==="apply")w.apply=t.checked;else{w[d.wound]=t.value===""?null:Number(t.value);if(d.wound==="crit"){w.critDone=null;w.critMsg="";}}setTimeout(render,0);return;}
+  if(d.bigfac){BIGFAC=t.value;return;}
   if(t.id==="aristoFac"){C.parents.ans.aristoFac=t.value||null;render();return;}
   if(t.id==="gainK"){GAIN.k=t.value;GAIN.msg="";render();return;}
   if(t.id==="gainN"){GAIN.n=t.value;return;}
@@ -2178,6 +2258,7 @@ document.addEventListener("change",e=>{
   if(d.misk){MISSION.kk=t.value;return;}
   if(d.miss){MISSION.ks=t.value;return;}
   if(d.inflchk){INFL.checks[d.inflchk]=t.checked;renderInfl();return;}
+  if(t.id==="inflExtra"){INFL.extra=t.checked;renderInfl();return;}
   if(t.id==="inflRevealed"){INFL.revealed=t.checked;renderInfl();return;}
   if(t.id==="inflType"){INFL.type=t.value;renderInfl();return;}
   if(t.id==="inflMod"){INFL.mod=Number(t.value)||0;renderInfl();return;}
@@ -2269,6 +2350,34 @@ function downloadSheet(){
   const html=`<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Лист персонажа — ${esc(C.name)}</title><style>${css}</style></head><body data-theme="light"><div class="wrap"><div class="brand">Лист персонажа, Сумрак 2096</div><div class="title" style="margin-bottom:16px">${esc(C.name||"Без имени")}</div>${node.outerHTML}</div></body></html>`;
   offer(fileName()+" — лист.html",html,"text/html");
 }
+/* ---------- звуки (свои файлы) ---------- */
+const SNDK={click:"Щелчок при нажатии",dice:"Бросок кубиков"};
+const SNDA={};
+function sndCfg(){return DB.sounds||(DB.sounds={vol:0.7});}
+function sndPlay(kind){const c=sndCfg();if(!c[kind]||c.mute)return;try{let a=SNDA[kind];if(!a||a.src!==c[kind]){a=SNDA[kind]=new Audio(c[kind]);}a.volume=Math.max(0,Math.min(1,c.vol??0.7));a.currentTime=0;a.play().catch(()=>{});}catch(e){}}
+const DICE_SEL='[data-roll],[data-rollres],[data-rollini],[data-shoot],[data-dmg],[data-atk],#tRoll,[data-ck="="],#ufRoll,[data-uft],#tdRoll,#inflRoll,#inflReroll,#fateTest,#fateUfRoll,#rollPool,#rollHp,#rollFate,[data-table],#rollBirth,[data-sub],[data-rand],[data-dice],#favRollBtn,[data-crit],[data-aristo],[data-disroll],[data-disdup],#rerollFives,#favRep';
+document.addEventListener("click",e=>{const c=sndCfg();if(!c.click&&!c.dice)return;const el=e.target.closest('button,summary,a,select,label,input[type=checkbox],[role="button"],.pill,.kitopt');if(!el||el.closest("#soundDlg"))return;
+  if(el.closest(DICE_SEL)&&!el.closest(".upbtn")&&!el.disabled&&c.dice)sndPlay("dice");else sndPlay("click");},true);
+function renderSoundBtn(){const b=$("#soundBtn");if(!b)return;const c=sndCfg();const any=(c.click||c.dice)&&!c.mute;b.setAttribute("aria-pressed",!!any);b.title="Звуки: свои файлы для щелчка и броска кубиков";
+  b.innerHTML=`<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/>${any?'<path d="M15.5 9a4.5 4.5 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11"/>':'<path d="m16 9.5 5 5m0-5-5 5"/>'}</svg>`;}
+function renderSoundDlg(msg){const c=sndCfg();
+  $("#soundBody").innerHTML=`<p class="note">По умолчанию приложение беззвучное. Можно загрузить свои короткие звуки (mp3, ogg, wav, до 700 КБ каждый): они сохранятся в приложении и будут играть при нажатиях.</p>
+  ${Object.entries(SNDK).map(([k,n])=>`<div class="iblk"><div class="iblk-t">${n}</div><div class="inline">${c[k]?`<span class="note">загружен</span><button class="btn small" data-sndplay="${k}">Прослушать</button><button class="btn small" data-snddel="${k}" style="color:var(--warn)">Удалить</button>`:`<span class="note">нет звука</span>`}<label class="btn small primary">${c[k]?"Заменить":"Загрузить файл"}<input type="file" accept="audio/*" data-sndfile="${k}" hidden></label></div></div>`).join("")}
+  <label class="note inline" style="gap:8px;margin:10px 0">Громкость <input type="range" min="0" max="1" step="0.05" value="${c.vol??0.7}" id="sndVol" style="flex:1"></label>
+  <label class="note inline" style="gap:8px"><input type="checkbox" id="sndMute" ${c.mute?"checked":""}> Временно выключить звуки</label>
+  ${msg?`<div class="okbox">${msg}</div>`:""}`;}
+$("#soundBtn").addEventListener("click",()=>{renderSoundDlg("");$("#soundDlg").showModal();});
+$("#soundClose").addEventListener("click",()=>$("#soundDlg").close());
+document.addEventListener("change",e=>{const t=e.target;
+  if(t.dataset&&t.dataset.sndfile){const f=t.files[0];if(!f)return;if(f.size>700*1024){renderSoundDlg("Файл слишком большой: максимум 700 КБ. Обрежьте звук до секунды-двух.");return;}
+    const rd=new FileReader();rd.onload=()=>{const c=sndCfg();c[t.dataset.sndfile]=rd.result;try{save();localStorage.getItem(KEY);}catch(err){}delete SNDA[t.dataset.sndfile];renderSoundDlg("Звук сохранён.");renderSoundBtn();sndPlay(t.dataset.sndfile);};rd.readAsDataURL(f);}
+  if(t.id==="sndVol"){sndCfg().vol=Number(t.value);save();}
+  if(t.id==="sndMute"){sndCfg().mute=t.checked;save();renderSoundBtn();}
+});
+document.addEventListener("click",e=>{const b=e.target.closest("[data-sndplay],[data-snddel]");if(!b)return;
+  if(b.dataset.sndplay){const c=sndCfg();const m=c.mute;c.mute=false;sndPlay(b.dataset.sndplay);c.mute=m;}
+  if(b.dataset.snddel){delete sndCfg()[b.dataset.snddel];delete SNDA[b.dataset.snddel];save();renderSoundDlg("Звук удалён.");renderSoundBtn();}});
+renderSoundBtn();
 render();
 if(NATIVE&&window.Capacitor.Plugins.App){
   window.Capacitor.Plugins.App.addListener("backButton",()=>{

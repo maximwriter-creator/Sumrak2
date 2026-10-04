@@ -32,6 +32,14 @@ jobs:
         with:
           packages: 'platform-tools platforms;android-36 build-tools;36.0.0'
 
+      - name: Постоянная подпись и номер версии
+        run: |
+          mkdir -p ~/.android
+          cp resources/android/debug.keystore ~/.android/debug.keystore
+          sed -i "s/versionCode 1$/versionCode ${{ github.run_number }}/" android/app/build.gradle
+          sed -i "s/versionName \"1.0\"/versionName \"1.${{ github.run_number }}\"/" android/app/build.gradle
+          grep -E "versionCode|versionName" android/app/build.gradle
+
       - name: Сборка APK
         working-directory: android
         run: |
@@ -42,6 +50,3 @@ jobs:
         with:
           name: sumrak2096-apk
           path: android/app/build/outputs/apk/debug/app-debug.apk
-
-
-          

@@ -2,6 +2,7 @@ name: Сборка APK
 
 on:
   push:
+    branches: [main, master]
   workflow_dispatch:
 
 jobs:
@@ -13,15 +14,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-
-      - name: Установка зависимостей
-        run: npm ci
-
-      - name: Создание Android-проекта
-        run: |
-          npx cap add android
-          cp -r resources/android/res/* android/app/src/main/res/
-          npx cap sync android
+          cache: npm
 
       - uses: actions/setup-java@v4
         with:
@@ -29,16 +22,26 @@ jobs:
           java-version: 21
 
       - uses: android-actions/setup-android@v3
-        with:
-          packages: 'platform-tools platforms;android-36 build-tools;36.0.0'
 
-      - name: Постоянная подпись и номер версии
+      - name: Установка зависимостей
+        run: npm ci
+
+      - name: Сборка страницы (src → www)
+        run: python3 build_www.py
+
+      - name: Создание Android-проекта
         run: |
-          mkdir -p ~/.android
-          cp resources/android/debug.keystore ~/.android/debug.keystore
+          rm -rf android
+          npx cap add android
+          cp -r resources/android/res/* android/app/src/main/res/
           sed -i "s/versionCode 1$/versionCode ${{ github.run_number }}/" android/app/build.gradle
           sed -i "s/versionName \"1.0\"/versionName \"1.${{ github.run_number }}\"/" android/app/build.gradle
-          grep -E "versionCode|versionName" android/app/build.gradle
+          npx cap sync android
+
+      - name: Постоянный ключ подписи
+        run: |
+          mkdir -p ~/.android
+          cp debug.keystore ~/.android/debug.keystore
 
       - name: Сборка APK
         working-directory: android

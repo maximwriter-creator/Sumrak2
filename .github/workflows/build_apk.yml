@@ -1,34 +1,32 @@
 name: Сборка APK
-
+ 
 on:
   push:
     branches: [main, master]
   workflow_dispatch:
-
+ 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
+ 
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
-
+ 
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 21
-
-      - uses: android-actions/setup-android@v3
-
+ 
       - name: Установка зависимостей
         run: npm ci
-
+ 
       - name: Сборка страницы (src → www)
         run: python3 build_www.py
-
+ 
       - name: Создание Android-проекта
         run: |
           rm -rf android
@@ -37,21 +35,19 @@ jobs:
           sed -i "s/versionCode 1$/versionCode ${{ github.run_number }}/" android/app/build.gradle
           sed -i "s/versionName \"1.0\"/versionName \"1.${{ github.run_number }}\"/" android/app/build.gradle
           npx cap sync android
-
+ 
       - name: Постоянный ключ подписи
         run: |
           mkdir -p ~/.android
           cp debug.keystore ~/.android/debug.keystore
-
+ 
       - name: Сборка APK
         working-directory: android
         run: |
           chmod +x gradlew
           ./gradlew assembleDebug --no-daemon
-
+ 
       - uses: actions/upload-artifact@v4
         with:
           name: sumrak2096-apk
           path: android/app/build/outputs/apk/debug/app-debug.apk
-
-          

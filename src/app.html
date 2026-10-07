@@ -327,12 +327,40 @@ details.sec>summary>h3{border-bottom:0!important}
 .groups .group .opt{display:block;width:100%;background:var(--panel);border:1px solid var(--line);border-radius:6px;margin:0 0 6px;padding:8px 10px;box-sizing:border-box}
 .groups .group .opt[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
 .groups>.opt{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:9px 11px;box-sizing:border-box}
+.misbar{position:sticky;top:0;z-index:5;display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--bg);padding:8px 0 10px;margin-bottom:6px;border-bottom:1px solid var(--line)}
+.misbar .btn{display:inline-flex;align-items:center;gap:6px}
+.misMod{gap:6px}
+details.missec>summary{pointer-events:none}
+details.missec>summary h3::before{content:none!important}
+@media (max-width:820px){.misbar{gap:6px}.misbar .btn{flex:1 1 calc(50% - 6px);justify-content:center;padding:9px 6px}.misMod{flex:1 1 100%;justify-content:center}}
+.ammo{margin-top:8px;padding:8px 10px;border:1px solid var(--line);border-radius:6px;background:var(--panel)}
+.ammo-top{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.ammo-n{font-family:var(--narrow);font-size:15px}.ammo-n.empty b{color:var(--warn)}
+.pips{display:flex;flex-wrap:wrap;gap:3px;max-width:100%}
+.pips i{width:7px;height:14px;border-radius:2px;border:1px solid var(--accent);display:block}
+.pips i.f{background:var(--accent)}
+.pm.sm{flex:none;min-height:28px;width:28px;font-size:16px}
+.fateval{flex:1 1 auto;min-width:46px;display:flex;align-items:baseline;justify-content:center;gap:2px;border:1px solid var(--line);border-radius:4px;background:var(--panel);font-family:var(--narrow);font-size:20px;padding:4px 2px}
+.misonly{display:none}
+body.mis .misonly{display:inline-flex;margin-left:6px}
+body.mis [data-modopen],body.mis [data-delgear],body.mis #addArs,body.mis #addGear,body.mis .upbtn,body.mis #toggleMods,body.mis .basenote,body.mis #sheet .note.noprint{display:none!important}
+.misbar .btn.primary .ico{color:inherit}
 .usedtag{display:inline-block;margin-top:4px;padding:1px 8px;border:1.5px solid var(--warn);color:var(--warn);border-radius:3px;font-family:var(--narrow);font-size:14px;transform:rotate(-2deg);text-transform:uppercase;letter-spacing:.04em}
 .editable:hover{background:color-mix(in srgb,var(--accent) 6%,transparent)}
 .basestat{color:var(--base);font-weight:700}
 .ownname{border:0;background:none;padding:6px 0;font:inherit;font-weight:700;color:inherit;cursor:pointer;text-align:left}
+.dmgbtn{border:1.5px solid var(--accent);background:var(--panel);color:var(--accent);border-radius:4px;padding:1px 9px;font-family:var(--narrow);font-weight:700;font-size:17px;cursor:pointer;line-height:1.4}
+.tag{display:inline-block;border:1px solid var(--line);background:var(--bg);border-radius:12px;padding:1px 9px;font-size:13.5px}
+.cfxrow{display:flex;gap:6px;align-items:center;margin-top:6px;min-width:0}
+.cfxrow .sel{flex:1 1 auto;min-width:0}
+.dmgbtn:hover{background:color-mix(in srgb,var(--accent) 14%,var(--panel))}
+.cfields{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-top:8px}
+.cfields label{display:flex;flex-direction:column;gap:3px;font-family:var(--narrow);font-size:14px;color:var(--muted);min-width:0}
+.cfields .inp,.cfields .sel{width:100%;min-width:0;color:var(--ink)}
 .ownname:hover{text-decoration:underline dotted;text-underline-offset:3px}
 .del{border:0;background:none;color:var(--warn);cursor:pointer;font-size:14px}
+.delico{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;padding:0;border-radius:4px;flex:none}
+.delico:hover{background:color-mix(in srgb,var(--warn) 12%,transparent)}
 dialog{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:4px;max-width:min(560px,92vw);padding:18px 20px}
 dialog::backdrop{background:rgba(10,8,20,.45)}
 .toast{position:fixed;bottom:calc(16px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 14px;border-radius:3px;font-size:14.5px;z-index:9;opacity:0;transition:opacity .2s;pointer-events:none}
@@ -424,7 +452,7 @@ img,svg,canvas{max-width:100%}
   <header class="top">
     <div>
       <div class="brand">Сумрак 2096, генерация по Книге игрока</div>
-      <div class="titlerow"><div class="title" id="hdrName">Новый оперативник</div><button class="btn small" id="delBtn" style="color:var(--warn)" title="Удалить этого персонажа">Удалить</button><button class="iconbtn" id="soundBtn" title="Звук" aria-label="Звук" aria-pressed="true"></button><button class="iconbtn" id="ioBtn" title="Файл: сохранить, загрузить, перенести персонажа" aria-label="Файл"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M12 11v6m-3-3 3 3 3-3"/></svg></button></div>
+      <div class="titlerow"><div class="title" id="hdrName">Новый оперативник</div><button class="iconbtn delico" id="delBtn" style="color:var(--warn)" title="Удалить этого персонажа" aria-label="Удалить этого персонажа"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg></button><button class="iconbtn" id="soundBtn" title="Звук" aria-label="Звук" aria-pressed="true"></button><button class="iconbtn" id="ioBtn" title="Файл: сохранить, загрузить, перенести персонажа" aria-label="Файл"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M12 11v6m-3-3 3 3 3-3"/></svg></button></div>
     </div>
     <div class="toolbar">
       <select class="sel" id="charSel" aria-label="Персонаж"></select>
@@ -536,6 +564,16 @@ img,svg,canvas{max-width:100%}
 <script>
 "use strict";
 const BOOK = JSON.parse(document.getElementById('book').textContent);
+/* решения при создании, которых нет в разметке книги */
+(function(){
+  const v=(n,vn)=>{const b=BOOK.births.find(x=>x.name===n);return b&&b.variants.find(x=>x.name===vn);};
+  const facs=BOOK.favors.filter(f=>!/^Орден/.test(f.name)&&f.name!=="МИСП").map(f=>f.name);
+  const g=v("Боливарская Коммуна","ГПС (Город победившего социализма)");
+  if(g&&!g.fx.some(f=>f[0]==="tpick"))g.fx.push(["tpick","Страны, чьи Одолжения можно сместить на 1 вверх или вниз",facs,"d3"]);
+  const w=v("Международная Инициатива Сдерживания Пелены","Блок «Виндикта»");
+  if(w){const r=w.fx.find(f=>f[0]==="roll");if(r&&!r[2][0][1].some(f=>f[0]==="tpick"))r[2][0][1].push(["tpick","Механический протез",["Левая рука","Правая рука","Левая нога","Правая нога"],1]);}
+  const pr=BOOK.flaws.find(x=>x.name==="Гордец");if(pr&&!pr.fx.length)pr.fx.push(["high",2,0,"Гордец: две наибольшие характеристики"]);
+})();
 const STATS = [["rng","Дальний бой","Боевая"],["mel","Ближний бой","Боевая"],["str","Сила","Боевая"],["agi","Ловкость","Боевая"],["tou","Стойкость","Боевая"],["wil","Воля","Небоевая"],["wit","Сообразительность","Небоевая"],["per","Наблюдательность","Небоевая"],["cha","Харизма","Небоевая"],["int","Интеллект","Небоевая"]];
 const SKEYS = STATS.map(s=>s[0]);
 const ICONS = {"rng": {"vb": "-4 -4 40 40", "sw": "1.65", "in": "<circle cx=\"16\" cy=\"16\" r=\"9\"/><circle cx=\"16\" cy=\"16\" r=\"3\"/><path d=\"M16 3v6m0 14v6M3 16h6m14 0h6\"/>"}, "mel": {"vb": "-4 -4 40 40", "sw": "1.65", "in": "<path d=\"m16 2 4 6v12h-8V8l4-6Zm0 5v13M8 21h16m-10 0v7h4v-7m-5 9h6\"/>"}, "str": {"vb": "-4 -4 40 40", "sw": "1.65", "in": "<path d=\"M9 28v-4l-4-6V9a3 3 0 0 1 6 0V6a3 3 0 0 1 6 0v1a3 3 0 0 1 6 0v2a3 3 0 0 1 6 0v10l-5 6v3H9Z\"/><path d=\"M11 9v5a3 3 0 0 1-6 0m12-7v7a3 3 0 0 1-6 0m12-5v5a3 3 0 0 1-6 0m12-2a3 3 0 0 1-6 2M7 22l5-6h7a3 3 0 0 1 0 6h-4m-6 3h15\"/>"}, "agi": {"vb": "-4 -4 40 40", "sw": "1.65", "in": "<circle cx=\"21\" cy=\"5\" r=\"2.5\"/><path d=\"m10 12 6-4 6 5 5-1M16 8l-3 10 7 3-1 8M13 18l-5 6H3M3 9h5m-6 7h5\"/>"}, "tou": {"vb": "-4 -4 40 40", "sw": "1.65", "in": "<path d=\"m16 3 11 4v9c0 6-6 10-11 13C11 26 5 22 5 16V7l11-4Z\"/><path d=\"m16 8 6 2v6c0 3-3 6-6 8-3-2-6-5-6-8v-6l6-2Zm0 1v14\"/>"}, "wil": {"vb": "-4 -4 40 40", "sw": "1.65", "in": "<path d=\"M16 3c2 7 9 10 9 17a9 9 0 0 1-18 0c0-4 2-7 5-10l1 7c3-3 4-8 3-14Z\"/><path d=\"M16 18c-5 5-4 9 0 10 4-1 5-5 0-10Z\"/>"}, "int": {"vb": "-4 -4 40 40", "sw": "1.65", "in": "<path d=\"M16 7c-5-4-9-1-9 3-5 1-5 7-2 9-2 5 3 9 7 7 1 3 4 2 4 0V7Zm0 0c5-4 9-1 9 3 5 1 5 7 2 9 2 5-3 9-7 7-1 3-4 2-4 0\"/><path d=\"M7 10c4 0 5 2 5 5m-7 4h5l2 4m13-13c-4 0-5 2-5 5m7 4h-5l-2 4\"/>"}, "wit": {"vb": "-4 -4 40 40", "sw": "1.65", "in": "<path d=\"M10 22v-3a9 9 0 1 1 12 0v3H10Zm1 4h10m-8 4h6\"/><path d=\"m17 7-5 7h5l-2 6 6-8h-5l1-5Z\"/>"}, "per": {"vb": "-4 -4 40 40", "sw": "1.65", "in": "<path d=\"M2 16S7 7 16 7s14 9 14 9-5 9-14 9S2 16 2 16Z\"/><circle cx=\"16\" cy=\"16\" r=\"5\"/><circle cx=\"16\" cy=\"16\" r=\"1\"/><path d=\"M16 2v2m0 24v2\"/>"}, "cha": {"vb": "-4 -4 40 40", "sw": "1.65", "in": "<path d=\"M5 5h22v11c0 7-6 11-11 13C11 27 5 23 5 16V5Z\"/><path d=\"m9 12 4 1m6 0 4-1m-12 7c3 3 7 3 10 0M10 5V3m12 2V3\"/>"}, "light": {"vb": "-4 -4 40 40", "sw": "1.65", "in": "<circle cx=\"16\" cy=\"16\" r=\"6\"/><path d=\"M16 2v4m0 20v4M2 16h4m20 0h4M6 6l3 3m14 14 3 3M6 26l3-3M23 9l3-3\"/>"}, "dark": {"vb": "-4 -4 40 40", "sw": "1.65", "in": "<path d=\"M22 4A13 13 0 1 0 28 22 11 11 0 0 1 22 4Z\"/><path d=\"m24 6 1 4 4 1-4 1-1 4-1-4-4-1 4-1 1-4Z\"/>"}, "ins": {"vb": "-4 -4 40 40", "sw": "1.65", "in": "<path d=\"M24 24a12 12 0 1 1 3-14M23 19a8 8 0 1 1-5-11c5 1 7 7 3 10-3 3-7 0-5-3\"/><path d=\"m27 15-3 6 5 1-4 7\"/>"}, "xp": {"vb": "-4 -4 40 40", "sw": "1.65", "in": "<path d=\"m16 2 13 7v14l-13 7-13-7V9l13-7Z\"/><path d=\"m7 11 7 10m0-10L7 21m12 0V11h3a3 3 0 0 1 0 6h-3\"/>"}, "infl": {"vb": "-4 -4 40 40", "sw": "1.65", "in": "<circle cx=\"16\" cy=\"6\" r=\"3\"/><circle cx=\"6\" cy=\"25\" r=\"3\"/><circle cx=\"26\" cy=\"25\" r=\"3\"/><path d=\"M16 9v7M8 22l8-6 8 6M6 17v-5h4m16 5v-5h-4M12 27h8\"/>"}};
@@ -543,7 +581,7 @@ const icon=(k,cls="ico")=>ICONS[k]?`<svg class="${cls}" viewBox="${ICONS[k].vb}"
 const COMBAT = SKEYS.slice(0,5), NONCOMBAT = SKEYS.slice(5);
 const LABEL = Object.fromEntries(STATS.map(s=>[s[0],s[1]]));
 Object.assign(LABEL,{ins:"Безумие",infl:"Влияние",hp:"Очки здоровья",fate:"Очки судьбы",xp:"Опыт",light:"Светлая карма",dark:"Тёмная карма",res:"Устойчивость",ini:"Инициатива"});
-const STEPS = ["Класс","Характеристики","Место рождения","Родители","Характер","Отметка судьбы","Недостаток","Лист персонажа","Академия","Кубы и тесты"];
+const STEPS = ["Класс","Характеристики","Место рождения","Родители","Характер","Отметка судьбы","Недостаток","Лист персонажа","Академия","Кубы и тесты","Миссия"];
 const CREATE=[0,1,2,3,4,5,6,8];
 const STEPICON={"0": "<path d=\"M6 13 16 7l10 6M6 20l10-6 10 6M6 27l10-6 10 6\"/>", "1": "<rect x=\"3\" y=\"11\" width=\"14\" height=\"14\" rx=\"2.5\" transform=\"rotate(-12 10 18)\"/><rect x=\"15\" y=\"5\" width=\"14\" height=\"14\" rx=\"2.5\" transform=\"rotate(14 22 12)\"/><path d=\"M9 15h.01M11.5 20h.01M7 21h.01M19.5 9h.01M24.5 15h.01M22 12h.01\" stroke-width=\"2.6\"/>", "2": "<circle cx=\"14\" cy=\"16\" r=\"11\"/><path d=\"M3 16h22M14 5c3.5 3 4.8 7 4.8 11S17.5 24 14 27M14 5c-3.5 3-4.8 7-4.8 11s1.3 8 4.8 11\"/><path d=\"M24 2.5a4.5 4.5 0 0 1 4.5 4.5c0 3.5-4.5 7.5-4.5 7.5S19.5 10.5 19.5 7A4.5 4.5 0 0 1 24 2.5Z\"/><circle cx=\"24\" cy=\"7\" r=\"1.3\"/>", "3": "<circle cx=\"10\" cy=\"8.5\" r=\"3.5\"/><circle cx=\"22\" cy=\"8.5\" r=\"3.5\"/><path d=\"M3.5 22c0-4.5 3-7.5 6.5-7.5 2 0 3.6.9 4.7 2.4M28.5 22c0-4.5-3-7.5-6.5-7.5-2 0-3.6.9-4.7 2.4\"/><circle cx=\"16\" cy=\"19\" r=\"2.8\"/><path d=\"M10.5 29c0-3.5 2.4-5.5 5.5-5.5s5.5 2 5.5 5.5\"/>", "4": "<path d=\"M5 6c3.7 1.5 7.3 1.5 11 0v9.5c0 5-2.7 9-5.5 9S5 20.5 5 15.5V6Z\"/><path d=\"M16 9c3.7 1.5 7.3 1.5 11 0v9.5c0 5-2.7 9-5.5 9-1.8 0-3.6-1.7-4.7-4\"/><path d=\"M7.7 12.5h2.2m2.2 0h2.2M8 19c1.6 1.3 3.4 1.3 5 0M18.8 15.5H21m2.2 0h2.2M19 23c1.6-1.3 3.4-1.3 5 0\"/>", "5": "<path d=\"M3 16s4.8-8 13-8 13 8 13 8-4.8 8-13 8S3 16 3 16Z\"/><circle cx=\"16\" cy=\"16\" r=\"3.8\"/><path d=\"M16 2.5v3M5.5 5.5l2 2.3M26.5 5.5l-2 2.3M16 26.5v3\"/>", "6": "<path d=\"M13.5 18.5 9 23a4.6 4.6 0 0 1-6.5-6.5l4.5-4.5a4.6 4.6 0 0 1 6.5 0\"/><path d=\"M18.5 13.5 23 9a4.6 4.6 0 0 1 6.5 6.5L25 20a4.6 4.6 0 0 1-6.5 0\"/><path d=\"M13 6.5 12 3m6.5 22.5L20 29M6.5 13 3 12m22.5 7 3.5 1\"/>", "8": "<path d=\"M16 5 2.5 11.5 16 18l13.5-6.5L16 5Z\"/><path d=\"M8 14.5V21c2 2.2 5 3.5 8 3.5s6-1.3 8-3.5v-6.5M29.5 11.5v8\"/><circle cx=\"29.5\" cy=\"21\" r=\"1.4\"/>"};
 const stepIco=i=>STEPICON[i]?`<svg class="rico" viewBox="-4 -4 40 40" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${STEPICON[i]}</svg>`:"";
@@ -620,6 +658,9 @@ function walk(fx, ans, path, src, ctx, out){
     else if(["rankup","requests","premission","blessfloor","karmaswap","fateuses"].includes(t)){ (out.flags=out.flags||[]).push(f); }
     else if(t==="bigfavors"){ out.choices.push({type:"bigfavors",path:p,done:ans[p]||null}); if(!ans[p]) out.pending++; }
     else if(t==="ksplit"){ const l=ans[p]; out.choices.push({type:"ksplit",path:p,total:f[1],l}); if(l==null) out.pending++; else { const lv=Math.max(0,Math.min(f[1],Number(l))); if(lv){out.mods.push({k:"light",v:lv,src});ctx.apply("light",lv);} if(f[1]-lv){out.mods.push({k:"dark",v:f[1]-lv,src});ctx.apply("dark",f[1]-lv);} } }
+    else if(t==="tpick"){const st=ans[p]||{};const die=typeof f[3]==="string"?f[3]:null;const cnt=die?st.r:f[3];const sel=(st.sel||[]).slice(0,cnt||0);
+      out.choices.push({type:"tpick",path:p,label:f[1],options:f[2],die,r:st.r,count:cnt,sel});
+      if(cnt==null||sel.length<cnt) out.pending++; else out.notes.push({text:f[1]+": "+sel.join(", "),src});}
     else if(t==="itemchoice"){ const sel=ans[p]; out.choices.push({type:"itemchoice",path:p,label:f[1],where:f[2],q:f[3],sel}); if(sel==null) out.pending++; }
     else if(t==="talent"){ out.notes.push({text:"Талант: "+f[1],src,desc:f[2]||null,tal:f[1]}); }
     else if(t==="pick"){
@@ -654,10 +695,10 @@ function walk(fx, ans, path, src, ctx, out){
       let pick;
       if(tied.length===need) pick=definite.concat(tied);
       else { const a=(ans[p]||[]).filter(k=>tied.includes(k)).slice(0,need);
-        out.choices.push({type:"pick",path:p,pool:tied,count:need,v:f[2],chosen:a,tie:t});
+        out.choices.push({type:"pick",path:p,pool:tied,count:need,v:f[2],chosen:a,tie:t,lbl:f[3]||null});
         pick=definite.concat(a); if(a.length<need) out.pending++; }
-      if(pick.length===f[1]) out.choices.push({type:"info",text:(t==="high"?"Самая высокая":"Самая низкая")+" на этот момент: "+pick.map(k=>LABEL[k]).join(", ")});
-      pick.forEach(k=>{out.mods.push({k,v:f[2],src});ctx.apply(k,f[2]);});
+      if(pick.length===f[1]){ out.choices.push({type:"info",text:(f[3]?f[3]:(t==="high"?"Самая высокая":"Самая низкая")+" на этот момент")+": "+pick.map(k=>LABEL[k]).join(", ")}); if(f[3]) out.notes.push({text:f[3]+": "+pick.map(k=>LABEL[k]).join(", "),src}); }
+      if(f[2]) pick.forEach(k=>{out.mods.push({k,v:f[2],src});ctx.apply(k,f[2]);});
     }
   });
 }
@@ -693,7 +734,7 @@ function compute(c){
   run("char", ch?ch.fx:[], c.char.ans, ch?ch.name:"");
   const fl = c.flaw.on&&c.flaw.i!=null?BOOK.flaws[c.flaw.i]:null;
   steps.__dummy=null;
-  run("flaw", fl?flawFx().concat(fl.name==="Психическая болезнь"?[["mod","ins",20]]:[]):[], c.flaw.ans, fl?fl.name:"");
+  run("flaw", fl?flawFx().concat(fl.name==="Психическая болезнь"?[["mod","ins",20]]:[]).concat(fl.name==="Гордец"?fl.fx||[]:[]):[], c.flaw.ans, fl?fl.name:"");
   const man = {mods:[],notes:[],choices:[],pending:0};
   c.manual.forEach(m=>{ if(m.k&&Number(m.v)){ man.mods.push({k:m.k,v:Number(m.v),src:m.src||"Вручную"}); ctx.apply(m.k,Number(m.v)); }});
   steps.manual = man;
@@ -710,7 +751,7 @@ function compute(c){
   steps.dev = dev;
   const gm = {mods:[],notes:[],choices:[],pending:0};
   (c.gear||[]).forEach(g=>{ if(g.on===false) return; const p=profile(g,null); if(p&&p.stats) p.stats.forEach(s=>{gm.mods.push({k:s.k,v:1,src:s.src});ctx.apply(s.k,1);}); });
-  (c.gear||[]).forEach(g=>{ if(g.on===false) return; const r=g.ref!=null&&g.ref>=0?g.ref:null; const nm=r!=null?ARS[r].name:g.name; const fx=ITEMFX[nm]; if(fx) fx.forEach(([k,v])=>{gm.mods.push({k,v,src:nm});ctx.apply(k,v);}); });
+  (c.gear||[]).forEach(g=>{ if(g.on===false) return; const r=g.ref!=null&&g.ref>=0?g.ref:null; const nm=r!=null?ARS[r].name:g.name; const fx=ITEMFX[nm]; if(fx) fx.forEach(([k,v])=>{gm.mods.push({k,v,src:nm});ctx.apply(k,v);}); if(r==null&&g.cfx) g.cfx.forEach(([k,v])=>{v=Number(v)||0;if(!k||!v)return;gm.mods.push({k,v,src:g.name||"свой предмет"});ctx.apply(k,v);}); });
   (c.gear||[]).forEach(g=>{ const r=g.ref!=null&&g.ref>=0?g.ref:null; const nm=r!=null?ARS[r].name:g.name; const fx=g.dose===2?DRUGS2[nm]:g.dose===1?DRUGS[nm]:null; if(fx) fx.forEach(([k,v])=>{gm.mods.push({k,v,src:nm+", принят"});ctx.apply(k,v);}); });
   (c.buys||[]).forEach(b=>{ if(b.tid!=null&&TAL[b.tid]&&TALFX[TAL[b.tid].name]) TALFX[TAL[b.tid].name].forEach(([k,v])=>{gm.mods.push({k,v,src:TAL[b.tid].name});ctx.apply(k,v);}); });
   steps.gear = gm;
@@ -728,7 +769,7 @@ function isFinished(c){if(c.reopen)return false;if(c.finished)return true;const 
 function stepStatus(c,R,i){
   const P = k=>R.steps[k].pending>0;
   switch(i){
-    case 0: return c.cls.i==null?"":(P("cls")||(parseBase(c).choose&&parseBase(c).keys.length<2)||c.gear.some(g=>g.src==="class"&&g.opts&&!g.picked)||c.talents.some(t=>t.src==="class"&&t.opts&&!t.picked)?"pending":"done");
+    case 0: return c.cls.i==null?"":(P("cls")||(parseBase(c).choose&&parseBase(c).keys.length<2)||c.gear.some(g=>g.src==="class"&&g.opts&&!g.picked)||c.talents.some(t=>t.src==="class"&&t.opts&&!t.picked)||c.gear.some(g=>g.src==="class"&&g.kit&&!g.picked)||c.talents.some(t=>t.src==="class"&&t.kit&&!t.picked)?"pending":"done");
     case 1: { const kept=keptPool(c); const assigned=SKEYS.filter(k=>c.stats.assign[k]!=null).length;
       if(!c.stats.pool.length) return ""; const fv=kept.filter(v=>Number(v)===5).length; return (assigned===10&&c.stats.hp!=null&&c.stats.fate!=null&&poolValid(c)&&!(c.settings.fives&&fv>2))?"done":"pending"; }
     case 2: return c.birth.nation==null?"":(c.birth.variant==null||P("birth")?"pending":"done");
@@ -778,6 +819,7 @@ function applyClassKit(c){
   gs=gs.replace(/Выберите две вещи из базового оружия МИСП и один из пистолетов МИСП/i,"Выберите оружие из базового оружия МИСП, Выберите оружие из базового оружия МИСП, Выберите пистолет МИСП");
   if(gs&&!/^Нет$/i.test(gs)) splitList(gs).forEach(t=>c.gear.push(parseItem(t,"class")));
   splitList(cl.talents).forEach(t=>{const it=parseItem(t,"class");c.talents.push({id:it.id,name:it.name,opts:it.opts,text:"",src:"class",todo:it.todo});});
+  kitNormalize(c);
 }
 
 /* ---------- rendering ---------- */
@@ -785,6 +827,7 @@ let STEP = C.step||0, LASTSTAMP=null;
 const $ = s=>document.querySelector(s);
 function focusKey(){const a=document.activeElement;if(!a||a===document.body)return null;if(a.id)return "#"+a.id;const e=Object.entries(a.dataset||{})[0];return e?`[data-${e[0].replace(/[A-Z]/g,m=>"-"+m.toLowerCase())}="${CSS.escape(e[1])}"]`:null;}
 function render(){
+  if(C&&C.cls&&C.cls.i!=null)kitNormalize(C);
   const fk=focusKey(); const ae=document.activeElement; const sel=ae&&typeof ae.selectionStart==="number"?[ae.selectionStart,ae.selectionEnd]:null;
   renderInner();
   if(fk){const el=document.querySelector(fk);if(el&&el!==document.activeElement&&!el.closest("dialog:not([open])")){el.focus({preventScroll:true});if(sel&&typeof el.setSelectionRange==="function"){try{el.setSelectionRange(sel[0],sel[1]);}catch(e){}}}}
@@ -799,6 +842,11 @@ function sectionize(){
   const sheet=document.getElementById("sheet");
   if(sheet){const kids=[...sheet.children];let i=0;while(i<kids.length){if(kids[i].tagName==="H3"){const h=kids[i];const nodes=[];let j=i+1;while(j<kids.length&&kids[j].tagName!=="H3"){nodes.push(kids[j]);j++;}const before=kids[j]||null;mk(h,nodes,sheet,before);i=j;}else i++;}}
   if(STEP===9){document.querySelectorAll("#main > .card").forEach(card=>{const h=card.querySelector(":scope > h3");if(!h)return;const nodes=[...card.children].filter(n=>n!==h);const tmp=document.createElement("div");card.appendChild(tmp);mk(h,nodes,card,tmp);tmp.remove();card.classList.add("dcard");});}
+  if(STEP===10){const keep=["Характеристики","Состояние и ранения","Трекеры","Временные эффекты","Снаряжение"];const sh=document.getElementById("sheet");
+    if(sh){[...sh.children].forEach(n=>{if(n.tagName==="DETAILS"&&n.classList.contains("sec")){if(!keep.includes(n.dataset.sec))n.remove();else{n.open=true;const dh=n.querySelector(".draghandle");if(dh)dh.remove();n.classList.add("missec");}}else n.remove();});
+      keep.forEach(k=>{const d=sh.querySelector(`:scope > details.sec[data-sec="${k}"]`);if(d)sh.appendChild(d);});
+      const tb=sh.querySelector(".geartbl tbody");if(tb)[...tb.children].filter(r=>r.querySelector("[data-shoot]")).reverse().forEach(r=>tb.prepend(r));
+      sh.querySelectorAll(".gainbox,#toggleMods").forEach(x=>{if(x.id==="toggleMods")return;});}}
   applySecOrder();
   markUnseen();
   document.querySelectorAll("#sheet .kv").forEach(kv=>{if(kv.dataset.grp)return;kv.dataset.grp=1;const ch=[...kv.children];for(let i=0;i<ch.length;i+=2){const w=document.createElement("div");w.className="kvi";const k=ch[i],v=ch[i+1];k.classList.add("kvk");w.appendChild(k);if(v){v.classList.add("kvv");w.appendChild(v);}kv.appendChild(w);}});
@@ -882,18 +930,20 @@ function renderInner(){
   const R=compute(C);
   $("#hdrName").textContent = C.name||"Новый оперативник";
   $("#charSel").innerHTML = DB.chars.map(c=>`<option value="${c.id}" ${c.id===C.id?"selected":""}>${esc(c.name||"Без имени")}</option>`).join("")+`<option disabled>──────────</option><option value="__new">+ Создать нового персонажа</option>`;
-  const sheetMode=STEP===7, diceMode=STEP===9, createMode=CREATE.includes(STEP);
+  const sheetMode=STEP===7, diceMode=STEP===9, misMode=STEP===10, createMode=CREATE.includes(STEP);
+  document.body.classList.toggle("mis",misMode);
   document.querySelector(".layout").classList.toggle("full",!createMode);
   const fin=isFinished(C)&&!createMode;
   $("#modeTabs").classList.toggle("two",fin);
-  $("#modeTabs").innerHTML=`${fin?"":`<button role="tab" aria-selected="${createMode}" data-go="${createMode?STEP:(C.lastStep??0)}">Создание персонажа</button>`}<button role="tab" aria-selected="${sheetMode}" data-go="7">Лист персонажа</button><button role="tab" aria-selected="${diceMode}" data-go="9">Кубы и тесты</button>`;
+  $("#modeTabs").innerHTML=`${fin?"":`<button role="tab" aria-selected="${createMode}" data-go="${createMode?STEP:(C.lastStep??0)}">Создание персонажа</button>`}<button role="tab" aria-selected="${sheetMode}" data-go="7">Лист</button><button role="tab" aria-selected="${misMode}" data-go="10">Миссия</button><button role="tab" aria-selected="${diceMode}" data-go="9">Кубы</button>`;
+  $("#modeTabs").style.gridTemplateColumns=`repeat(${$("#modeTabs").children.length},minmax(0,1fr))`;
   if(createMode) C.lastStep=STEP;
   $("#rail").innerHTML = CREATE.map((i,n)=>{const st=stepStatus(C,R,i);return `<li><button class="rbtn" data-step="${i}" ${i===STEP?'aria-current="step"':""} aria-label="${n+1}. ${STEPS[i]}">${stepIco(i)}<span class="rtxt"><span class="rttl">${n+1}. ${STEPS[i]}</span><span class="rst ${st}">${st==="done"?"готово":st==="pending"?"не закончено":i===8?"по желанию":"не начато"}</span></span><span class="state ${st}" aria-hidden="true"></span></button></li>`;}).join("");
-  $("#main").innerHTML = [stClass,stStats,stBirth,stParents,stChar,stMark,stFlaw,stSheet,stAcademy,stDice][STEP](R) + navBtns();
+  $("#main").innerHTML = [stClass,stStats,stBirth,stParents,stChar,stMark,stFlaw,stSheet,stAcademy,stDice,stMission][STEP](R) + navBtns();
   sectionize();
   if(CREATE.includes(STEP)){const chs=[...document.querySelectorAll("#main .card .choice")];if(chs.length){const box=document.createElement("div");box.className="card choicecard";box.innerHTML=`<h3 class="chttl">Нужно выбрать</h3>`;let need=0;
     chs.forEach(c=>{const q=c.querySelector(".q");const m=q&&q.textContent.match(/\((\d+)\/(\d+)\)/);const pills=c.querySelectorAll(".pill,.kitopt");const pressed=c.querySelectorAll(".pill[aria-pressed='true']").length;
-      const pending=(m&&Number(m[1])<Number(m[2]))||(!m&&pills.length&&!pressed)||c.querySelector("[data-aristo],[data-favitem],[data-sub],[data-rand]")&&!c.querySelector(".okbox");if(pending){c.classList.add("need");need++;}box.appendChild(c);});
+      const pending=(m&&Number(m[1])<Number(m[2]))||(!m&&pills.length&&!pressed)||(c.querySelector("[data-aristo],[data-favitem],[data-rand],[data-kitsel],[data-tpdice]")||(c.querySelector("[data-sub]")&&!c.querySelector(".stamp")))&&!c.querySelector(".okbox");if(pending){c.classList.add("need");need++;}box.appendChild(c);});
     box.querySelector(".chttl").textContent=need?`Нужно выбрать (${need})`:"Выбор сделан";if(!need)box.classList.add("ok");
     const lead=document.querySelector("#main > .lead");(lead||document.querySelector("#main > h2")).after(box);}}
   if(CREATE.includes(STEP)){const h=document.querySelector("#main > h2");if(h&&STEPICON[STEP]&&!h.querySelector(".rico")){h.classList.add("stepttl");h.insertAdjacentHTML("afterbegin",stepIco(STEP));}}
@@ -940,13 +990,17 @@ function choicesUI(out,scope){
       return ch.r!=null?`<div class="note" style="margin-top:6px">${esc(ch.label)}: выпало <b>${ch.r}</b> <button class="jump ph noprint" data-dice="${scope}|${ch.path}|${ch.n}|${ch.sides}">перебросить</button></div>`
         :`<div class="choice"><div class="q">${esc(ch.label)}</div><div class="inline"><button class="btn small primary" data-dice="${scope}|${ch.path}|${ch.n}|${ch.sides}">Бросить ${ch.n}d${ch.sides}</button><input class="inp" type="number" min="${ch.n}" max="${ch.n*ch.sides}" style="width:80px" placeholder="или ввести" data-dicev="${scope}|${ch.path}"></div></div>`;
     }
+    if(ch.type==="tpick"){
+      if(ch.die&&ch.r==null) return `<div class="choice"><div class="q">${esc(ch.label)}: сначала бросьте ${ch.die}</div><button class="btn small primary" data-tpdice="${scope}|${ch.path}|${ch.die.slice(1)}">Бросить ${ch.die}</button></div>`;
+      return `<div class="choice"><div class="q">${esc(ch.label)}${ch.die?`: выпало ${ch.r}`:""} <span class="note">(${ch.sel.length}/${ch.count})</span></div><div class="pillset">${ch.options.map(o=>`<button class="pill" aria-pressed="${ch.sel.includes(o)}" data-tp="${scope}|${ch.path}|${esc(o)}">${esc(o)}</button>`).join("")}</div>${ch.die?`<button class="jump ph noprint" data-tpre="${scope}|${ch.path}|${ch.die.slice(1)}" style="margin-top:6px">перебросить ${ch.die}</button>`:""}</div>`;
+    }
     if(ch.type==="itemchoice"){
       const g=scope.startsWith("merit:")?C.gear.find(x=>x.mid===scope.slice(6)&&x.fpath===ch.path):C.gear.find(x=>x.stepKey==="pick|"+scope+"|"+ch.path);
       return ch.sel!=null&&g?`<div class="note" style="margin-top:6px">${esc(ch.label)}: <b>${esc(g.name||"предмет")}</b>, добавлен в снаряжение <button class="jump ph noprint" data-favitem="${scope}|${ch.path}" data-w="${esc(ch.where||"")}" data-q="${esc(ch.q||"")}">изменить</button></div>`
         :`<div class="choice"><div class="q">${esc(ch.label)}</div><button class="btn small primary" data-favitem="${scope}|${ch.path}" data-w="${esc(ch.where||"")}" data-q="${esc(ch.q||"")}">Выбрать предмет</button></div>`;
     }
     if(ch.type==="pick"){
-      const what = ch.tie?"Равные значения, выберите какую":(ch.v>0?`Выберите ${ch.count>1?ch.count+" характеристики":"характеристику"} для ${sgn(ch.v)}`:`Выберите ${ch.count>1?ch.count+" характеристики":"характеристику"} для ${sgn(ch.v)}`);
+      const what = ch.tie?(ch.lbl?esc(ch.lbl)+": равные значения, выберите":"Равные значения, выберите какую"):(ch.v>0?`Выберите ${ch.count>1?ch.count+" характеристики":"характеристику"} для ${sgn(ch.v)}`:`Выберите ${ch.count>1?ch.count+" характеристики":"характеристику"} для ${sgn(ch.v)}`);
       return `<div class="choice"><div class="q">${what} <span class="note">(${ch.chosen.length}/${ch.count})</span></div><div class="pillset">${ch.pool.map(k=>`<button class="pill" aria-pressed="${ch.chosen.includes(k)}" data-pick="${scope}|${ch.path}|${k}|${ch.count}">${LABEL[k]}</button>`).join("")}</div></div>`;
     }
     if(ch.type==="rand"){
@@ -1008,7 +1062,57 @@ function aristoRoll(){const a=C.parents.ans, af=aristoFaction(), fac=af.fac||a.a
   const mid=uid(); C.merits.push({id:mid,book:true,title:favTitle(fa,"Большое")+" "+favNo(e.n),text:e.text,fx:e.fx||[],ans:{},ref:fa.name+"|Большое|"+e.n,fromParents:true});
   (e.fx||[]).filter(f=>f[0]==="item").forEach(f=>{const r=exactArsenal(f[1]);C.gear.push({id:uid(),name:f[1],qty:f[2]||1,note:f[3]||"",src:"favor",mid,ref:r??null});});
   a.aristoMid=mid; LASTSTAMP="aristo"; toast("Большое одолжение: "+favNo(e.n));}
+/* ---------- выбор стартового снаряжения из списков ---------- */
+const FACRE=/\((?:Солнечная|Боливарская|Союз Великого|Арабская|Европейский|Веллингтонское|Технофедерация)/i;
+const SCIENCES=["Изучение Пелены","Медицина","Генная инженерия","Социология","Биология"];
+const RANGED_CATS=["Пистолеты","Пистолеты-пулемёты","Штурмовые винтовки","Дробовики","Снайперские винтовки","Пулемёты"];
+const elecCost=i=>Number((ARS[i].text.match(/(\d+)\s*[Ээ]лектроник/)||[])[1]||0);
+const KITPICK={
+ mispPistol:{label:"пистолет МИСП",list:()=>ARS.map((x,i)=>i).filter(i=>ARS[i].cat==="Пистолеты"&&!FACRE.test(ARS[i].name))},
+ mispMelee:{label:"оружие ближнего боя из базового листа МИСП",list:()=>ARS.map((x,i)=>i).filter(i=>/^(Одноручное|Двуручное) обычное$/.test(ARS[i].cat)&&!FACRE.test(ARS[i].name))},
+ mispAny:{label:"оружие из базового оружия МИСП",list:()=>ARS.map((x,i)=>i).filter(i=>(RANGED_CATS.includes(ARS[i].cat)||/^(Одноручное|Двуручное) обычное$/.test(ARS[i].cat))&&!FACRE.test(ARS[i].name))},
+ jet:{label:"реактивное оружие ближнего боя",list:()=>ARS.map((x,i)=>i).filter(i=>ARS[i].cat==="Реактивное")},
+ tech:{label:"техническое устройство до 7 электроники",uniq:true,list:()=>ARS.map((x,i)=>i).filter(i=>ARS[i].cat==="Личные электронные устройства"&&elecCost(i)>0&&elecCost(i)<=7)},
+ book:{label:"базовая Великая книга",uniq:true,list:()=>ARS.map((x,i)=>i).filter(i=>ARS[i].cat==="Великие книги")},
+ shieldmod:{label:"модуль для щита «Миротворец»",mod:true,list:()=>MODS.filter(m=>m.k==="shield").map(m=>m.i)},
+ science:{label:"Наука",tal:true,uniq:true,list:()=>SCIENCES}
+};
+function kitKey(g){if(g.src!=="class")return null;if(g.kit)return g.kit;const n=String(g.name||"");if(g.qty==null)return /Наук/i.test(n)&&g.todo?"science":null;
+  if(/пистолет МИСП/i.test(n))return "mispPistol";
+  if(/базового оружия ближнего боя/i.test(n))return "mispMelee";
+  if(/из базового оружия МИСП/i.test(n))return "mispAny";
+  if(/Реактивного оружия/i.test(n))return "jet";
+  if(/[Тт]ехнические устройства|[Тт]ехнических устройства/.test(n))return "tech";
+  if(/[Вв]еликие книги/.test(n))return "book";
+  if(/Миротворец.*модул/i.test(n))return "shieldmod";
+  if(/Наук/i.test(n)&&g.todo)return "science";
+  return null;}
+function kitNormalize(c){
+  const split=(L,isTal)=>{const out=[];L.forEach(g=>{const k=kitKey(g);
+    if(k&&!g.kit){g.kit=k;let n=1;
+      if(k==="tech"||k==="book"){n=g.qty||1;g.qty=1;}
+      if(k==="science")n=2;
+      if(k==="shieldmod"){g.name="Баллистический щит «Миротворец»";g.ref=exactArsenal(g.name)??matchArsenal(g.name);g.todo=false;}
+      else{g.label=KITPICK[k].label;g.name=g.label[0].toUpperCase()+g.label.slice(1)+": выбор не сделан";g.todo=true;g.ref=null;}
+      out.push(g);for(let j=1;j<n;j++)out.push({...g,id:uid()});}
+    else out.push(g);});return out;};
+  c.gear=split(c.gear,false);c.talents=split(c.talents,true);
+}
+function kitOptsUI(g,kind){const K=KITPICK[g.kit];if(!K)return "";
+  const L=kind==="tal"?C.talents:C.gear;const taken=K.uniq?L.filter(x=>x.kit===g.kit&&x.id!==g.id&&x.picked).map(x=>x.pick):[];
+  const opts=K.list().filter(v=>!taken.includes(v));
+  const cur=g.picked?(K.mod?`${esc(g.name)} с модулем «${esc((MODBYI[g.pick]||{}).name||"")}»`:esc(g.name)):"";
+  const desc=g.picked&&!K.tal?(K.mod?(ARS[g.pick]||{}).text:(g.ref!=null?ARS[g.ref].text:"")):"";
+  const lab=K.mod?"Модуль для щита «Миротворец»":(kind==="tal"?"Стартовый талант: ":"Стартовое снаряжение: ")+K.label;
+  if(g.picked&&!EDITG.has("kit|"+g.id))return `<div class="choice"><div class="q">${esc(lab)}</div><div class="okbox">Выбрано: <b>${cur}</b>, ${kind==="tal"?"добавлено в таланты":"добавлено в снаряжение"} <button class="jump ph" data-kitre="${kind}|${g.id}">изменить</button>${desc?`<div class="note">${esc(desc)}</div>`:""}</div></div>`;
+  return `<div class="choice"><div class="q">${esc(lab)}</div><select class="sel" data-kitsel="${kind}|${g.id}" style="width:100%"><option value="">выберите…</option>${opts.map(v=>K.tal?`<option value="${esc(v)}" ${g.pick===v?"selected":""}>${esc(v)}</option>`:`<option value="${v}" ${g.pick===v?"selected":""}>${esc(ARS[v].name)}${K.mod||g.kit==="tech"?"":""}</option>`).join("")}</select></div>`;
+}
 function kitChoices(){
+  kitNormalize(C);
+  const kits=[...C.gear.filter(g=>g.src==="class"&&g.kit).map(g=>kitOptsUI(g,"gear")),...C.talents.filter(t=>t.src==="class"&&t.kit).map(t=>kitOptsUI(t,"tal"))].join("");
+  return kits+kitChoicesOr();
+}
+function kitChoicesOr(){
   const rows=[...C.gear.filter(g=>g.src==="class"&&g.opts).map(g=>({g,kind:"gear"})),...C.talents.filter(t=>t.src==="class"&&t.opts).map(g=>({g,kind:"tal"}))];
   return rows.map(({g,kind})=>`<div class="choice"><div class="q">${kind==="gear"?"Стартовое снаряжение":"Стартовый талант"}: выберите один вариант</div>${g.picked?`<div class="note">Выбрано: <b>${esc(g.name)}</b> <button class="jump ph" data-kitedit="${kind}|${g.id}">изменить</button></div>`:`<div class="kitopts">${g.opts.map((o,i)=>{const r=kind==="gear"?(exactArsenal(o)??matchArsenal(o)):null;const bt=kind==="tal"?findTal(o):null;return `<button class="kitopt" data-kit="${kind}|${g.id}|${i}"><b>${esc(o)}</b>${r!=null?`<span class="note">${esc(ARS[r].text)}</span>`:bt!=null?`<span class="note">${esc(TAL[bt].text.slice(0,160))}…</span>`:""}</button>`;}).join("")}</div>`}</div>`).join("");
 }
@@ -1133,10 +1237,10 @@ function stSheet(R){
   </div>
   <p class="note">Устойчивость снижает урон без брони или при исчерпанной прочности брони. Инициатива: удвоенная Ловкость минус d20. <span class="noprint">Нажмите на любой блок характеристики, Устойчивости или Инициативы, чтобы бросить d20.</span></p>
   ${c.manual.length?`<div class="noprint card" style="margin-top:12px"><h4 style="margin-top:0">Ручные модификаторы</h4><p class="note">Этот раздел убран. Ниже модификаторы, добавленные раньше: они ещё учитываются, удалите их, если они больше не нужны.</p>
-  ${c.manual.map(m=>`<div class="inline" style="margin:6px 0"><select class="sel" data-man="${m.id}|k">${[...STATS.map(s=>s[0]),"hp","fate","res","ini"].map(k=>`<option value="${k}" ${m.k===k?"selected":""}>${LABEL[k]}</option>`).join("")}</select><input class="inp" type="number" style="width:70px" data-man="${m.id}|v" value="${m.v}"><input class="inp" data-man="${m.id}|src" value="${esc(m.src)}" placeholder="Источник"><button class="del" data-delman="${m.id}">Удалить</button></div>`).join("")}
+  ${c.manual.map(m=>`<div class="inline" style="margin:6px 0"><select class="sel" data-man="${m.id}|k">${[...STATS.map(s=>s[0]),"hp","fate","res","ini"].map(k=>`<option value="${k}" ${m.k===k?"selected":""}>${LABEL[k]}</option>`).join("")}</select><input class="inp" type="number" style="width:70px" data-man="${m.id}|v" value="${m.v}"><input class="inp" data-man="${m.id}|src" value="${esc(m.src)}" placeholder="Источник"><button class="del delico" data-delman="${m.id}" title="Удалить" aria-label="Удалить"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg></button></div>`).join("")}
 </div>`:""}
   <h3>Трекеры</h3>
-  <div class="trk">${[["light","Светлая карма"],["dark","Тёмная карма"],["ins","Безумие"],["xp","Опыт (EXP)"],["infl","Влияние"]].map(([k,n])=>`<div class="trkl" data-ik="t:${k}"><span class="inline" style="justify-content:space-between;gap:4px;flex-wrap:nowrap"><span>${icon(k)} ${n}</span>${k==="infl"?`<button class="btn small noprint" id="openInfl" style="padding:2px 8px">Запрос</button>`:""}</span><div class="trkrow"><input class="inp" type="number" data-trk="${k}" value="${tr[k]}" aria-label="${n}" ${(k==="light"||k==="dark")&&hasMedBless(R)?"readonly title=\"Карма меняется через блок «Получить» с учётом Благословения\"":""}>${(k==="light"||k==="dark")&&hasMedBless(R)?"":`<button class="pm noprint" data-trkd="${k}|-1" aria-label="Уменьшить ${n}">−</button><button class="pm noprint" data-trkd="${k}|1" aria-label="Увеличить ${n}">+</button>`}</div></div>`).join("")}</div>
+  <div class="trk">${[["light","Светлая карма"],["dark","Тёмная карма"],["ins","Безумие"],["xp","Опыт (EXP)"],["infl","Влияние"]].map(([k,n])=>`<div class="trkl" data-ik="t:${k}"><span class="inline" style="justify-content:space-between;gap:4px;flex-wrap:nowrap"><span>${icon(k)} ${n}</span>${k==="infl"?`<button class="btn small noprint" id="openInfl" style="padding:2px 8px">Запрос</button>`:""}</span><div class="trkrow"><input class="inp" type="number" data-trk="${k}" value="${tr[k]}" aria-label="${n}" ${(k==="light"||k==="dark")&&hasMedBless(R)?"readonly title=\"Карма меняется через блок «Получить» с учётом Благословения\"":""}>${(k==="light"||k==="dark")&&hasMedBless(R)?"":`<button class="pm noprint" data-trkd="${k}|-1" aria-label="Уменьшить ${n}">−</button><button class="pm noprint" data-trkd="${k}|1" aria-label="Увеличить ${n}">+</button>`}</div></div>`).join("")}${C.stats.fate!=null?(()=>{const f=fateInfo();return `<div class="trkl" data-ik="t:fate"><span class="inline" style="justify-content:space-between;gap:4px;flex-wrap:nowrap"><span style="white-space:nowrap;font-size:14px">${stepIco(5).replace('class="rico"','class="ico"')} Очки судьбы</span><button class="btn small noprint" id="openFate" style="padding:2px 8px">Окно</button></span><div class="trkrow"><span class="fateval"><b>${f.left}</b><span class="note">/${f.tot}</span></span><button class="pm noprint" data-fatepm="-1" aria-label="Потратить Очко судьбы" ${f.left<=0?"disabled":""}>−</button><button class="pm noprint" data-fatepm="1" aria-label="Вернуть Очко судьбы" ${f.used<=0?"disabled":""}>+</button></div></div>`;})():""}</div>
   ${hasMedBless(R)?gainUI(R):""}
   ${meritFlags("karmaswap").length?`<div class="gainbox noprint"><div class="note">Ритуал Заходящего солнца: 2 очка кармы → 1 очко противоположной</div><div class="inline" style="margin-top:6px"><button class="btn small" data-swap="light">2 светлой → 1 тёмная</button><button class="btn small" data-swap="dark">2 тёмной → 1 светлая</button></div></div>`:""}
   ${(()=>{const act=R.temps.filter(t=>t.active);return act.length?`<h3>Временные эффекты</h3><div class="noprint inline" style="margin-bottom:6px"><button class="btn small" id="tempAll">Миссия завершена: уменьшить все на 1</button></div>${act.map(t=>`<div class="entry"><b>${esc(t.label)}</b> <span class="note">от «${esc(t.title)}», осталось миссий: <b>${t.st.left}</b></span> <button class="btn small noprint" data-tempdec="merit:${t.mid}|${t.path}">Миссия прошла</button></div>`).join("")}`:"";})()}
@@ -1144,14 +1248,15 @@ function stSheet(R){
   ${disorderUI(R,tr)}
   <h3>Снаряжение</h3>
   <div class="scroll"><table class="tbl geartbl"><thead><tr><th>Предмет</th><th>Кол-во</th><th class="noprint"></th></tr></thead><tbody>
-  ${c.gear.map(g=>`<tr data-ik="g:${g.id}"><td>${g.opts?`<div style="font-weight:700;padding:6px 0">${esc(g.name)}</div>${g.picked?"":`<div class="note noprint">Выбор не сделан: по умолчанию первый вариант. <button class="jump ph" data-go="0">Выбрать в создании</button></div>`}`:(g.src!=="class"&&g.ref==null?(EDITG.has(g.id)?`<input class="inp" style="width:100%;font-weight:700" data-gear="${g.id}|name" value="${esc(g.name)}" placeholder="Название предмета">`:`<button class="ownname" data-gearedit="${g.id}" title="Нажмите, чтобы изменить название и описание">${esc(g.name||"Без названия")}</button>`):`<div style="font-weight:700;padding:6px 0">${esc(g.name)}</div>`)}${(()=>{const r=gearRef(g);if(r==null)return "";const p=profile(g,R);const ms=(g.mods||[]).map(i=>MODBYI[i]).filter(Boolean);const can=modsFor_item(g).length;
-   let h=p?`<div style="margin-top:4px;font-size:14.5px">${esc(p.line)}${p.kind==="ranged"||p.kind==="melee"?`. <b>${p.skill==="rng"?"ДБ":"ББ"} ${p.total}</b>${p.hit?` <span class="note">(${sgn(p.hit)} от улучшений)</span>`:""}<div class="noprint" style="margin-top:6px"><button class="btn small primary" data-shoot="${g.id}">${p.kind==="ranged"?"Стрелять":"Атаковать"}</button></div>`:""}${p.melee?`. Удар в ближнем бою +${p.melee} урона`:""}${p.notes.length?`<div class="note">${esc(p.notes.join("; "))}</div>`:""}</div>`:`<div class="note" style="margin-top:4px">${esc(ARS[r].text)}</div>`;
+  ${c.gear.map(g=>`<tr data-ik="g:${g.id}"><td>${g.opts?`<div style="font-weight:700;padding:6px 0">${esc(g.name)}</div>${g.picked?"":`<div class="note noprint">Выбор не сделан: по умолчанию первый вариант. <button class="jump ph" data-go="0">Выбрать в создании</button></div>`}`:(g.src!=="class"&&g.ref==null?(EDITG.has(g.id)?`<input class="inp" style="width:100%;font-weight:700" data-gear="${g.id}|name" value="${esc(g.name)}" placeholder="Название предмета">`:`<button class="ownname" data-gearedit="${g.id}" title="Нажмите, чтобы изменить название и описание">${esc(g.name||"Без названия")}</button>`):`<div style="font-weight:700;padding:6px 0">${esc(g.name)}</div>`)}${(()=>{const r=gearRef(g);if(r==null)return customUI(g,R);const p=profile(g,R);const ms=(g.mods||[]).map(i=>MODBYI[i]).filter(Boolean);const can=modsFor_item(g).length;
+   let h=p?`<div style="margin-top:4px;font-size:14.5px">${esc(p.line)}${p.kind==="ranged"||p.kind==="melee"?`. <b>${p.skill==="rng"?"ДБ":"ББ"} ${p.total}</b>${p.hit?` <span class="note">(${sgn(p.hit)} от улучшений)</span>`:""}${ammoUI(g,p)}`:""}${p.melee?`. Удар в ближнем бою +${p.melee} урона`:""}${p.notes.length?`<div class="note">${esc(p.notes.join("; "))}</div>`:""}</div>`:`<div class="note" style="margin-top:4px">${esc(ARS[r].text)}</div>`;
+   if(!p) h+=explUI(g,r);
    if(ms.length) h+=`<div class="pillset" style="margin-top:4px">${ms.map(m=>`<span class="pill" style="cursor:default">${esc(m.name)}<button class="del noprint" data-modoff="${g.id}|${m.i}" aria-label="Снять ${esc(m.name)}" style="margin-left:4px">×</button></span>`).join("")}</div>`;
    if(p&&(p.kind==="armor"||p.kind==="shield"||p.kind==="shieldplain")) h+=`<label class="note inline noprint" style="gap:4px;margin-top:4px"><input type="checkbox" data-gearon="${g.id}" ${g.on!==false?"checked":""}> надето</label>`;
    {const nm=ARS[r].name; if(DRUGS[nm]){const v1=DRUGS[nm].map(([k,v])=>`${sgn(v)} ${LABEL[k]}`).join(", "),v2=DRUGS2[nm].map(([k,v])=>`${sgn(v)} ${LABEL[k]}`).join(", ");h+=`<div class="pillset noprint" style="margin-top:4px"><button class="pill" aria-pressed="${!g.dose}" data-dose="${g.id}|0">не принят</button><button class="pill" aria-pressed="${g.dose===1}" data-dose="${g.id}|1">${v1}</button><button class="pill" aria-pressed="${g.dose===2}" data-dose="${g.id}|2">${v2}</button></div>`;}}
    {const nm=ARS[r].name; if(ITEMFX[nm]) h+=`<div class="note" style="margin-top:3px">Даёт: ${ITEMFX[nm].map(([k,v])=>`${sgn(v)} ${LABEL[k]||k}`).join(", ")}</div>`+(p&&(p.kind==="armor"||p.kind==="shield"||p.kind==="shieldplain")?"":`<label class="note inline noprint" style="gap:4px;margin-top:4px"><input type="checkbox" data-gearon="${g.id}" ${g.on!==false?"checked":""}> используется</label>`);}
    if(can) h+=`<button class="btn small noprint" data-modopen="${g.id}" style="margin-top:6px">Улучшения</button>`;
-   return h;})()}${(()=>{const fe=favorEffects(g.id);return fe.length?`<div class="note" style="margin-top:3px">Улучшено одолжением: ${fe.map(x=>esc(x.eff.note||x.label)+(x.eff.freemod?" (установите через «Улучшения», бесплатно)":"")).join("; ")}</div>`:"";})()}${g.src==="academy"?`<div class="note" style="margin-top:2px">из Академии</div>`:""}${g.src==="step"?`<div class="note" style="margin-top:2px">от ${/\|birth\|/.test("|"+g.stepKey+"|")||/^(step|pick)\|birth/.test(g.stepKey)?"места рождения":/^(step|pick)\|parents/.test(g.stepKey)?"родителей":/^(step|pick)\|char/.test(g.stepKey)?"характера":"создания персонажа"}</div>`:""}${g.src==="favor"?(()=>{const m=C.merits.find(x=>x.id===g.mid);return m?`<div class="note" style="margin-top:2px">от одолжения «${esc(m.title)}»</div>`:"";})():""}${g.src!=="class"&&g.ref==null?(EDITG.has(g.id)?`<textarea class="inp" style="margin-top:6px;min-height:52px" data-gear="${g.id}|note" placeholder="Описание: характеристики, откуда предмет, как работает">${esc(g.note||"")}</textarea><label class="note inline noprint" style="gap:6px;margin-top:6px">Количество <input class="inp" type="number" min="0" value="${g.qty}" data-gear="${g.id}|qty" style="width:70px"></label> <button class="btn small primary noprint" data-geardone="${g.id}" style="margin-top:6px">Готово</button>`:(g.note?`<div class="note" style="margin-top:4px;white-space:pre-wrap;font-size:14.5px">${esc(g.note)}</div>`:"")):""}${g.todo?`<div class="note">Уточните выбор <button class="btn small noprint" data-arsrep="${g.id}">Выбрать из арсенала</button></div>`:""}</td><td><input class="inp" type="number" min="0" style="width:64px" data-gear="${g.id}|qty" value="${g.qty}"></td><td class="noprint"><button class="del" data-delgear="${g.id}">Удалить</button></td></tr>`).join("")}
+   return h;})()}${(()=>{const fe=favorEffects(g.id);return fe.length?`<div class="note" style="margin-top:3px">Улучшено одолжением: ${fe.map(x=>esc(x.eff.note||x.label)+(x.eff.freemod?" (установите через «Улучшения», бесплатно)":"")).join("; ")}</div>`:"";})()}${g.src==="academy"?`<div class="note" style="margin-top:2px">из Академии</div>`:""}${g.src==="step"?`<div class="note" style="margin-top:2px">от ${/\|birth\|/.test("|"+g.stepKey+"|")||/^(step|pick)\|birth/.test(g.stepKey)?"места рождения":/^(step|pick)\|parents/.test(g.stepKey)?"родителей":/^(step|pick)\|char/.test(g.stepKey)?"характера":"создания персонажа"}</div>`:""}${g.src==="favor"?(()=>{const m=C.merits.find(x=>x.id===g.mid);return m?`<div class="note" style="margin-top:2px">от одолжения «${esc(m.title)}»</div>`:"";})():""}${g.src!=="class"&&g.ref==null?(EDITG.has(g.id)?`<textarea class="inp" style="margin-top:6px;min-height:52px" data-gear="${g.id}|note" placeholder="Описание: характеристики, откуда предмет, как работает">${esc(g.note||"")}</textarea>${customFields(g)}<label class="note inline noprint" style="gap:6px;margin-top:6px">Количество <input class="inp" type="number" min="0" value="${g.qty}" data-gear="${g.id}|qty" style="width:70px"></label> <button class="btn small primary noprint" data-geardone="${g.id}" style="margin-top:6px">Готово</button>`:(g.note?`<div class="note" style="margin-top:4px;white-space:pre-wrap;font-size:14.5px">${esc(g.note)}</div>`:"")):""}${g.todo?(g.kit?`<div class="note noprint">Выбор не сделан. <button class="jump ph" data-go="0">Выбрать в создании</button></div>`:`<div class="note">Уточните выбор <button class="btn small noprint" data-arsrep="${g.id}">Выбрать из арсенала</button></div>`):""}</td><td><input class="inp" type="number" min="0" style="width:64px" data-gear="${g.id}|qty" value="${g.qty}"><button class="btn small misonly" data-use="${g.id}" ${g.qty>0?"":"disabled"} title="Израсходовать одну единицу">−1</button></td><td class="noprint"><button class="del delico" data-delgear="${g.id}" title="Удалить" aria-label="Удалить"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg></button></td></tr>`).join("")}
   </tbody></table></div><div class="inline noprint" style="margin-top:8px"><button class="btn small primary" id="addArs">Добавить из арсенала</button><button class="btn small" id="addGear">Добавить свой предмет</button></div>
   <h3>Детали и особенности</h3><p class="note noprint">Нажмите на раздел, чтобы раскрыть полный текст из книги. При печати все разделы раскрываются.</p>
   ${cl?sectionH("Класс: "+esc(cl.variant)+" ("+esc(cl.group)+")",classBlocks(cl),"cls"):""}
@@ -1225,7 +1330,7 @@ function matchArsenal(name){
     else if(hit===s.length&&hit>=2&&hit>score){best=i;score=hit-0.5;}});
   return best;
 }
-const gearRef=g=>g.ref!=null&&g.ref>=0?g.ref:(g.src==="favor"?null:matchArsenal(g.name));
+const gearRef=g=>g.ctype?null:g.ref!=null&&g.ref>=0?g.ref:(g.src==="favor"?null:matchArsenal(g.name));
 function exactArsenal(name){const n=anorm(name).replace(/[«»]/g,"");const i=ARS.findIndex(x=>anorm(x.name).replace(/[«»]/g,"").replace(/\s*\([^)]*\)\s*$/,"")===n);return i>=0?i:null;}
 
 /* ---------- weapon & armor modifications ---------- */
@@ -1309,8 +1414,87 @@ function parseWeapon(t){
   o.props=PROPS.filter(p=>new RegExp("(^|[\\s.,])"+p+"([\\s.,]|$)","i").test(t)&&!(p==="Разрывающее"&&/Смертельно разрывающее/i.test(t)));
   return o;
 }
+function parseDmg(s){
+  s=String(s||"").replace(/\s/g,"").replace(/[кКдД]/g,"d").replace(/бс/gi,"БС");if(!s)return null;
+  let dice=null,flat=0;const bs=[];const m=s.match(/(\d*)d(\d+)/i);
+  if(m){if(Number(m[2])<1||Number(m[1]||1)>50)return null;dice=(m[1]||"1")+"d"+m[2];}
+  const rest=m?s.slice(0,m.index)+s.slice(m.index+m[0].length):s;
+  const toks=rest.match(/[+\-]?(?:\d*\*?БС|\d+)/g)||[];
+  if(toks.join("")!==rest)return null;
+  toks.forEach(t=>{if(/БС/.test(t))bs.push(/^[+\-]/.test(t)?t:"+"+t);else flat+=Number(t);});
+  if(!dice&&!flat&&!bs.length)return null;
+  const expr=(dice||"")+(flat?(dice?(flat>0?"+":"")+flat:String(flat)):"")+bs.join("");
+  return {dice,flat,bs,expr:dice||flat?expr:expr.replace(/^\+/,"")};
+}
+/* ---------- урон взрывчатки и метательного ---------- */
+function explDmg(r){const x=ARS[r];if(!x||!(x.sec==="Взрывные устройства"||x.cat==="Метательное")||!/урон/i.test(x.text))return [];
+  const out=[];const re=/(\d*)\s*d\s*(\d+)((?:\s*\+\s*(?:\d+|БС))*)/gi;let m;
+  while((m=re.exec(x.text))){const parts=(m[3]||"").match(/\+\s*(?:\d+|БС)/gi)||[];let flat=0;const bs=[];parts.forEach(p=>{p=p.replace(/\s/g,"");if(/БС/i.test(p))bs.push("+БС");else flat+=Number(p.slice(1));});
+    const dice=(m[1]||"1")+"d"+m[2];out.push({dice,flat,bs,expr:dice+(flat?"+"+flat:"")+bs.join("")});}
+  if(out.length===2&&/взрыв/i.test(x.text))out[1].label="взрыв";
+  return out;}
+function explMeta(r){const t=ARS[r].text,a=[];let m=t.match(/(\d+)\s*пробити|пробитие\s*\(?(\d+)/i);if(m)a.push(`пробитие ${m[1]??m[2]}`);m=t.match(/[Рр]адиус[^\d]{0,20}(\d+)\s*метр|радиусе\s*(\d+)\s*метр|\((\d+)\s*метров\)|в\s*(\d+)\s*метр/);if(m)a.push(`радиус ${m[1]||m[2]||m[3]||m[4]} м`);return a;}
+const outWord=n=>/гранат/i.test(n)?"Гранат больше нет":/мин[аы]?(\s|$)|мина/i.test(n)?"Мин больше нет":/взрыв/i.test(n)?"Зарядов больше нет":"Больше не осталось";
+const isExpl=r=>r!=null&&(ARS[r].sec==="Взрывные устройства"||ARS[r].cat==="Метательное");
+function explUI(g,r){if(!isExpl(r))return "";const ds=explDmg(r);const meta=explMeta(r);const out=!(Number(g.qty)>0);
+  if(!ds.length)return `<div class="inline noprint" style="margin-top:6px;gap:8px"><button class="btn small primary" data-xuse="${g.id}" ${out?"disabled":""}>Использовать</button>${meta.length?`<span class="note">${esc(meta.join(", "))}</span>`:""}</div>${out?`<div class="note" style="color:var(--warn);margin-top:3px">${outWord(g.name)}</div>`:`<div class="note" style="margin-top:3px">Спишется 1, осталось ${g.qty}</div>`}`;
+  return `<div style="margin-top:6px;font-size:14.5px">Урон ${ds.map((d,i)=>`${d.label?`${esc(d.label)} `:""}<button class="dmgbtn" data-xdmg="${g.id}|${i}" title="Бросить урон">${esc(d.expr)}</button>`).join(", ")}${meta.length?`<span class="note">, ${esc(meta.join(", "))}</span>`:""}</div>${out?`<div class="note" style="color:var(--warn);margin-top:3px">${outWord(g.name)}</div>`:`<div class="note" style="margin-top:3px">При броске урона спишется 1, осталось ${g.qty}</div>`}`;}
+function customProfile(g,R){
+  const t=g.ctype, mods=(g.mods||[]).map(i=>MODBYI[i]).filter(Boolean), notes=mods.filter(m=>m.note).map(m=>m.note);
+  if(t==="ranged"||t==="melee"){
+    const d=parseDmg(g.cdmg),skill=t==="ranged"?"rng":"mel",mag=t==="ranged"&&Number(g.cmag)>0?Number(g.cmag):null;
+    let dmg=0,pen=0,hit=0,melee=0,whirl=0,crit=String(g.ccrit||"").trim().replace("/","-")||null;
+    const props=[...(g.cprops||[])];const add=p=>{p=p.trim();if(p&&!props.includes(p))props.push(p);};
+    String(g.cpropx||"").split(/[,;]/).forEach(add);
+    favorEffects(g.id).forEach(({eff})=>{hit+=eff.hit||0;pen+=eff.pen||0;(eff.props||[]).forEach(add);});
+    mods.forEach(m=>{dmg+=m.dmg||0;pen+=m.pen||0;hit+=m.hit||0;melee+=m.melee||0;(m.props||[]).forEach(add);if(m.crit&&(!crit||parseInt(m.crit)<parseInt(crit)))crit=m.crit;if(m.whirl)whirl=whirl?whirl+1:2;});
+    const base=g.cpen!==""&&g.cpen!=null&&!isNaN(Number(g.cpen))?Number(g.cpen):null;
+    const penT=base!=null?base+pen:(pen||null);
+    let dice=null,flat=dmg,bs=[],expr=null;
+    if(d){dice=d.dice;flat=d.flat+dmg;bs=d.bs;}
+    if(d||dmg){expr=(dice||"")+(flat?(dice?(flat>0?"+":"")+flat:String(flat)):"")+bs.join("");if(!expr)expr="0";}
+    const parts=[];if(expr)parts.push(`${expr} урона`);if(penT!=null)parts.push(`пробитие ${penT}`);if(mag)parts.push(`обойма ${mag}`);if(crit)parts.push(`крит на ${crit}`);if(whirl)parts.push(`Вихрь ударов (${whirl})`);
+    return {custom:true,mag,single:true,burst:null,kind:t,line:parts.join(", ")+(props.length?". "+props.join(", "):""),props,hit,skill,pen:penT,crit,whirl,dmg:expr,dice:expr?(dice||"0d1"):null,flat,bs,total:R?R.tot[skill]+hit:null,melee,notes,orig:g.note||"",changed:mods.length>0};
+  }
+  if(t==="armor"){let a=Number(g.carmor)||0,dur=Number(g.cdur)||0,cls="";
+    mods.forEach(md=>{a+=md.armor||0;dur+=md.dur||0;if(md.cls)cls=md.cls;});
+    favorEffects(g.id).forEach(({eff})=>{dur+=eff.dur||0;a+=eff.armor||0;});
+    a=Math.max(0,a);dur=Math.max(0,dur);
+    return {custom:true,kind:"armor",armor:a,dur,line:`Броня ${a}, прочность ${dur}${cls?", "+cls.toLowerCase()+" броня":""}`,stats:mods.filter(m=>m.stat).map(m=>({k:m.stat,src:m.name})),notes,orig:g.note||"",changed:mods.length>0};}
+  return null;
+}
+const FXKEYS=()=>[...SKEYS.map(k=>[k,LABEL[k]]),["hp","Очки здоровья"],["ini","Инициатива"],["res","Устойчивость"]];
+const fxLabel=k=>(FXKEYS().find(x=>x[0]===k)||[k,k])[1];
+function cfxLine(g){const fx=(g.cfx||[]).filter(([k,v])=>k&&Number(v));return fx.length?`<div class="note" style="margin-top:3px">Даёт: ${fx.map(([k,v])=>`${sgn(Number(v))} ${esc(fxLabel(k))}`).join(", ")}</div>`:"";}
+function modPills(g){const ms=(g.mods||[]).map(i=>MODBYI[i]).filter(Boolean);return ms.length?`<div class="pillset" style="margin-top:4px">${ms.map(m=>`<span class="pill" style="cursor:default">${esc(m.name)}<button class="del noprint" data-modoff="${g.id}|${m.i}" aria-label="Снять ${esc(m.name)}" style="margin-left:4px">×</button></span>`).join("")}</div>`:"";}
+function customUI(g,R){
+  if(EDITG.has(g.id))return "";
+  const p=g.ctype?customProfile(g,R):null, fx=cfxLine(g), hasFx=(g.cfx||[]).some(([k,v])=>k&&Number(v));
+  const can=g.ctype&&g.ctype!=="item"&&modsFor_item(g).length;
+  let h="";
+  if(p&&p.kind==="armor"){h+=`<div style="margin-top:4px;font-size:14.5px">Броня <b>${p.armor}</b>, прочность <b>${p.dur}</b>${p.line.includes("броня")?`, ${esc(p.line.split(", ").slice(2).join(", "))}`:""}</div>`+(p.notes.length?`<div class="note">${esc(p.notes.join("; "))}</div>`:"")+fx+`<label class="note inline noprint" style="gap:4px;margin-top:4px"><input type="checkbox" data-gearon="${g.id}" ${g.on!==false?"checked":""}> надето</label>`;}
+  else if(p){const ex=[];if(p.pen!=null)ex.push(`пробитие ${p.pen}`);if(p.mag)ex.push(`обойма ${p.mag}`);if(p.crit)ex.push(`крит на ${p.crit}`);if(p.whirl)ex.push(`Вихрь ударов (${p.whirl})`);
+    h+=`<div style="margin-top:4px;font-size:14.5px">Урон ${p.dmg?`<button class="dmgbtn" data-dmg="${g.id}" title="Бросить урон">${esc(p.dmg)}</button>`:(g.cdmg?`<span class="note" style="color:var(--warn)">не разобран: «${esc(g.cdmg)}»</span>`:`<span class="note">не указан</span>`)}${ex.length?", "+ex.join(", "):""}. <b>${p.skill==="rng"?"ДБ":"ББ"} ${p.total}</b>${p.hit?` <span class="note">(${sgn(p.hit)} от улучшений)</span>`:""}${p.props.length?`<div class="pillset" style="margin-top:4px">${p.props.map(x=>`<span class="tag">${esc(x)}</span>`).join("")}</div>`:""}${p.melee?`<div class="note">Удар в ближнем бою +${p.melee} урона</div>`:""}${p.notes.length?`<div class="note">${esc(p.notes.join("; "))}</div>`:""}${ammoUI(g,p)}</div>`+fx+(hasFx?`<label class="note inline noprint" style="gap:4px;margin-top:4px"><input type="checkbox" data-gearon="${g.id}" ${g.on!==false?"checked":""}> используется</label>`:"");}
+  else if(hasFx){h+=fx+`<label class="note inline noprint" style="gap:4px;margin-top:4px"><input type="checkbox" data-gearon="${g.id}" ${g.on!==false?"checked":""}> используется</label>`;}
+  h+=modPills(g);
+  if(can)h+=`<button class="btn small noprint" data-modopen="${g.id}" style="margin-top:6px">Улучшения</button>`;
+  return h;
+}
+function customFields(g){
+  const t=g.ctype||"",v=k=>esc(g[k]==null?"":String(g[k]));
+  const opt=(val,lb)=>`<option value="${val}" ${t===val?"selected":""}>${lb}</option>`;
+  let h=`<div class="cfields noprint"><label>Тип предмета<select class="sel" data-gear="${g.id}|ctype">${opt("","Обычный предмет")}${opt("ranged","Оружие дальнего боя")}${opt("melee","Оружие ближнего боя")}${opt("armor","Броня")}</select></label>`;
+  if(t==="ranged"||t==="melee"){h+=`<label>Урон<input class="inp" data-gear="${g.id}|cdmg" value="${v("cdmg")}" placeholder="2d10+3" autocomplete="off"></label><label>Пробитие<input class="inp" type="number" min="0" data-gear="${g.id}|cpen" value="${v("cpen")}" placeholder="0"></label>`;if(t==="ranged")h+=`<label>Обойма<input class="inp" type="number" min="0" data-gear="${g.id}|cmag" value="${v("cmag")}" placeholder="без патронов"></label>`;}
+  if(t==="armor")h+=`<label>Броня<input class="inp" type="number" min="0" data-gear="${g.id}|carmor" value="${v("carmor")}" placeholder="0"></label><label>Прочность<input class="inp" type="number" min="0" data-gear="${g.id}|cdur" value="${v("cdur")}" placeholder="0"></label>`;
+  if(t==="ranged"||t==="melee")h+=`<label>Крит на<input class="inp" data-gear="${g.id}|ccrit" value="${v("ccrit")}" placeholder="9-10" autocomplete="off"></label>`;
+  h+=`</div>`;
+  if(t==="ranged"||t==="melee"){const on=g.cprops||[];h+=`<div class="noprint" style="margin-top:8px"><div class="note">Свойства (названия из Арсенала)</div><div class="pillset" style="margin-top:4px">${PROPS.map(x=>`<button class="pill" data-cprop="${g.id}|${esc(x)}" aria-pressed="${on.includes(x)}">${esc(x)}</button>`).join("")}</div><label class="note" style="display:flex;flex-direction:column;gap:3px;margin-top:6px">Другие свойства через запятую<input class="inp" data-gear="${g.id}|cpropx" value="${v("cpropx")}" placeholder="Верный удар (3), Критический удар" autocomplete="off"></label></div>`;}
+  {const fx=g.cfx||[];h+=`<div class="noprint" style="margin-top:8px"><div class="note">Эффекты на характеристики</div>${fx.map(([k,val],i)=>`<div class="cfxrow"><select class="sel" data-cfx="${g.id}|${i}|k">${FXKEYS().map(([kk,lb])=>`<option value="${kk}" ${kk===k?"selected":""}>${esc(lb)}</option>`).join("")}</select><input class="inp" type="number" data-cfx="${g.id}|${i}|v" value="${esc(String(val??""))}" style="width:72px"><button class="del delico" data-cfxdel="${g.id}|${i}" title="Убрать эффект" aria-label="Убрать эффект">×</button></div>`).join("")}<button class="btn small" data-cfxadd="${g.id}" style="margin-top:6px">Добавить эффект</button></div>`;}
+  if(t==="ranged"||t==="melee")h+=`<div class="note noprint" data-dmghint="${g.id}" style="${g.cdmg&&!parseDmg(g.cdmg)?"color:var(--warn)":""}">${g.cdmg&&!parseDmg(g.cdmg)?"Не получается разобрать урон. ":""}Урон пишется как в книге: 2d10+3, d5, 4 или 2d6+БС.</div>`;
+  return h;
+}
 function profile(g,R){
-  const r=gearRef(g), kind=itemKind(r); if(r==null) return null;
+  const r=gearRef(g), kind=itemKind(r); if(r==null) return g.ctype?customProfile(g,R):null;
   const x=ARS[r], mods=(g.mods||[]).map(i=>MODBYI[i]).filter(Boolean);
   const notes=mods.filter(m=>m.note).map(m=>m.note);
   if(kind==="ranged"||kind==="melee"){
@@ -1330,7 +1514,8 @@ function profile(g,R){
     if(whirl) parts.push(`Вихрь ударов (${whirl})`);
     const skill=kind==="ranged"?"rng":"mel";
     const line=parts.join(", ")+(props.length?". "+props.join(", "):"");
-    return {kind,line,props,hit,skill,dmg:dmgExpr,dice:w.dice,flat:(w.flat||0)+dmg,bs:w.bs||[],total:R?R.tot[skill]+hit:null,melee,notes,orig:x.text,changed:mods.length>0||favorEffects(g.id).length>0};
+    const mm=x.text.match(/Режим стрельбы\s*([\d\-–—]+)\s*\/\s*([\d\-–—]+)/i);const single=!mm||/\d/.test(mm[1]);const burst=mm&&/\d/.test(mm[2])?Number(mm[2]):null;
+    return {pen:w.pen!=null?w.pen+pen:(pen||null),crit,whirl,mag:kind==="ranged"&&w.mag?Number(w.mag):null,single,burst,kind,line,props,hit,skill,dmg:dmgExpr,dice:w.dice,flat:(w.flat||0)+dmg,bs:w.bs||[],total:R?R.tot[skill]+hit:null,melee,notes,orig:x.text,changed:mods.length>0||favorEffects(g.id).length>0};
   }
   if(kind==="armor"){
     const m=x.text.match(/^(\d+)\s*\((\d+)\)/); let a=m?Number(m[1]):0,d=m?Number(m[2]):0;
@@ -1349,8 +1534,8 @@ function profile(g,R){
   }
   return null;
 }
-function modsFor_item(g){const k=itemKind(gearRef(g));const r=gearRef(g);if(!k||k==="shieldplain")return [];
-  return MODS.filter(m=>m.k===k&&(!m.only||m.only.test(ARS[r].cat))&&(!m.onlyText||m.onlyText.test(ARS[r].text)));}
+function modsFor_item(g){const r=gearRef(g);const k=g.ctype?g.ctype:itemKind(r);if(!k||k==="shieldplain")return [];
+  return MODS.filter(m=>m.k===k&&(r==null||((!m.only||m.only.test(ARS[r].cat))&&(!m.onlyText||m.onlyText.test(ARS[r].text)))));}
 const MDLG={id:null};
 function renderMods(){
   const g=C.gear.find(x=>x.id===MDLG.id); if(!g) return;
@@ -1463,7 +1648,7 @@ function talEntry(t,R){
   const how=t.src==="class"?"стартовый, бесплатно":(t.how?esc(t.how):"свой");
   let buy="";
   if(t.src!=="class"&&bt){const lv=talLevel(bi),c=talCost(bi);if(c)buy=`<div class="inline noprint" style="margin-top:6px"><button class="btn small primary" data-talbuy="${t.id}|${bi}" ${xpAvail(R)<c.cost?"disabled":""}>Купить за ${c.cost} EXP</button><button class="btn small" data-talfree="${t.id}|${bi}">Получен бесплатно</button><span class="note">Этот талант есть в книге: ${esc(bt.group==="МИСП"?"общий МИСП":bt.sub==="Общие"?bt.group:bt.sub)}${bt.rank?", ранг "+bt.rank:""}, ${bt.costs.join("/")} EXP</span></div>`;}
-  return `<div class="entry"><div class="inline">${nameUI}<span class="note">${how}</span><button class="del noprint" data-deltal="${t.id}">Удалить</button></div>${t.todo?'<div class="note">Уточните выбор</div>':""}
+  return `<div class="entry"><div class="inline">${nameUI}<span class="note">${how}</span><button class="del noprint delico" data-deltal="${t.id}" title="Удалить" aria-label="Удалить"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg></button></div>${t.todo?'<div class="note">Уточните выбор</div>':""}
    ${bt?`<div style="margin-top:4px">${talToggle("c"+t.id,"Описание и требования")}</div>${talBody("c"+t.id,`${bt.req&&!/^нет$/i.test(bt.req)?`<div class="note">Требования: ${esc(bt.req)}</div>`:""}<div class="rules">${paras(bt.text)}</div>`)}`:(t.src==="class"?`<div class="note" style="margin-top:4px">Описания этого таланта в Книге игрока нет.</div>`:"")}
    <textarea class="inp" style="margin-top:6px;min-height:40px" data-tal="${t.id}|text" placeholder="${bt?"Заметки":"Описание"}">${esc(t.text)}</textarea>${buy}</div>`;
 }
@@ -1553,9 +1738,13 @@ function showRoll(name,v,r,ini){
   const st=$("#rollNow .stamp");if(st)setTimeout(()=>st.classList.remove("hit"),400);
   if(v!=null&&!/Очко судьбы/.test(name))fateOffer(r);
 }
-function showDamage(name,expr,rolls,flat,sum,bs){
+function critLo(c){const m=String(c||"").match(/(\d+)/);return m?Number(m[1]):null;}
+function rollDmgP(p){const m=(p.dice||"0d1").match(/(\d+)d(\d+)/);const n=Number(m[1]),sd=Number(m[2]);const rolls=Array.from({length:n},()=>rnd(sd));const sum=rolls.reduce((a,b)=>a+b,0)+p.flat;const lo=critLo(p.crit);const crit=lo!=null&&n>0&&rolls.some(x=>x>=lo);return {rolls,sum,crit};}
+function wpnExtras(p){const a=[];if(p.pen!=null&&!isNaN(p.pen))a.push(`пробитие ${p.pen}`);if(p.whirl)a.push(`Вихрь ударов (${p.whirl})`);if(p.props&&p.props.length)a.push("свойства: "+p.props.join(", "));const n=(p.notes||[]);return (a.length?`<div class="note" style="margin-top:4px">${esc(a.join("; "))}</div>`:"")+(n.length?`<div class="note">Улучшения: ${esc(n.join("; "))}</div>`:"");}
+const critTag=(p,dr)=>dr.crit?` <b style="color:var(--base)">Крит: на кубе урона ${Math.max(...dr.rolls)} (крит на ${esc(p.crit)})</b>`:"";
+function showDamage(name,expr,rolls,flat,sum,bs,extra){
   LASTSTAMP="roll";
-  $("#rollNow").innerHTML=`<div class="big">${esc(name)}: урон ${esc(expr)}</div><div class="inline" style="margin-top:4px">${stamp(sum,"roll")}<span class="verdict" style="font-size:16px">${rolls.length>1?"кубы "+rolls.join(" + "):"куб "+rolls[0]}${flat?`, бонус ${sgn(flat)}`:""}${bs.length?`, не забудьте ${esc(bs.join(""))}`:""}</span></div>`;
+  $("#rollNow").innerHTML=`<div class="big">${esc(name)}: урон ${esc(expr)}</div><div class="inline" style="margin-top:4px">${stamp(sum,"roll")}<span class="verdict" style="font-size:20px">${sum} урона${bs.length?` ${esc(bs.join(""))}`:""}</span></div><div style="margin-top:4px;font-size:15px">${esc(expr)}: ${rolls.length?`выпало ${rolls.join(" + ")}`:"без кубов"}${flat?` ${flat>0?"+":"−"} ${Math.abs(flat)}`:""} = <b>${sum}</b>${bs.length?`<div class="note">${esc(bs.join(""))} добавьте сами</div>`:""}</div>${extra||""}`;
   ROLLS.unshift(`${name}: урон ${sum}${bs.length?" "+bs.join(""):""}`);ROLLS.length=Math.min(ROLLS.length,8);
   $("#rollLog").innerHTML=ROLLS.slice(1).map(x=>`<li>${esc(x)}</li>`).join("");showPanel();
   const st=$("#rollNow .stamp");if(st)setTimeout(()=>st.classList.remove("hit"),400);
@@ -1584,7 +1773,7 @@ function stAcademy(R){
   <p class="note">Справа итоговое значение характеристики со всеми бонусами.</p></div>
   <div class="card"><h3>Ресурсы</h3><div class="statgrid">${res.map(([k,n])=>stepper(k,A[k],n)).join("")}</div></div>
   <div class="card"><h3>Снаряжение из Академии</h3>
-  ${items.length?items.map(g=>`<div class="entry inline" style="justify-content:space-between"><span><b>${esc(g.name||"Без названия")}</b> <label class="note inline" style="gap:4px;display:inline-flex">× <input class="inp" type="number" min="0" value="${g.qty}" data-gear="${g.id}|qty" style="width:58px"></label>${gearRef(g)!=null?`<div class="note">${esc(ARS[gearRef(g)].text)}</div>`:(g.note?`<div class="note">${esc(g.note)}</div>`:"")}</span><button class="del" data-delgear="${g.id}">Удалить</button></div>`).join(""):`<p class="note">Пока пусто.</p>`}
+  ${items.length?items.map(g=>`<div class="entry inline" style="justify-content:space-between"><span><b>${esc(g.name||"Без названия")}</b> <label class="note inline" style="gap:4px;display:inline-flex">× <input class="inp" type="number" min="0" value="${g.qty}" data-gear="${g.id}|qty" style="width:58px"></label>${gearRef(g)!=null?`<div class="note">${esc(ARS[gearRef(g)].text)}</div>`:(g.note?`<div class="note">${esc(g.note)}</div>`:"")}</span><button class="del delico" data-delgear="${g.id}" title="Удалить" aria-label="Удалить"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg></button></div>`).join(""):`<p class="note">Пока пусто.</p>`}
   <div class="inline" style="margin-top:8px"><button class="btn small primary" id="acaArs">Добавить из арсенала</button><button class="btn small" id="acaOwn">Добавить свой предмет</button></div>
   <p class="note">Свой предмет потом можно переименовать и описать в листе персонажа, нажав на его название.</p></div>`;
 }
@@ -1637,6 +1826,28 @@ function calcRoll(){
 }
 const TEST={stat:"rng",custom:10,type:"normal",mod:0,opp:10,coef:3,maxh:5};
 function rollDie(n){if(n===66)return rnd(6)*10+rnd(6);return rnd(n);}
+function ammoUI(g,p){
+  if(p.kind!=="ranged"||!p.mag) return `<div class="noprint" style="margin-top:6px"><button class="btn small primary" data-shoot="${g.id}">${p.kind==="ranged"?"Стрелять":"Атаковать"}</button></div>`;
+  if(g.ammo==null)g.ammo=p.mag; const a=g.ammo, m=p.mag;
+  const pips=m<=30?`<span class="pips" aria-hidden="true">${Array.from({length:m},(_,i)=>`<i class="${i<a?"f":""}"></i>`).join("")}</span>`:"";
+  const sp=g.spare==null?"∞":g.spare;
+  return `<div class="ammo noprint"><div class="ammo-top"><span class="ammo-n ${a===0?"empty":""}">Патроны: <b>${a}</b> / ${m}</span>${pips}</div>
+   <div class="inline" style="margin-top:6px;gap:6px">${p.single?`<button class="btn small primary" data-shoot="${g.id}" ${a<1?"disabled":""}>Стрелять</button>`:""}${p.burst?`<button class="btn small primary" data-burst="${g.id}" ${a<1?"disabled":""}>Очередь (${Math.min(p.burst,a)||p.burst})</button>`:""}
+   <button class="btn small ${a===0?"primary":""}" data-reload="${g.id}" ${a>=m?"disabled":""}>Перезарядить</button>
+   <span class="note inline" style="gap:4px">Магазины: <button class="pm sm" data-spare="${g.id}|-1" aria-label="Меньше магазинов">−</button><b>${sp}</b><button class="pm sm" data-spare="${g.id}|1" aria-label="Больше магазинов">+</button></span></div>
+   ${a===0?`<div class="note" style="color:var(--warn)">Магазин пуст: перезарядите оружие.</div>`:""}</div>`;
+}
+function stMission(R){
+  const full=stSheet(R), i=full.indexOf('<div class="sheet" id="sheet">');
+  const ini=2*R.tot.agi+(R.extra.ini||0); const f=C.stats.fate!=null?fateInfo():null;
+  return `<div class="misbar noprint">
+    <button class="btn primary" data-rollini="${ini}">${icon("agi")} Инициатива</button>
+    ${f?`<button class="btn" id="openFate">Очки судьбы <b>${f.left}</b>/${f.tot}</button>`:""}
+    <button class="btn" id="openInfl">${icon("infl")} Запрос</button>
+    <button class="btn" id="openMission">Начало и конец миссии</button>
+    <label class="note inline misMod">Модификатор тестов <input class="inp" type="number" id="misMod" value="${ROLLMOD}" style="width:64px"></label>
+  </div>`+(i>=0?full.slice(i):full);
+}
 function stDice(R){
   const pool=Object.entries(DPOOL.dice).filter(([,c])=>c>0);
   const poolTxt=pool.map(([n,c])=>`${c}d${n}`).join(" + ")+(DPOOL.mod?` ${DPOOL.mod>0?"+":"−"} ${Math.abs(DPOOL.mod)}`:"");
@@ -1837,7 +2048,7 @@ function disorderUI(R,tr){
   const hints=Object.entries(DIS).filter(([k,d])=>ins>=d.get).map(([k,d])=>`${d.n} расстройство: при ${d.get}+ Безумия в конце миссии бросок по таблице`);
   return `<h3>Психические расстройства</h3>
   ${hints.length?`<div class="warnbox">${hints.map(esc).join("<br>")}</div>`:`<p class="note">Безумие ${ins}. Броски расстройств: слабое при 10+, значительное при 35+, ужасающее при 70+ очков Безумия.</p>`}
-  ${L.map(x=>{const d=DIS[x.cat];const active=ins>=d.act;return `<div class="entry"><div class="inline" style="justify-content:space-between"><h5 style="margin:0">${talToggle("ds"+x.id,`${d.n}: ${x.lo}${x.hi!==x.lo?"–"+x.hi:""}`)} <span class="note" style="color:${active?"var(--warn)":"var(--muted)"}">${active?"действует":"не действует (Безумие ниже "+d.act+")"}</span></h5><button class="del noprint" data-deldis="${x.id}">Удалить</button></div>${talBody("ds"+x.id,`<div class="rules">${paras(x.text)}</div>`)}</div>`;}).join("")}
+  ${L.map(x=>{const d=DIS[x.cat];const active=ins>=d.act;return `<div class="entry"><div class="inline" style="justify-content:space-between"><h5 style="margin:0">${talToggle("ds"+x.id,`${d.n}: ${x.lo}${x.hi!==x.lo?"–"+x.hi:""}`)} <span class="note" style="color:${active?"var(--warn)":"var(--muted)"}">${active?"действует":"не действует (Безумие ниже "+d.act+")"}</span></h5><button class="del noprint delico" data-deldis="${x.id}" title="Удалить" aria-label="Удалить"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg></button></div>${talBody("ds"+x.id,`<div class="rules">${paras(x.text)}</div>`)}</div>`;}).join("")}
   <div class="inline noprint" style="margin-top:6px">${Object.entries(DIS).map(([k,d])=>`<button class="btn small" data-disroll="${k}">Бросить ${d.gen} (d66)</button>`).join("")}</div>
   ${DISMSG?`<div class="okbox noprint">${DISMSG}</div>`:""}`;
 }
@@ -2043,7 +2254,7 @@ function gainApply(){
 function meritsUI(R){
   const pend=C.merits.filter(m=>R.meritOut[m.id]&&R.meritOut[m.id].pending).length;
   return C.merits.map(e=>{const o=R.meritOut[e.id];
-    return `<div class="entry" data-ik="m:${e.id}" ${e.used?'style="opacity:.75"':""}><div class="inline" style="justify-content:space-between">${e.book?`<h5 style="margin:0">${talToggle("m"+e.id,esc(e.title))}</h5>`:(EDITG.has(e.id)?`<input class="inp" style="flex:1;min-width:200px;font-weight:700" data-le="merits|${e.id}|title" value="${esc(e.title)}" placeholder="Название заслуги">`:`<h5 style="margin:0">${talToggle("m"+e.id,esc(e.title||"Без названия"))}</h5>`)}<span class="inline" style="gap:8px">${!e.book&&!EDITG.has(e.id)?`<button class="jump ph noprint" data-meritedit="${e.id}">изменить</button>`:""}<button class="del noprint" data-delle="merits|${e.id}">Удалить</button></span></div>${e.used?`<div class="usedtag">израсходовано</div>`:""}
+    return `<div class="entry" data-ik="m:${e.id}" ${e.used?'style="opacity:.75"':""}><div class="inline" style="justify-content:space-between">${e.book?`<h5 style="margin:0">${talToggle("m"+e.id,esc(e.title))}</h5>`:(EDITG.has(e.id)?`<input class="inp" style="flex:1;min-width:200px;font-weight:700" data-le="merits|${e.id}|title" value="${esc(e.title)}" placeholder="Название заслуги">`:`<h5 style="margin:0">${talToggle("m"+e.id,esc(e.title||"Без названия"))}</h5>`)}<span class="inline" style="gap:8px">${!e.book&&!EDITG.has(e.id)?`<button class="jump ph noprint" data-meritedit="${e.id}">изменить</button>`:""}<button class="del noprint delico" data-delle="merits|${e.id}" title="Удалить" aria-label="Удалить"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg></button></span></div>${e.used?`<div class="usedtag">израсходовано</div>`:""}
     ${e.book?`${talBody("m"+e.id,`<div class="rules">${paras(e.text)}</div><div class="noprint" style="margin-top:4px"><button class="btn small" data-usedtog="${e.id}">${e.used?"Вернуть (не израсходовано)":"Отметить израсходованным"}</button></div>`)}${o?choicesUI(o,"merit:"+e.id)+fxSummary(o):""}`
       :(EDITG.has(e.id)?`<textarea class="inp" style="margin-top:6px" data-le="merits|${e.id}|text" placeholder="Описание: за что получено, что даёт">${esc(e.text)}</textarea><button class="btn small primary noprint" data-meritdone="${e.id}" style="margin-top:6px">Готово</button>`:(e.text?talBody("m"+e.id,`<div class="rules" style="white-space:pre-wrap">${esc(e.text)}</div>`):""))}</div>`;}).join("")
    +(pend?`<div class="warnbox noprint">У ${pend} заслуг не сделан выбор характеристики.</div>`:"")
@@ -2072,7 +2283,7 @@ function favTitle(fa,t){
   return `${t} Одолжение ${g}`;
 }
 function listEditor(key,ph){
-  return C[key].map(e=>EDITG.has(e.id)?`<div class="entry"><div class="inline"><input class="inp" style="flex:1;min-width:200px;font-weight:700" data-le="${key}|${e.id}|title" value="${esc(e.title)}" placeholder="${ph}"><button class="del noprint" data-delle="${key}|${e.id}">Удалить</button></div><textarea class="inp" style="margin-top:6px;min-height:90px" data-le="${key}|${e.id}|text" placeholder="Что произошло на миссии">${esc(e.text)}</textarea><button class="btn small primary noprint" data-ledone="${e.id}" style="margin-top:6px">Готово</button></div>`
+  return C[key].map(e=>EDITG.has(e.id)?`<div class="entry"><div class="inline"><input class="inp" style="flex:1;min-width:200px;font-weight:700" data-le="${key}|${e.id}|title" value="${esc(e.title)}" placeholder="${ph}"><button class="del noprint delico" data-delle="${key}|${e.id}" title="Удалить" aria-label="Удалить"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg></button></div><textarea class="inp" style="margin-top:6px;min-height:90px" data-le="${key}|${e.id}|text" placeholder="Что произошло на миссии">${esc(e.text)}</textarea><button class="btn small primary noprint" data-ledone="${e.id}" style="margin-top:6px">Готово</button></div>`
    :`<div class="entry"><button class="ownname" data-leedit="${e.id}" title="Нажмите, чтобы изменить">${esc(e.title||"Без названия")}</button>${e.text?`<div class="rules editable" data-leedit="${e.id}" role="button" tabindex="0" title="Нажмите, чтобы изменить" style="white-space:pre-wrap;cursor:pointer">${esc(e.text)}</div>`:""}</div>`).join("")+`<button class="btn small noprint" data-addle="${key}">${key==="missions"?"Добавить миссию":"Добавить заслугу"}</button>`;
 }
 
@@ -2091,13 +2302,25 @@ document.addEventListener("click",e=>{
   if(d.dice){const [sc,p,n,sd]=d.dice.split("|");let r=0;for(let k=0;k<Number(n);k++)r+=rnd(Number(sd));scopeObj(sc).ans[p]=r;render();toast("Выпало "+r);return;}
   if(d.favitem){const [sc,p]=d.favitem.split("|");ACAT.favor={scope:sc,mid:sc.startsWith("merit:")?sc.slice(6):null,path:p};ACAT.sec="";ACAT.where=t.dataset.w||"";openArsenal(null,t.dataset.q||"");return;}
   if(d.roll){const k=d.roll,R=compute(C),v=R.tot[k],r=rnd(20);showRoll(LABEL[k],v,r);return;}
-  if(d.shoot){const g=C.gear.find(x=>x.id===d.shoot),R=compute(C),p=profile(g,R);let v=p.total;const wp=woundPen(R);if(ROLLMOD)v+=ROLLMOD;if(wp)v+=wp;const r=rnd(20);
+  if(d.fatepm){const f=fateInfo();
+    if(d.fatepm==="-1"&&f.left>0){C.fateUsed=(C.fateUsed||0)+1;render();renderFate("Очко судьбы потрачено. Теперь бросьте 2d6 на Безудержные Силы: выберите Силу, к которой взывали.");$("#fateUf").hidden=false;$("#fateUfRes").innerHTML="";$("#fateUfRoll").disabled=false;$("#fateUfForce").value=UF.force||"light";$("#fateDlg").showModal();return;}
+    else if(d.fatepm==="1"&&f.used>0){C.fateUsed--;toast("Очко судьбы возвращено");}render();return;}
+  if(d.use){const g=C.gear.find(x=>x.id===d.use);if(g&&g.qty>0){g.qty--;toast(`${g.name}: осталось ${g.qty}`);render();}return;}
+  if(d.reload){const g=C.gear.find(x=>x.id===d.reload),p=profile(g,compute(C));if(g.spare!=null&&g.spare<=0){toast("Нет запасных магазинов");return;}if(g.spare!=null)g.spare--;g.ammo=p.mag;const fast=C.buys.some(b=>b.tid!=null&&TAL[b.tid]&&TAL[b.tid].name==="Быстрая перезарядка");toast("Перезаряжено"+(fast?" (Быстрая перезарядка: на одно действие меньше)":""));render();return;}
+  if(d.spare){const [id,dv]=d.spare.split("|");const g=C.gear.find(x=>x.id===id);let v=g.spare==null?(Number(dv)>0?1:null):g.spare+Number(dv);if(v!=null&&v<0)v=null;g.spare=v;render();return;}
+  if(d.burst){const g=C.gear.find(x=>x.id===d.burst),R=compute(C),p=profile(g,R);if(g.ammo==null)g.ammo=p.mag;const n=Math.min(p.burst,g.ammo);if(n<1){toast("Магазин пуст");return;}g.ammo-=n;
+    let v=p.total+(ROLLMOD||0)+woundPen(R);const r=rnd(20);const ok=r!==20&&(r===1||r<=v);const k=3;const hits=ok?Math.min(n,1+Math.floor(Math.max(0,v-r)/k)):0;
+    const dmgs=[];let crits=0;if(hits&&p.dice){for(let h=0;h<hits;h++){const dr=rollDmgP(p);dmgs.push(dr.sum);if(dr.crit)crits++;}}
+    LASTSTAMP="roll";$("#rollNow").innerHTML=`<div class="big">${esc(g.name)}: очередь ${n}, ДБ ${v}</div><div class="inline" style="margin-top:4px">${stamp(r,"roll")}<span class="verdict ${ok?"ok":"bad"}">${ok?`Попаданий: ${hits} из ${n}`:"Промах"}${ok?` (степеней ${v-r})`:""}</span></div>${dmgs.length?`<div style="margin-top:6px;font-size:15px">Урон по попаданиям: <b>${dmgs.join(", ")}</b> (всего ${dmgs.reduce((a,b)=>a+b,0)})${p.bs.length?", плюс "+esc(p.bs.join("")):""}${crits?` <b style="color:var(--base)">Критов по урону: ${crits} (крит на ${esc(p.crit)})</b>`:""}</div>`:""}${ok?wpnExtras(p):""}<div class="note">Осталось патронов: ${g.ammo}. Попадания: 1 + 1 за каждые ${k} степени успеха, не больше длины очереди.</div>`;
+    pushLog(`${g.name}: очередь ${n}, ${r} против ${v} — ${ok?"попаданий "+hits:"промах"}`);showPanel();render();fateOffer(r);return;}
+  if(d.shoot){const g=C.gear.find(x=>x.id===d.shoot),R=compute(C),p=profile(g,R);
+    if(p.mag){if(g.ammo==null)g.ammo=p.mag;if(g.ammo<1){toast("Магазин пуст: перезарядите");return;}g.ammo--;setTimeout(render,0);}let v=p.total;const wp=woundPen(R);if(ROLLMOD)v+=ROLLMOD;if(wp)v+=wp;const r=rnd(20);
     const ok=r!==20&&(r===1||r<=v);const deg=ok?(v-r>0?`степеней успеха ${v-r}`:"базовый успех"):`степеней провала ${r-v}`;let dm="";
-    if(ok&&p.dice){const m=p.dice.match(/(\d+)d(\d+)/);const rolls=Array.from({length:Number(m[1])},()=>rnd(Number(m[2])));const sum=rolls.reduce((a,b)=>a+b,0)+p.flat;dm=` Урон: <b>${sum}</b> (${rolls.join("+")}${p.flat?sgn(p.flat):""}${p.bs.length?", плюс "+p.bs.join(""):""}).`;}
-    LASTSTAMP="roll";$("#rollNow").innerHTML=`<div class="big">${esc(g.name)}: ${p.skill==="rng"?"ДБ":"ББ"} ${v}${wp?` (ранение ${sgn(wp)})`:""}${ROLLMOD?` (${sgn(ROLLMOD)})`:""}</div><div class="inline" style="margin-top:4px">${stamp(r,"roll")}<span class="verdict ${ok?"ok":"bad"}">${r===1?"Критический успех, ":r===20?"Критический провал, ":""}${ok?"попадание":"промах"}, ${deg}.</span></div>${dm?`<div style="margin-top:6px;font-size:15px">${dm}</div>`:""}`;
-    pushLog(`${g.name}: ${r} против ${v} — ${ok?"попадание":"промах"}${dm?dm.replace(/<[^>]+>/g,""):""}`);showPanel();fateOffer(r);const st=$("#rollNow .stamp");if(st)setTimeout(()=>st.classList.remove("hit"),400);return;}
+    if(ok&&p.dice){const dr=rollDmgP(p);dm=`<b>${dr.sum} урона</b>${p.bs.length?" "+esc(p.bs.join("")):""} <span class="note">(${esc(p.dmg||"")}: ${dr.rolls.length?"выпало "+dr.rolls.join(" + "):"без кубов"}${p.flat?` ${p.flat>0?"+":"−"} ${Math.abs(p.flat)}`:""})</span>${critTag(p,dr)}`;}
+    LASTSTAMP="roll";$("#rollNow").innerHTML=`<div class="big">${esc(g.name)}: ${p.skill==="rng"?"ДБ":"ББ"} ${v}${wp?` (ранение ${sgn(wp)})`:""}${ROLLMOD?` (${sgn(ROLLMOD)})`:""}</div><div class="inline" style="margin-top:4px">${stamp(r,"roll")}<span class="verdict ${ok?"ok":"bad"}">${r===1?"Критический успех, ":r===20?"Критический провал, ":""}${ok?"попадание":"промах"}, ${deg}.</span></div>${dm?`<div style="margin-top:6px;font-size:15px">${dm}</div>`:""}${ok?wpnExtras(p):""}`;
+    pushLog(`${g.name}: ${r} против ${v} — ${ok?"попадание":"промах"}${dm?", "+dm.replace(/<[^>]+>/g,""):""}`);showPanel();fateOffer(r);const st=$("#rollNow .stamp");if(st)setTimeout(()=>st.classList.remove("hit"),400);return;}
   if(d.atk){const g=C.gear.find(x=>x.id===d.atk),R=compute(C),p=profile(g,R);showRoll(`${g.name}: ${p.skill==="rng"?"ДБ":"ББ"}`,p.total,rnd(20));return;}
-  if(d.dmg){const g=C.gear.find(x=>x.id===d.dmg),R=compute(C),p=profile(g,R);const m=p.dice.match(/(\d+)d(\d+)/);const rolls=Array.from({length:Number(m[1])},()=>rnd(Number(m[2])));const sum=rolls.reduce((a,b)=>a+b,0)+p.flat;showDamage(g.name,p.dmg,rolls,p.flat,sum,p.bs);return;}
+  if(d.dmg){const g=C.gear.find(x=>x.id===d.dmg),R=compute(C),p=profile(g,R);const dr=rollDmgP(p);showDamage(g.name,p.dmg,dr.rolls,p.flat,dr.sum,p.bs,(dr.crit?`<div style="margin-top:4px">${critTag(p,dr)}</div>`:"")+wpnExtras(p));return;}
   if(d.rollres!=null){showRoll("Устойчивость",Number(d.rollres),rnd(20));return;}
   if(d.rollini){const v=Number(d.rollini);let r=rnd(20);const mk=C.mark.i!=null?BOOK.fates[C.mark.i].name:"";if(mk==="Аура удачи"&&r===3){r=2;toast("Аура удачи: 3 считается как 2");}if(mk==="Аура неудачи"&&r===18){r=19;toast("Аура неудачи: 18 считается как 19");}showRoll("Инициатива",null,r,v-r);return;}
   if(d.aca){const [key,dv]=d.aca.split("|");const A=C.academy;A.mods=A.mods||{};if(key.startsWith("m:")){const k=key.slice(2);A.mods[k]=(Number(A.mods[k])||0)+Number(dv);}else A[key]=(Number(A[key])||0)+Number(dv);render();return;}
@@ -2143,6 +2366,17 @@ document.addEventListener("click",e=>{
   if(d.ledone){EDITG.delete(d.ledone);render();return;}
   if(d.meritedit){EDITG.add(d.meritedit);render();const el=document.querySelector(`input[data-le="merits|${d.meritedit}|title"]`);if(el)el.focus();return;}
   if(d.meritdone){EDITG.delete(d.meritdone);render();return;}
+  if(d.xuse){const g=C.gear.find(x=>x.id===d.xuse);if(!g)return;if(!(Number(g.qty)>0)){toast(outWord(g.name));return;}g.qty=Number(g.qty)-1;LASTSTAMP="roll";$("#rollNow").innerHTML=`<div class="big">${esc(g.name)}</div><div class="verdict ok" style="margin-top:4px">Использовано</div><div class="note">${esc(ARS[gearRef(g)].text)}</div>${g.qty>0?`<div class="note">Осталось: ${g.qty}</div>`:`<div class="note" style="color:var(--warn)">Это было последнее. ${outWord(g.name)}</div>`}`;showPanel();render();return;}
+  if(d.xdmg){const [id,i]=d.xdmg.split("|");const g=C.gear.find(x=>x.id===id);const r=gearRef(g);const dd=explDmg(r)[Number(i)];if(!dd)return;
+    let left="";if(Number(i)===0){if(!(Number(g.qty)>0)){LASTSTAMP="roll";$("#rollNow").innerHTML=`<div class="big">${esc(g.name)}</div><div class="verdict bad" style="margin-top:4px">${outWord(g.name)}</div>`;showPanel();toast(outWord(g.name));return;}g.qty=Number(g.qty)-1;left=g.qty>0?`<div class="note">Осталось: ${g.qty}</div>`:`<div class="note" style="color:var(--warn)">Это было последнее. ${outWord(g.name)}</div>`;setTimeout(render,0);}const p={dice:dd.dice,flat:dd.flat,crit:null};const dr=rollDmgP(p);const meta=explMeta(r);showDamage(g.name+(dd.label?" ("+dd.label+")":""),dd.expr,dr.rolls,dd.flat,dr.sum,dd.bs,(meta.length?`<div class="note" style="margin-top:4px">${esc(meta.join("; "))}</div>`:"")+left);return;}
+  if(d.tpdice||d.tpre){const [sc,p,sd]=(d.tpdice||d.tpre).split("|");const o=scopeObj(sc);o.ans[p]={r:rnd(Number(sd)),sel:[]};LASTSTAMP=sc+p;render();return;}
+  if(d.tp){const i1=d.tp.indexOf("|"),i2=d.tp.indexOf("|",i1+1);const sc=d.tp.slice(0,i1),p=d.tp.slice(i1+1,i2),val=d.tp.slice(i2+1);const o=scopeObj(sc);const st=o.ans[p]||{sel:[]};
+    const ch=(compute(C).steps[sc]||{choices:[]}).choices.find(x=>x.path===p);const cnt=ch?ch.count:1;let a=(st.sel||[]).slice();if(a.includes(val))a=a.filter(x=>x!==val);else{a.push(val);if(a.length>cnt)a.shift();}
+    o.ans[p]={...st,sel:a};render();return;}
+  if(d.kitre){const [kind,id]=d.kitre.split("|");EDITG.add("kit|"+id);render();return;}
+  if(d.cprop){const i=d.cprop.indexOf("|"),id=d.cprop.slice(0,i),nm=d.cprop.slice(i+1);const g=C.gear.find(x=>x.id===id);const a=g.cprops||[];g.cprops=a.includes(nm)?a.filter(x=>x!==nm):[...a,nm];render();return;}
+  if(d.cfxadd){const g=C.gear.find(x=>x.id===d.cfxadd);g.cfx=[...(g.cfx||[]),["str",1]];render();return;}
+  if(d.cfxdel){const [id,i]=d.cfxdel.split("|");const g=C.gear.find(x=>x.id===id);g.cfx=(g.cfx||[]).filter((_,j)=>j!==Number(i));render();return;}
   if(d.gearedit){EDITG.add(d.gearedit);render();const el=document.querySelector(`input[data-gear="${d.gearedit}|name"]`);if(el)el.focus();return;}
   if(d.geardone){EDITG.delete(d.geardone);render();return;}
   if(d.modopen){MDLG.id=d.modopen;renderMods();$("#modDlg").showModal();return;}
@@ -2268,9 +2502,17 @@ document.addEventListener("change",e=>{
   if(t.id==="tStat"){TEST.stat=t.value;render();return;}
   if(t.id==="tType"){TEST.type=t.value;render();return;}
   if(["tCustom","tMod","tOpp","tCoef","tMax"].includes(t.id)){TEST[{tCustom:"custom",tMod:"mod",tOpp:"opp",tCoef:"coef",tMax:"maxh"}[t.id]]=Number(t.value)||0;return;}
+  if(t.id==="misMod"){ROLLMOD=Number(t.value)||0;const rm=$("#rollMod");if(rm)rm.value=ROLLMOD;return;}
   if(t.id==="rollMod"){ROLLMOD=Number(t.value)||0;return;}
   if(d.ksplit){const [sc,p]=d.ksplit.split("|");const o=scopeObj(sc);if(t.value==="")delete o.ans[p];else o.ans[p]=Math.max(0,Math.min(15,Number(t.value)||0));render();return;}
   if(d.dicev){const [sc,p]=d.dicev.split("|");if(t.value!==""){scopeObj(sc).ans[p]=Number(t.value);render();}return;}
+  if(d.cfx){const [id,i,f]=d.cfx.split("|");const g=C.gear.find(x=>x.id===id);const row=(g.cfx||[])[Number(i)];if(row){if(f==="k")row[0]=t.value;else row[1]=Number(t.value)||0;}render();return;}
+  if(d.kitsel){const [kind,id]=d.kitsel.split("|");const L=kind==="tal"?C.talents:C.gear;const g=L.find(x=>x.id===id);if(!g)return;const K=KITPICK[g.kit];EDITG.delete("kit|"+id);
+    if(t.value===""){g.picked=false;g.pick=null;render();return;}
+    if(K.tal){g.pick=t.value;g.name="Наука ("+t.value+")";}
+    else if(K.mod){g.pick=Number(t.value);g.mods=[g.pick];}
+    else{g.pick=Number(t.value);g.ref=g.pick;g.name=ARS[g.pick].name;g.mods=[];g.ammo=null;}
+    g.picked=true;g.todo=false;render();toast(kind==="tal"?"Талант добавлен: "+g.name:"Добавлено в снаряжение: "+g.name);return;}
   if(d.gearon){C.gear.find(x=>x.id===d.gearon).on=t.checked;render();return;}
   if(d.rank){C.rankLvl=Math.max(1,Math.min(7,Number(t.value)||1));setTimeout(render,0);return;}
   if(d.disc!=null){CAT.disc[Number(d.disc)]=t.checked;renderCatalog();return;}
@@ -2290,7 +2532,7 @@ document.addEventListener("input",e=>{
   const t=e.target,d=t.dataset;
   if(d.txt==="rankLvl"){C.rankLvl=Math.max(1,Math.min(7,Number(t.value)||1));save();return;}
   if(d.txt){C[d.txt]=t.value;if(d.txt==="name"){$("#hdrName").textContent=t.value||"Новый оперативник";}save();return;}
-  if(d.gear&&t.tagName!=="SELECT"&&!f_qty(d.gear)){const [id,f]=d.gear.split("|");const g=C.gear.find(x=>x.id===id);g[f]=t.value;if(f==="name")g.ref=null;save();return;}
+  if(d.gear&&t.tagName!=="SELECT"&&!f_qty(d.gear)){const [id,f]=d.gear.split("|");const g=C.gear.find(x=>x.id===id);g[f]=t.value;if(f==="name")g.ref=null;if(f==="cdmg"){const hn=document.querySelector(`[data-dmghint="${id}"]`);if(hn){const bad=t.value&&!parseDmg(t.value);hn.style.color=bad?"var(--warn)":"";hn.textContent=(bad?"Не получается разобрать урон. ":"")+"Урон пишется как в книге: 2d10+3, d5, 4 или 2d6+БС.";}}save();return;}
   if(d.tal&&t.tagName!=="SELECT"){const [id,f]=d.tal.split("|");C.talents.find(x=>x.id===id)[f]=t.value;save();return;}
   if(t.id==="dpExpr"){DPOOL.expr=t.value;return;}
   if(t.id==="arsQ"){ACAT.q=t.value;renderArsenal();return;}
@@ -2355,14 +2597,14 @@ const SNDK={click:"Щелчок при нажатии",dice:"Бросок куб
 const SNDA={};
 function sndCfg(){return DB.sounds||(DB.sounds={vol:0.7});}
 function sndPlay(kind){const c=sndCfg();if(!c[kind]||c.mute)return;try{let a=SNDA[kind];if(!a||a.src!==c[kind]){a=SNDA[kind]=new Audio(c[kind]);}a.volume=Math.max(0,Math.min(1,c.vol??0.7));a.currentTime=0;a.play().catch(()=>{});}catch(e){}}
-const DICE_SEL='[data-roll],[data-rollres],[data-rollini],[data-shoot],[data-dmg],[data-atk],#tRoll,[data-ck="="],#ufRoll,[data-uft],#tdRoll,#inflRoll,#inflReroll,#fateTest,#fateUfRoll,#rollPool,#rollHp,#rollFate,[data-table],#rollBirth,[data-sub],[data-rand],[data-dice],#favRollBtn,[data-crit],[data-aristo],[data-disroll],[data-disdup],#rerollFives,#favRep';
+const DICE_SEL='[data-roll],[data-rollres],[data-rollini],[data-shoot],[data-dmg],[data-xdmg],[data-tpdice],[data-tpre],[data-atk],#tRoll,[data-ck="="],#ufRoll,[data-uft],#tdRoll,#inflRoll,#inflReroll,#fateTest,#fateUfRoll,#rollPool,#rollHp,#rollFate,[data-table],#rollBirth,[data-sub],[data-rand],[data-dice],#favRollBtn,[data-crit],[data-aristo],[data-disroll],[data-disdup],#rerollFives,#favRep';
 document.addEventListener("click",e=>{const c=sndCfg();if(!c.click&&!c.dice)return;const el=e.target.closest('button,summary,a,select,label,input[type=checkbox],[role="button"],.pill,.kitopt');if(!el||el.closest("#soundDlg"))return;
   if(el.closest(DICE_SEL)&&!el.closest(".upbtn")&&!el.disabled&&c.dice)sndPlay("dice");else sndPlay("click");},true);
 function renderSoundBtn(){const b=$("#soundBtn");if(!b)return;const c=sndCfg();const any=(c.click||c.dice)&&!c.mute;b.setAttribute("aria-pressed",!!any);b.title="Звуки: свои файлы для щелчка и броска кубиков";
   b.innerHTML=`<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/>${any?'<path d="M15.5 9a4.5 4.5 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11"/>':'<path d="m16 9.5 5 5m0-5-5 5"/>'}</svg>`;}
 function renderSoundDlg(msg){const c=sndCfg();
   $("#soundBody").innerHTML=`<p class="note">По умолчанию приложение беззвучное. Можно загрузить свои короткие звуки (mp3, ogg, wav, до 700 КБ каждый): они сохранятся в приложении и будут играть при нажатиях.</p>
-  ${Object.entries(SNDK).map(([k,n])=>`<div class="iblk"><div class="iblk-t">${n}</div><div class="inline">${c[k]?`<span class="note">загружен</span><button class="btn small" data-sndplay="${k}">Прослушать</button><button class="btn small" data-snddel="${k}" style="color:var(--warn)">Удалить</button>`:`<span class="note">нет звука</span>`}<label class="btn small primary">${c[k]?"Заменить":"Загрузить файл"}<input type="file" accept="audio/*" data-sndfile="${k}" hidden></label></div></div>`).join("")}
+  ${Object.entries(SNDK).map(([k,n])=>`<div class="iblk"><div class="iblk-t">${n}</div><div class="inline">${c[k]?`<span class="note">загружен</span><button class="btn small" data-sndplay="${k}">Прослушать</button><button class="del delico" data-snddel="${k}" title="Удалить" aria-label="Удалить"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg></button>`:`<span class="note">нет звука</span>`}<label class="btn small primary">${c[k]?"Заменить":"Загрузить файл"}<input type="file" accept="audio/*" data-sndfile="${k}" hidden></label></div></div>`).join("")}
   <label class="note inline" style="gap:8px;margin:10px 0">Громкость <input type="range" min="0" max="1" step="0.05" value="${c.vol??0.7}" id="sndVol" style="flex:1"></label>
   <label class="note inline" style="gap:8px"><input type="checkbox" id="sndMute" ${c.mute?"checked":""}> Временно выключить звуки</label>
   ${msg?`<div class="okbox">${msg}</div>`:""}`;}
@@ -2384,7 +2626,7 @@ if(NATIVE&&window.Capacitor.Plugins.App){
     const dlg=document.querySelector("dialog[open]"); if(dlg){dlg.close();return;}
     if(!$("#rollPanel").hidden){$("#rollPanel").hidden=true;document.body.classList.remove("panel-open");return;}
     const i=CREATE.indexOf(STEP);
-    if(STEP===9){STEP=7;render();scrollTo(0,0);return;}
+    if(STEP===9||STEP===10){STEP=7;render();scrollTo(0,0);return;}
     if(STEP===7&&!isFinished(C)){STEP=C.lastStep??0;render();scrollTo(0,0);return;}
     if(STEP===7){window.Capacitor.Plugins.App.exitApp();return;}
     if(i>0){STEP=CREATE[i-1];render();scrollTo(0,0);return;}

@@ -49,3 +49,14 @@ npx cap open android
 ```
 
 В Android Studio: Build → Build App Bundle(s) / APK(s) → Build APK(s).
+
+## Комната мастера (Supabase)
+
+1. Зарегистрируйтесь на supabase.com и создайте проект (регион, например, Frankfurt).
+2. Authentication → Sign In / Providers: включите **Anonymous sign-ins**.
+3. SQL Editor → New query: вставьте содержимое `supabase/room.sql` и нажмите Run.
+4. Project Settings → API (или Data API / API Keys): скопируйте **Project URL** и публичный ключ **anon / publishable**.
+5. В приложении: «Комната» → вставьте адрес и ключ → «Сохранить» (один раз на каждом телефоне).
+   Ключ **service_role / secret** никуда не вставляйте.
+
+Библиотека supabase-js встраивается в APK при сборке (build_www.py), интернет нужен только для самой комнаты.

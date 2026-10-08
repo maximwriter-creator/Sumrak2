@@ -34,6 +34,14 @@ def main():
     html = app.replace("__DATA__", data.replace("</", "<\\/"))
     html = re.sub(r'<link rel="preconnect"[^>]*>\s*', "", html)
     html = re.sub(r'<link href="https://fonts\.googleapis\.com[^>]*>', "<style>\n" + font_css() + "\n</style>", html)
+    supa = os.path.join(ROOT, "node_modules", "@supabase", "supabase-js", "dist", "umd", "supabase.js")
+    if os.path.exists(supa):
+        # библиотека комнаты мастера: встраиваем, чтобы не грузить её из интернета
+        js = open(supa, encoding="utf-8").read().replace("</script", "<\\/script")
+        i = html.index("<script>")
+        html = html[:i] + "<script>" + js + "</script>\n" + html[i:]
+    else:
+        print("нет supabase-js: комната мастера загрузит библиотеку из интернета")
     os.makedirs(os.path.join(ROOT, "www"), exist_ok=True)
     open(os.path.join(ROOT, "www", "index.html"), "w", encoding="utf-8").write(html)
     print("www/index.html собран:", round(len(html.encode()) / 1024), "КБ")

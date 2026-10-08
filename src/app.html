@@ -445,6 +445,30 @@ img,svg,canvas{max-width:100%}
   .sheet{border:0;padding:0;background:#fff}
   .wrap{max-width:none}
 }
+.ptabbar{display:flex;gap:6px;overflow-x:auto;padding:6px 0 4px;margin-top:10px;scrollbar-width:thin}
+.ptab{flex:0 0 auto;display:flex;flex-direction:column;align-items:flex-start;gap:1px;padding:8px 12px;border:1px solid var(--line);border-radius:6px;background:var(--card,transparent);color:inherit;font:inherit;cursor:pointer;max-width:200px}
+.ptab[aria-selected="true"]{border-color:var(--accent);box-shadow:inset 0 -3px 0 var(--accent)}
+.ptabn{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:176px}
+.ptabs2{font-size:13px;opacity:.85;white-space:nowrap}
+.peek button:disabled,.peek input:disabled,.peek select:disabled,.peek textarea:disabled{opacity:1;cursor:default;pointer-events:none}
+.peek .noprint .btn,.peek .draghandle,.peek .del,.peek .pm,.peek [data-modopen],.peek #addArs,.peek #addGear{display:none!important}
+.totop{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:60;width:48px;height:48px;border-radius:50%;border:1px solid var(--line);background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,.25);cursor:pointer;transition:bottom .15s}
+.totop[hidden]{display:none}
+@media print{.totop{display:none}}
+#modeTabs.five button{font-size:13.5px;padding-left:2px;padding-right:2px}
+.gmpm{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-top:4px}
+.gmb{width:40px;height:36px;border:1px solid var(--accent);border-radius:6px;background:var(--panel);color:var(--accent);font-size:20px;font-weight:700;line-height:1;cursor:pointer}
+.gmb:active{background:var(--accent);color:#fff}
+.gmv{font-weight:700;min-width:34px;text-align:center}.gmv.pos{color:var(--ok)}.gmv.neg{color:var(--warn)}
+.dwrap{display:flex;flex-direction:column;gap:4px;min-width:0}.dwrap>.dblk{flex:1}
+.misjump{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:6px;flex:1 1 100%}
+.misjump .mj.prim{background:var(--accent);color:#fff;border-color:var(--accent)}
+.misjump .mj.prim .ico{color:#fff}
+.misjump .mj.jump2{background:transparent}
+.misjump .mj{min-width:0;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;border:1px solid var(--line);border-radius:6px;background:var(--panel);color:inherit;font:inherit;font-size:13px;cursor:pointer}
+.misjump .mj span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.misjump .mj .ico{width:20px;height:20px}
+body.mis #openCat,body.mis [data-unbuy],body.mis [data-buyfree]{display:none!important}
 </style>
 </head>
 <body>
@@ -533,10 +557,6 @@ img,svg,canvas{max-width:100%}
   <p class="note">Сжигается очко навсегда и только в крайнем случае: чтобы избежать смерти, отменить Безудержные Силы и т.п. Особые способы использования есть у класса и Отметки судьбы.</p>
   <div class="inline"><button class="btn small" id="fateBurn" style="color:var(--warn)">Сжечь очко</button><button class="btn small" id="fateUnburn">Вернуть сожжённое</button><button class="btn small" id="fateReset">Миссия завершена: вернуть активированные</button></div>
 </dialog>
-<dialog id="roomDlg" style="max-width:min(640px,96vw);width:640px">
-  <div class="inline" style="justify-content:space-between"><h3 style="font-family:var(--narrow);margin:0">Комната мастера</h3><button class="btn" id="roomClose">Закрыть</button></div>
-  <div id="roomBody"></div>
-</dialog>
 <dialog id="mcDlg" style="max-width:min(560px,94vw)">
   <div class="inline" style="justify-content:space-between"><h3 style="font-family:var(--narrow);margin:0">Калькулятор</h3><button class="btn" id="mcClose">Закрыть</button></div>
   <div id="mcBody" style="margin-top:10px"></div>
@@ -569,6 +589,7 @@ img,svg,canvas{max-width:100%}
   <div class="inline" style="margin-bottom:6px"><select class="sel" id="arsSec"></select><input class="inp" id="arsQ" placeholder="Поиск: название, свойство, фракция" style="flex:1;min-width:180px"></div>
   <div id="arsBody"></div>
 </dialog>
+<button id="toTop" class="totop noprint" type="button" hidden aria-label="Наверх" title="Наверх"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
 <div id="rollPanel" class="rollpanel noprint" hidden role="status" aria-live="polite"><div class="inline" style="justify-content:space-between;align-items:flex-start"><div id="rollNow"></div><button class="del" id="rollClose" aria-label="Закрыть">✕</button></div><label class="note inline" style="gap:6px;margin-top:8px">Модификатор следующих тестов <input class="inp" type="number" id="rollMod" value="0" style="width:64px"></label><ol id="rollLog"></ol></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -599,7 +620,7 @@ const icon=(k,cls="ico")=>ICONS[k]?`<svg class="${cls}" viewBox="${ICONS[k].vb}"
 const COMBAT = SKEYS.slice(0,5), NONCOMBAT = SKEYS.slice(5);
 const LABEL = Object.fromEntries(STATS.map(s=>[s[0],s[1]]));
 Object.assign(LABEL,{ins:"Безумие",infl:"Влияние",hp:"Очки здоровья",fate:"Очки судьбы",xp:"Опыт",light:"Светлая карма",dark:"Тёмная карма",res:"Устойчивость",ini:"Инициатива"});
-const STEPS = ["Класс","Характеристики","Место рождения","Родители","Характер","Отметка судьбы","Недостаток","Лист персонажа","Академия","Кубы и тесты","Миссия"];
+const STEPS = ["Класс","Характеристики","Место рождения","Родители","Характер","Отметка судьбы","Недостаток","Лист персонажа","Академия","Кубы и тесты","Миссия","Комната"];
 const CREATE=[0,1,2,3,4,5,6,8];
 const STEPICON={"0": "<path d=\"M6 13 16 7l10 6M6 20l10-6 10 6M6 27l10-6 10 6\"/>", "1": "<rect x=\"3\" y=\"11\" width=\"14\" height=\"14\" rx=\"2.5\" transform=\"rotate(-12 10 18)\"/><rect x=\"15\" y=\"5\" width=\"14\" height=\"14\" rx=\"2.5\" transform=\"rotate(14 22 12)\"/><path d=\"M9 15h.01M11.5 20h.01M7 21h.01M19.5 9h.01M24.5 15h.01M22 12h.01\" stroke-width=\"2.6\"/>", "2": "<circle cx=\"14\" cy=\"16\" r=\"11\"/><path d=\"M3 16h22M14 5c3.5 3 4.8 7 4.8 11S17.5 24 14 27M14 5c-3.5 3-4.8 7-4.8 11s1.3 8 4.8 11\"/><path d=\"M24 2.5a4.5 4.5 0 0 1 4.5 4.5c0 3.5-4.5 7.5-4.5 7.5S19.5 10.5 19.5 7A4.5 4.5 0 0 1 24 2.5Z\"/><circle cx=\"24\" cy=\"7\" r=\"1.3\"/>", "3": "<circle cx=\"10\" cy=\"8.5\" r=\"3.5\"/><circle cx=\"22\" cy=\"8.5\" r=\"3.5\"/><path d=\"M3.5 22c0-4.5 3-7.5 6.5-7.5 2 0 3.6.9 4.7 2.4M28.5 22c0-4.5-3-7.5-6.5-7.5-2 0-3.6.9-4.7 2.4\"/><circle cx=\"16\" cy=\"19\" r=\"2.8\"/><path d=\"M10.5 29c0-3.5 2.4-5.5 5.5-5.5s5.5 2 5.5 5.5\"/>", "4": "<path d=\"M5 6c3.7 1.5 7.3 1.5 11 0v9.5c0 5-2.7 9-5.5 9S5 20.5 5 15.5V6Z\"/><path d=\"M16 9c3.7 1.5 7.3 1.5 11 0v9.5c0 5-2.7 9-5.5 9-1.8 0-3.6-1.7-4.7-4\"/><path d=\"M7.7 12.5h2.2m2.2 0h2.2M8 19c1.6 1.3 3.4 1.3 5 0M18.8 15.5H21m2.2 0h2.2M19 23c1.6-1.3 3.4-1.3 5 0\"/>", "5": "<path d=\"M3 16s4.8-8 13-8 13 8 13 8-4.8 8-13 8S3 16 3 16Z\"/><circle cx=\"16\" cy=\"16\" r=\"3.8\"/><path d=\"M16 2.5v3M5.5 5.5l2 2.3M26.5 5.5l-2 2.3M16 26.5v3\"/>", "6": "<path d=\"M13.5 18.5 9 23a4.6 4.6 0 0 1-6.5-6.5l4.5-4.5a4.6 4.6 0 0 1 6.5 0\"/><path d=\"M18.5 13.5 23 9a4.6 4.6 0 0 1 6.5 6.5L25 20a4.6 4.6 0 0 1-6.5 0\"/><path d=\"M13 6.5 12 3m6.5 22.5L20 29M6.5 13 3 12m22.5 7 3.5 1\"/>", "8": "<path d=\"M16 5 2.5 11.5 16 18l13.5-6.5L16 5Z\"/><path d=\"M8 14.5V21c2 2.2 5 3.5 8 3.5s6-1.3 8-3.5v-6.5M29.5 11.5v8\"/><circle cx=\"29.5\" cy=\"21\" r=\"1.4\"/>"};
 const stepIco=i=>STEPICON[i]?`<svg class="rico" viewBox="-4 -4 40 40" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${STEPICON[i]}</svg>`:"";
@@ -863,7 +884,7 @@ function sectionize(){
   const sheet=document.getElementById("sheet");
   if(sheet){const kids=[...sheet.children];let i=0;while(i<kids.length){if(kids[i].tagName==="H3"){const h=kids[i];const nodes=[];let j=i+1;while(j<kids.length&&kids[j].tagName!=="H3"){nodes.push(kids[j]);j++;}const before=kids[j]||null;mk(h,nodes,sheet,before);i=j;}else i++;}}
   if(STEP===9){document.querySelectorAll("#main > .card").forEach(card=>{const h=card.querySelector(":scope > h3");if(!h)return;const nodes=[...card.children].filter(n=>n!==h);const tmp=document.createElement("div");card.appendChild(tmp);mk(h,nodes,card,tmp);tmp.remove();card.classList.add("dcard");});}
-  if(STEP===10){const keep=["Характеристики","Состояние и ранения","Трекеры","Временные эффекты","Снаряжение"];const sh=document.getElementById("sheet");
+  if(STEP===10){const keep=["Характеристики","Состояние и ранения","Трекеры","Временные эффекты","Снаряжение","Таланты"];const sh=document.getElementById("sheet");
     if(sh){[...sh.children].forEach(n=>{if(n.tagName==="DETAILS"&&n.classList.contains("sec")){if(!keep.includes(n.dataset.sec))n.remove();else{n.open=true;const dh=n.querySelector(".draghandle");if(dh)dh.remove();n.classList.add("missec");}}else n.remove();});
       keep.forEach(k=>{const d=sh.querySelector(`:scope > details.sec[data-sec="${k}"]`);if(d)sh.appendChild(d);});
       const tb=sh.querySelector(".geartbl tbody");if(tb)[...tb.children].filter(r=>r.querySelector("[data-shoot]")).reverse().forEach(r=>tb.prepend(r));
@@ -951,17 +972,20 @@ function renderInner(){
   const R=compute(C);
   $("#hdrName").textContent = C.name||"Новый оперативник";
   $("#charSel").innerHTML = DB.chars.map(c=>`<option value="${c.id}" ${c.id===C.id?"selected":""}>${esc(c.name||"Без имени")}</option>`).join("")+`<option disabled>──────────</option><option value="__new">+ Создать нового персонажа</option>`;
-  const sheetMode=STEP===7, diceMode=STEP===9, misMode=STEP===10, createMode=CREATE.includes(STEP);
+  const sheetMode=STEP===7, diceMode=STEP===9, misMode=STEP===10||STEP===11, roomMode=STEP===11, createMode=CREATE.includes(STEP);
   document.body.classList.toggle("mis",misMode);
   document.querySelector(".layout").classList.toggle("full",!createMode);
   const fin=isFinished(C)&&!createMode;
   $("#modeTabs").classList.toggle("two",fin);
-  $("#modeTabs").innerHTML=`${fin?"":`<button role="tab" aria-selected="${createMode}" data-go="${createMode?STEP:(C.lastStep??0)}">Создание персонажа</button>`}<button role="tab" aria-selected="${sheetMode}" data-go="7">Лист</button><button role="tab" aria-selected="${misMode}" data-go="10">Миссия</button><button role="tab" aria-selected="${diceMode}" data-go="9">Кубы</button>`;
+  $("#modeTabs").innerHTML=`${fin?"":`<button role="tab" aria-selected="${createMode}" data-go="${createMode?STEP:(C.lastStep??0)}">Создание персонажа</button>`}<button role="tab" aria-selected="${sheetMode}" data-go="7">Лист</button><button role="tab" aria-selected="${STEP===10}" data-go="10">Миссия</button><button role="tab" aria-selected="${diceMode}" data-go="9">Кубы</button><button role="tab" aria-selected="${roomMode}" data-go="11">Комната</button>`;
   $("#modeTabs").style.gridTemplateColumns=`repeat(${$("#modeTabs").children.length},minmax(0,1fr))`;
+  $("#modeTabs").classList.toggle("five",$("#modeTabs").children.length>4);
   if(createMode) C.lastStep=STEP;
   $("#rail").innerHTML = CREATE.map((i,n)=>{const st=stepStatus(C,R,i);return `<li><button class="rbtn" data-step="${i}" ${i===STEP?'aria-current="step"':""} aria-label="${n+1}. ${STEPS[i]}">${stepIco(i)}<span class="rtxt"><span class="rttl">${n+1}. ${STEPS[i]}</span><span class="rst ${st}">${st==="done"?"готово":st==="pending"?"не закончено":i===8?"по желанию":"не начато"}</span></span><span class="state ${st}" aria-hidden="true"></span></button></li>`;}).join("");
-  $("#main").innerHTML = [stClass,stStats,stBirth,stParents,stChar,stMark,stFlaw,stSheet,stAcademy,stDice,stMission][STEP](R) + navBtns();
+  $("#main").innerHTML = [stClass,stStats,stBirth,stParents,stChar,stMark,stFlaw,stSheet,stAcademy,stDice,stMission,stRoom][STEP](R) + navBtns();
   sectionize();
+  if(STEP===11)renderRoom();
+  $("#toTop").hidden=!(STEP===10||STEP===11);placeToTop();
   if(CREATE.includes(STEP)){const chs=[...document.querySelectorAll("#main .card .choice")];if(chs.length){const box=document.createElement("div");box.className="card choicecard";box.innerHTML=`<h3 class="chttl">Нужно выбрать</h3>`;let need=0;
     chs.forEach(c=>{const q=c.querySelector(".q");const m=q&&q.textContent.match(/\((\d+)\/(\d+)\)/);const pills=c.querySelectorAll(".pill,.kitopt");const pressed=c.querySelectorAll(".pill[aria-pressed='true']").length;
       const pending=(m&&Number(m[1])<Number(m[2]))||(!m&&pills.length&&!pressed)||(c.querySelector("[data-aristo],[data-favitem],[data-rand],[data-kitopen],[data-tpdice]")||(c.querySelector("[data-sub]")&&!c.querySelector(".stamp")))&&!c.querySelector(".okbox");if(pending){c.classList.add("need");need++;}box.appendChild(c);});
@@ -2016,13 +2040,16 @@ function ammoUI(g,p){
 function stMission(R){
   const full=stSheet(R), i=full.indexOf('<div class="sheet" id="sheet">');
   const ini=2*R.tot.agi+(R.extra.ini||0); const f=C.stats.fate!=null?fateInfo():null;
-  return `<div class="misbar noprint">
-    <button class="btn primary" data-rollini="${ini}">${icon("agi")} Инициатива</button>
-    ${f?`<button class="btn" id="openFate">Очки судьбы <b>${f.left}</b>/${f.tot}</button>`:""}
-    <button class="btn" id="openInfl">${icon("infl")} Запрос</button>
-    <button class="btn" id="openMission">Начало и конец миссии</button>
-    <button class="btn" id="openMc">Калькулятор</button>
-    <button class="btn" data-roomopen="1">${roomBtnLabel()}</button>
+  const sv=p=>`<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+  const mj=(attr,ico,lbl,cls="",title="")=>`<button class="mj ${cls}" ${attr} title="${esc(title||lbl.replace(/<[^>]+>/g,""))}">${ico}<span>${lbl}</span></button>`;
+  return `<div class="misbar noprint"><div class="misjump">
+    ${mj(`data-rollini="${ini}"`,icon("agi"),"Инициатива","prim")}
+    ${f?mj('id="openFate"',sv('<path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/>'),`Судьба ${f.left}/${f.tot}`,"","Очки судьбы"):""}
+    ${mj('id="openInfl"',icon("infl"),"Запрос")}
+    ${mj('id="openMc"',sv('<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 11h2M12 11h2M16 11v6M8 15h2M12 15h2M8 18h6"/>'),"Калькулятор")}
+    ${mj('data-roomopen="1"',sv('<circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.4"/><path d="M3 20c.8-3.4 3.2-5 6-5s5.2 1.6 6 5M15 15.2c2.6-.4 4.8 1 5.6 4"/>'),roomShortLabel(),"","Комната мастера")}
+    ${[["Характеристики","Характ.","str"],["Трекеры","Трекеры","light"],["Снаряжение","Снаряж.","parts"],["Таланты","Таланты","xp"]].map(([k,l,ic])=>mj(`data-jumpsec="${k}"`,icon(ic),l,"jump2",k)).join("")}
+  </div>
     <label class="note inline misMod">Модификатор тестов <input class="inp" type="number" id="misMod" value="${ROLLMOD}" style="width:64px"></label>
   </div>`+(i>=0?full.slice(i):full);
 }
@@ -2036,6 +2063,10 @@ function diceCalcHTML(card){const body=`
     </div>
     <p class="note">Кубы можно нажимать подряд: «d6» дважды даст 2d6. Работает и ввод с клавиатуры: цифры, d, + − * /, скобки, Enter — бросок, Backspace — стереть, Esc — очистить. d66 — два d6 (десятки и единицы).</p>
   `;return card?`<div class="card calc"><h3>Калькулятор</h3>${body}</div>`:`<div class="calc">${body}</div>`;}
+function placeToTop(){const b=$("#toTop");if(!b||b.hidden)return;const p=$("#rollPanel");const h=p&&!p.hidden?p.getBoundingClientRect().height+12:0;b.style.bottom=`calc(${16+Math.round(h)}px + env(safe-area-inset-bottom,0px))`;}
+window.addEventListener("resize",placeToTop);
+setTimeout(()=>{const p=$("#rollPanel");if(p)new MutationObserver(placeToTop).observe(p,{attributes:true,childList:true,subtree:true});},0);
+function stRoom(R){return `<h2>Комната мастера</h2><div id="roomView"></div>`;}
 function stDice(R){
   const pool=Object.entries(DPOOL.dice).filter(([,c])=>c>0);
   const poolTxt=pool.map(([n,c])=>`${c}d${n}`).join(" + ")+(DPOOL.mod?` ${DPOOL.mod>0?"+":"−"} ${Math.abs(DPOOL.mod)}`:"");
@@ -2586,9 +2617,12 @@ document.addEventListener("click",e=>{
     render();if($("#missionDlg").open)renderMission();return;}
   if(d.spt){const [l,v]=d.spt.split("|");const r=rnd(20);const ROLLMOD0=ROLLMOD;ROLLMOD=0;const w0=W().apply;W().apply=false;showRoll("Змеиный дух: "+l,Number(v),r);W().apply=w0;ROLLMOD=ROLLMOD0;return;}
   if(d.spdmg){const rr=rnd(10);showDamage("Змеиный дух: Челюсти Змея","1d10+4",[rr],4,rr+4,[],`<div class="note" style="margin-top:4px">2 действия, пробитие 0. Жажда крови: после ранения цели смена цели — только с тестом на Стойкость.</div>`);return;}
-  if(d.roomopen){ROOM.err="";ROOM.msg="";renderRoom();$("#roomDlg").showModal();if(ROOM.st&&ROOM.st.role==="gm")roomFetch();return;}
+  if(d.roomopen){ROOM.err="";ROOM.msg="";STEP=11;render();scrollTo(0,0);if(ROOM.st&&ROOM.st.role==="gm")roomFetch();return;}
   if(d.room){roomAction(d.room);return;}
-  if(d.rmadd!=null){const i=Number(d.rmadd),p=ROOM.players[i];if(!p)return;const k=$("#rmk-"+i).value,v=Number($("#rmv-"+i).value),n=$("#rmn-"+i).value.trim();if(!v){toast("Введите значение, например −2 или 3");return;}roomSetMods(i,[...(ROOM.mods[rmKey(p)]||[]),{k,v,note:n}]);return;}
+  if(d.rmadd!=null){const i=Number(d.rmadd),p=ROOM.players[i];if(!p)return;const dr=rmDraft(rmKey(p));const v=Number(String(dr.v).replace("−","-").replace(",","."));if(!v){toast("Введите значение, например −2 или 3");return;}roomSetMods(i,[...(ROOM.mods[rmKey(p)]||[]),{k:dr.k,v,note:String(dr.n||"").trim()}]);dr.v="";dr.n="";return;}
+  if(d.rmpm){const [i,k,dv]=d.rmpm.split("|");const p=ROOM.players[Number(i)];if(!p)return;const mods=(ROOM.mods[rmKey(p)]||[]).map(m=>({...m}));let m=mods.find(x=>x.k===k&&x.pm);if(!m){m={k,v:0,note:"",pm:true};mods.push(m);}m.v=(Number(m.v)||0)+Number(dv);roomSetMods(Number(i),mods.filter(x=>Number(x.v)));return;}
+  if(d.jumpsec){const el=document.querySelector(`#sheet > details.sec[data-sec="${CSS.escape(d.jumpsec)}"]`);if(!el){toast("Блока «"+d.jumpsec+"» нет");return;}el.open=true;window.scrollTo(0,el.getBoundingClientRect().top+scrollY-8);const bar=document.querySelector(".misbar");if(bar){const br=bar.getBoundingClientRect();if(br.top<=1&&br.bottom>0)window.scrollBy(0,-br.height);}return;}
+  if(d.rmsel!=null){const p=ROOM.players[Number(d.rmsel)];if(p){ROOM.sel=rmKey(p);renderRoom();}return;}
   if(d.rmdel){const [i,j]=d.rmdel.split("|").map(Number),p=ROOM.players[i];if(!p)return;const cur=(ROOM.mods[rmKey(p)]||[]).filter((_,x)=>x!==j);roomSetMods(i,cur);return;}
   if(d.rmclear!=null){roomSetMods(Number(d.rmclear),[]);return;}
   if(d.rmkick!=null){const i=Number(d.rmkick),p=ROOM.players[i];if(!p)return;askConfirm(`Убрать «${p.name||"Без имени"}» из комнаты?`,()=>roomKick(i));return;}
@@ -2684,7 +2718,7 @@ document.addEventListener("click",e=>{
     case "favClose": $("#favDlg").close();break;
     case "favRollBtn": FAV.roll=rnd(3)*10+rnd(3);LASTSTAMP="fav";renderFav();{const el=document.querySelector(`#favBody h5[data-favn="${FAV.roll}"]`);if(el)el.closest(".entry").scrollIntoView({block:"center",behavior:"smooth"});}break;
     case "tempAll": C.merits.forEach(m=>{if(!m.ans)return;Object.values(m.ans).forEach(v=>{if(v&&typeof v==="object"&&!Array.isArray(v)&&"left" in v&&v.left>0)v.left--;});});render();toast("Временные эффекты уменьшены на одну миссию");break;
-    case "roomClose": $("#roomDlg").close();break;
+    case "toTop": window.scrollTo({top:0,behavior:"smooth"});break;
     case "openMc": renderMc();$("#mcDlg").showModal();break;
     case "mcClose": $("#mcDlg").close();break;
     case "openInfl": INFL.last=null;INFL.rerolled=false;renderInfl();$("#inflDlg").showModal();break;
@@ -2872,12 +2906,28 @@ const SNDA={};
 function sndCfg(){return DB.sounds||(DB.sounds={vol:0.7});}
 function sndPlay(kind){const c=sndCfg();if(!c[kind]||c.mute)return;try{let a=SNDA[kind];if(!a||a.src!==c[kind]){a=SNDA[kind]=new Audio(c[kind]);}a.volume=Math.max(0,Math.min(1,c.vol??0.7));a.currentTime=0;a.play().catch(()=>{});}catch(e){}}
 const DICE_SEL='[data-roll],[data-rollres],[data-rollini],[data-shoot],[data-dmg],[data-xdmg],[data-tpdice],[data-tpre],[data-atk],#tRoll,[data-ck="="],#ufRoll,[data-uft],#tdRoll,#inflRoll,#inflReroll,#fateTest,#fateUfRoll,#rollPool,#rollHp,#rollFate,[data-table],#rollBirth,[data-sub],[data-rand],[data-dice],#favRollBtn,[data-crit],[data-aristo],[data-disroll],[data-disdup],#rerollFives,#favRep';
-document.addEventListener("click",e=>{const c=sndCfg();if(!c.click&&!c.dice)return;const el=e.target.closest('button,summary,a,select,label,input[type=checkbox],[role="button"],.pill,.kitopt');if(!el||el.closest("#soundDlg"))return;
-  if(el.closest(DICE_SEL)&&!el.closest(".upbtn")&&!el.disabled&&c.dice)sndPlay("dice");else sndPlay("click");},true);
-function renderSoundBtn(){const b=$("#soundBtn");if(!b)return;const c=sndCfg();const any=(c.click||c.dice)&&!c.mute;b.setAttribute("aria-pressed",!!any);b.title="Звуки: свои файлы для щелчка и броска кубиков";
+/* щелчок терминала: синтез из шума, как в Oldvibes (без аудиофайла) */
+let ACTX=null,CLKBUF=null;
+function actx(){if(ACTX)return ACTX;try{ACTX=new (window.AudioContext||window.webkitAudioContext)();}catch(e){ACTX=null;}return ACTX;}
+function clkBuf(ctx){if(CLKBUF)return CLKBUF;const len=Math.max(1,Math.floor(ctx.sampleRate*0.04));CLKBUF=ctx.createBuffer(1,len,ctx.sampleRate);const d=CLKBUF.getChannelData(0);for(let i=0;i<len;i++)d[i]=Math.random()*2-1;return CLKBUF;}
+function synthTick(ctx,freq,at,dur,peak){const src=ctx.createBufferSource();src.buffer=clkBuf(ctx);const f=ctx.createBiquadFilter();f.type="bandpass";f.frequency.setValueAtTime(freq,at);f.Q.setValueAtTime(1.2,at);const g=ctx.createGain();g.gain.setValueAtTime(0.0001,at);g.gain.exponentialRampToValueAtTime(Math.max(0.0002,peak),at+0.002);g.gain.exponentialRampToValueAtTime(0.0001,at+dur);src.connect(f).connect(g).connect(ctx.destination);src.start(at);src.stop(at+dur+0.01);}
+function synthClick(kind){const ctx=actx();if(!ctx)return;if(ctx.state==="suspended")ctx.resume().catch(()=>{});const v=Math.max(0,Math.min(1,sndCfg().vol??0.7))/0.7;const now=ctx.currentTime;
+  if(kind==="open"){synthTick(ctx,2700,now,0.022,0.6*v);synthTick(ctx,2000,now+0.05,0.028,0.5*v);}
+  else if(kind==="close")synthTick(ctx,950,now,0.032,0.55*v);
+  else synthTick(ctx,2700,now,0.022,0.6*v);}
+const OPEN_SEL='[role="tab"],.ptab,.rbtn,[data-go],[data-step],[data-roomopen],[data-jumpsec],[data-rmsel],[id^="open"],#addArs,#addGear,#openCat,[data-modopen],[data-kitopen],#soundBtn';
+document.addEventListener("click",e=>{const c=sndCfg();if(c.mute)return;const el=e.target.closest('button,summary,a,select,label,input[type=checkbox],[role="button"],.pill,.kitopt');if(!el||el.closest("#soundDlg")||el.disabled)return;
+  if(el.closest(DICE_SEL)&&!el.closest(".upbtn")&&c.dice){sndPlay("dice");return;}
+  if(c.click){sndPlay("click");return;}
+  if(c.synth===false)return;
+  const det=el.tagName==="SUMMARY"?el.parentElement:null;
+  const kind=det?(det.open?"close":"open"):(/Close$/.test(el.id)||/^(Закрыть|Отмена|×)$/.test((el.textContent||"").trim())||el.matches("#confirmNo,#delCancel,[data-room=leave]"))?"close":el.matches(OPEN_SEL)?"open":"tap";
+  synthClick(kind);},true);
+function renderSoundBtn(){const b=$("#soundBtn");if(!b)return;const c=sndCfg();const any=(c.click||c.dice||c.synth!==false)&&!c.mute;b.setAttribute("aria-pressed",!!any);b.title="Звуки: свои файлы для щелчка и броска кубиков";
   b.innerHTML=`<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/>${any?'<path d="M15.5 9a4.5 4.5 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11"/>':'<path d="m16 9.5 5 5m0-5-5 5"/>'}</svg>`;}
 function renderSoundDlg(msg){const c=sndCfg();
-  $("#soundBody").innerHTML=`<p class="note">По умолчанию приложение беззвучное. Можно загрузить свои короткие звуки (mp3, ogg, wav, до 700 КБ каждый): они сохранятся в приложении и будут играть при нажатиях.</p>
+  $("#soundBody").innerHTML=`<label class="note inline" style="gap:8px;margin:4px 0 10px"><input type="checkbox" id="sndSynth" ${c.synth!==false?"checked":""}> Щелчок терминала при нажатиях (как в Oldvibes): двойной при открытии вкладок и разделов, глухой при закрытии</label>
+  <p class="note">Можно загрузить и свои короткие звуки (mp3, ogg, wav, до 700 КБ каждый): свой щелчок заменит щелчок терминала, звук броска играет на кнопках бросков.</p>
   ${Object.entries(SNDK).map(([k,n])=>`<div class="iblk"><div class="iblk-t">${n}</div><div class="inline">${c[k]?`<span class="note">загружен</span><button class="btn small" data-sndplay="${k}">Прослушать</button><button class="del delico" data-snddel="${k}" title="Удалить" aria-label="Удалить"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg></button>`:`<span class="note">нет звука</span>`}<label class="btn small primary">${c[k]?"Заменить":"Загрузить файл"}<input type="file" accept="audio/*" data-sndfile="${k}" hidden></label></div></div>`).join("")}
   <label class="note inline" style="gap:8px;margin:10px 0">Громкость <input type="range" min="0" max="1" step="0.05" value="${c.vol??0.7}" id="sndVol" style="flex:1"></label>
   <label class="note inline" style="gap:8px"><input type="checkbox" id="sndMute" ${c.mute?"checked":""}> Временно выключить звуки</label>
@@ -2889,6 +2939,7 @@ document.addEventListener("change",e=>{const t=e.target;
     const rd=new FileReader();rd.onload=()=>{const c=sndCfg();c[t.dataset.sndfile]=rd.result;try{save();localStorage.getItem(KEY);}catch(err){}delete SNDA[t.dataset.sndfile];renderSoundDlg("Звук сохранён.");renderSoundBtn();sndPlay(t.dataset.sndfile);};rd.readAsDataURL(f);}
   if(t.id==="sndVol"){sndCfg().vol=Number(t.value);save();}
   if(t.id==="sndMute"){sndCfg().mute=t.checked;save();renderSoundBtn();}
+  if(t.id==="sndSynth"){sndCfg().synth=t.checked;save();renderSoundBtn();if(t.checked)synthClick("open");}
 });
 document.addEventListener("click",e=>{const b=e.target.closest("[data-sndplay],[data-snddel]");if(!b)return;
   if(b.dataset.sndplay){const c=sndCfg();const m=c.mute;c.mute=false;sndPlay(b.dataset.sndplay);c.mute=m;}
@@ -2900,7 +2951,7 @@ if(NATIVE&&window.Capacitor.Plugins.App){
     const dlg=document.querySelector("dialog[open]"); if(dlg){dlg.close();return;}
     if(!$("#rollPanel").hidden){$("#rollPanel").hidden=true;document.body.classList.remove("panel-open");return;}
     const i=CREATE.indexOf(STEP);
-    if(STEP===9||STEP===10){STEP=7;render();scrollTo(0,0);return;}
+    if(STEP===9||STEP===10||STEP===11){STEP=7;render();scrollTo(0,0);return;}
     if(STEP===7&&!isFinished(C)){STEP=C.lastStep??0;render();scrollTo(0,0);return;}
     if(STEP===7){window.Capacitor.Plugins.App.exitApp();return;}
     if(i>0){STEP=CREATE[i-1];render();scrollTo(0,0);return;}
@@ -2912,7 +2963,7 @@ const ROOM_DEF={url:"https://jwvyixjrpfmcnpdxmyvq.supabase.co",key:"sb_publishab
 const RCFG_KEY="sumrak2096_room_cfg",RST_KEY="sumrak2096_room_state";
 const lsGet=k=>{try{return JSON.parse(localStorage.getItem(k)||"null");}catch(e){return null;}};
 const lsSet=(k,v)=>{try{if(v==null)localStorage.removeItem(k);else localStorage.setItem(k,JSON.stringify(v));}catch(e){}};
-var ROOM={cfg:lsGet(RCFG_KEY)||{...ROOM_DEF},st:lsGet(RST_KEY),sb:null,uid:null,ch:null,players:[],mods:{},status:"",err:"",msg:"",busy:false,editCfg:false,pushT:null,fetchT:null,dirty:false,openKeys:new Set(),lastPush:null};
+var ROOM={cfg:lsGet(RCFG_KEY)||{...ROOM_DEF},st:lsGet(RST_KEY),sb:null,uid:null,ch:null,players:[],mods:{},status:"",err:"",msg:"",busy:false,editCfg:false,pushT:null,fetchT:null,dirty:false,openKeys:new Set(),lastPush:null,draft:{},sel:null,peekOpen:{},poll:null};
 if(!ROOM.cfg.url&&ROOM_DEF.url)ROOM.cfg={...ROOM_DEF};
 const roomCfgOk=()=>!!(ROOM.cfg&&ROOM.cfg.url&&ROOM.cfg.key);
 const rmKey=p=>p.uid+"|"+p.char_id;
@@ -2938,14 +2989,16 @@ async function roomPush(){const st=ROOM.st;if(!st||st.role!=="player")return;con
     if(error){if(error.code==="23503"){roomGone("Комната закрыта мастером.");return;}throw error;}ROOM.lastPush=new Date();ROOM.err="";}catch(e){ROOM.err=roomErr(e);}
   roomRefresh();}
 function roomPushSoon(){if(!ROOM||!ROOM.st||ROOM.st.role!=="player")return;clearTimeout(ROOM.pushT);ROOM.pushT=setTimeout(roomPush,1500);}
-function roomGone(msg){const c=roomChar();if(c&&c.gmMods&&c.gmMods.length){c.gmMods=[];save();render();}if(ROOM.ch&&ROOM.sb)ROOM.sb.removeChannel(ROOM.ch);ROOM.ch=null;ROOM.st=null;lsSet(RST_KEY,null);ROOM.msg=msg||"";ROOM.players=[];ROOM.mods={};roomRefresh();renderRoomBtn();if(msg)toast(msg);}
+function roomGone(msg){clearInterval(ROOM.poll);ROOM.poll=null;const c=roomChar();if(c&&c.gmMods&&c.gmMods.length){c.gmMods=[];save();render();}if(ROOM.ch&&ROOM.sb)ROOM.sb.removeChannel(ROOM.ch);ROOM.ch=null;ROOM.st=null;lsSet(RST_KEY,null);ROOM.msg=msg||"";ROOM.players=[];ROOM.mods={};roomRefresh();renderRoomBtn();if(msg)toast(msg);}
 function roomApplyMods(row){const c=roomChar();if(!c)return;const mods=row&&Array.isArray(row.mods)?row.mods:[];const was=JSON.stringify(c.gmMods||[]);if(was===JSON.stringify(mods))return;c.gmMods=mods;localSave();render();roomRefresh();toast(mods.length?"Мастер изменил модификаторы на миссию":"Мастер снял модификаторы");pushLog("Мастер: "+(mods.length?mods.map(m=>`${fxLabel(m.k)} ${sgn(Number(m.v))}${m.note?" ("+m.note+")":""}`).join(", "):"модификаторы сняты"));}
 async function roomSubscribe(){const st=ROOM.st;if(!st)return;const sb=await roomClient();if(ROOM.ch)sb.removeChannel(ROOM.ch);
   const ch=sb.channel("room-"+st.code+"-"+Math.random().toString(36).slice(2,7));
   if(st.role==="gm"){ch.on("postgres_changes",{event:"*",schema:"public",table:"room_players",filter:`room=eq.${st.code}`},()=>roomFetchSoon());ch.on("postgres_changes",{event:"*",schema:"public",table:"room_mods",filter:`room=eq.${st.code}`},()=>roomFetchSoon());}
   else{ch.on("postgres_changes",{event:"*",schema:"public",table:"room_mods",filter:`room=eq.${st.code}`},p=>{const n=p.new&&p.new.uid?p.new:null,o=p.old||{};if(n&&n.uid===ROOM.uid&&n.char_id===st.charId)roomApplyMods(n);else if(p.eventType==="DELETE"&&(!o.uid||(o.uid===ROOM.uid&&o.char_id===st.charId)))roomApplyMods(null);});
     ch.on("postgres_changes",{event:"DELETE",schema:"public",table:"room_players",filter:`room=eq.${st.code}`},p=>{const o=p.old||{};if(o.uid===ROOM.uid&&o.char_id===st.charId)roomGone("Мастер убрал вас из комнаты или закрыл её.");});}
-  ch.subscribe(s=>{ROOM.status=s;roomRefresh();renderRoomBtn();});ROOM.ch=ch;}
+  ch.subscribe(s=>{ROOM.status=s;roomRefresh();renderRoomBtn();});ROOM.ch=ch;
+  clearInterval(ROOM.poll);ROOM.poll=setInterval(()=>{if(!document.hidden)roomPoll();},8000);}
+async function roomPoll(){const st=ROOM.st;if(!st)return;if(st.role==="gm")return roomFetch();try{const sb=await roomClient();const m=await sb.from("room_mods").select("*").eq("room",st.code).eq("uid",ROOM.uid).eq("char_id",st.charId).maybeSingle();if(!m.error)roomApplyMods(m.data);}catch(e){}}
 async function roomFetch(){const st=ROOM.st;if(!st||st.role!=="gm")return;try{const sb=await roomClient();
     const [a,b]=await Promise.all([sb.from("room_players").select("*").eq("room",st.code).order("name"),sb.from("room_mods").select("*").eq("room",st.code)]);
     if(a.error)throw a.error;if(b.error)throw b.error;ROOM.players=a.data||[];ROOM.mods={};(b.data||[]).forEach(r=>ROOM.mods[rmKey(r)]=r.mods||[]);ROOM.err="";}catch(e){ROOM.err=roomErr(e);}roomRefresh();renderRoomBtn();}
@@ -2968,7 +3021,7 @@ async function roomSetMods(i,mods){const p=ROOM.players[i];if(!p)return;const ke
   try{const sb=await roomClient();const {error}=await sb.from("room_mods").upsert({room:ROOM.st.code,uid:p.uid,char_id:p.char_id,mods,updated_at:new Date().toISOString()},{onConflict:"room,uid,char_id"});if(error)throw error;ROOM.err="";}catch(e){ROOM.err=roomErr(e);}roomRefresh();}
 async function roomKick(i){const p=ROOM.players[i];if(!p)return;try{const sb=await roomClient();await sb.from("room_mods").delete().eq("room",ROOM.st.code).eq("uid",p.uid).eq("char_id",p.char_id);const r=await sb.from("room_players").delete().eq("room",ROOM.st.code).eq("uid",p.uid).eq("char_id",p.char_id);if(r.error)throw r.error;}catch(e){ROOM.err=roomErr(e);}roomFetch();}
 /* чтение чужого листа: compute и профиль оружия работают с глобальным C, поэтому временно подменяем */
-function roomPeek(sheet){const keep=C;let o=null;try{const s=JSON.parse(JSON.stringify(sheet||{}));const b=blank();Object.keys(b).forEach(k=>{if(s[k]==null)s[k]=b[k];});C=s;const R=compute(s);
+function roomPeek(sheet,mods){const keep=C;let o=null;try{const s=JSON.parse(JSON.stringify(sheet||{}));if(mods)s.gmMods=mods;const b=blank();Object.keys(b).forEach(k=>{if(s[k]==null)s[k]=b[k];});C=s;const R=compute(s);
     const w=s.wound||{},hpMax=R.hp,hpCur=w.cur==null?hpMax:Number(w.cur);const tr={light:(R.extra.light||0)+(s.adj.light||0),dark:(R.extra.dark||0)+(s.adj.dark||0),ins:Math.max(0,(R.extra.ins||0)+(s.adj.ins||0)),infl:(R.extra.infl||0)+(s.adj.infl||0)};
     const fTot=R.fate-(s.fateBurned||0),fLeft=Math.max(0,fTot-Math.min(s.fateUsed||0,fTot));
     const wpn=[],arm=[],oth=[];(s.gear||[]).forEach(g=>{if(isResItem(g))return;let p=null;try{p=profile(g,R);}catch(e){}
@@ -2980,45 +3033,48 @@ function roomPeek(sheet){const keep=C;let o=null;try{const s=JSON.parse(JSON.str
     const crit=Number(w.crit)>0?`, критическое ранение ${w.crit}`:"";
     o={R,s,hpMax,hpCur,crit,tr,fTot,fLeft,wpn,arm,oth,tal,eff,ini:2*R.tot.agi+(R.extra.ini||0),cls:R.cl?R.cl.variant:"—",cls2:R.cl2?R.cl2.variant:null};}catch(e){o={err:String(e&&e.message||e)};}finally{C=keep;}return o;}
 const agoTxt=t=>{const d=Math.round((Date.now()-new Date(t).getTime())/1000);return d<60?"только что":d<3600?Math.round(d/60)+" мин назад":Math.round(d/3600)+" ч назад";};
-function roomPlayerCard(p,i){const key=rmKey(p),v=roomPeek(p.sheet),mods=ROOM.mods[key]||[];const open=ROOM.openKeys.has(key);
-  const modUI=`<div class="iblk rev" style="margin-top:8px"><div class="iblk-t">Модификаторы мастера на миссию</div><div class="iblk-b">${mods.length?mods.map((m,j)=>`<div class="inline" style="gap:6px;justify-content:space-between"><span><b>${esc(fxLabel(m.k))} ${sgn(Number(m.v))}</b>${m.note?` <span class="note">${esc(m.note)}</span>`:""}</span><button class="del delico" data-rmdel="${i}|${j}" aria-label="Убрать">×</button></div>`).join(""):`<div class="note">Нет</div>`}
-    <div class="inline" style="gap:6px;margin-top:6px"><select class="sel" id="rmk-${i}">${FXKEYS().map(([k,l])=>`<option value="${k}">${esc(l)}</option>`).join("")}</select><input class="inp" type="number" id="rmv-${i}" placeholder="±" style="width:64px"><input class="inp" id="rmn-${i}" placeholder="за что (необязательно)" style="flex:1;min-width:120px"><button class="btn small primary" data-rmadd="${i}">Добавить</button></div>
-    ${mods.length?`<button class="jump ph" data-rmclear="${i}" style="margin-top:6px">снять все</button>`:""}</div></div>`;
-  if(v.err)return `<details class="entry" data-rk="${esc(key)}" ${open?"open":""}><summary><h5 style="display:inline">${esc(p.name||"Без имени")}</h5> <span class="note">лист не читается</span></summary><div class="note">${esc(v.err)}</div>${modUI}</details>`;
-  const R=v.R,hpBad=v.hpCur<v.hpMax/2;
-  return `<details class="entry" data-rk="${esc(key)}" ${open?"open":""}><summary><h5 style="display:inline">${esc(p.name||"Без имени")}</h5> <span class="note">${esc(v.cls)}${v.cls2?" / "+esc(v.cls2):""} · <span style="${hpBad?"color:var(--warn);font-weight:700":""}">ОЗ ${v.hpCur}/${v.hpMax}${v.crit}</span> · ${agoTxt(p.updated_at)}${mods.length?` · <b>правок: ${mods.length}</b>`:""}</span></summary>
-   <div style="margin-top:6px;font-size:14.5px;line-height:1.6"><b>ОЗ ${v.hpCur}/${v.hpMax}</b>${esc(v.crit)} · Инициатива ${v.ini} · Очки судьбы ${v.fLeft}/${v.fTot}<br>Карма: светлая ${v.tr.light}, тёмная ${v.tr.dark} · Безумие ${v.tr.ins} · Влияние ${v.tr.infl}</div>
-   <div class="pillset" style="margin-top:6px">${STATS.map(([k,n])=>{const gm=mods.filter(m=>m.k===k).reduce((a,m)=>a+Number(m.v||0),0);return `<span class="pill" style="cursor:default${gm?";border-color:var(--accent);font-weight:700":""}">${esc(n)} ${R.tot[k]}${gm?` (${sgn(gm)})`:""}</span>`;}).join("")}</div>
-   ${v.eff.length?`<div class="tempbox" style="margin-top:6px">${v.eff.map(esc).join("<br>")}</div>`:""}
-   ${v.wpn.length?`<div style="margin-top:6px;font-size:14.5px">${v.wpn.join("<br>")}</div>`:""}
-   ${v.arm.length?`<div style="margin-top:6px;font-size:14.5px">${v.arm.join("<br>")}</div>`:""}
-   ${v.oth.length?`<div class="note" style="margin-top:6px">Снаряжение: ${v.oth.join(", ")}</div>`:""}
-   ${v.tal.length?`<div class="note" style="margin-top:4px">Таланты: ${v.tal.map(esc).join(", ")}</div>`:""}
-   ${modUI}<button class="jump ph" data-rmkick="${i}" style="margin-top:6px;color:var(--warn)">убрать из комнаты</button></details>`;}
-function roomFocusInside(){const a=document.activeElement;return !!(a&&$("#roomDlg").contains(a)&&a.matches('[id^="rmk-"],[id^="rmv-"],[id^="rmn-"],#rcUrl,#rcKey'));}
-function roomRefresh(){const d=$("#roomDlg");if(!d||!d.open)return;if(roomFocusInside()){ROOM.dirty=true;return;}renderRoom();}
-function renderRoom(){const body=$("#roomBody");if(!body)return;ROOM.dirty=false;body.querySelectorAll("details[data-rk]").forEach(x=>{if(x.open)ROOM.openKeys.add(x.dataset.rk);else ROOM.openKeys.delete(x.dataset.rk);});
+function rmDraft(key){return ROOM.draft[key]||(ROOM.draft[key]={k:"rng",v:"",n:""});}
+function roomPeekSheet(p){const keep=C;let html="";try{const s=JSON.parse(JSON.stringify(p.sheet||{}));s.gmMods=ROOM.mods[rmKey(p)]||[];const b=blank();Object.keys(b).forEach(k=>{if(s[k]==null)s[k]=b[k];});C=s;const R=compute(s);const full=stSheet(R);const i=full.indexOf('<div class="sheet" id="sheet">');html=i>=0?full.slice(i):full;}catch(e){html=`<div class="warnbox">Не удалось показать лист: ${esc(String(e&&e.message||e))}</div>`;}finally{C=keep;}return html;}
+const PEEK_SECS=["Характеристики","Состояние и ранения","Трекеры","Временные эффекты","Снаряжение","Таланты","Заслуги","Детали и особенности"],PEEK_OPEN=["Характеристики","Состояние и ранения","Трекеры","Снаряжение"];
+function peekSectionize(box){const sh=box.querySelector("#sheet");if(!sh)return;const groups=[];let cur=null;[...sh.children].forEach(n=>{if(n.tagName==="H3"){cur={h:n,nodes:[]};groups.push(cur);}else if(cur)cur.nodes.push(n);});
+  sh.innerHTML="";groups.forEach(g=>{const key=g.h.textContent.trim();if(!PEEK_SECS.includes(key))return;const d=document.createElement("details");d.className="sec missec";d.dataset.sec=key;d.open=ROOM.peekOpen[key]!=null?ROOM.peekOpen[key]:PEEK_OPEN.includes(key);const sm=document.createElement("summary");sm.appendChild(g.h);d.appendChild(sm);g.nodes.forEach(n=>d.appendChild(n));d.addEventListener("toggle",()=>{ROOM.peekOpen[key]=d.open;});sh.appendChild(d);});
+  sh.querySelectorAll("button,input,select,textarea").forEach(el=>{el.disabled=true;el.tabIndex=-1;});}
+function roomModsUI(p,i){const key=rmKey(p),mods=ROOM.mods[key]||[],dr=rmDraft(key);
+  return `<div class="card" style="margin-top:10px"><h3 style="margin-top:0">Модификаторы мастера на миссию</h3>
+   ${mods.length?mods.map((m,j)=>`<div class="inline" style="gap:6px;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--line)"><span><b>${esc(fxLabel(m.k))} ${sgn(Number(m.v))}</b>${m.note?` <span class="note">${esc(m.note)}</span>`:""}</span><button class="del delico" data-rmdel="${i}|${j}" aria-label="Убрать модификатор">×</button></div>`).join(""):`<div class="note">Нет. Добавленные модификаторы сразу учитываются у игрока в характеристиках и бросках.</div>`}
+   <div class="inline" style="gap:6px;margin-top:8px"><select class="sel" data-rmd="${i}|k" aria-label="Что меняем">${FXKEYS().map(([k,l])=>`<option value="${k}" ${dr.k===k?"selected":""}>${esc(l)}</option>`).join("")}</select><input class="inp" type="number" inputmode="numeric" data-rmd="${i}|v" value="${esc(String(dr.v))}" placeholder="±" style="width:70px" aria-label="Значение"><input class="inp" data-rmd="${i}|n" value="${esc(dr.n)}" placeholder="за что (необязательно)" style="flex:1;min-width:140px"><button class="btn small primary" data-rmadd="${i}">Добавить</button></div>
+   <div class="inline" style="gap:10px;margin-top:8px">${mods.length?`<button class="jump ph" data-rmclear="${i}">снять все у этого игрока</button>`:""}<button class="jump ph" data-rmkick="${i}" style="color:var(--warn)">убрать из комнаты</button></div></div>`;}
+function roomGMView(st,live){const ps=ROOM.players;if(ps.length&&!ps.some(p=>rmKey(p)===ROOM.sel))ROOM.sel=rmKey(ps[0]);
+  const i=ps.findIndex(p=>rmKey(p)===ROOM.sel),p=ps[i];const anyMods=Object.values(ROOM.mods).some(m=>m&&m.length);
+  const tabs=ps.map((q,j)=>{const v=roomPeek(q.sheet,ROOM.mods[rmKey(q)]||[]);const n=(ROOM.mods[rmKey(q)]||[]).length;const bad=!v.err&&v.hpCur<v.hpMax/2;return `<button class="ptab" role="tab" aria-selected="${j===i}" data-rmsel="${j}"><span class="ptabn">${esc(q.name||"Без имени")}</span><span class="ptabs2" style="${bad?"color:var(--warn);font-weight:700":""}">${v.err?"?":`ОЗ ${v.hpCur}/${v.hpMax}`}${n?` · правок ${n}`:""}</span></button>`;}).join("");
+  return `<div class="card"><div class="inline" style="gap:10px;justify-content:space-between"><div>Код комнаты <b style="font-size:26px;letter-spacing:3px">${esc(st.code)}</b> <span class="note">· ${live}</span></div><button class="btn small" data-room="refresh">Обновить</button></div>
+    <p class="note" style="margin-bottom:0">Игроки: «Комната» → «Я игрок» → этот код. Листы обновляются сами.</p></div>
+    ${ps.length?`<div class="ptabbar" role="tablist">${tabs}</div>${p?`<div class="note" style="margin-top:6px">Лист обновлён ${agoTxt(p.updated_at)}. Здесь только просмотр, изменения игрок делает у себя.</div>${roomModsUI(p,i)}<div class="peek" id="peekBox">${roomPeekSheet(p)}</div>`:""}`:`<p class="note">Пока никто не подключился.</p>`}
+    <div class="card" style="margin-top:12px"><div class="inline" style="gap:8px"><button class="btn small" data-room="clearall" ${anyMods?"":"disabled"}>Конец миссии: снять модификаторы у всех</button><button class="btn small" data-room="leave">Выйти (комната останется)</button><button class="btn small" data-room="close" style="color:var(--warn)">Закрыть комнату</button></div></div>`;}
+function roomFocusInside(){const a=document.activeElement;return !!(a&&$("#roomView")&&$("#roomView").contains(a)&&a.matches('[data-rmd],#rcUrl,#rcKey,#rmCode'));}
+function roomRefresh(){if(STEP!==11||!$("#roomView"))return;if(roomFocusInside()){ROOM.dirty=true;return;}renderRoom();}
+function renderRoom(){const body=$("#roomView");if(!body)return;ROOM.dirty=false;
   const st=ROOM.st,err=ROOM.err?`<div class="warnbox" style="margin-top:8px">${esc(ROOM.err)}</div>`:"",msg=ROOM.msg?`<div class="okbox" style="margin-top:8px">${esc(ROOM.msg)}</div>`:"";
-  const live=ROOM.status==="SUBSCRIBED"?`<span style="color:var(--ok)">● на связи</span>`:ROOM.status?`<span style="color:var(--warn)">● ${ROOM.status==="CHANNEL_ERROR"||ROOM.status==="TIMED_OUT"?"нет связи, переподключение…":"подключение…"}</span>`:"";
-  const cfgForm=`<div class="choice" style="margin-top:8px"><div class="q">Сервер комнаты (Supabase)</div><label class="note" style="display:flex;flex-direction:column;gap:3px">Project URL<input class="inp" id="rcUrl" value="${esc(ROOM.cfg.url||"")}" placeholder="https://xxxx.supabase.co" autocomplete="off"></label><label class="note" style="display:flex;flex-direction:column;gap:3px;margin-top:6px">Публичный ключ (anon / publishable)<input class="inp" id="rcKey" value="${esc(ROOM.cfg.key||"")}" placeholder="eyJ… или sb_publishable_…" autocomplete="off"></label><div class="inline" style="gap:8px;margin-top:8px"><button class="btn small primary" data-room="cfgsave">Сохранить</button>${roomCfgOk()?`<button class="jump ph" data-room="cfgcancel">отмена</button>`:""}</div><p class="note">Один раз на каждом устройстве. Секретный ключ service_role сюда не вставляйте.</p></div>`;
+  const live=ROOM.status==="SUBSCRIBED"?`<span style="color:var(--ok)">● на связи</span>`:ROOM.status?`<span style="color:var(--warn)">● ${ROOM.status==="CHANNEL_ERROR"||ROOM.status==="TIMED_OUT"||ROOM.status==="CLOSED"?"мгновенные обновления недоступны, обновляю раз в несколько секунд":"подключение…"}</span>`:"";
+  const cfgForm=`<div class="card"><div class="choice"><div class="q">Сервер комнаты (Supabase)</div><label class="note" style="display:flex;flex-direction:column;gap:3px">Project URL<input class="inp" id="rcUrl" value="${esc(ROOM.cfg.url||"")}" placeholder="https://xxxx.supabase.co" autocomplete="off"></label><label class="note" style="display:flex;flex-direction:column;gap:3px;margin-top:6px">Публичный ключ (anon / publishable)<input class="inp" id="rcKey" value="${esc(ROOM.cfg.key||"")}" placeholder="sb_publishable_…" autocomplete="off"></label><div class="inline" style="gap:8px;margin-top:8px"><button class="btn small primary" data-room="cfgsave">Сохранить</button>${roomCfgOk()?`<button class="jump ph" data-room="cfgcancel">отмена</button>`:""}</div></div></div>`;
   let h="";
   if(!roomCfgOk()||ROOM.editCfg) h=cfgForm;
-  else if(!st) h=`<p class="note" style="margin-top:6px">Игроки заходят в комнату по коду, мастер видит их листы и может добавлять модификаторы на миссию.</p>
-    <div class="choice"><div class="q">Я игрок</div><div class="note">Войдёт текущий персонаж: <b>${esc(C.name||"Без имени")}</b></div><div class="inline" style="gap:6px;margin-top:6px"><input class="inp" id="rmCode" placeholder="Код комнаты" maxlength="8" style="width:140px;text-transform:uppercase;font-size:18px;letter-spacing:2px" autocomplete="off"><button class="btn primary" data-room="join" ${ROOM.busy?"disabled":""}>Войти</button></div></div>
-    <div class="choice"><div class="q">Я мастер</div><button class="btn primary" data-room="create" ${ROOM.busy?"disabled":""}>Создать комнату</button></div>
+  else if(!st) h=`<p class="lead">Игроки заходят в комнату по коду. Мастер видит их листы и может добавлять модификаторы на миссию.</p>
+    <div class="card"><h3 style="margin-top:0">Я игрок</h3><div class="note">Войдёт текущий персонаж: <b>${esc(C.name||"Без имени")}</b></div><div class="inline" style="gap:6px;margin-top:8px"><input class="inp" id="rmCode" placeholder="Код комнаты" maxlength="8" style="width:150px;text-transform:uppercase;font-size:18px;letter-spacing:2px" autocomplete="off"><button class="btn primary" data-room="join" ${ROOM.busy?"disabled":""}>Войти</button></div></div>
+    <div class="card"><h3 style="margin-top:0">Я мастер</h3><button class="btn primary" data-room="create" ${ROOM.busy?"disabled":""}>Создать комнату</button></div>
     <button class="jump ph" data-room="cfgedit" style="margin-top:8px">настройки сервера</button>`;
   else if(st.role==="player"){const c=roomChar();const mods=(c&&c.gmMods)||[];
-    h=`<div class="inline" style="gap:10px;margin-top:8px;justify-content:space-between"><div>Комната <b style="font-size:22px;letter-spacing:2px">${esc(st.code)}</b><div class="note">Персонаж: <b>${esc(c?c.name||"Без имени":"удалён")}</b> · ${live}</div></div></div>
+    h=`<div class="card"><div>Комната <b style="font-size:24px;letter-spacing:2px">${esc(st.code)}</b> <span class="note">· ${live}</span></div><div class="note">Персонаж: <b>${esc(c?c.name||"Без имени":"удалён")}</b></div>
     <p class="note">Лист отправляется мастеру автоматически при каждом изменении${ROOM.lastPush?`, последний раз ${agoTxt(ROOM.lastPush)}`:""}.${c&&C.id!==c.id?" Сейчас открыт другой персонаж: в комнате остаётся тот, с которым вы вошли.":""}</p>
     <div class="iblk rev"><div class="iblk-t">Модификаторы от мастера на миссию</div><div class="iblk-b">${mods.length?mods.map(m=>`<div><b>${esc(fxLabel(m.k))} ${sgn(Number(m.v))}</b>${m.note?` <span class="note">${esc(m.note)}</span>`:""}</div>`).join(""):`<div class="note">Пока нет. Они сразу учитываются в характеристиках и бросках.</div>`}</div></div>
-    <div class="inline" style="gap:8px;margin-top:10px"><button class="btn small" data-room="push">Отправить лист сейчас</button><button class="btn small" data-room="leave">Выйти из комнаты</button></div>`;}
-  else{h=`<div style="margin-top:8px">Код комнаты <b style="font-size:26px;letter-spacing:3px">${esc(st.code)}</b> <span class="note">· ${live}</span></div><p class="note">Сообщите код игрокам: «Комната» → «Я игрок». Листы обновляются сами.</p>
-    <div class="inline" style="gap:8px;justify-content:space-between"><b>Игроки: ${ROOM.players.length}</b><button class="btn small" data-room="refresh">Обновить</button></div>
-    ${ROOM.players.length?ROOM.players.map(roomPlayerCard).join(""):`<p class="note">Пока никто не подключился.</p>`}
-    ${ROOM.players.length?`<button class="btn small" data-room="clearall" style="margin-top:8px">Конец миссии: снять все модификаторы</button>`:""}
-    <div class="inline" style="gap:8px;margin-top:12px"><button class="btn small" data-room="leave">Выйти (комната останется)</button><button class="btn small" data-room="close" style="color:var(--warn)">Закрыть комнату</button></div>`;}
-  body.innerHTML=msg+h+err;}
-function renderRoomBtn(){document.querySelectorAll("[data-roomopen]").forEach(b=>{b.innerHTML=`Комната${ROOM.st?` <b>${esc(ROOM.st.code)}</b>`:""}`;});}
+    <div class="inline" style="gap:8px;margin-top:10px"><button class="btn small" data-room="push">Отправить лист сейчас</button><button class="btn small" data-go="10">Открыть миссию</button><button class="btn small" data-room="leave">Выйти из комнаты</button></div></div>`;}
+  else h=roomGMView(st,live);
+  body.innerHTML=msg+err+h;if(st&&st.role==="gm"){peekSectionize(body);const i=ROOM.players.findIndex(p=>rmKey(p)===ROOM.sel);if(i>=0)roomInjectPM(body,i);}}
+function roomInjectPM(body,i){const p=ROOM.players[i];if(!p)return;const mods=ROOM.mods[rmKey(p)]||[];const sum=k=>mods.filter(m=>m.k===k).reduce((a,m)=>a+(Number(m.v)||0),0);
+  const ctl=(k,lbl)=>{const v=sum(k);return `<div class="gmpm noprint"><button class="gmb" data-rmpm="${i}|${k}|-1" aria-label="${esc(lbl)}: минус 1">−</button><span class="gmv ${v>0?"pos":v<0?"neg":""}">${v?sgn(v):"±0"}</span><button class="gmb" data-rmpm="${i}|${k}|1" aria-label="${esc(lbl)}: плюс 1">+</button></div>`;};
+  body.querySelectorAll('#peekBox .stile[data-ik^="s:"]').forEach(t=>{const k=t.dataset.ik.slice(2);t.insertAdjacentHTML("beforeend",ctl(k,LABEL[k]||k));});
+  [["[data-rollres]","res","Устойчивость"],["[data-rollini]","ini","Инициатива"]].forEach(([sel,k,l])=>{const b=body.querySelector("#peekBox "+sel);if(!b)return;const w=document.createElement("div");w.className="dwrap";b.before(w);w.appendChild(b);w.insertAdjacentHTML("beforeend",ctl(k,l));});}
+function renderRoomBtn(){document.querySelectorAll("[data-roomopen]").forEach(b=>{if(b.classList.contains("mj")){const sp=b.querySelector("span");if(sp)sp.innerHTML=roomShortLabel();return;}b.innerHTML=`Комната${ROOM.st?` <b>${esc(ROOM.st.code)}</b>`:""}`;});}
 async function roomResume(){if(!ROOM.st||!roomCfgOk())return;try{await roomClient();await roomSubscribe();if(ROOM.st.role==="gm")await roomFetch();else{const m=await ROOM.sb.from("room_mods").select("*").eq("room",ROOM.st.code).eq("uid",ROOM.uid).eq("char_id",ROOM.st.charId).maybeSingle();if(m.data)roomApplyMods(m.data);roomPush();}}catch(e){ROOM.err=roomErr(e);}}
 async function roomAction(a){
   if(a==="cfgsave"){const url=$("#rcUrl").value.trim(),key=$("#rcKey").value.trim();if(!/^https:\/\/.+/.test(url)||key.length<20){ROOM.err="Проверьте адрес (https://…supabase.co) и ключ.";renderRoom();return;}ROOM.cfg={url,key};lsSet(RCFG_KEY,ROOM.cfg);ROOM.sb=null;ROOM.uid=null;ROOM.editCfg=false;ROOM.err="";renderRoom();return;}
@@ -3030,11 +3086,15 @@ async function roomAction(a){
   if(a==="leave")return roomLeave(false);
   if(a==="close")return askConfirm("Закрыть комнату? Игроки будут отключены, модификаторы сняты.",()=>roomLeave(true));
   if(a==="refresh")return roomFetch();
-  if(a==="clearall"){for(let i=0;i<ROOM.players.length;i++)if((ROOM.mods[rmKey(ROOM.players[i])]||[]).length)await roomSetMods(i,[]);toast("Модификаторы сняты у всех");return;}
+  if(a==="clearall"){try{const sb=await roomClient();const {error}=await sb.from("room_mods").update({mods:[],updated_at:new Date().toISOString()}).eq("room",ROOM.st.code);if(error)throw error;Object.keys(ROOM.mods).forEach(k=>ROOM.mods[k]=[]);ROOM.err="";toast("Модификаторы сняты у всех игроков");}catch(e){ROOM.err=roomErr(e);}roomRefresh();roomFetchSoon();return;}
 }
 function localSave(){try{localStorage.setItem(KEY,JSON.stringify(DB));}catch(e){}}
+function roomShortLabel(){return typeof ROOM!=="undefined"&&ROOM&&ROOM.st?esc(ROOM.st.code):"Комната";}
 function roomBtnLabel(){return `Комната${typeof ROOM!=="undefined"&&ROOM&&ROOM.st?` <b>${esc(ROOM.st.code)}</b>`:""}`;}
-document.addEventListener("focusout",e=>{if(ROOM&&ROOM.dirty&&$("#roomDlg").contains(e.target))setTimeout(roomRefresh,60);});
+document.addEventListener("focusout",e=>{if(ROOM&&ROOM.dirty&&$("#roomView")&&$("#roomView").contains(e.target))setTimeout(roomRefresh,80);});
+const rmdSet=e=>{const t=e.target;if(!t.dataset||!t.dataset.rmd)return;const [i,f]=t.dataset.rmd.split("|");const p=ROOM.players[Number(i)];if(!p)return;rmDraft(rmKey(p))[f]=t.value;};
+document.addEventListener("input",rmdSet);document.addEventListener("change",rmdSet);
+document.addEventListener("visibilitychange",()=>{if(!document.hidden&&ROOM&&ROOM.st)roomPoll();});
 document.addEventListener("keydown",e=>{if(e.target&&e.target.id==="rmCode"&&e.key==="Enter"){e.preventDefault();roomAction("join");}});
 roomResume();
 </script>

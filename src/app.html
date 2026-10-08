@@ -343,7 +343,7 @@ details.missec>summary h3::before{content:none!important}
 .fateval{flex:1 1 auto;min-width:46px;display:flex;align-items:baseline;justify-content:center;gap:2px;border:1px solid var(--line);border-radius:4px;background:var(--panel);font-family:var(--narrow);font-size:20px;padding:4px 2px}
 .misonly{display:none}
 body.mis .misonly{display:inline-flex;margin-left:6px}
-body.mis [data-modopen],body.mis [data-delgear],body.mis #addArs,body.mis #addGear,body.mis .upbtn,body.mis #toggleMods,body.mis .basenote,body.mis #sheet .note.noprint{display:none!important}
+body.mis [data-delgear],body.mis #addArs,body.mis #addGear,body.mis .upbtn,body.mis #toggleMods,body.mis .basenote,body.mis #sheet .note.noprint{display:none!important}
 .misbar .btn.primary .ico{color:inherit}
 .usedtag{display:inline-block;margin-top:4px;padding:1px 8px;border:1.5px solid var(--warn);color:var(--warn);border-radius:3px;font-family:var(--narrow);font-size:14px;transform:rotate(-2deg);text-transform:uppercase;letter-spacing:.04em}
 .editable:hover{background:color-mix(in srgb,var(--accent) 6%,transparent)}
@@ -469,6 +469,63 @@ img,svg,canvas{max-width:100%}
 .misjump .mj span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 .misjump .mj .ico{width:20px;height:20px}
 body.mis #openCat,body.mis [data-unbuy],body.mis [data-buyfree]{display:none!important}
+.geartbl tbody>tr[data-gid]{position:relative}
+.geartbl tbody>tr[data-gid] .gname{padding-right:76px}.peek .geartbl tbody>tr[data-gid] .gname{padding-right:0}
+.gdrag{position:absolute;right:4px;top:4px;width:32px;height:36px;display:flex;align-items:center;justify-content:center;cursor:grab;touch-action:none;color:var(--muted);border-radius:4px;user-select:none;-webkit-user-select:none;z-index:1}
+.gdrag:hover,.gdrag:focus-visible{color:var(--accent);background:var(--soft)}
+tr.gdragging{opacity:.9;outline:2px dashed var(--accent);outline-offset:-2px;box-shadow:0 6px 18px rgba(0,0,0,.18)}
+.peek .gdrag{display:none}.peek #sheet .geartbl tbody>tr[data-gid]>td:first-child{padding-right:0!important}
+@media print{.geartbl tbody>tr[data-gid]>td:first-child{padding-right:0!important}}
+.gname{display:flex;align-items:baseline;gap:6px;width:100%;text-align:left;background:none;border:0;padding:6px 0;margin:0;font:inherit;font-weight:700;color:inherit;cursor:pointer}
+.gname .gcar{color:var(--muted);width:1em;flex:0 0 auto}
+.gname .gnm{min-width:0;overflow-wrap:anywhere}
+.gname .gq{font-weight:400;color:var(--muted);flex:0 0 auto}
+@media screen{
+.geartbl tr.gshut>td:first-child>:not(.gname):not(.gdrag):not(.gedit){display:none!important}
+.geartbl tr.gshut>td:not(:first-child){display:none!important}
+#sheet .geartbl tr.gshut{padding-top:4px;padding-bottom:4px}
+}
+.peek .gname:disabled{opacity:1}
+.ggrp{border:1px solid var(--line);border-radius:8px;padding:4px 10px 6px;margin:10px 0;background:var(--panel)}
+.ggh{display:flex;align-items:center;gap:8px;width:100%;background:none;border:0;padding:8px 0;font:inherit;font-family:var(--narrow);font-size:17px;font-weight:700;color:inherit;cursor:pointer;text-align:left}
+.ggh .ggn{margin-left:auto;font-family:var(--sans);font-size:13px;font-weight:400;color:var(--muted);border:1px solid var(--line);border-radius:10px;padding:1px 8px}
+.ggrp .geartbl tr{margin:8px 0!important}
+.peek .ggh:disabled{opacity:1}
+@media print{.ggrp{border:0;padding:0;background:none}}
+.gedit{position:absolute;right:40px;top:4px;width:34px;height:36px;display:flex;align-items:center;justify-content:center;border:0;border-radius:4px;background:none;color:var(--muted);cursor:pointer;z-index:1}
+.gedit:hover,.gedit:focus-visible{color:var(--accent);background:var(--soft)}
+.gedit[aria-pressed="true"]{color:#fff;background:var(--accent)}
+.peek .gedit{display:none}
+.arssec{font-family:var(--narrow);margin:18px 0 4px;font-size:20px}
+.arsgrp{border:1px solid var(--line);border-radius:8px;margin:8px 0;background:var(--panel)}
+.arsgh{display:flex;align-items:center;gap:8px;width:100%;background:none;border:0;padding:10px 12px;font:inherit;font-family:var(--narrow);font-size:17px;font-weight:700;color:inherit;cursor:pointer;text-align:left}
+.arsgh .ggn{margin-left:auto;font-family:var(--sans);font-size:13px;font-weight:400;color:var(--muted);border:1px solid var(--line);border-radius:10px;padding:1px 8px}
+.arsitems{padding:0 10px 8px}
+.arsitems>.entry{margin:8px 0}
+.mstip{font-size:14px;color:var(--muted)}@media print{.mstip{display:none}}
+.haspm{position:relative}
+.dwrap.haspm{container-type:inline-size}
+.haspm>*{--pb:clamp(22px,13cqw,34px);--pv:clamp(18px,11cqw,30px)}
+.haspm>.gmpm{position:absolute;right:8px;top:50%;transform:translateY(-50%);margin:0;display:flex;flex-direction:row;align-items:center;gap:3px;z-index:2}
+.haspm>.gmpm .gmb{width:var(--pb);height:calc(var(--pb) - 2px);font-size:calc(var(--pb) * .6);padding:0;border-radius:5px}
+.haspm>.gmpm .gmv{min-width:var(--pv);font-size:clamp(11px,7cqw,14px);text-align:center}
+.haspm>.stbtn{row-gap:calc(var(--pb) + 8px)!important}
+.dwrap.haspm>.gmpm{top:auto;bottom:8px;transform:none}
+.dwrap.haspm>.dblk{padding-bottom:calc(var(--pb) + 14px)!important}
+.haspm>.gmpm .gmb{border:0;background:rgba(0,0,0,.12);background:color-mix(in srgb,var(--ink) 13%,transparent);box-shadow:none}
+.haspm>.gmpm .gmb:active{background:var(--accent);color:#fff}
+@container (max-width:170px){.haspm>.gmpm{top:auto;bottom:8px;transform:none}.haspm>.stbtn{row-gap:6px!important}}
+/* отклик на нажатие: лёгкая подсветка и сжатие */
+:where(button,summary,.pill,label.btn,[role="button"],.opt,.kitopt){transition:transform .14s ease,box-shadow .2s ease,filter .2s ease}
+:where(button,.pill,label.btn,[role="button"],.opt,.kitopt):not(:disabled).tapped{transform:scale(.95);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 28%,transparent),0 0 14px color-mix(in srgb,var(--accent) 35%,transparent);filter:brightness(1.06)}
+:where(.stbtn,.dblk,.mj,.ptab,.rbtn,[role="tab"]):not(:disabled).tapped{transform:scale(.97)}
+:where(summary,.ggh,.gname,.arsgh).tapped{transform:scale(.985);box-shadow:none;filter:none}
+:where(summary,.ggh,.gname,.arsgh).tapped{background:color-mix(in srgb,var(--accent) 12%,transparent);border-radius:6px}
+.totop.tapped{transform:scale(.9)}
+.gdrag.tapped,.gdragging .gdrag{transform:none;box-shadow:none}
+@media (prefers-reduced-motion:reduce){:where(button,summary,.pill,label.btn,[role="button"],.opt,.kitopt).tapped{transform:none!important}}
+.stamp.dmg{border-color:var(--warn);color:var(--warn)}
+.dmgbig{font-size:19px;font-family:var(--narrow)}
 </style>
 </head>
 <body>
@@ -787,6 +844,7 @@ function compute(c){
   steps.academy = aca;
   (c.ufMods||[]).forEach(m=>{aca.mods.push({k:m.k,v:m.v,src:m.src});ctx.apply(m.k,m.v);});
   (c.missionMods||[]).forEach(m=>{aca.mods.push({k:m.k,v:m.v,src:m.src});ctx.apply(m.k,m.v);});
+  {let inMis=false;try{inMis=STEP===10||STEP===11;}catch(e){}if(inMis)Object.entries(c.misAdj||{}).forEach(([k,v])=>{v=Number(v)||0;if(v){aca.mods.push({k,v,src:"только на миссию"});ctx.apply(k,v);}});}
   (c.gmMods||[]).forEach(m=>{const v=Number(m.v)||0;if(m.k&&v){aca.mods.push({k:m.k,v,src:"Мастер"+(m.note?": "+m.note:"")});ctx.apply(m.k,v);}});
   const dev = {mods:[],notes:[],choices:[],pending:0};
   (c.buys||[]).forEach(b=>{ if(b.stat){ dev.mods.push({k:b.stat,v:1,src:"Развитие (EXP)"}); ctx.apply(b.stat,1);} });
@@ -887,7 +945,8 @@ function sectionize(){
   if(STEP===10){const keep=["Характеристики","Состояние и ранения","Трекеры","Временные эффекты","Снаряжение","Таланты"];const sh=document.getElementById("sheet");
     if(sh){[...sh.children].forEach(n=>{if(n.tagName==="DETAILS"&&n.classList.contains("sec")){if(!keep.includes(n.dataset.sec))n.remove();else{n.open=true;const dh=n.querySelector(".draghandle");if(dh)dh.remove();n.classList.add("missec");}}else n.remove();});
       keep.forEach(k=>{const d=sh.querySelector(`:scope > details.sec[data-sec="${k}"]`);if(d)sh.appendChild(d);});
-      const tb=sh.querySelector(".geartbl tbody");if(tb)[...tb.children].filter(r=>r.querySelector("[data-shoot]")).reverse().forEach(r=>tb.prepend(r));
+      misInjectPM(sh);
+      const tb=null;if(tb)[...tb.children].filter(r=>r.querySelector("[data-shoot]")).reverse().forEach(r=>tb.prepend(r));
       sh.querySelectorAll(".gainbox,#toggleMods").forEach(x=>{if(x.id==="toggleMods")return;});}}
   applySecOrder();
   markUnseen();
@@ -1336,20 +1395,20 @@ function stSheet(R){
   ${woundUI(R)}
   ${disorderUI(R,tr)}
   <h3>Снаряжение</h3>
-  <div class="scroll"><table class="tbl geartbl"><thead><tr><th>Предмет</th><th>Кол-во</th><th class="noprint"></th></tr></thead><tbody>
-  ${c.gear.filter(g=>!isResItem(g)).map(g=>`<tr data-ik="g:${g.id}"><td>${g.opts?`<div style="font-weight:700;padding:6px 0">${esc(g.name)}</div>${g.picked?"":`<div class="note noprint">Выбор не сделан: по умолчанию первый вариант. <button class="jump ph" data-go="0">Выбрать в создании</button></div>`}`:(g.src!=="class"&&g.ref==null?(EDITG.has(g.id)?`<input class="inp" style="width:100%;font-weight:700" data-gear="${g.id}|name" value="${esc(g.name)}" placeholder="Название предмета">`:`<button class="ownname" data-gearedit="${g.id}" title="Нажмите, чтобы изменить название и описание">${esc(g.name||"Без названия")}</button>`):`<div style="font-weight:700;padding:6px 0">${esc(g.name)}</div>`)}${(()=>{const r=gearRef(g);if(r==null)return customUI(g,R);const p=profile(g,R);const ms=(g.mods||[]).map(i=>MODBYI[i]).filter(Boolean);const can=modsFor_item(g).length;
+  ${c.gear.filter(g=>!isResItem(g)).length>1?`<div class="noprint" style="margin:-4px 0 4px"><button class="jump ph" data-gall="1">${c.gear.filter(g=>!isResItem(g)).every(g=>GOPEN.has(g.id))?"свернуть всё":"развернуть всё"}</button></div>`:""}
+  ${gearGroups(c.gear.filter(g=>!isResItem(g)),g=>`<tr data-ik="g:${g.id}" data-gid="${g.id}" class="${GOPEN.has(g.id)||EDITG.has(g.id)?"gopen":"gshut"}"><td><span class="gdrag noprint" data-gdrag="${g.id}" tabindex="0" role="button" aria-label="Перетащить «${esc(g.name||"предмет")}»: потяните или нажимайте стрелки вверх и вниз" title="Перетащить"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><circle cx="9" cy="6" r="1.6"/><circle cx="15" cy="6" r="1.6"/><circle cx="9" cy="12" r="1.6"/><circle cx="15" cy="12" r="1.6"/><circle cx="9" cy="18" r="1.6"/><circle cx="15" cy="18" r="1.6"/></svg></span>${gEditBtn(g)}${g.opts?`${gName(g)}${g.picked?"":`<div class="note noprint">Выбор не сделан: по умолчанию первый вариант. <button class="jump ph" data-go="0">Выбрать в создании</button></div>`}`:(g.src!=="class"&&g.ref==null?(EDITG.has(g.id)?`<input class="inp" style="width:calc(100% - 78px);font-weight:700" data-gear="${g.id}|name" value="${esc(g.name)}" placeholder="Название предмета">`:`${gName(g)}`):`${gName(g)}`)}${(()=>{const r=gearRef(g);if(r==null)return customUI(g,R)+plantUI(g);const p=profile(g,R);const ms=(g.mods||[]).map(i=>MODBYI[i]).filter(Boolean);const can=modsFor_item(g).length;
    let h=p?`<div style="margin-top:4px;font-size:14.5px">${esc(p.line)}${p.kind==="ranged"||p.kind==="melee"?`. <b>${p.skill==="rng"?"ДБ":"ББ"} ${p.total}</b>${p.hit?` <span class="note">(${sgn(p.hit)} от улучшений)</span>`:""}${ammoUI(g,p)}`:""}${p.melee?`. Удар в ближнем бою +${p.melee} урона`:""}${p.notes.length?`<div class="note">${esc(p.notes.join("; "))}</div>`:""}</div>`:`<div class="note" style="margin-top:4px;white-space:pre-wrap">${esc(g.desc??ARS[r].text)}</div>`;
-   if(!p) h+=explUI(g,r);
+   if(!p) h+=explUI(g,r)+plantUI(g);
    if(ms.length) h+=`<div class="pillset" style="margin-top:4px">${ms.map(m=>`<span class="pill" style="cursor:default">${esc(m.name)}<button class="del noprint" data-modoff="${g.id}|${m.i}" aria-label="Снять ${esc(m.name)}" style="margin-left:4px">×</button></span>`).join("")}</div>`;
    if(p&&(p.kind==="armor"||p.kind==="shield"||p.kind==="shieldplain")) h+=`<label class="note inline noprint" style="gap:4px;margin-top:4px"><input type="checkbox" data-gearon="${g.id}" ${g.on!==false?"checked":""}> надето</label>`;
    {const nm=ARS[r].name; if(DRUGS[nm]){const v1=DRUGS[nm].map(([k,v])=>`${sgn(v)} ${LABEL[k]}`).join(", "),v2=DRUGS2[nm].map(([k,v])=>`${sgn(v)} ${LABEL[k]}`).join(", ");h+=`<div class="pillset noprint" style="margin-top:4px"><button class="pill" aria-pressed="${!g.dose}" data-dose="${g.id}|0">не принят</button><button class="pill" aria-pressed="${g.dose===1}" data-dose="${g.id}|1">${v1}</button><button class="pill" aria-pressed="${g.dose===2}" data-dose="${g.id}|2">${v2}</button></div>`;}}
    {const nm=ARS[r].name; if(ITEMFX[nm]) h+=`<div class="note" style="margin-top:3px">Даёт: ${ITEMFX[nm].map(([k,v])=>`${sgn(v)} ${LABEL[k]||k}`).join(", ")}</div>`+(p&&(p.kind==="armor"||p.kind==="shield"||p.kind==="shieldplain")?"":`<label class="note inline noprint" style="gap:4px;margin-top:4px"><input type="checkbox" data-gearon="${g.id}" ${g.on!==false?"checked":""}> используется</label>`);}
    if(can) h+=`<button class="btn small noprint" data-modopen="${g.id}" style="margin-top:6px">Улучшения</button>`;
    const wpn=p&&(p.kind==="ranged"||p.kind==="melee");
-   if(EDITG.has(g.id)) h+=`<label class="note noprint" style="display:flex;flex-direction:column;gap:3px;margin-top:8px">Описание<textarea class="inp" style="min-height:90px" data-gear="${g.id}|desc" placeholder="Описание предмета">${esc(g.desc??ARS[r].text)}</textarea></label>${wpn?burstFields(g,p):""}<div class="inline noprint" style="gap:8px;margin-top:6px"><button class="btn small primary" data-geardone="${g.id}">Готово</button>${g.desc!=null?`<button class="jump ph" data-geardesc0="${g.id}">вернуть текст книги</button>`:""}</div>`;
-   else h+=`${p&&g.desc!=null&&g.desc!==ARS[r].text?`<div class="note" style="margin-top:4px;white-space:pre-wrap">${esc(g.desc)}</div>`:""}<div class="noprint"><button class="jump ph" data-gearedit="${g.id}" style="margin-top:4px">изменить описание${wpn?" и очередь":""}</button></div>`;
-   return h;})()}${(()=>{const fe=favorEffects(g.id);return fe.length?`<div class="note" style="margin-top:3px">Улучшено одолжением: ${fe.map(x=>esc(x.eff.note||x.label)+(x.eff.freemod?" (установите через «Улучшения», бесплатно)":"")).join("; ")}</div>`:"";})()}${g.src==="academy"?`<div class="note" style="margin-top:2px">из Академии</div>`:""}${g.src==="step"?`<div class="note" style="margin-top:2px">от ${/\|birth\|/.test("|"+g.stepKey+"|")||/^(step|pick)\|birth/.test(g.stepKey)?"места рождения":/^(step|pick)\|parents/.test(g.stepKey)?"родителей":/^(step|pick)\|char/.test(g.stepKey)?"характера":"создания персонажа"}</div>`:""}${g.src==="favor"?(()=>{const m=C.merits.find(x=>x.id===g.mid);return m?`<div class="note" style="margin-top:2px">от одолжения «${esc(m.title)}»</div>`:"";})():""}${g.src!=="class"&&g.ref==null?(EDITG.has(g.id)?`<textarea class="inp" style="margin-top:6px;min-height:52px" data-gear="${g.id}|note" placeholder="Описание: характеристики, откуда предмет, как работает">${esc(g.note||"")}</textarea>${customFields(g)}<label class="note inline noprint" style="gap:6px;margin-top:6px">Количество <input class="inp" type="number" min="0" value="${g.qty}" data-gear="${g.id}|qty" style="width:70px"></label> <button class="btn small primary noprint" data-geardone="${g.id}" style="margin-top:6px">Готово</button>`:(g.note?`<div class="note" style="margin-top:4px;white-space:pre-wrap;font-size:14.5px">${esc(g.note)}</div>`:"")):""}${g.todo?(g.kit?`<div class="note noprint">Выбор не сделан. <button class="jump ph" data-go="0">Выбрать в создании</button></div>`:`<div class="note">Уточните выбор <button class="btn small noprint" data-arsrep="${g.id}">Выбрать из арсенала</button></div>`):""}</td><td><input class="inp" type="number" min="0" style="width:64px" data-gear="${g.id}|qty" value="${g.qty}"><button class="btn small misonly" data-use="${g.id}" ${g.qty>0?"":"disabled"} title="Израсходовать одну единицу">−1</button></td><td class="noprint"><button class="del delico" data-delgear="${g.id}" title="Удалить" aria-label="Удалить"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg></button></td></tr>`).join("")}
-  </tbody></table></div><div class="inline noprint" style="margin-top:8px"><button class="btn small primary" id="addArs">Добавить из арсенала</button><button class="btn small" id="addGear">Добавить свой предмет</button></div>
+   if(EDITG.has(g.id)) h+=`<label class="note noprint" style="display:flex;flex-direction:column;gap:3px;margin-top:8px">Описание<textarea class="inp" style="min-height:90px" data-gear="${g.id}|desc" placeholder="Описание предмета">${esc(g.desc??ARS[r].text)}</textarea></label>${wpn?burstFields(g,p):""}${p&&(p.kind==="armor"||p.kind==="shield"||p.kind==="shieldplain")?armPropsUI(g):""}${grpSelect(g)}${plantSelect(g)}<div class="inline noprint" style="gap:8px;margin-top:6px"><button class="btn small primary" data-geardone="${g.id}">Готово</button>${g.desc!=null?`<button class="jump ph" data-geardesc0="${g.id}">вернуть текст книги</button>`:""}</div>`;
+   else h+=`${p&&g.desc!=null&&g.desc!==ARS[r].text?`<div class="note" style="margin-top:4px;white-space:pre-wrap">${esc(g.desc)}</div>`:""}`;
+   return h;})()}${(()=>{const fe=favorEffects(g.id);return fe.length?`<div class="note" style="margin-top:3px">Улучшено одолжением: ${fe.map(x=>esc(x.eff.note||x.label)+(x.eff.freemod?" (установите через «Улучшения», бесплатно)":"")).join("; ")}</div>`:"";})()}${g.src==="academy"?`<div class="note" style="margin-top:2px">из Академии</div>`:""}${g.src==="step"?`<div class="note" style="margin-top:2px">от ${/\|birth\|/.test("|"+g.stepKey+"|")||/^(step|pick)\|birth/.test(g.stepKey)?"места рождения":/^(step|pick)\|parents/.test(g.stepKey)?"родителей":/^(step|pick)\|char/.test(g.stepKey)?"характера":"создания персонажа"}</div>`:""}${g.src==="favor"?(()=>{const m=C.merits.find(x=>x.id===g.mid);return m?`<div class="note" style="margin-top:2px">от одолжения «${esc(m.title)}»</div>`:"";})():""}${g.src!=="class"&&g.ref==null?(EDITG.has(g.id)?`<textarea class="inp" style="margin-top:6px;min-height:52px" data-gear="${g.id}|note" placeholder="Описание: характеристики, откуда предмет, как работает">${esc(g.note||"")}</textarea>${customFields(g)}${grpSelect(g)}${plantSelect(g)}<label class="note inline noprint" style="gap:6px;margin-top:6px">Количество <input class="inp" type="number" min="0" value="${g.qty}" data-gear="${g.id}|qty" style="width:70px"></label> <button class="btn small primary noprint" data-geardone="${g.id}" style="margin-top:6px">Готово</button>`:(g.note?`<div class="note" style="margin-top:4px;white-space:pre-wrap;font-size:14.5px">${esc(g.note)}</div>`:"")):""}${g.todo?(g.kit?`<div class="note noprint">Выбор не сделан. <button class="jump ph" data-go="0">Выбрать в создании</button></div>`:`<div class="note">Уточните выбор <button class="btn small noprint" data-arsrep="${g.id}">Выбрать из арсенала</button></div>`):""}</td><td><input class="inp" type="number" min="0" style="width:64px" data-gear="${g.id}|qty" value="${g.qty}"><button class="btn small misonly" data-use="${g.id}" ${g.qty>0?"":"disabled"} title="Израсходовать одну единицу">−1</button></td><td class="noprint"><button class="del delico" data-delgear="${g.id}" title="Удалить" aria-label="Удалить"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg></button></td></tr>`)}
+  <div class="inline noprint" style="margin-top:8px"><button class="btn small primary" id="addArs">Добавить из арсенала</button><button class="btn small" id="addGear">Добавить свой предмет</button></div>
   <h3>Детали и особенности</h3><p class="note noprint">Нажмите на раздел, чтобы раскрыть полный текст из книги. При печати все разделы раскрываются.</p>
   ${cl?sectionH("Класс: "+esc(cl.variant)+" ("+esc(cl.group)+")",classBlocks(cl),"cls"):""}
   ${R.cl2?sectionH("Второй класс: "+esc(R.cl2.variant)+" ("+esc(R.cl2.group)+")",cls2Blocks(R),"cls2"):""}
@@ -1533,9 +1592,10 @@ const isThrown=r=>r!=null&&((ARS[r].sec==="Взрывные устройства
 let THROW={id:null,mod:0,res:""};
 function renderMc(){$("#mcBody").innerHTML=diceCalcHTML(false);}
 function renderThrow(){const g=C.gear.find(x=>x.id===THROW.id);if(!g)return;const R=compute(C),r=gearRef(g),ds=explDmg(r),meta=explMeta(r),wp=woundPen(R);
-  $("#throwBody").innerHTML=`<p style="margin:8px 0 4px"><b>${esc(g.name)}</b>${ds.length?` — урон ${ds.map(d=>esc((d.label?d.label+" ":"")+d.expr)).join(", ")}`:""}${meta.length?`<span class="note">, ${esc(meta.join(", "))}</span>`:""}</p><p class="note" style="margin:0 0 8px">Тест на Дальний бой. При попадании урон бросается сразу. Предмет списывается при каждом броске. Осталось: <b>${g.qty}</b>.</p>
+  $("#throwBody").innerHTML=`<p style="margin:8px 0 4px"><b>${esc(g.name)}</b>${ds.length?` — урон ${ds.map(d=>esc((d.label?d.label+" ":"")+d.expr)).join(", ")}`:""}${meta.length?`<span class="note">, ${esc(meta.join(", "))}</span>`:""}</p><p class="note" style="margin:0 0 8px">Сначала тест на Дальний бой, затем урон отдельной кнопкой. Предмет списывается при каждом броске. Осталось: <b>${g.qty}</b>.</p>
   <div class="inline" style="gap:8px"><span>ДБ <b>${R.tot.rng}</b>${wp?` <span class="note">ранение ${sgn(wp)}</span>`:""}${ROLLMOD?` <span class="note">модиф. тестов ${sgn(ROLLMOD)}</span>`:""}</span><label class="note inline" style="gap:4px">Модификатор <input class="inp" type="number" id="throwMod" value="${THROW.mod||0}" style="width:70px"></label><button class="btn primary" data-throwgo="1" ${Number(g.qty)>0?"":"disabled"}>Бросить d20</button></div>${Number(g.qty)>0?"":`<div class="note" style="color:var(--warn);margin-top:6px">${outWord(g.name)}</div>`}<div id="throwRes" style="margin-top:6px">${THROW.res||""}</div>`;}
-function throwDmgHtml(ds){return ds.map(dd=>{const dr=rollDmgP({dice:dd.dice,flat:dd.flat,crit:null});return `${dd.label?esc(dd.label)+": ":""}<b>${dr.sum} урона</b> <span class="note">(${esc(dd.expr)}: выпало ${dr.rolls.join(" + ")}${dd.flat?" + "+dd.flat:""}${dd.bs.length?"; "+esc(dd.bs.join(""))+" добавьте сами":""})</span>`;}).join("<br>");}
+function throwDmgHtml(ds){return ds.map(dd=>{const dr=rollDmgP({dice:dd.dice,flat:dd.flat,crit:null});LASTDMG=dr.sum;return `<div class="inline" style="gap:12px;align-items:center;flex-wrap:nowrap;margin-top:6px">${dmgStamp(dr.sum)}<span>${dd.label?`<span class="note">${esc(dd.label)}</span><br>`:""}<b class="dmgbig">${dr.sum} урона</b><br><span class="note">${esc(dd.expr)}: выпало ${dr.rolls.join(" + ")}${dd.flat?" + "+dd.flat:""}${dd.bs.length?"; "+esc(dd.bs.join(""))+" добавьте сами":""}</span></span></div>`;}).join("");}
+function dmgStamp(v){LASTSTAMP="dmg";return stamp(v,"dmg").replace('class="stamp','class="stamp dmg');}
 const isExpl=r=>r!=null&&(ARS[r].sec==="Взрывные устройства"||ARS[r].cat==="Метательное");
 function explUI(g,r){if(!isExpl(r))return "";const ds=explDmg(r);const meta=explMeta(r);const out=!(Number(g.qty)>0);
   const thr=isThrown(r)?`<button class="btn small primary" data-throw="${g.id}" ${out?"disabled":""}>Бросить (тест ДБ)</button>`:"";
@@ -1568,7 +1628,8 @@ function customProfile(g,R){
     mods.forEach(md=>{a+=md.armor||0;dur+=md.dur||0;if(md.cls)cls=md.cls;});
     favorEffects(g.id).forEach(({eff})=>{dur+=eff.dur||0;a+=eff.armor||0;});
     a=Math.max(0,a);dur=Math.max(0,dur);
-    return {custom:true,kind:"armor",armor:a,dur,line:`Броня ${a}, прочность ${dur}${cls?", "+cls.toLowerCase()+" броня":""}`,stats:mods.filter(m=>m.stat).map(m=>({k:m.stat,src:m.name})),notes,orig:g.note||"",changed:mods.length>0};}
+    if(!cls&&g.ccls)cls=g.ccls;const aprops=[...(g.cprops||[]),...String(g.cpropx||"").split(/[,;]/).map(x=>x.trim()).filter(Boolean)];
+    return {custom:true,kind:"armor",armor:a,dur,props:aprops,line:`Броня ${a}, прочность ${dur}${cls?", "+cls.toLowerCase()+(cls==="Бронекостюм"?"":" броня"):""}${aprops.length?". "+aprops.join(", "):""}`,stats:mods.filter(m=>m.stat).map(m=>({k:m.stat,src:m.name})),notes,orig:g.note||"",changed:mods.length>0};}
   return null;
 }
 const FXKEYS=()=>[...SKEYS.map(k=>[k,LABEL[k]]),["hp","Очки здоровья"],["ini","Инициатива"],["res","Устойчивость"]];
@@ -1580,7 +1641,7 @@ function customUI(g,R){
   const p=g.ctype?customProfile(g,R):null, fx=cfxLine(g), hasFx=(g.cfx||[]).some(([k,v])=>k&&Number(v));
   const can=g.ctype&&g.ctype!=="item"&&modsFor_item(g).length;
   let h="";
-  if(p&&p.kind==="armor"){h+=`<div style="margin-top:4px;font-size:14.5px">Броня <b>${p.armor}</b>, прочность <b>${p.dur}</b>${p.line.includes("броня")?`, ${esc(p.line.split(", ").slice(2).join(", "))}`:""}</div>`+(p.notes.length?`<div class="note">${esc(p.notes.join("; "))}</div>`:"")+fx+`<label class="note inline noprint" style="gap:4px;margin-top:4px"><input type="checkbox" data-gearon="${g.id}" ${g.on!==false?"checked":""}> надето</label>`;}
+  if(p&&p.kind==="armor"){h+=`<div style="margin-top:4px;font-size:14.5px">Броня <b>${p.armor}</b>, прочность <b>${p.dur}</b>${p.line.split(". ")[0].split(", ").slice(2).length?`, ${esc(p.line.split(". ")[0].split(", ").slice(2).join(", "))}`:""}</div>${(p.props||[]).length?`<div class="pillset" style="margin-top:4px">${p.props.map(x=>`<span class="tag">${esc(x)}</span>`).join("")}</div>`:""}`+(p.notes.length?`<div class="note">${esc(p.notes.join("; "))}</div>`:"")+fx+`<label class="note inline noprint" style="gap:4px;margin-top:4px"><input type="checkbox" data-gearon="${g.id}" ${g.on!==false?"checked":""}> надето</label>`;}
   else if(p){const ex=[];if(p.pen!=null)ex.push(`пробитие ${p.pen}`);if(p.mag)ex.push(`обойма ${p.mag}`);if(p.crit)ex.push(`крит на ${p.crit}`);if(p.whirl)ex.push(`Вихрь ударов (${p.whirl}), степень ${p.step}`);if(p.burst)ex.push(`очередь ${p.burst}, степень ${p.step}`);
     h+=`<div style="margin-top:4px;font-size:14.5px">Урон ${p.dmg?`<button class="dmgbtn" data-dmg="${g.id}" title="Бросить урон">${esc(p.dmg)}</button>`:(g.cdmg?`<span class="note" style="color:var(--warn)">не разобран: «${esc(g.cdmg)}»</span>`:`<span class="note">не указан</span>`)}${ex.length?", "+ex.join(", "):""}. <b>${p.skill==="rng"?"ДБ":"ББ"} ${p.total}</b>${p.hit?` <span class="note">(${sgn(p.hit)} от улучшений)</span>`:""}${p.props.length?`<div class="pillset" style="margin-top:4px">${p.props.map(x=>`<span class="tag">${esc(x)}</span>`).join("")}</div>`:""}${p.melee?`<div class="note">Удар в ближнем бою +${p.melee} урона</div>`:""}${p.notes.length?`<div class="note">${esc(p.notes.join("; "))}</div>`:""}${ammoUI(g,p)}</div>`+fx+(hasFx?`<label class="note inline noprint" style="gap:4px;margin-top:4px"><input type="checkbox" data-gearon="${g.id}" ${g.on!==false?"checked":""}> используется</label>`:"");}
   else if(hasFx){h+=fx+`<label class="note inline noprint" style="gap:4px;margin-top:4px"><input type="checkbox" data-gearon="${g.id}" ${g.on!==false?"checked":""}> используется</label>`;}
@@ -1593,10 +1654,12 @@ function customFields(g){
   const opt=(val,lb)=>`<option value="${val}" ${t===val?"selected":""}>${lb}</option>`;
   let h=`<div class="cfields noprint"><label>Тип предмета<select class="sel" data-gear="${g.id}|ctype">${opt("","Обычный предмет")}${opt("ranged","Оружие дальнего боя")}${opt("melee","Оружие ближнего боя")}${opt("armor","Броня")}</select></label>`;
   if(t==="ranged"||t==="melee"){h+=`<label>Урон<input class="inp" data-gear="${g.id}|cdmg" value="${v("cdmg")}" placeholder="2d10+3" autocomplete="off"></label><label>Пробитие<input class="inp" type="number" min="0" data-gear="${g.id}|cpen" value="${v("cpen")}" placeholder="0"></label>`;if(t==="ranged")h+=`<label>Обойма<input class="inp" type="number" min="0" data-gear="${g.id}|cmag" value="${v("cmag")}" placeholder="без патронов"></label>`;}
+  if(t==="armor")h+=`<label>Класс брони<select class="sel" data-gear="${g.id}|ccls" data-keep="1"><option value="">не указан</option>${["Легкая","Средняя","Тяжелая","Бронекостюм"].map(x=>`<option ${g.ccls===x?"selected":""}>${x}</option>`).join("")}</select></label>`;
   if(t==="armor")h+=`<label>Броня<input class="inp" type="number" min="0" data-gear="${g.id}|carmor" value="${v("carmor")}" placeholder="0"></label><label>Прочность<input class="inp" type="number" min="0" data-gear="${g.id}|cdur" value="${v("cdur")}" placeholder="0"></label>`;
   if(t==="ranged"||t==="melee")h+=`<label>${t==="ranged"?"Длина очереди":"Вихрь ударов"}<input class="inp" type="number" min="0" data-gear="${g.id}|blen" value="${v("blen")}" placeholder="нет"></label><label>${t==="ranged"?"Степень очереди":"Степень вихря"}<input class="inp" type="number" min="1" data-gear="${g.id}|bstep" value="${v("bstep")}" placeholder="${BSTEP_DEF}"></label>`;
   if(t==="ranged"||t==="melee")h+=`<label>Крит на<input class="inp" data-gear="${g.id}|ccrit" value="${v("ccrit")}" placeholder="9-10" autocomplete="off"></label>`;
   h+=`</div>`;
+  if(t==="armor"){const on=g.cprops||[];h+=`<div class="noprint" style="margin-top:8px"><div class="note">Свойства брони (из Арсенала)</div><div class="pillset" style="margin-top:4px">${ARMPROPS.map(x=>`<button class="pill" data-cprop="${g.id}|${esc(x)}" aria-pressed="${on.includes(x)}">${esc(x)}</button>`).join("")}</div><label class="note" style="display:flex;flex-direction:column;gap:3px;margin-top:6px">Другие свойства через запятую<input class="inp" data-gear="${g.id}|cpropx" value="${v("cpropx")}" placeholder="Силовое поле (12), …" autocomplete="off"></label></div>`;}
   if(t==="ranged"||t==="melee"){const on=g.cprops||[];h+=`<div class="noprint" style="margin-top:8px"><div class="note">Свойства (названия из Арсенала)</div><div class="pillset" style="margin-top:4px">${PROPS.map(x=>`<button class="pill" data-cprop="${g.id}|${esc(x)}" aria-pressed="${on.includes(x)}">${esc(x)}</button>`).join("")}</div><label class="note" style="display:flex;flex-direction:column;gap:3px;margin-top:6px">Другие свойства через запятую<input class="inp" data-gear="${g.id}|cpropx" value="${v("cpropx")}" placeholder="Верный удар (3), Критический удар" autocomplete="off"></label></div>`;}
   {const fx=g.cfx||[];h+=`<div class="noprint" style="margin-top:8px"><div class="note">Эффекты на характеристики</div>${fx.map(([k,val],i)=>`<div class="cfxrow"><select class="sel" data-cfx="${g.id}|${i}|k">${FXKEYS().map(([kk,lb])=>`<option value="${kk}" ${kk===k?"selected":""}>${esc(lb)}</option>`).join("")}</select><input class="inp" type="number" data-cfx="${g.id}|${i}|v" value="${esc(String(val??""))}" style="width:72px"><button class="del delico" data-cfxdel="${g.id}|${i}" title="Убрать эффект" aria-label="Убрать эффект">×</button></div>`).join("")}<button class="btn small" data-cfxadd="${g.id}" style="margin-top:6px">Добавить эффект</button></div>`;}
   if(t==="ranged"||t==="melee")h+=`<div class="note noprint" data-dmghint="${g.id}" style="${g.cdmg&&!parseDmg(g.cdmg)?"color:var(--warn)":""}">${g.cdmg&&!parseDmg(g.cdmg)?"Не получается разобрать урон. ":""}Урон пишется как в книге: 2d10+3, d5, 4 или 2d6+БС.</div>`;
@@ -1637,8 +1700,9 @@ function profile(g,R){
     mods.forEach(md=>{a+=md.armor||0;d+=md.dur||0;if(md.cls)cls=md.cls;});
     favorEffects(g.id).forEach(({eff})=>{d+=eff.dur||0;a+=eff.armor||0;});
     a=Math.max(0,a);
-    const extra=x.text.replace(/^\d+\s*\(\d+\)\s*,?\s*/,"");
-    return {kind,armor:a,dur:d,line:`Броня ${a}, прочность ${d}${cls?", "+cls.toLowerCase()+(cls==="Бронекостюм"?"":" броня"):""}${extra?". "+extra:""}`,stats:mods.filter(m=>m.stat).map(m=>({k:m.stat,src:m.name})),notes,orig:x.text,changed:mods.length>0};
+    const extra=x.text.replace(/^\d+\s*\(\d+\)\s*[,.]?\s*/,"");
+    const xp=(g.xprops||[]).filter(x=>!new RegExp(x.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"),"i").test(extra));
+    return {kind,armor:a,dur:d,line:`Броня ${a}, прочность ${d}${cls?", "+cls.toLowerCase()+(cls==="Бронекостюм"?"":" броня"):""}${extra?". "+extra:""}${xp.length?". "+xp.join(", "):""}`,stats:mods.filter(m=>m.stat).map(m=>({k:m.stat,src:m.name})),notes,orig:x.text,changed:mods.length>0};
   }
   if(kind==="shield"||kind==="shieldplain"){
     let a=Number((x.text.match(/Добавляет (\d+)/)||[])[1]||0);
@@ -1664,7 +1728,7 @@ function renderMods(){
    $("#modBody").insertAdjacentHTML("afterbegin",`<div class="okbox" style="margin:0 0 8px">Запчасти: <b>${resVal("parts")}</b>${hasTalent(R2,"Экономная переборка")?` <span class="note">(«Экономная переборка»: −1 к цене)</span>`:""}. Бесплатная установка — для улучшений, полученных другим путём.</div>`+(isW&&hasTalent(R2,"Полная переборка оружия")?`<div class="entry"><h5 style="margin:0">Полная переборка оружия</h5><div class="note">Тест на Сообразительность −3 и 5 запчастей: оружие получает одно свойство.</div><div class="inline" style="margin-top:6px;gap:6px"><select class="sel" id="ovProp"><option value="">свойство…</option>${PROPS.concat(["Критический удар"]).map(x=>`<option ${MDLG.ov===x?"selected":""}>${esc(x)}</option>`).join("")}</select><button class="btn small primary" data-overhaul="1" ${resVal("parts")<5?"disabled":""}>Переборка</button></div>${(g.xprops||[]).length?`<div class="pillset" style="margin-top:6px">${g.xprops.map(x=>`<span class="pill" style="cursor:default">${esc(x)}<button class="del" data-xpropoff="${g.id}|${esc(x)}" aria-label="Убрать">×</button></span>`).join("")}</div>`:""}</div>`:""));}
 }
 
-const ACAT={sec:"",q:"",replace:null,qty:{}};
+const ACAT={open:new Set(),sec:"",q:"",replace:null,qty:{}};
 function renderArsenal(){
   const secs=[...new Set(ARS.map(x=>x.sec))];
   $("#arsSec").innerHTML=`<option value="">Все разделы</option>`+secs.map(s=>`<option ${ACAT.sec===s?"selected":""}>${esc(s)}</option>`).join("");
@@ -1672,13 +1736,15 @@ function renderArsenal(){
   const kitSet=ACAT.kit?new Set(ACAT.kit.list):null;
   $("#arsSec").hidden=!!ACAT.kit;
   const list=ARS.map((x,i)=>({x,i})).filter(({x,i})=>(kitSet?kitSet.has(i):((!ACAT.where||x.sec===ACAT.where||x.cat===ACAT.where)&&(!ACAT.sec||x.sec===ACAT.sec)))&&(!q||anorm(x.name+" "+x.text+" "+x.cat).includes(q)));
-  const groups={};list.forEach(o=>{const g=o.x.sec+(o.x.cat!==o.x.sec?": "+o.x.cat:"");(groups[g]=groups[g]||[]).push(o);});
+  const groups={};list.forEach(o=>{const g=o.x.sec+"|"+o.x.cat;(groups[g]=groups[g]||[]).push(o);});
+  const autoOpen=!!q||!!ACAT.kit||list.length<=8;let lastSec=null;
   if(ACAT.kit){$("#arsMode").textContent=`Стартовое снаряжение: ${ACAT.kit.label}. Выбранный предмет сразу появится в снаряжении.`;}
   else if(ACAT.academy){$("#arsMode").textContent="Предмет будет записан как полученный в Академии.";}
   else if(ACAT.favor){const m=C.merits.find(x=>x.id===ACAT.favor.mid);$("#arsMode").innerHTML=`${m?"Предмет для одолжения «"+esc(m.title)+"».":"Предмет для создания персонажа."} ${ACAT.where?"Показан раздел «"+esc(ACAT.where)+"». ":""}Если нужного предмета нет в арсенале книги, <button class="jump ph" id="arsOwn">запишите свой</button>.`;}
   else if(!ACAT.replace)$("#arsMode").textContent=`Предмет добавится в снаряжение. Электроника: ${resVal("elec")}${hasTalent(compute(C),"Улучшенная сборка")?" («Улучшенная сборка»: −1 к цене)":""}. «Собрать» спишет электронику, «Добавить» — без списания.`;
   else $("#arsMode").textContent=ACAT.replace?"Выбранный предмет заменит строку «"+(C.gear.find(g=>g.id===ACAT.replace)||{}).name+"».":"Предмет добавится в снаряжение.";
-  $("#arsBody").innerHTML=Object.entries(groups).map(([g,xs])=>`<h4 style="font-family:var(--narrow);margin:16px 0 0;font-size:19px">${esc(g)}</h4>`+xs.map(({x,i})=>`<div class="entry"><div class="inline" style="justify-content:space-between"><h5 style="margin:0">${esc(x.name)}</h5><span class="inline" style="gap:6px;flex-wrap:nowrap">${ACAT.kit?`<button class="btn small primary" data-kittake="${i}">${ACAT.kit.cur===i?"Выбрано":"Выбрать"}</button>`:`${ACAT.replace?"":`<label class="note inline" style="gap:4px;flex-wrap:nowrap">Количество <input class="inp" type="number" min="1" value="${ACAT.qty[i]||1}" data-arsqty="${i}" style="width:58px"></label>`}${!ACAT.replace&&!ACAT.favor&&!ACAT.academy&&elecPrice(i)?`<button class="btn small primary" data-arsbuy="${i}" title="Списать электронику">Собрать за ${elecPrice(i)} эл.</button>`:""}<button class="btn small ${!ACAT.replace&&!ACAT.favor&&!ACAT.academy&&elecPrice(i)?"":"primary"}" data-arsadd="${i}">${ACAT.replace?"Выбрать":"Добавить"}</button>`}</span></div><div class="rules" style="font-size:14.5px">${esc(x.text)}</div></div>`).join("")).join("")||`<p class="note">Ничего не найдено. Измените запрос или раздел.</p>`;
+  $("#arsBody").innerHTML=Object.entries(groups).map(([g,xs])=>{const [sec,cat]=g.split("|");const head=sec!==lastSec?`<h4 class="arssec">${esc(sec)}</h4>`:"";lastSec=sec;const open=autoOpen||ACAT.open.has(g);
+    return head+`<div class="arsgrp ${open?"open":""}"><button class="arsgh" data-arsgrp="${esc(g)}" aria-expanded="${open}"><span class="gcar" aria-hidden="true">${open?"▾":"▸"}</span><span>${esc(cat)}</span><span class="ggn">${xs.length}</span></button>${open?`<div class="arsitems">`+xs.map(({x,i})=>`<div class="entry"><div class="inline" style="justify-content:space-between"><h5 style="margin:0">${esc(x.name)}</h5><span class="inline" style="gap:6px;flex-wrap:nowrap">${ACAT.kit?`<button class="btn small primary" data-kittake="${i}">${ACAT.kit.cur===i?"Выбрано":"Выбрать"}</button>`:`${ACAT.replace?"":`<label class="note inline" style="gap:4px;flex-wrap:nowrap">Количество <input class="inp" type="number" min="1" value="${ACAT.qty[i]||1}" data-arsqty="${i}" style="width:58px"></label>`}${!ACAT.replace&&!ACAT.favor&&!ACAT.academy&&elecPrice(i)?`<button class="btn small primary" data-arsbuy="${i}" title="Списать электронику">Собрать за ${elecPrice(i)} эл.</button>`:""}<button class="btn small ${!ACAT.replace&&!ACAT.favor&&!ACAT.academy&&elecPrice(i)?"":"primary"}" data-arsadd="${i}">${ACAT.replace?"Выбрать":"Добавить"}</button>`}</span></div><div class="rules" style="font-size:14.5px">${esc(x.text)}</div></div>`).join("")+`</div>`:""}</div>`;}).join("")||`<p class="note">Ничего не найдено. Измените запрос или раздел.</p>`;
 }
 function openArsenal(replaceId,query){ACAT.kit=null;$("#arsSec").hidden=false;ACAT.replace=replaceId||null;ACAT.q=query||"";$("#arsQ").value=ACAT.q;renderArsenal();$("#arsDlg").showModal();}
 
@@ -1780,7 +1846,7 @@ function boughtUI(R){
   return Object.entries(by).map(([i,bs])=>{const t=TAL[i];const lv=bs.length;const sum=bs.reduce((a,b)=>a+b.cost,0);const free=bs.filter(b=>b.free);const costTxt=free.length===bs.length?`получен бесплатно`:`${sum} EXP${free.length?", часть уровней бесплатно":""}`;
     const where=t.group==="МИСП"?"Общий МИСП":(t.sub==="Общие"?t.group:t.sub);
     const key="b"+i;
-    return `<div class="entry" data-ik="b:${i}"><div class="inline" style="justify-content:space-between"><h5 style="margin:0">${talToggle(key,esc(t.name)+(t.costs.length>1?" ("+lv+")":""))} <span class="note">(${esc(where)}${t.rank?", Ранг "+t.rank:""}) — ${costTxt}</span></h5><button class="del noprint" data-unbuy="${i}">${lv>1?"Снять уровень":(free.length===bs.length?"Убрать":"Вернуть опыт")}</button></div>${free.length?`<input class="inp" style="width:100%;margin-top:4px" data-buyhow="${free[0].id}" value="${esc(free[0].how||"")}" placeholder="Откуда получен: одолжение, мастер, особенность">`:""}${talBody(key,`${t.req&&!/^нет$/i.test(t.req)?`<div class="note">Требования: ${esc(t.req)}</div>`:""}<div class="rules">${paras(t.text)}</div>`)}</div>`;}).join("");
+    return `<div class="entry" data-ik="b:${i}"><div class="inline" style="justify-content:space-between"><h5 style="margin:0">${talToggle(key,esc(t.name)+(t.costs.length>1?" ("+lv+")":""))} <span class="note">(${esc(where)}${t.rank?", Ранг "+t.rank:""}) — ${costTxt}</span></h5>${(()=>{const lbl=lv>1?"Снять уровень":(free.length===bs.length?"Убрать талант":"Вернуть опыт");return `<button class="del delico noprint" data-unbuy="${i}" title="${lbl}" aria-label="${lbl}: ${esc(t.name)}"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg></button>`;})()}</div>${free.length?`<input class="inp" style="width:100%;margin-top:4px" data-buyhow="${free[0].id}" value="${esc(free[0].how||"")}" placeholder="Откуда получен: одолжение, мастер, особенность">`:""}${talBody(key,`${t.req&&!/^нет$/i.test(t.req)?`<div class="note">Требования: ${esc(t.req)}</div>`:""}<div class="rules">${paras(t.text)}</div>`)}</div>`;}).join("");
 }
 function renderCatalog(){
   const R=compute(C); const cl=R.cl; const xp=xpAvail(R);
@@ -1866,7 +1932,7 @@ const critTag=(p,dr)=>dr.crit?` <b style="color:var(--base)">Крит: на ку
 function showDamage(name,expr,rolls,flat,sum,bs,extra){
   LASTDMG=sum;
   LASTSTAMP="roll";
-  $("#rollNow").innerHTML=`<div class="big">${esc(name)}: урон ${esc(expr)}</div><div class="inline" style="margin-top:4px">${stamp(sum,"roll")}<span class="verdict" style="font-size:20px">${sum} урона${bs.length?` ${esc(bs.join(""))}`:""}</span></div><div style="margin-top:4px;font-size:15px">${esc(expr)}: ${rolls.length?`выпало ${rolls.join(" + ")}`:"без кубов"}${flat?` ${flat>0?"+":"−"} ${Math.abs(flat)}`:""} = <b>${sum}</b>${bs.length?`<div class="note">${esc(bs.join(""))} добавьте сами</div>`:""}</div>${extra||""}`;
+  $("#rollNow").innerHTML=`<div class="big">${esc(name)}: урон ${esc(expr)}</div><div class="inline" style="margin-top:4px">${stamp(sum,"roll").replace('class="stamp','class="stamp dmg')}<span class="verdict" style="font-size:20px">${sum} урона${bs.length?` ${esc(bs.join(""))}`:""}</span></div><div style="margin-top:4px;font-size:15px">${esc(expr)}: ${rolls.length?`выпало ${rolls.join(" + ")}`:"без кубов"}${flat?` ${flat>0?"+":"−"} ${Math.abs(flat)}`:""} = <b>${sum}</b>${bs.length?`<div class="note">${esc(bs.join(""))} добавьте сами</div>`:""}</div>${extra||""}`;
   ROLLS.unshift(`${name}: урон ${sum}${bs.length?" "+bs.join(""):""}`);ROLLS.length=Math.min(ROLLS.length,8);
   $("#rollLog").innerHTML=ROLLS.slice(1).map(x=>`<li>${esc(x)}</li>`).join("");showPanel();
   const st=$("#rollNow .stamp");if(st)setTimeout(()=>st.classList.remove("hit"),400);
@@ -2048,7 +2114,7 @@ function stMission(R){
     ${mj('id="openInfl"',icon("infl"),"Запрос")}
     ${mj('id="openMc"',sv('<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 11h2M12 11h2M16 11v6M8 15h2M12 15h2M8 18h6"/>'),"Калькулятор")}
     ${mj('data-roomopen="1"',sv('<circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.4"/><path d="M3 20c.8-3.4 3.2-5 6-5s5.2 1.6 6 5M15 15.2c2.6-.4 4.8 1 5.6 4"/>'),roomShortLabel(),"","Комната мастера")}
-    ${[["Характеристики","Характ.","str"],["Трекеры","Трекеры","light"],["Снаряжение","Снаряж.","parts"],["Таланты","Таланты","xp"]].map(([k,l,ic])=>mj(`data-jumpsec="${k}"`,icon(ic),l,"jump2",k)).join("")}
+    ${[["Характеристики","Характ.","str"],["Состояние и ранения","Состояние",null],["Трекеры","Трекеры","light"],["Снаряжение","Снаряж.","parts"],["Таланты","Таланты","xp"]].map(([k,l,ic])=>mj(`data-jumpsec="${k}"`,ic?icon(ic):sv('<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/><path d="M8.5 11.5h2l1-2 1.5 4 1-2h1.5"/>'),l,"jump2",k)).join("")}
   </div>
     <label class="note inline misMod">Модификатор тестов <input class="inp" type="number" id="misMod" value="${ROLLMOD}" style="width:64px"></label>
   </div>`+(i>=0?full.slice(i):full);
@@ -2066,6 +2132,51 @@ function diceCalcHTML(card){const body=`
 function placeToTop(){const b=$("#toTop");if(!b||b.hidden)return;const p=$("#rollPanel");const h=p&&!p.hidden?p.getBoundingClientRect().height+12:0;b.style.bottom=`calc(${16+Math.round(h)}px + env(safe-area-inset-bottom,0px))`;}
 window.addEventListener("resize",placeToTop);
 setTimeout(()=>{const p=$("#rollPanel");if(p)new MutationObserver(placeToTop).observe(p,{attributes:true,childList:true,subtree:true});},0);
+/* перетаскивание снаряжения */
+let GDRAG=null;
+function gearApplyOrder(tb){const ids=[...tb.querySelectorAll(":scope > tr[data-gid]")].map(r=>r.dataset.gid);const vis=new Set(ids);const byId=Object.fromEntries(C.gear.map(g=>[g.id,g]));let k=0;
+  C.gear=C.gear.map(g=>vis.has(g.id)?byId[ids[k++]]:g);C.gearSorted=true;save();}
+document.addEventListener("pointerdown",e=>{const h=e.target.closest(".gdrag");if(!h||h.closest(".peek"))return;const row=h.closest("tr[data-gid]");const tb=row&&row.parentElement;if(!tb)return;e.preventDefault();
+  GDRAG={row,tb,id:e.pointerId,moved:false};row.classList.add("gdragging");document.body.classList.add("dragmode");try{h.setPointerCapture(e.pointerId);}catch(_){}});
+document.addEventListener("pointermove",e=>{if(!GDRAG||e.pointerId!==GDRAG.id)return;e.preventDefault();const y=e.clientY;const rows=[...GDRAG.tb.querySelectorAll(":scope > tr[data-gid]")].filter(r=>r!==GDRAG.row);
+  let before=null;for(const r of rows){const b=r.getBoundingClientRect();if(y<b.top+b.height/2){before=r;break;}}
+  if(before){if(GDRAG.row.nextElementSibling!==before){GDRAG.tb.insertBefore(GDRAG.row,before);GDRAG.moved=true;}}else{const last=rows[rows.length-1];if(last&&last.nextElementSibling!==GDRAG.row){last.after(GDRAG.row);GDRAG.moved=true;}}
+  if(y<70)window.scrollBy(0,-14);else if(y>window.innerHeight-70)window.scrollBy(0,14);});
+const gEnd=e=>{if(!GDRAG)return;const {row,tb,moved}=GDRAG;row.classList.remove("gdragging");document.body.classList.remove("dragmode");GDRAG=null;if(moved){gearApplyOrder(tb);try{synthClick("close");}catch(_){}}};
+document.addEventListener("pointerup",gEnd);document.addEventListener("pointercancel",gEnd);
+document.addEventListener("keydown",e=>{const h=e.target.closest&&e.target.closest(".gdrag");if(!h||(e.key!=="ArrowUp"&&e.key!=="ArrowDown"))return;e.preventDefault();const row=h.closest("tr[data-gid]"),tb=row.parentElement;
+  if(e.key==="ArrowUp"){const p=row.previousElementSibling;if(p&&p.matches("tr[data-gid]"))p.before(row);}else{const n=row.nextElementSibling;if(n&&n.matches("tr[data-gid]"))n.after(row);}gearApplyOrder(tb);h.focus();});
+const GOPEN=new Set();
+function plantAuto(g){let k="misc";try{k=gearGroupOf(g);}catch(e){}if(k!=="expl")return false;const r=gearRef(g);return !(r!=null&&isThrown(r));}
+function plantUI(g){if(g.plant===false||(g.plant!==true&&!plantAuto(g)))return "";
+  return `<div class="noprint" style="margin-top:6px"><button class="btn small primary" data-plant="${g.id}" ${Number(g.qty)>0?"":"disabled"}>Установить: тест Сообразительности</button></div>`;}
+function gEditable(g){return !g.opts&&(gearRef(g)!=null||(g.src!=="class"&&g.ref==null));}
+function gEditBtn(g){if(!gEditable(g))return "";const on=EDITG.has(g.id);return `<button class="gedit noprint" data-gearedit="${g.id}" aria-pressed="${on}" aria-label="${on?"Закончить изменение":"Изменить название, описание и тип"}" title="${on?"Готово":"Изменить"}"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${on?'<path d="M5 12.5l4.5 4.5L19 7.5"/>':'<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/>'}</svg></button>`;}
+const ARMPROPS=["Подвижная","Замкнутая система жизнеобеспечения","Фонарь","Силовое поле","Улучшенное силовое поле","Бонус силы ×2","Сенсоры","Оптический комплекс","Джетпак","Встроенный коммуникатор"];
+function armPropsUI(g){const on=g.xprops||[];return `<div class="noprint" style="margin-top:8px"><div class="note">Свойства брони (из Арсенала)</div><div class="pillset" style="margin-top:4px">${ARMPROPS.map(x=>`<button class="pill" data-xprop="${g.id}|${esc(x)}" aria-pressed="${on.includes(x)}">${esc(x)}</button>`).join("")}</div></div>`;}
+function plantSelect(g){const v=g.plant===true?"on":g.plant===false?"off":"";return `<label class="note noprint" style="display:flex;flex-direction:column;gap:3px;margin-top:8px">Кнопка «Установить: тест Сообразительности»<select class="sel" data-gplant="${g.id}"><option value="" ${v===""?"selected":""}>Автоматически: ${plantAuto(g)?"есть":"нет"}</option><option value="on" ${v==="on"?"selected":""}>Показывать</option><option value="off" ${v==="off"?"selected":""}>Не показывать</option></select></label>`;}
+function grpSelect(g){let auto="misc";try{const k=g.grp;g.grp=null;auto=gearGroupOf(g);g.grp=k;}catch(e){}const al=(GGRP.find(x=>x[0]===auto)||["",""])[1];
+  return `<label class="note noprint" style="display:flex;flex-direction:column;gap:3px;margin-top:8px">Тип снаряжения (раздел)<select class="sel" data-ggset="${g.id}"><option value="">Автоматически: ${esc(al)}</option>${GGRP.map(([k,l])=>`<option value="${k}" ${g.grp===k?"selected":""}>${esc(l)}</option>`).join("")}</select></label>`;}
+function gName(g){const op=GOPEN.has(g.id);const q=Number(g.qty);return `<button class="gname" data-gtog="${g.id}" aria-expanded="${op}"><span class="gcar" aria-hidden="true">${op?"▾":"▸"}</span><span class="gnm">${esc(g.name||"Без названия")}</span>${q!==1?`<span class="gq">×${esc(String(g.qty))}</span>`:""}</button>`;}
+/* группы снаряжения */
+const GGRP=[["rng","Дальний бой"],["mel","Ближний бой"],["expl","Взрывчатка и метательное"],["arm","Броня и щиты"],["elec","Электроника"],["drug","Препараты"],["mod","Модификации и импланты"],["spec","Особое"],["misc","Прочее"]];
+const GGSHUT=new Set();
+function gearGroupOf(g){if(g.grp&&GGRP.some(x=>x[0]===g.grp))return g.grp;const r=gearRef(g);if(/растяж/i.test(g.name||"")||(r!=null&&/растяж/i.test(ARS[r].name)))return "expl";
+  if(r==null){const t=g.ctype;return t==="ranged"?"rng":t==="melee"?"mel":t==="armor"?"arm":"misc";}
+  const x=ARS[r];if(x.cat==="Метательное"||x.sec==="Взрывные устройства")return "expl";
+  if(x.sec==="Дальний бой")return "rng";if(x.sec==="Ближний бой")return x.cat==="Защитное"?"arm":"mel";if(x.sec==="Броня")return "arm";
+  if(x.sec==="Электронные приборы")return "elec";if(x.sec==="Модификации")return "mod";if(x.cat==="Боевые наркотики")return "drug";if(x.sec==="Особые виды оружия")return "spec";return "misc";}
+function gearGroups(items,row){const by={};items.forEach(g=>{let k="misc";try{k=gearGroupOf(g);}catch(e){}(by[k]=by[k]||[]).push(g);});
+  const keys=GGRP.filter(([k])=>by[k]);if(!keys.length)return `<p class="note">Снаряжения пока нет.</p>`;
+  return keys.map(([k,l])=>{const shut=GGSHUT.has(k);return `<div class="ggrp" data-ggrp="${k}"><button class="ggh" data-ggtog="${k}" aria-expanded="${!shut}"><span class="gcar" aria-hidden="true">${shut?"▸":"▾"}</span><span>${l}</span><span class="ggn">${by[k].length}</span></button>${shut?"":`<div class="scroll"><table class="tbl geartbl"><thead><tr><th>Предмет</th><th>Кол-во</th><th class="noprint"></th></tr></thead><tbody>${by[k].map(row).join("")}</tbody></table></div>`}</div>`;}).join("");}
+function misInjectPM(sh){const A=C.misAdj||{};
+  const ctl=(k,lbl)=>{const v=Number(A[k])||0;return `<div class="gmpm noprint"><button class="gmb" data-mspm="${k}|-1" aria-label="${esc(lbl)}: минус 1 на миссию">−</button><span class="gmv ${v>0?"pos":v<0?"neg":""}">${v?sgn(v):"±0"}</span><button class="gmb" data-mspm="${k}|1" aria-label="${esc(lbl)}: плюс 1 на миссию">+</button></div>`;};
+  sh.querySelectorAll('.stile[data-ik^="s:"]').forEach(t=>{const k=t.dataset.ik.slice(2);t.classList.add("haspm");t.insertAdjacentHTML("beforeend",ctl(k,LABEL[k]||k));});
+  [["[data-rollres]","res","Устойчивость"],["[data-rollini]","ini","Инициатива"]].forEach(([sel,k,l])=>{const b=sh.querySelector(sel);if(!b||b.closest(".misbar"))return;const w=document.createElement("div");w.className="dwrap haspm";b.before(w);w.appendChild(b);w.insertAdjacentHTML("beforeend",ctl(k,l));});
+  const st=sh.querySelector(':scope > details.sec[data-sec="Характеристики"] .stiles');const act=Object.entries(A).filter(([,v])=>Number(v));
+  if(st)st.insertAdjacentHTML("beforebegin",`<div class="mstip" style="margin:0 0 8px">Кнопки − и + меняют значения только на эту миссию, в листе персонажа их нет.${act.length?` Сейчас: <b>${act.map(([k,v])=>esc(fxLabel(k))+" "+sgn(Number(v))).join(", ")}</b> <button class="jump ph" data-msreset="1">сбросить</button>`:""}</div>`);}
+/* отклик на нажатие */
+document.addEventListener("pointerdown",e=>{const el=e.target.closest('button,summary,.pill,label.btn,[role="button"],.opt,.kitopt');if(!el||el.disabled||el.closest(".gdrag"))return;el.classList.add("tapped");const off=()=>{setTimeout(()=>el.classList.remove("tapped"),160);};el.addEventListener("pointerup",off,{once:true});el.addEventListener("pointercancel",off,{once:true});el.addEventListener("pointerleave",off,{once:true});setTimeout(()=>el.classList.remove("tapped"),900);},true);
 function stRoom(R){return `<h2>Комната мастера</h2><div id="roomView"></div>`;}
 function stDice(R){
   const pool=Object.entries(DPOOL.dice).filter(([,c])=>c>0);
@@ -2384,6 +2495,7 @@ function missionItems(){
   if(ch==="Патриот"){const n=(C.missionCount||0)+1;it.end.push({key:"patriot",label:`Патриот: миссия №${n}${n%5===0?" — бросок d6 на одолжение своей страны":" (бросок на одолжение каждые 5 миссий)"}`,def:n%5===0});}
   if(C.fateUsed) it.end.push({key:"fate",label:`Вернуть активированные Очки судьбы (${C.fateUsed})`,def:true});
   if((C.gmMods||[]).length&&!(ROOM&&ROOM.st&&ROOM.st.role==="player")) it.end.push({key:"gmmods",label:"Снять модификаторы мастера ("+C.gmMods.map(m=>fxLabel(m.k)+" "+sgn(Number(m.v))).join(", ")+")",def:true});
+  if(Object.values(C.misAdj||{}).some(v=>Number(v))) it.end.push({key:"misadj",label:"Сбросить правки характеристик «только на миссию» ("+Object.entries(C.misAdj).filter(([,v])=>Number(v)).map(([k,v])=>fxLabel(k)+" "+sgn(Number(v))).join(", ")+")",def:true});
   if(C.tibetUsed) it.end.push({key:"tibet",label:"Тибет: снова можно восстановить Очко судьбы в следующей миссии",def:true});
   if(C.ritualUses||C.spirit||C.ritOn) it.end.push({key:"ritual",label:`${ritualOf(R)||"Ритуал"}: сбросить счётчик проведений (${C.ritualUses||0})${C.spirit?", Змеиный дух исчезает":""}`,def:true});
   if(W().perm) it.end.push({key:"perm",label:`Снять постоянный штраф за ранение (${W().perm})`,def:true});
@@ -2427,6 +2539,7 @@ function missionRun(phase){
     if(MISSION.sel.temps){let n=0;C.merits.forEach(m=>{if(!m.ans)return;Object.values(m.ans).forEach(v=>{if(v&&typeof v==="object"&&!Array.isArray(v)&&"left" in v&&v.left>0){v.left--;n++;}});});res.push(`Временные эффекты: уменьшено ${n}.`);}
     if(MISSION.sel.fate&&C.fateUsed){res.push(`Вернулись Очки судьбы: ${C.fateUsed}.`);C.fateUsed=0;}
     if(MISSION.sel.gmmods&&(C.gmMods||[]).length){C.gmMods=[];res.push("Модификаторы мастера сняты.");}
+    if(MISSION.sel.misadj){C.misAdj={};res.push("Правки «только на миссию» сброшены.");}
     if(MISSION.sel.tibet&&C.tibetUsed){C.tibetUsed=false;res.push("Тибет: восстановление Очка судьбы снова доступно.");}
     if(MISSION.sel.ritual){res.push(`Ритуалы: счётчик сброшен (было ${C.ritualUses||0}).`);C.ritualUses=0;C.spirit=null;C.ritOn=null;C.ritLast="";}
     if(MISSION.sel.perm&&W().perm){res.push(`Постоянный штраф за ранение снят (${W().perm}).`);W().perm=0;}
@@ -2524,6 +2637,8 @@ document.addEventListener("click",e=>{
   if(d.fatepm){const f=fateInfo();
     if(d.fatepm==="-1"&&f.left>0){C.fateUsed=(C.fateUsed||0)+1;const trb=fateAfterSpend();render();renderFate((trb?trb+" ":"")+"Очко судьбы потрачено. Теперь бросьте 2d6 на Безудержные Силы: выберите Силу, к которой взывали.");$("#fateUf").hidden=false;$("#fateUfRes").innerHTML="";$("#fateUfRoll").disabled=false;$("#fateUfForce").value=UF.force||"light";$("#fateDlg").showModal();return;}
     else if(d.fatepm==="1"&&f.used>0){C.fateUsed--;toast("Очко судьбы возвращено");}render();return;}
+  if(d.plant){const g=C.gear.find(x=>x.id===d.plant);if(!g)return;const R=compute(C);showRoll(`Установка «${g.name}»: Сообразительность`,R.tot.wit,rnd(20));
+    const ok=/verdict ok/.test($("#rollNow").innerHTML);$("#rollNow").insertAdjacentHTML("beforeend",`<div class="note" style="margin-top:6px">${ok?"Установлено.":"Не удалось установить — решает Мастер, потерян ли заряд."} Осталось: ${g.qty}. <button class="btn small" data-use="${g.id}" ${g.qty>0?"":"disabled"}>Списать 1</button></div>`);pushLog(`${g.name}: установка — ${ok?"успех":"провал"}`);return;}
   if(d.use){const g=C.gear.find(x=>x.id===d.use);if(g&&g.qty>0){g.qty--;toast(`${g.name}: осталось ${g.qty}`);render();}return;}
   if(d.reload){const g=C.gear.find(x=>x.id===d.reload),p=profile(g,compute(C));if(g.spare!=null&&g.spare<=0){toast("Нет запасных магазинов");return;}if(g.spare!=null)g.spare--;g.ammo=p.mag;const fast=C.buys.some(b=>b.tid!=null&&TAL[b.tid]&&TAL[b.tid].name==="Быстрая перезарядка");toast("Перезаряжено"+(fast?" (Быстрая перезарядка: на одно действие меньше)":""));render();return;}
   if(d.spare){const [id,dv]=d.spare.split("|");const g=C.gear.find(x=>x.id===id);let v=g.spare==null?(Number(dv)>0?1:null):g.spare+Number(dv);if(v!=null&&v<0)v=null;g.spare=v;render();return;}
@@ -2534,12 +2649,12 @@ document.addEventListener("click",e=>{
     const dmgs=[];let crits=0;if(hits&&p.dice){for(let h=0;h<hits;h++){const dr=rollDmgP(p);dmgs.push(dr.sum);if(dr.crit)crits++;}}
     const tot=dmgs.reduce((a,b)=>a+b,0);if(dmgs.length)LASTDMG=tot;LASTT={name:g.name,v,r};
     const what=melee?`вихрь ударов ${n}`:`очередь ${n}`,sk=melee?"ББ":"ДБ";
-    LASTSTAMP="roll";$("#rollNow").innerHTML=`<div class="big">${esc(g.name)}: ${what}, ${sk} ${v}${wp?` (ранение ${sgn(wp)})`:""}${ROLLMOD?` (${sgn(ROLLMOD)})`:""}</div><div class="inline" style="margin-top:4px">${stamp(r,"roll")}<span class="verdict ${ok?"ok":"bad"}">${r===1?"Критический успех, ":r===20?"Критический провал, ":""}${ok?`попаданий: ${hits} из ${n}`:"промах"}</span></div><div class="note" style="margin-top:4px">Степень ${melee?"вихря":"очереди"} ${k}: ${esc(seq)} (нужно не больше ${v})</div>${dmgs.length?`<div style="margin-top:6px;font-size:15px">Урон по попаданиям: ${dmgs.join(" + ")} = <b>${tot} урона</b>${p.bs.length?" "+esc(p.bs.join(""))+" за каждое попадание добавьте сами":""}${crits?` <b style="color:var(--base)">Критов по урону: ${crits} (крит на ${esc(p.crit)})</b>`:""}</div>`:""}${ok?wpnExtras(p):""}${!melee&&p.mag?`<div class="note">Осталось патронов: ${g.ammo}.</div>`:""}`;
+    LASTSTAMP="roll";$("#rollNow").innerHTML=`<div class="big">${esc(g.name)}: ${what}, ${sk} ${v}${wp?` (ранение ${sgn(wp)})`:""}${ROLLMOD?` (${sgn(ROLLMOD)})`:""}</div><div class="inline" style="margin-top:4px">${stamp(r,"roll")}<span class="verdict ${ok?"ok":"bad"}">${r===1?"Критический успех, ":r===20?"Критический провал, ":""}${ok?`попаданий: ${hits} из ${n}`:"промах"}</span></div><div class="note" style="margin-top:4px">Степень ${melee?"вихря":"очереди"} ${k}: ${esc(seq)} (нужно не больше ${v})</div>${dmgs.length?`<div style="margin-top:6px;font-size:15px"><div class="inline" style="gap:12px;align-items:center;flex-wrap:nowrap">${dmgStamp(tot)}<span><b class="dmgbig">${tot} урона</b><br><span class="note">по попаданиям: ${dmgs.join(" + ")}</span></span></div>${p.bs.length?" "+esc(p.bs.join(""))+" за каждое попадание добавьте сами":""}${crits?` <b style="color:var(--base)">Критов по урону: ${crits} (крит на ${esc(p.crit)})</b>`:""}</div>`:""}${ok?wpnExtras(p):""}${!melee&&p.mag?`<div class="note">Осталось патронов: ${g.ammo}.</div>`:""}`;
     pushLog(`${g.name}: ${what}, ${r} против ${v} — ${ok?"попаданий "+hits+(dmgs.length?", урон "+tot:""):"промах"}`);showPanel();render();fateOffer(r);const st=$("#rollNow .stamp");if(st)setTimeout(()=>st.classList.remove("hit"),400);return;}
   if(d.shoot){const g=C.gear.find(x=>x.id===d.shoot),R=compute(C),p=profile(g,R);
     if(p.mag){if(g.ammo==null)g.ammo=p.mag;if(g.ammo<1){toast("Магазин пуст: перезарядите");return;}g.ammo--;setTimeout(render,0);}let v=p.total;const wp=woundPen(R);if(ROLLMOD)v+=ROLLMOD;if(wp)v+=wp;const r=rnd(20);
     const ok=r!==20&&(r===1||r<=v);const deg=ok?(v-r>0?`степеней успеха ${v-r}`:"базовый успех"):`степеней провала ${r-v}`;let dm="";
-    LASTT={name:g.name,v,r};if(ok&&p.dice){const dr=rollDmgP(p);LASTDMG=dr.sum;dm=`<b>${dr.sum} урона</b>${p.bs.length?" "+esc(p.bs.join("")):""} <span class="note">(${esc(p.dmg||"")}: ${dr.rolls.length?"выпало "+dr.rolls.join(" + "):"без кубов"}${p.flat?` ${p.flat>0?"+":"−"} ${Math.abs(p.flat)}`:""})</span>${critTag(p,dr)}`;}
+    LASTT={name:g.name,v,r};if(ok&&p.dice){const dr=rollDmgP(p);LASTDMG=dr.sum;dm=`<div class="inline" style="gap:12px;align-items:center;flex-wrap:nowrap">${dmgStamp(dr.sum)}<span><b class="dmgbig">${dr.sum} урона</b>${p.bs.length?" "+esc(p.bs.join("")):""}<br><span class="note">${esc(p.dmg||"")}: ${dr.rolls.length?"выпало "+dr.rolls.join(" + "):"без кубов"}${p.flat?` ${p.flat>0?"+":"−"} ${Math.abs(p.flat)}`:""}</span>${critTag(p,dr)}</span></div>`;}
     LASTSTAMP="roll";$("#rollNow").innerHTML=`<div class="big">${esc(g.name)}: ${p.skill==="rng"?"ДБ":"ББ"} ${v}${wp?` (ранение ${sgn(wp)})`:""}${ROLLMOD?` (${sgn(ROLLMOD)})`:""}</div><div class="inline" style="margin-top:4px">${stamp(r,"roll")}<span class="verdict ${ok?"ok":"bad"}">${r===1?"Критический успех, ":r===20?"Критический провал, ":""}${ok?"попадание":"промах"}, ${deg}.</span></div>${dm?`<div style="margin-top:6px;font-size:15px">${dm}</div>`:""}${ok?wpnExtras(p):""}`;
     pushLog(`${g.name}: ${r} против ${v} — ${ok?"попадание":"промах"}${dm?", "+dm.replace(/<[^>]+>/g,""):""}`);showPanel();fateOffer(r);const st=$("#rollNow .stamp");if(st)setTimeout(()=>st.classList.remove("hit"),400);return;}
   if(d.atk){const g=C.gear.find(x=>x.id===d.atk),R=compute(C),p=profile(g,R);showRoll(`${g.name}: ${p.skill==="rng"?"ДБ":"ББ"}`,p.total,rnd(20));return;}
@@ -2620,8 +2735,14 @@ document.addEventListener("click",e=>{
   if(d.roomopen){ROOM.err="";ROOM.msg="";STEP=11;render();scrollTo(0,0);if(ROOM.st&&ROOM.st.role==="gm")roomFetch();return;}
   if(d.room){roomAction(d.room);return;}
   if(d.rmadd!=null){const i=Number(d.rmadd),p=ROOM.players[i];if(!p)return;const dr=rmDraft(rmKey(p));const v=Number(String(dr.v).replace("−","-").replace(",","."));if(!v){toast("Введите значение, например −2 или 3");return;}roomSetMods(i,[...(ROOM.mods[rmKey(p)]||[]),{k:dr.k,v,note:String(dr.n||"").trim()}]);dr.v="";dr.n="";return;}
+  if(d.mspm){const [k,dv]=d.mspm.split("|");C.misAdj=C.misAdj||{};const v=(Number(C.misAdj[k])||0)+Number(dv);if(v)C.misAdj[k]=v;else delete C.misAdj[k];render();return;}
+  if(d.msreset){C.misAdj={};render();toast("Правки на миссию сброшены");return;}
   if(d.rmpm){const [i,k,dv]=d.rmpm.split("|");const p=ROOM.players[Number(i)];if(!p)return;const mods=(ROOM.mods[rmKey(p)]||[]).map(m=>({...m}));let m=mods.find(x=>x.k===k&&x.pm);if(!m){m={k,v:0,note:"",pm:true};mods.push(m);}m.v=(Number(m.v)||0)+Number(dv);roomSetMods(Number(i),mods.filter(x=>Number(x.v)));return;}
   if(d.jumpsec){const el=document.querySelector(`#sheet > details.sec[data-sec="${CSS.escape(d.jumpsec)}"]`);if(!el){toast("Блока «"+d.jumpsec+"» нет");return;}el.open=true;window.scrollTo(0,el.getBoundingClientRect().top+scrollY-8);const bar=document.querySelector(".misbar");if(bar){const br=bar.getBoundingClientRect();if(br.top<=1&&br.bottom>0)window.scrollBy(0,-br.height);}return;}
+  if(d.arsgrp){if(ACAT.open.has(d.arsgrp))ACAT.open.delete(d.arsgrp);else ACAT.open.add(d.arsgrp);renderArsenal();return;}
+  if(d.ggtog){if(GGSHUT.has(d.ggtog))GGSHUT.delete(d.ggtog);else GGSHUT.add(d.ggtog);if(STEP===11)renderRoom();else render();return;}
+  if(d.gtog){if(GOPEN.has(d.gtog))GOPEN.delete(d.gtog);else GOPEN.add(d.gtog);if(STEP===11)renderRoom();else render();return;}
+  if(d.gall){const ids=C.gear.map(g=>g.id);const anyShut=ids.some(id=>!GOPEN.has(id));ids.forEach(id=>anyShut?GOPEN.add(id):GOPEN.delete(id));render();return;}
   if(d.rmsel!=null){const p=ROOM.players[Number(d.rmsel)];if(p){ROOM.sel=rmKey(p);renderRoom();}return;}
   if(d.rmdel){const [i,j]=d.rmdel.split("|").map(Number),p=ROOM.players[i];if(!p)return;const cur=(ROOM.mods[rmKey(p)]||[]).filter((_,x)=>x!==j);roomSetMods(i,cur);return;}
   if(d.rmclear!=null){roomSetMods(Number(d.rmclear),[]);return;}
@@ -2629,10 +2750,10 @@ document.addEventListener("click",e=>{
   if(d.throw){THROW={id:d.throw,mod:THROW.id===d.throw?THROW.mod:0,res:""};renderThrow();$("#throwDlg").showModal();return;}
   if(d.throwgo){const g=C.gear.find(x=>x.id===THROW.id);if(!g)return;if(!(Number(g.qty)>0)){renderThrow();return;}
     const R=compute(C),r0=gearRef(g),ds=explDmg(r0),meta=explMeta(r0);const mod=Number(($("#throwMod")||{}).value)||0;THROW.mod=mod;const wp=woundPen(R);const v=R.tot.rng+mod+(Number(ROLLMOD)||0)+wp;const r=rnd(20);const ok=r!==20&&(r===1||r<=v);
-    g.qty=Number(g.qty)-1;LASTT={name:g.name,v,r};const dm=ok&&ds.length?throwDmgHtml(ds):"";
-    THROW.res=`<div class="inline" style="gap:10px">${stamp(r,"thr")}<span><span class="verdict ${ok?"ok":"bad"}" style="font-size:18px">${r===1?"Критический успех, ":r===20?"Критический провал, ":""}${ok?"попадание":"промах"}</span><br><span class="note">ДБ ${v}: ${ok?(v-r?`степеней успеха ${v-r}`:"базовый успех"):`степеней провала ${r-v}`}</span></span></div>${dm?`<div style="margin-top:6px;font-size:15px">${dm}</div>`:""}${!ok&&ds.length?`<div class="note" style="margin-top:6px">Мимо цели: куда упадёт и кого заденет, решает Мастер. <button class="jump ph" data-throwdmg="1">бросить урон</button></div>`:""}${ok&&meta.length?`<div class="note">${esc(meta.join("; "))}</div>`:""}<div class="note" style="margin-top:4px">${g.qty>0?`Осталось: ${g.qty}`:`<span style="color:var(--warn)">Это было последнее. ${outWord(g.name)}</span>`}</div>`;
+    g.qty=Number(g.qty)-1;LASTT={name:g.name,v,r};const dm="";
+    THROW.res=`<div class="inline" style="gap:10px">${stamp(r,"thr")}<span><span class="verdict ${ok?"ok":"bad"}" style="font-size:18px">${r===1?"Критический успех, ":r===20?"Критический провал, ":""}${ok?"попадание":"промах"}</span><br><span class="note">ДБ ${v}: ${ok?(v-r?`степеней успеха ${v-r}`:"базовый успех"):`степеней провала ${r-v}`}</span></span></div>${dm?`<div style="margin-top:6px;font-size:15px">${dm}</div>`:""}${ds.length?(ok?`<div style="margin-top:8px"><button class="btn primary" data-throwdmg="1">Бросить урон: ${esc(ds.map(d=>(d.label?d.label+" ":"")+d.expr).join(", "))}</button></div>`:`<div class="note" style="margin-top:6px">Мимо цели: куда упадёт и кого заденет, решает Мастер. <button class="btn small" data-throwdmg="1">Всё равно бросить урон</button></div>`):""}${ok&&meta.length?`<div class="note">${esc(meta.join("; "))}</div>`:""}<div class="note" style="margin-top:4px">${g.qty>0?`Осталось: ${g.qty}`:`<span style="color:var(--warn)">Это было последнее. ${outWord(g.name)}</span>`}</div>`;
     LASTSTAMP="thr";pushLog(`${g.name}: бросок ${r} против ДБ ${v} — ${ok?"попадание":"промах"}${dm?", "+dm.replace(/<[^>]+>/g,""):""}`);render();renderThrow();fateOffer(r);return;}
-  if(d.throwdmg){const g=C.gear.find(x=>x.id===THROW.id);if(!g)return;const dm=throwDmgHtml(explDmg(gearRef(g)));const e=$("#throwRes");if(e)e.insertAdjacentHTML("beforeend",`<div style="margin-top:6px;font-size:15px">${dm}</div>`);THROW.res=e?e.innerHTML:THROW.res;t.remove();return;}
+  if(d.throwdmg){const g=C.gear.find(x=>x.id===THROW.id);if(!g)return;const dm=throwDmgHtml(explDmg(gearRef(g)));const e=$("#throwRes");t.remove();if(e)e.insertAdjacentHTML("beforeend",`<div style="margin-top:6px;font-size:15px">${dm}</div>`);THROW.res=e?e.innerHTML:THROW.res;pushLog(`${g.name}: урон — ${dm.replace(/<[^>]+>/g,"")}`);return;}
   if(d.mk){const f=fateInfo(),R=f.R,M=MARKFX[R.mark.name],out=h=>{$("#mkRes").innerHTML=h;};const a=d.mk;
     if(a==="soulroll"){const r=rnd(3)+1;C.soulPts=(C.soulPts||0)+r;save();renderFate(`Душа единения: +${r} Очков судьбы для союзников.`);return;}
     if(a==="soul-"||a==="soul+"){C.soulPts=Math.max(0,(C.soulPts||0)+(a==="soul+"?1:-1));save();renderFate("");return;}
@@ -2678,10 +2799,11 @@ document.addEventListener("click",e=>{
   if(d.isida){const nat=BOOK.births[C.birth.nation];const r=rnd(6);C.birth.variant=Math.min(r,nat.variants.length)-1;C.birth.ans={};C.birth.isidaRoll=r;C.birth.isidaSub=null;
     const R0=compute(C);const ch=(R0.steps.birth.choices||[]).find(x=>x.type==="roll");if(ch){const s2=rnd(ch.sides);C.birth.ans[ch.path]=s2;C.birth.isidaSub=s2;}
     LASTSTAMP="d66";render();toast("Происхождение: "+(isidaOrigin(compute(C))||nat.variants[C.birth.variant].name));return;}
+  if(d.xprop){const i=d.xprop.indexOf("|"),id=d.xprop.slice(0,i),nm=d.xprop.slice(i+1);const g=C.gear.find(x=>x.id===id);const a=g.xprops||[];g.xprops=a.includes(nm)?a.filter(x=>x!==nm):[...a,nm];render();return;}
   if(d.cprop){const i=d.cprop.indexOf("|"),id=d.cprop.slice(0,i),nm=d.cprop.slice(i+1);const g=C.gear.find(x=>x.id===id);const a=g.cprops||[];g.cprops=a.includes(nm)?a.filter(x=>x!==nm):[...a,nm];render();return;}
   if(d.cfxadd){const g=C.gear.find(x=>x.id===d.cfxadd);g.cfx=[...(g.cfx||[]),["str",1]];render();return;}
   if(d.cfxdel){const [id,i]=d.cfxdel.split("|");const g=C.gear.find(x=>x.id===id);g.cfx=(g.cfx||[]).filter((_,j)=>j!==Number(i));render();return;}
-  if(d.gearedit){EDITG.add(d.gearedit);render();const el=document.querySelector(`input[data-gear="${d.gearedit}|name"]`);if(el)el.focus();return;}
+  if(d.gearedit){if(EDITG.has(d.gearedit)){EDITG.delete(d.gearedit);render();return;}EDITG.add(d.gearedit);GOPEN.add(d.gearedit);render();const el=document.querySelector(`input[data-gear="${d.gearedit}|name"]`);if(el)el.focus();return;}
   if(d.geardone){EDITG.delete(d.geardone);render();return;}
   if(d.cls2){if(!C.cls2)C.cls2={i:null,ans:{},bonus:false};if(d.cls2==="set"){const v=$("#cls2Pick");if(!v)return;C.cls2={i:Number(v.value),ans:{},bonus:false};toast("Второй класс: "+BOOK.classes[C.cls2.i].variant);}else{C.cls2={i:null,ans:{},bonus:false};}render();return;}
   if(d.geardesc0){const g=C.gear.find(x=>x.id===d.geardesc0);delete g.desc;render();return;}
@@ -2704,7 +2826,9 @@ document.addEventListener("click",e=>{
   if(d.buyfree){const i=Number(d.buyfree);C.buys.push({id:uid(),tid:i,tkey:TKEY(TAL[i]),cost:0,free:true,how:""});render();renderCatalog();toast("Добавлен талант «"+TAL[i].name+"»");return;}
   if(d.talbuy){const [id,bi]=d.talbuy.split("|");const i=Number(bi),c=talCost(i);if(c){const t=C.talents.find(x=>x.id===id);C.buys.push({id:uid(),tid:i,tkey:TKEY(TAL[i]),cost:c.cost});C.talents=C.talents.filter(x=>x.id!==id);render();toast("Куплен «"+TAL[i].name+"» за "+c.cost+" EXP");}return;}
   if(d.talfree){const [id,bi]=d.talfree.split("|");const i=Number(bi);const t=C.talents.find(x=>x.id===id);C.buys.push({id:uid(),tid:i,tkey:TKEY(TAL[i]),cost:0,free:true,how:t&&t.text?t.text:"Получен бесплатно"});C.talents=C.talents.filter(x=>x.id!==id);render();return;}
-  if(d.unbuy){const i=Number(d.unbuy);const idx=C.buys.map(b=>b.tid).lastIndexOf(i);if(idx>=0)C.buys.splice(idx,1);render();return;}
+  if(d.unbuy){const i=Number(d.unbuy);const bs=C.buys.filter(b=>b.tid===i);const last=bs[bs.length-1];if(!last)return;const t=TAL[i];
+    const msg=bs.length>1?`Снять уровень ${bs.length} таланта «${t.name}»?${last.free?"":` Вернётся ${last.cost} опыта.`}`:(last.free?`Убрать талант «${t.name}»?`:`Убрать талант «${t.name}» и вернуть ${last.cost} опыта?`);
+    askConfirm(msg,()=>{const idx=C.buys.map(b=>b.tid).lastIndexOf(i);if(idx>=0)C.buys.splice(idx,1);render();toast(bs.length>1?"Уровень снят":"Талант убран");});return;}
   if(d.addle){const id=uid();C[d.addle].push({id,title:"",text:""});EDITG.add(id);render();const el=document.querySelector(`input[data-le="${d.addle}|${id}|title"]`);if(el)el.focus();return;}
   switch(t.id){
     case "rollPool": C.stats.pool=Array.from({length:11},()=>Math.ceil(rnd(10)/2));C.stats.drop=null;C.stats.assign={};render();break;
@@ -2820,6 +2944,8 @@ document.addEventListener("change",e=>{
   if(d.cfx){const [id,i,f]=d.cfx.split("|");const g=C.gear.find(x=>x.id===id);const row=(g.cfx||[])[Number(i)];if(row){if(f==="k")row[0]=t.value;else row[1]=Number(t.value)||0;}render();return;}
   if(t.id==="mkForce"){C.mkForce=t.value;return;}
   if(d.gearon){C.gear.find(x=>x.id===d.gearon).on=t.checked;render();return;}
+  if(d.gplant){const g=C.gear.find(x=>x.id===d.gplant);if(g){g.plant=t.value==="on"?true:t.value==="off"?false:null;GOPEN.add(g.id);render();}return;}
+  if(d.ggset){const g=C.gear.find(x=>x.id===d.ggset);if(g){g.grp=t.value||null;GOPEN.add(g.id);render();toast(t.value?"Перенесено в «"+(GGRP.find(x=>x[0]===t.value)||["",""])[1]+"»":"Раздел определяется автоматически");}return;}
   if(d.cls2bonus){C.cls2.bonus=t.checked;C.cls2.ans={};render();return;}
   if(d.rank){C.rankLvl=Math.max(1,Math.min(7,Number(t.value)||1));setTimeout(render,0);return;}
   if(d.disc!=null){CAT.disc[Number(d.disc)]=t.checked;renderCatalog();return;}
@@ -2830,7 +2956,7 @@ document.addEventListener("change",e=>{
   if(d.res){const v=Math.max(0,Number(t.value)||0);C.res=C.res||{};C.res[d.res]=v-resBase(d.res);setTimeout(render,0);return;}
   if(d.trk){const R=compute(C);const derived={light:R.extra.light||0,dark:R.extra.dark||0,xp:(R.extra.xp||0)-R.spent,ins:R.extra.ins||0,infl:R.extra.infl||0}[d.trk];C.adj[d.trk]=(Number(t.value)||0)-derived;setTimeout(render,0);return;}
   if(d.man){const [id,f]=d.man.split("|");const m=C.manual.find(x=>x.id===id);m[f]=f==="v"?Number(t.value):t.value;render();return;}
-  if(d.gear&&t.tagName==="SELECT"){const [id,f]=d.gear.split("|");const g=C.gear.find(x=>x.id===id);g[f]=t.value;g.ref=null;g.mods=[];render();return;}
+  if(d.gear&&t.tagName==="SELECT"){const [id,f]=d.gear.split("|");const g=C.gear.find(x=>x.id===id);g[f]=t.value;if(!d.keep){g.ref=null;g.mods=[];}render();return;}
   if(d.tal&&t.tagName==="SELECT"){const [id,f]=d.tal.split("|");C.talents.find(x=>x.id===id)[f]=t.value;render();return;}
   if(d.tal&&d.tal.endsWith("|name")){render();return;}
   if(d.gear&&f_qty(d.gear)){const [id]=d.gear.split("|");C.gear.find(x=>x.id===id).qty=Number(t.value)||0;save();return;}
@@ -2920,6 +3046,7 @@ document.addEventListener("click",e=>{const c=sndCfg();if(c.mute)return;const el
   if(el.closest(DICE_SEL)&&!el.closest(".upbtn")&&c.dice){sndPlay("dice");return;}
   if(c.click){sndPlay("click");return;}
   if(c.synth===false)return;
+  if(el.matches(".gname,.ggh,.arsgh")){synthClick(el.getAttribute("aria-expanded")==="true"?"close":"open");return;}
   const det=el.tagName==="SUMMARY"?el.parentElement:null;
   const kind=det?(det.open?"close":"open"):(/Close$/.test(el.id)||/^(Закрыть|Отмена|×)$/.test((el.textContent||"").trim())||el.matches("#confirmNo,#delCancel,[data-room=leave]"))?"close":el.matches(OPEN_SEL)?"open":"tap";
   synthClick(kind);},true);
@@ -3038,7 +3165,7 @@ function roomPeekSheet(p){const keep=C;let html="";try{const s=JSON.parse(JSON.s
 const PEEK_SECS=["Характеристики","Состояние и ранения","Трекеры","Временные эффекты","Снаряжение","Таланты","Заслуги","Детали и особенности"],PEEK_OPEN=["Характеристики","Состояние и ранения","Трекеры","Снаряжение"];
 function peekSectionize(box){const sh=box.querySelector("#sheet");if(!sh)return;const groups=[];let cur=null;[...sh.children].forEach(n=>{if(n.tagName==="H3"){cur={h:n,nodes:[]};groups.push(cur);}else if(cur)cur.nodes.push(n);});
   sh.innerHTML="";groups.forEach(g=>{const key=g.h.textContent.trim();if(!PEEK_SECS.includes(key))return;const d=document.createElement("details");d.className="sec missec";d.dataset.sec=key;d.open=ROOM.peekOpen[key]!=null?ROOM.peekOpen[key]:PEEK_OPEN.includes(key);const sm=document.createElement("summary");sm.appendChild(g.h);d.appendChild(sm);g.nodes.forEach(n=>d.appendChild(n));d.addEventListener("toggle",()=>{ROOM.peekOpen[key]=d.open;});sh.appendChild(d);});
-  sh.querySelectorAll("button,input,select,textarea").forEach(el=>{el.disabled=true;el.tabIndex=-1;});}
+  sh.querySelectorAll("button,input,select,textarea").forEach(el=>{if(el.matches(".gname,.ggh"))return;el.disabled=true;el.tabIndex=-1;});}
 function roomModsUI(p,i){const key=rmKey(p),mods=ROOM.mods[key]||[],dr=rmDraft(key);
   return `<div class="card" style="margin-top:10px"><h3 style="margin-top:0">Модификаторы мастера на миссию</h3>
    ${mods.length?mods.map((m,j)=>`<div class="inline" style="gap:6px;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--line)"><span><b>${esc(fxLabel(m.k))} ${sgn(Number(m.v))}</b>${m.note?` <span class="note">${esc(m.note)}</span>`:""}</span><button class="del delico" data-rmdel="${i}|${j}" aria-label="Убрать модификатор">×</button></div>`).join(""):`<div class="note">Нет. Добавленные модификаторы сразу учитываются у игрока в характеристиках и бросках.</div>`}
@@ -3072,8 +3199,8 @@ function renderRoom(){const body=$("#roomView");if(!body)return;ROOM.dirty=false
   body.innerHTML=msg+err+h;if(st&&st.role==="gm"){peekSectionize(body);const i=ROOM.players.findIndex(p=>rmKey(p)===ROOM.sel);if(i>=0)roomInjectPM(body,i);}}
 function roomInjectPM(body,i){const p=ROOM.players[i];if(!p)return;const mods=ROOM.mods[rmKey(p)]||[];const sum=k=>mods.filter(m=>m.k===k).reduce((a,m)=>a+(Number(m.v)||0),0);
   const ctl=(k,lbl)=>{const v=sum(k);return `<div class="gmpm noprint"><button class="gmb" data-rmpm="${i}|${k}|-1" aria-label="${esc(lbl)}: минус 1">−</button><span class="gmv ${v>0?"pos":v<0?"neg":""}">${v?sgn(v):"±0"}</span><button class="gmb" data-rmpm="${i}|${k}|1" aria-label="${esc(lbl)}: плюс 1">+</button></div>`;};
-  body.querySelectorAll('#peekBox .stile[data-ik^="s:"]').forEach(t=>{const k=t.dataset.ik.slice(2);t.insertAdjacentHTML("beforeend",ctl(k,LABEL[k]||k));});
-  [["[data-rollres]","res","Устойчивость"],["[data-rollini]","ini","Инициатива"]].forEach(([sel,k,l])=>{const b=body.querySelector("#peekBox "+sel);if(!b)return;const w=document.createElement("div");w.className="dwrap";b.before(w);w.appendChild(b);w.insertAdjacentHTML("beforeend",ctl(k,l));});}
+  body.querySelectorAll('#peekBox .stile[data-ik^="s:"]').forEach(t=>{const k=t.dataset.ik.slice(2);t.classList.add("haspm");t.insertAdjacentHTML("beforeend",ctl(k,LABEL[k]||k));});
+  [["[data-rollres]","res","Устойчивость"],["[data-rollini]","ini","Инициатива"]].forEach(([sel,k,l])=>{const b=body.querySelector("#peekBox "+sel);if(!b)return;const w=document.createElement("div");w.className="dwrap haspm";b.before(w);w.appendChild(b);w.insertAdjacentHTML("beforeend",ctl(k,l));});}
 function renderRoomBtn(){document.querySelectorAll("[data-roomopen]").forEach(b=>{if(b.classList.contains("mj")){const sp=b.querySelector("span");if(sp)sp.innerHTML=roomShortLabel();return;}b.innerHTML=`Комната${ROOM.st?` <b>${esc(ROOM.st.code)}</b>`:""}`;});}
 async function roomResume(){if(!ROOM.st||!roomCfgOk())return;try{await roomClient();await roomSubscribe();if(ROOM.st.role==="gm")await roomFetch();else{const m=await ROOM.sb.from("room_mods").select("*").eq("room",ROOM.st.code).eq("uid",ROOM.uid).eq("char_id",ROOM.st.charId).maybeSingle();if(m.data)roomApplyMods(m.data);roomPush();}}catch(e){ROOM.err=roomErr(e);}}
 async function roomAction(a){

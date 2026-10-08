@@ -1,32 +1,32 @@
 name: Сборка APK
- 
+
 on:
   push:
     branches: [main, master]
   workflow_dispatch:
- 
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
- 
+
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
- 
+
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 21
- 
+
       - name: Установка зависимостей
         run: npm ci
- 
+
       - name: Сборка страницы (src → www)
         run: python3 build_www.py
- 
+
       - name: Создание Android-проекта
         run: |
           rm -rf android
@@ -35,21 +35,41 @@ jobs:
           sed -i "s/versionCode 1$/versionCode ${{ github.run_number }}/" android/app/build.gradle
           sed -i "s/versionName \"1.0\"/versionName \"1.${{ github.run_number }}\"/" android/app/build.gradle
           npx cap sync android
- 
+
       - name: Постоянный ключ подписи
         run: |
-          mkdir -p ~/.android
-          cp debug.keystore ~/.android/debug.keystore
- 
+          python3 - <<'PY'
+          import re
+          p = "android/app/build.gradle"
+          s = open(p, encoding="utf-8").read()
+          cfg = ('    signingConfigs {\n'
+                 '        fixed {\n'
+                 '            storeFile file("${rootDir}/../debug.keystore")\n'
+                 '            storePassword "android"\n'
+                 '            keyAlias "androiddebugkey"\n'
+                 '            keyPassword "android"\n'
+                 '        }\n'
+                 '    }\n')
+          s, n1 = re.subn(r"(\nandroid\s*\{\n)", lambda m: m.group(1) + cfg, s, count=1)
+          s, n2 = re.subn(r"(\n\s*buildTypes\s*\{\n)", lambda m: m.group(1) + "        debug {\n            signingConfig signingConfigs.fixed\n        }\n", s, count=1)
+          assert n1 == 1 and n2 == 1, "не удалось вписать ключ подписи в build.gradle"
+          open(p, "w", encoding="utf-8").write(s)
+          print("ключ подписи вписан в build.gradle")
+          PY
+
       - name: Сборка APK
         working-directory: android
         run: |
           chmod +x gradlew
           ./gradlew assembleDebug --no-daemon
- 
+
+      - name: Проверка подписи
+        run: |
+          APKSIGNER=$(ls -d "$ANDROID_HOME"/build-tools/*/ | sort -V | tail -1)apksigner
+          "$APKSIGNER" verify --print-certs android/app/build/outputs/apk/debug/app-debug.apk | tee certs.txt
+          grep -qi "8c5d8eceb53e30fe820be2789a0ea081922631b0aeb3e39ac7e386fe1e451df9" certs.txt || (echo "APK подписан не тем ключом!"; exit 1)
+
       - uses: actions/upload-artifact@v4
         with:
           name: sumrak2096-apk
           path: android/app/build/outputs/apk/debug/app-debug.apk
-
-          

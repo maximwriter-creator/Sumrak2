@@ -525,7 +525,21 @@ tr.gdragging{opacity:.9;outline:2px dashed var(--accent);outline-offset:-2px;box
 .gdrag.tapped,.gdragging .gdrag{transform:none;box-shadow:none}
 @media (prefers-reduced-motion:reduce){:where(button,summary,.pill,label.btn,[role="button"],.opt,.kitopt).tapped{transform:none!important}}
 .stamp.dmg{border-color:var(--warn);color:var(--warn)}
+.rzc{border:1px solid var(--line);background:transparent;color:inherit;border-radius:6px;padding:0 6px;font:inherit;cursor:pointer;opacity:.6}.rzc.on{border-color:var(--warn);color:var(--warn);opacity:1;font-weight:700}.rzp{white-space:nowrap}
+.combat{padding:10px 12px;margin:0 0 10px}.cbhead{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}.cbacts{display:inline-flex;align-items:center;gap:6px}.actpips i{width:10px;height:16px}.cbbtns{display:inline-flex;gap:6px;margin-left:auto}
+.cbreact{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px;margin-top:8px}.rxpen{font-weight:400;opacity:.85}.rxbox{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center}
+.nbpad,.nbtext{font:inherit;font-size:15px;line-height:1.45}
+.nbpad{width:100%;min-height:120px;resize:vertical;box-sizing:border-box}
+.nbitem{border:1px solid var(--line);border-radius:4px;margin:6px 0;background:var(--bg)}
+.nbitem>summary{display:flex;align-items:baseline;gap:8px;padding:9px 12px;cursor:pointer;list-style:none}.nbitem>summary::-webkit-details-marker{display:none}
+.nbitem>summary::before{content:"▸";color:var(--accent);transition:transform .15s}.nbitem[open]>summary::before{transform:rotate(90deg)}
+.nbtitle{font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.nbdate{flex:none}
+.nbbody{padding:0 12px 12px}.nbtext{width:100%;min-height:140px;resize:vertical;margin-top:6px;box-sizing:border-box}
 .dmgbig{font-size:19px;font-family:var(--narrow)}
+.enthd{display:flex;align-items:center;gap:8px;justify-content:space-between;flex-wrap:nowrap}
+.enthd>h5{margin:0;flex:1;min-width:0}
+.enthd .taltog{text-align:left;width:100%}
+.entry{cursor:default}
 </style>
 </head>
 <body>
@@ -550,6 +564,8 @@ tr.gdragging{opacity:.9;outline:2px dashed var(--accent);outline-offset:-2px;box
   <h3 style="font-family:var(--narrow);margin-top:0">Правила группы</h3>
   <p class="note">Действуют для текущего персонажа. Данные книги не меняются.</p>
   <label class="inline" style="margin:10px 0">Базовое значение характеристик <input class="inp" type="number" id="setBase" min="0" max="10" style="width:70px"></label>
+  <label class="inline" style="margin:10px 0">Сложный и невозможный тест: сумма кубов против <select class="sel" id="setHardT"><option value="n">характеристики × число кубов</option><option value="1">самой характеристики</option></select></label>
+  <label class="inline" style="margin:10px 0">Перезарядка, действий <input class="inp" type="number" id="setReload" min="0" max="6" style="width:70px"></label>
   <label class="inline" style="margin:10px 0"><input type="checkbox" id="setFives"> Перебрасывать пятёрки сверх двух (трактовка правила 1.2)</label>
   <div id="reopenBox"><p class="note" style="margin-top:12px">Создание персонажа завершено и скрыто. Если нужно что-то исправить в генерации, его можно открыть снова.</p>
   <button class="btn small" id="reopenCreate">Открыть создание персонажа</button></div>
@@ -592,6 +608,10 @@ tr.gdragging{opacity:.9;outline:2px dashed var(--accent);outline-offset:-2px;box
 <dialog id="missionDlg" style="max-width:min(600px,94vw)">
   <div class="inline" style="justify-content:space-between"><h3 style="font-family:var(--narrow);margin:0">Миссия</h3><button class="btn" id="missionClose">Закрыть</button></div>
   <div id="missionBody"></div>
+</dialog>
+<dialog id="notesDlg" style="max-width:min(640px,96vw);width:640px">
+  <div class="inline" style="justify-content:space-between"><h3 style="font-family:var(--narrow);margin:0">Блокнот</h3><button class="btn" id="notesClose">Закрыть</button></div>
+  <div id="notesBody"></div>
 </dialog>
 <dialog id="inflDlg" style="max-width:min(560px,94vw)">
   <div class="inline" style="justify-content:space-between"><h3 style="font-family:var(--narrow);margin:0">Запрос на Влияние</h3><button class="btn" id="inflClose">Закрыть</button></div>
@@ -1355,7 +1375,7 @@ function stSheet(R){
   const section=(title,obj,extra="",id="")=>obj?`<details class="entry" ${id?`id="det-${id}"`:""}><summary><h5 style="display:inline">${title}</h5></summary><div class="rules">${extra}${paras(obj)}</div></details>`:"";
   return `<div class="inline" style="justify-content:space-between;align-items:flex-end"><div><h2>Лист персонажа</h2><p class="lead" style="margin-bottom:12px">Здесь ведётся персонаж по ходу кампании: опыт, таланты, снаряжение, одолжения и миссии.</p></div>${isFinished(C)?"":`<button class="btn noprint" data-go="${C.lastStep??0}">Вернуться к созданию</button>`}</div>
   ${pend.length?`<div class="warnbox noprint">Не завершены шаги: ${pend.join(", ")}.</div>`:""}
-  <div class="noprint inline" style="margin-bottom:12px"><button class="btn primary" id="openMission">Начало и конец миссии</button><button class="btn" data-roomopen="1">${roomBtnLabel()}</button>${NATIVE?"":`<button class="btn" id="printBtn">Печать или PDF</button>`}<button class="btn" id="dlSheet">${NATIVE?"Поделиться листом":"Скачать лист (.html)"}</button></div>
+  <div class="noprint inline" style="margin-bottom:12px"><button class="btn primary" id="openMission">Начало и конец миссии</button><button class="btn" id="openNotes">${notesLabel()}</button><button class="btn" data-roomopen="1">${roomBtnLabel()}</button>${NATIVE?"":`<button class="btn" id="printBtn">Печать или PDF</button>`}<button class="btn" id="dlSheet">${NATIVE?"Поделиться листом":"Скачать лист (.html)"}</button></div>
   <div class="sheet" id="sheet">
   <h3>Общие сведения</h3>
   <div class="kv">
@@ -1383,7 +1403,7 @@ function stSheet(R){
   ${(()=>{const ps=c.gear.filter(g=>g.on!==false).map(g=>profile(g,R)).filter(p=>p&&p.kind==="armor");const cls=ps.length?(String(ps[0].line).match(/(лёгкая|легкая|средняя|тяжелая|тяжёлая)/i)||[])[1]:"";const v=!ps.length?2:/легк|лёгк/i.test(cls)?2:/средн/i.test(cls)?3:/тяж/i.test(cls)?4:null;return v?`<div class="dblk"><span class="dname">${icon("agi")} Парирование и Уклонение</span><span class="dval">−${v}</span><div class="note">${ps.length?"броня: "+cls.toLowerCase():"без брони"}</div></div>`:"";})()}
   <button class="dblk dbtn" data-rollini="${ini}" title="Бросить инициативу"><span class="dname">${icon("agi")} Инициатива</span><span class="dval">${ini}&nbsp;−&nbsp;d20</span><span class="note">по Ловкости ${R.tot.agi}${R.extra.ini?", "+sgn(R.extra.ini)+" бонус":""}</span></button>
   </div>
-  <p class="note">Устойчивость снижает урон без брони или при исчерпанной прочности брони. Инициатива: удвоенная Ловкость минус d20. <span class="noprint">Нажмите на любой блок характеристики, Устойчивости или Инициативы, чтобы бросить d20.</span></p>
+  <p class="note">Урон: сначала броня (минус ББ атаки), затем прочность брони, остаток снижает Устойчивость. Инициатива: удвоенная Ловкость минус d20. <span class="noprint">Нажмите на любой блок характеристики, Устойчивости или Инициативы, чтобы бросить d20.</span></p>
   ${c.manual.length?`<div class="noprint card" style="margin-top:12px"><h4 style="margin-top:0">Ручные модификаторы</h4><p class="note">Этот раздел убран. Ниже модификаторы, добавленные раньше: они ещё учитываются, удалите их, если они больше не нужны.</p>
   ${c.manual.map(m=>`<div class="inline" style="margin:6px 0"><select class="sel" data-man="${m.id}|k">${[...STATS.map(s=>s[0]),"hp","fate","res","ini"].map(k=>`<option value="${k}" ${m.k===k?"selected":""}>${LABEL[k]}</option>`).join("")}</select><input class="inp" type="number" style="width:70px" data-man="${m.id}|v" value="${m.v}"><input class="inp" data-man="${m.id}|src" value="${esc(m.src)}" placeholder="Источник"><button class="del delico" data-delman="${m.id}" title="Удалить" aria-label="Удалить"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg></button></div>`).join("")}
 </div>`:""}
@@ -1549,7 +1569,7 @@ function itemKind(r){
   if(x.cat==="Защитное"&&/Добавляет \d+ очк/.test(x.text)) return "shieldplain";
   return null;
 }
-const PROPS=["Точное","Неточное","Надежное","Разрывающее","Смертельно разрывающее","Пронизывающее","Сбалансированное","Несбалансированное","Неудобное","Скрытное","Простое","Малая отдача","Большая отдача","Кучное","Подавление","Оглушающее","Электрическое","Отбрасывающее","Медленное"];
+const PROPS=["Точное","Неточное","Надежное","Разрывающее","Смертельно разрывающее","Пронизывающее","Сбалансированное","Несбалансированное","Неудобное","Скрытное","Простое","Малая отдача","Большая отдача","Кучное","Подавление","Оглушающее","Электрическое","Отбрасывающее","Медленное","Спаренное"];
 function parseWeapon(t){
   const o={};
   let m=t.match(/(\d+(?:\/\d+)?)\s*[Дд]ействи/); if(m) o.act=m[1];
@@ -1846,7 +1866,7 @@ function boughtUI(R){
   return Object.entries(by).map(([i,bs])=>{const t=TAL[i];const lv=bs.length;const sum=bs.reduce((a,b)=>a+b.cost,0);const free=bs.filter(b=>b.free);const costTxt=free.length===bs.length?`получен бесплатно`:`${sum} EXP${free.length?", часть уровней бесплатно":""}`;
     const where=t.group==="МИСП"?"Общий МИСП":(t.sub==="Общие"?t.group:t.sub);
     const key="b"+i;
-    return `<div class="entry" data-ik="b:${i}"><div class="inline" style="justify-content:space-between"><h5 style="margin:0">${talToggle(key,esc(t.name)+(t.costs.length>1?" ("+lv+")":""))} <span class="note">(${esc(where)}${t.rank?", Ранг "+t.rank:""}) — ${costTxt}</span></h5>${(()=>{const lbl=lv>1?"Снять уровень":(free.length===bs.length?"Убрать талант":"Вернуть опыт");return `<button class="del delico noprint" data-unbuy="${i}" title="${lbl}" aria-label="${lbl}: ${esc(t.name)}"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg></button>`;})()}</div>${free.length?`<input class="inp" style="width:100%;margin-top:4px" data-buyhow="${free[0].id}" value="${esc(free[0].how||"")}" placeholder="Откуда получен: одолжение, мастер, особенность">`:""}${talBody(key,`${t.req&&!/^нет$/i.test(t.req)?`<div class="note">Требования: ${esc(t.req)}</div>`:""}<div class="rules">${paras(t.text)}</div>`)}</div>`;}).join("");
+    return `<div class="entry" data-ik="b:${i}"><div class="enthd"><h5>${talToggle(key,esc(t.name)+(t.costs.length>1?" ("+lv+")":""))}</h5>${(()=>{const lbl=lv>1?"Снять уровень":(free.length===bs.length?"Убрать талант":"Вернуть опыт");return `<button class="del delico noprint" data-unbuy="${i}" title="${lbl}" aria-label="${lbl}: ${esc(t.name)}"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg></button>`;})()}</div>${talBody(key,`<div class="note">${esc(where)}${t.rank?", ранг "+t.rank:""} — ${costTxt}</div>${t.req&&!/^нет$/i.test(t.req)?`<div class="note">Требования: ${esc(t.req)}</div>`:""}${free.length?`<input class="inp noprint" style="width:100%;margin-top:4px" data-buyhow="${free[0].id}" value="${esc(free[0].how||"")}" placeholder="Откуда получен: одолжение, мастер, особенность">`:""}<div class="rules">${paras(t.text)}</div>`)}</div>`;}).join("");
 }
 function renderCatalog(){
   const R=compute(C); const cl=R.cl; const xp=xpAvail(R);
@@ -1910,7 +1930,7 @@ function showRoll(name,v,r,ini){
   const wp=v!=null?woundPen():0; if(wp){v=v+wp;name=name+` (ранение ${sgn(wp)})`;}
   const crit=r===1?"Критический успех":r===20?"Критический провал":"";
   let verdict="",cls="";
-  if(ini!=null){const ic={1:"ходите первым и получаете 4 дополнительных действия",2:"ходите первым (если ни у кого не выпала 1)",19:"ходите последним (если ни у кого не выпала 20)",20:"ходите последним и получаете только 2 действия"}[r];verdict=`Инициатива: ${ini}`+(ic?`. Выпало ${r}: ${ic}`:"");cls=r<=2?"ok":r>=19?"bad":"";}
+  if(ini!=null){const ic={1:"ходите первым и получаете 8 действий (4 + 4)",2:"ходите первым (если ни у кого не выпала 1)",19:"ходите последним (если ни у кого не выпала 20)",20:"ходите последним и получаете только 2 действия"}[r];verdict=`Инициатива: ${ini}`+(ic?`. Выпало ${r}: ${ic}`:". Действий: 4")+". При равенстве раньше ходит тот, у кого выше Ловкость, затем d100.";cls=r<=2?"ok":r>=19?"bad":"";}
   else {
     const deg=r<=v?(v-r===0?"базовый успех":`степеней успеха: ${v-r}`):`степеней провала: ${r-v}`;
     if(crit){const consistent=(r===1&&r<=v)||(r===20&&r>v);verdict=consistent?`${crit}, ${deg}`:crit;cls=r===1?"ok":"bad";}
@@ -1928,6 +1948,15 @@ function showRoll(name,v,r,ini){
 function critLo(c){const m=String(c||"").match(/(\d+)/);return m?Number(m[1]):null;}
 function rollDmgP(p){const m=(p.dice||"0d1").match(/(\d+)d(\d+)/);const n=Number(m[1]),sd=Number(m[2]);const rolls=Array.from({length:n},()=>rnd(sd));const sum=rolls.reduce((a,b)=>a+b,0)+p.flat;const lo=critLo(p.crit);const crit=lo!=null&&n>0&&rolls.some(x=>x>=lo);return {rolls,sum,crit};}
 function wpnExtras(p){const a=[];if(p.pen!=null&&!isNaN(p.pen))a.push(`пробитие ${p.pen}`);if(p.whirl)a.push(`Вихрь ударов (${p.whirl})`);if(p.props&&p.props.length)a.push("свойства: "+p.props.join(", "));const n=(p.notes||[]);return (a.length?`<div class="note" style="margin-top:4px">${esc(a.join("; "))}</div>`:"")+(n.length?`<div class="note">Улучшения: ${esc(n.join("; "))}</div>`:"");}
+let DMGSEL=null;
+function rollHits(p,hits,mult){const rz=!!(p.props&&p.props.includes("Разрывающее"));const H=[];
+  for(let i=0;i<hits;i++){const a=rollDmgP(p),b=rz?rollDmgP(p):null;H.push({a,b,pick:b&&b.sum>a.sum?1:0});}
+  DMGSEL={p,H,mult:mult||1,rz};LASTDMG=dmgTotal();return `<div id="dmgBox">${dmgBoxHtml()}</div>`;}
+function dmgTotal(){return DMGSEL?DMGSEL.H.reduce((t,h)=>t+(h.pick?h.b.sum:h.a.sum),0)*DMGSEL.mult:0;}
+function dmgBoxHtml(){const {p,H,mult,rz}=DMGSEL,tot=dmgTotal();const ch=h=>h.pick?h.b:h.a;const crits=H.filter(h=>ch(h).crit).length;
+  const per=H.map((h,i)=>rz?`<span class="rzp"><button class="rzc ${h.pick?"":"on"}" data-rzp="${i}|0">${h.a.sum}</button>/<button class="rzc ${h.pick?"on":""}" data-rzp="${i}|1">${h.b.sum}</button></span>`:String(h.a.sum)).join(" + ");
+  const one=H.length===1&&!rz?`${esc(p.dmg||"")}: ${H[0].a.rolls.length?"выпало "+H[0].a.rolls.join(" + "):"без кубов"}${p.flat?` ${p.flat>0?"+":"−"} ${Math.abs(p.flat)}`:""}`:"";
+  return `<div class="inline" style="gap:12px;align-items:center;flex-wrap:nowrap">${dmgStamp(tot)}<span><b class="dmgbig">${tot} урона</b>${p.bs&&p.bs.length?" "+esc(p.bs.join(""))+(H.length>1?" за каждое попадание":""):""}<br><span class="note">${one||(H.length>1||rz?(H.length>1?"по попаданиям: ":"")+per:"")}${mult>1?" — двойной урон (крит 1)":""}</span>${rz?`<div class="note">Разрывающее: два броска на каждое попадание, нажмите на нужное значение.</div>`:""}${crits?`<div><b style="color:var(--base)">Крит по урону${H.length>1?": "+crits:""} (крит на ${esc(p.crit)})</b></div>`:""}</span></div>`;}
 const critTag=(p,dr)=>dr.crit?` <b style="color:var(--base)">Крит: на кубе урона ${Math.max(...dr.rolls)} (крит на ${esc(p.crit)})</b>`:"";
 function showDamage(name,expr,rolls,flat,sum,bs,extra){
   LASTDMG=sum;
@@ -2117,7 +2146,7 @@ function stMission(R){
     ${[["Характеристики","Характ.","str"],["Состояние и ранения","Состояние",null],["Трекеры","Трекеры","light"],["Снаряжение","Снаряж.","parts"],["Таланты","Таланты","xp"]].map(([k,l,ic])=>mj(`data-jumpsec="${k}"`,ic?icon(ic):sv('<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/><path d="M8.5 11.5h2l1-2 1.5 4 1-2h1.5"/>'),l,"jump2",k)).join("")}
   </div>
     <label class="note inline misMod">Модификатор тестов <input class="inp" type="number" id="misMod" value="${ROLLMOD}" style="width:64px"></label>
-  </div>`+(i>=0?full.slice(i):full);
+  </div>`+combatCard(R)+(i>=0?full.slice(i):full);
 }
 function diceCalcHTML(card){const body=`
     <div class="calcscreen" aria-live="polite"><div class="calcexpr" id="calcExpr">${esc(CALC.expr)||'<span class="note">Наберите выражение: 2d6+3, (d10+5)×2…</span>'}</div>
@@ -2132,6 +2161,67 @@ function diceCalcHTML(card){const body=`
 function placeToTop(){const b=$("#toTop");if(!b||b.hidden)return;const p=$("#rollPanel");const h=p&&!p.hidden?p.getBoundingClientRect().height+12:0;b.style.bottom=`calc(${16+Math.round(h)}px + env(safe-area-inset-bottom,0px))`;}
 window.addEventListener("resize",placeToTop);
 setTimeout(()=>{const p=$("#rollPanel");if(p)new MutationObserver(placeToTop).observe(p,{attributes:true,childList:true,subtree:true});},0);
+
+/* ---------- бой: действия и защитные реакции ---------- */
+const ACT_BASE=4, REACT_STEP=3;
+function CB(){const c=C.cb||(C.cb={round:0,act:ACT_BASE,max:ACT_BASE,free:false,dodge:{n:0,x:0,blk:false,auto:false,step:REACT_STEP},parry:{n:0,x:0,blk:false,step:REACT_STEP}});c.dodge=c.dodge||{n:0,x:0,step:REACT_STEP};c.parry=c.parry||{n:0,x:0,step:REACT_STEP};return c;}
+function hasFastReload(){return C.buys.some(b=>b.tid!=null&&TAL[b.tid]&&TAL[b.tid].name==="Быстрая перезарядка");}
+function reloadCost(){return hasFastReload()?1:(C.settings.reload??2);}
+function reactPen(k){const r=CB()[k];return r.n*(Number(r.step)||0)+(r.x||0);}
+function combatCard(R){const c=CB(),on=c.round>0;
+  const pips=Array.from({length:Math.max(c.max,c.act)},(_,i)=>`<i class="${i<c.act?"f":""}"></i>`).join("");
+  const rx=(k,nm,stat)=>{const r=c[k],pen=reactPen(k);return `<div class="rxbox"><button class="btn small ${r.blk?"":"primary"}" data-react="${k}" ${r.blk?"disabled":""}>${nm} ${stat}${pen?` <span class="rxpen">−${pen}</span>`:""}</button>
+    <span class="note">${r.blk?"недоступно до вашего хода":r.auto?"<b>следующее попадание — авто-уклонение</b>":r.n?`реакций: ${r.n}`:"первая реакция без штрафа"}</span>
+    <label class="note inline" style="gap:4px" title="Степень убывающего теста: насколько растёт штраф за каждую следующую реакцию">степень <input class="inp" type="number" min="0" data-rstep="${k}" value="${r.step}" style="width:48px"></label></div>`;};
+  return `<div class="card combat noprint"><div class="cbhead"><b>${on?`Бой · раунд ${c.round}`:"Бой"}</b>
+    <span class="cbacts">Действия <button class="pm sm" data-act="-1" aria-label="Потратить действие">−</button><span class="pips actpips" aria-label="Действий ${c.act} из ${c.max}">${pips}</span><b>${c.act}</b>/${c.max}<button class="pm sm" data-act="1" aria-label="Вернуть действие">+</button></span>
+    <button class="btn small ${c.free?"":"primary"}" data-cbfree="1" title="Свободное действие: одно за раунд">${c.free?"Свободное потрачено":"Свободное действие"}</button>
+    <span class="cbbtns"><button class="btn small" data-cbturn="1" title="Начало вашего хода: действия и реакции восстанавливаются">${on?"Новый ход":"Начать бой"}</button>${on?`<button class="btn small" data-cbend="1">Конец боя</button>`:""}</span></div>
+    <div class="cbreact">${rx("dodge","Уклонение",R.tot.agi)}${rx("parry","Парирование",R.tot.mel)}</div>
+    <p class="note" style="margin:4px 0 0">Против ближнего боя — уклонение или парирование, против дальнего — только уклонение. Перезарядка: ${reloadCost()} ${reloadCost()===1?"действие":"действия"}${hasFastReload()?" (Быстрая перезарядка)":""}.</p></div>`;}
+function cbTurn(start){const c=CB();if(start||c.round<1){c.round=Math.max(1,c.round+(start?0:1));}else c.round++;
+  c.max=ACT_BASE;c.act=c.max;c.free=false;["dodge","parry"].forEach(k=>{c[k].n=0;c[k].x=0;c[k].blk=false;});}
+function cbIni(r){const c=CB();c.round=1;c.max=r===1?ACT_BASE+4:r===20?2:ACT_BASE;c.act=c.max;c.free=false;["dodge","parry"].forEach(k=>{c[k].n=0;c[k].x=0;c[k].blk=false;c[k].auto=false;});}
+function doReact(k){const R=compute(C),c=CB(),rr=c[k];if(rr.blk){toast("Реакция недоступна до вашего хода");return;}
+  const nm=k==="dodge"?"Уклонение":"Парирование",st=k==="dodge"?R.tot.agi:R.tot.mel,pen=reactPen(k),wp=woundPen(R);
+  if(k==="dodge"&&rr.auto){rr.auto=false;LASTSTAMP="roll";$("#rollNow").innerHTML=`<div class="big">Уклонение: автоматическое</div><div class="verdict ok">Попадание отменено (крит 1 на прошлом уклонении)</div>`;pushLog("Уклонение: автоматическое (крит 1)");showPanel();if(c.round<1)c.round=1;render();return;}
+  const v=st-pen+(ROLLMOD||0)+wp, r=rnd(20), over=pen>st;
+  const ok=r===1||(!over&&r!==20&&r<=v);
+  let fx="";
+  if(r===1){fx=k==="dodge"?"Крит 1: штраф не растёт, следующее попадание — автоматическое уклонение.":"Крит 1: штраф не растёт, контратака, на которую нельзя среагировать.";if(k==="dodge")rr.auto=true;}
+  else if(r===2){fx=k==="dodge"?"Крит 2: штраф не растёт.":"Крит 2: штраф не растёт, можно контратаковать.";}
+  else if(r===19){rr.n++;rr.x=(rr.x||0)+3;fx="Крит 19: дополнительный −3 к следующим реакциям.";}
+  else if(r===20){rr.n++;rr.blk=true;fx=`Крит 20: ${k==="dodge"?"уклоняться":"парировать"} нельзя до вашего следующего хода.`;}
+  else rr.n++;
+  if(c.round<1)c.round=1;
+  const deg=ok?(v-r>0?`степеней успеха ${v-r}`:"базовый успех"):`степеней провала ${Math.max(0,r-v)}`;
+  LASTSTAMP="roll";$("#rollNow").innerHTML=`<div class="big">${nm}: ${k==="dodge"?"Ловкость":"Ближний бой"} ${st}${pen?` − ${pen} (убывающий)`:""}${wp?` (ранение ${sgn(wp)})`:""}${ROLLMOD?` (${sgn(ROLLMOD)})`:""} = ${v}</div><div class="inline" style="margin-top:4px">${stamp(r,"roll")}<span class="verdict ${ok?"ok":"bad"}">${ok?"Успех":"Провал"}, ${deg}${over&&r!==1?" — штраф больше характеристики, спасает только 1":""}</span></div>${fx?`<div class="okbox" style="margin-top:6px">${fx}</div>`:""}<div class="note">Следующая реакция: −${reactPen(k)}.</div>`;
+  pushLog(`${nm} ${v}: ${r} — ${ok?"успех":"провал"}${fx?" ("+fx+")":""}`);showPanel();fateOffer(r);render();const s2=$("#rollNow .stamp");if(s2)setTimeout(()=>s2.classList.remove("hit"),400);}
+
+/* ---------- блокнот ---------- */
+const NOTEOPEN=new Set();
+function NB(){const n=C.notes||(C.notes={pad:"",items:[]});n.items=n.items||[];return n;}
+function notesLabel(){const n=C.notes;const k=n&&n.items?n.items.length:0;return `Блокнот${k?` (${k})`:""}`;}
+function noteDate(t){try{return new Date(t).toLocaleDateString("ru-RU",{day:"numeric",month:"short"})+" "+new Date(t).toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit"});}catch(e){return "";}}
+const DELSVG='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>';
+function renderNotes(){const n=NB();
+  $("#notesBody").innerHTML=`<label class="note" style="display:block;margin:10px 0 4px">Пометки</label>
+  <textarea class="inp nbpad" data-nb="pad" placeholder="Быстрые пометки: имена, улики, должники, коды дверей…">${esc(n.pad||"")}</textarea>
+  <div class="inline" style="justify-content:space-between;margin:14px 0 6px"><b>Заметки</b><button class="btn small primary" id="noteAdd">+ Новая заметка</button></div>
+  ${n.items.length?n.items.map(it=>`<details class="nbitem" data-nid="${it.id}" ${NOTEOPEN.has(it.id)?"open":""}><summary><span class="nbtitle">${esc(it.title||"Без заголовка")}</span><span class="note nbdate">${noteDate(it.t)}</span></summary>
+    <div class="nbbody"><div class="inline" style="gap:6px;flex-wrap:nowrap"><input class="inp" data-nb="title|${it.id}" value="${esc(it.title||"")}" placeholder="Заголовок" style="flex:1;min-width:0"><button class="del delico" data-notedel="${it.id}" title="Удалить заметку" aria-label="Удалить заметку">${DELSVG}</button></div>
+    <textarea class="inp nbtext" data-nb="text|${it.id}" placeholder="Текст заметки">${esc(it.text||"")}</textarea></div></details>`).join(""):`<p class="note">Заметок пока нет. Создайте отдельную заметку с заголовком — для персонажа, задания или места.</p>`}`;
+  $("#notesBody").querySelectorAll("details.nbitem").forEach(d=>d.addEventListener("toggle",()=>{d.open?NOTEOPEN.add(d.dataset.nid):NOTEOPEN.delete(d.dataset.nid);}));}
+let NBT=null;
+document.addEventListener("input",e=>{const t=e.target,k=t.dataset&&t.dataset.nb;if(!k)return;const n=NB();
+  if(k==="pad")n.pad=t.value;else{const [f,id]=k.split("|");const it=n.items.find(x=>x.id===id);if(!it)return;it[f]=t.value;it.t=Date.now();
+    if(f==="title"){const d=t.closest("details");const s2=d&&d.querySelector(".nbtitle");if(s2)s2.textContent=t.value||"Без заголовка";}}
+  clearTimeout(NBT);NBT=setTimeout(save,300);});
+document.addEventListener("click",e=>{const b=e.target.closest("#openNotes,#notesClose,#noteAdd,[data-notedel]");if(!b)return;
+  if(b.id==="openNotes"){renderNotes();$("#notesDlg").showModal();return;}
+  if(b.id==="notesClose"){save();$("#notesDlg").close();render();return;}
+  if(b.id==="noteAdd"){const n=NB(),id="n"+Date.now().toString(36)+Math.floor(Math.random()*1e4);n.items.unshift({id,title:"",text:"",t:Date.now()});NOTEOPEN.add(id);save();renderNotes();const i=$(`[data-nb="title|${id}"]`);if(i)i.focus();return;}
+  if(b.dataset.notedel){const id=b.dataset.notedel,n=NB(),it=n.items.find(x=>x.id===id);askConfirm(`Удалить заметку «${(it&&it.title)||"Без заголовка"}»?`,()=>{n.items=n.items.filter(x=>x.id!==id);save();renderNotes();});}});
 /* перетаскивание снаряжения */
 let GDRAG=null;
 function gearApplyOrder(tb){const ids=[...tb.querySelectorAll(":scope > tr[data-gid]")].map(r=>r.dataset.gid);const vis=new Set(ids);const byId=Object.fromEntries(C.gear.map(g=>[g.id,g]));let k=0;
@@ -2177,6 +2267,12 @@ function misInjectPM(sh){const A=C.misAdj||{};
   if(st)st.insertAdjacentHTML("beforebegin",`<div class="mstip" style="margin:0 0 8px">Кнопки − и + меняют значения только на эту миссию, в листе персонажа их нет.${act.length?` Сейчас: <b>${act.map(([k,v])=>esc(fxLabel(k))+" "+sgn(Number(v))).join(", ")}</b> <button class="jump ph" data-msreset="1">сбросить</button>`:""}</div>`);}
 /* отклик на нажатие */
 document.addEventListener("pointerdown",e=>{const el=e.target.closest('button,summary,.pill,label.btn,[role="button"],.opt,.kitopt');if(!el||el.disabled||el.closest(".gdrag"))return;el.classList.add("tapped");const off=()=>{setTimeout(()=>el.classList.remove("tapped"),160);};el.addEventListener("pointerup",off,{once:true});el.addEventListener("pointercancel",off,{once:true});el.addEventListener("pointerleave",off,{once:true});setTimeout(()=>el.classList.remove("tapped"),900);},true);
+/* нажатие на край карточки/блока тоже раскрывает его */
+document.addEventListener("click",e=>{if(e.defaultPrevented)return;const tg=e.target;if(tg.closest('button,a,input,select,textarea,label,summary,[role="button"],[data-roll],[data-rollres],[data-rollini],.gdrag,.pill,.talbody'))return;
+  const tr=tg.closest("tr.gshut");if(tr){const b=tr.querySelector(".gname");if(b){b.click();return;}}
+  const gg=tg.closest(".ggrp,.arsgrp");if(gg&&!gg.querySelector(".geartbl,.arsitems")){const b=gg.querySelector(".ggh,.arsgh");if(b){b.click();return;}}
+  const ent=tg.closest(".entry");if(ent&&!ent.closest(".peek")){const b=ent.querySelector(':scope > .enthd .taltog[aria-expanded="false"], :scope > .inline .taltog[aria-expanded="false"], :scope h5 .taltog[aria-expanded="false"]');if(b){b.click();return;}}
+  const det=tg.closest("details");if(det&&tg===det&&!det.open){det.open=true;}});
 function stRoom(R){return `<h2>Комната мастера</h2><div id="roomView"></div>`;}
 function stDice(R){
   const pool=Object.entries(DPOOL.dice).filter(([,c])=>c>0);
@@ -2194,7 +2290,7 @@ function stDice(R){
       ${TEST.type==="opposed"?`<label class="note" style="display:flex;flex-direction:column;gap:4px">Характеристика противника <input class="inp" type="number" id="tOpp" value="${TEST.opp}"></label>`:""}
       ${TEST.type==="waning"?`<label class="note" style="display:flex;flex-direction:column;gap:4px">Коэффициент (степеней на каждое следующее попадание) <input class="inp" type="number" min="1" id="tCoef" value="${TEST.coef}"></label><label class="note" style="display:flex;flex-direction:column;gap:4px">Максимум попаданий (длина очереди) <input class="inp" type="number" min="1" id="tMax" value="${TEST.maxh}"></label>`:""}
     </div>
-    <p class="note" style="margin-top:8px">${{normal:"Бросок d20: успех, если выпало не больше значения. 1 — критический успех, 20 — критический провал.",hard:"Бросаются два d20, успех только если оба не больше значения. Степени считаются по худшему кубу.",impossible:"Бросаются три d20, успех только если все не больше значения. Степени считаются по худшему кубу.",opposed:"Вы и противник бросаете d20 по своим характеристикам. Побеждает тот, у кого больше степеней успеха (или меньше степеней провала).",waning:"Один бросок d20. Первое попадание при успехе, каждое следующее требует ещё столько степеней успеха, сколько указано в коэффициенте."}[TEST.type]}</p>
+    <p class="note" style="margin-top:8px">${{normal:"Бросок d20: успех, если выпало не больше значения. 1 — критический успех, 20 — критический провал.",hard:"Бросаются два d20 и складываются; степени считаются как обычно (порог задаётся в правилах группы). На каждом кубе 1 даёт +7 степеней успеха, 2 — +3, 19 — 3 степени провала, 20 — 7. Сумма 2 считается как 1, 3–4 как 2, 37–38 как 19, 39–40 как 20.",impossible:"Бросаются три d20 и складываются; степени считаются как обычно. Бонусы кубов те же. Сумма 3 считается как 1, 4–6 как 2, 55–57 как 19, 58–60 как 20.",opposed:"Вы и противник бросаете d20 по своим характеристикам. Побеждает тот, у кого больше степеней успеха (или меньше степеней провала).",waning:"Один бросок d20. Первое попадание при успехе, каждое следующее требует ещё столько степеней успеха, сколько указано в коэффициенте."}[TEST.type]}</p>
     <button class="btn primary" id="tRoll">Бросить тест</button>
   </div>
   <div class="card"><h3>Взывание к Силам: Безудержные Силы</h3>
@@ -2315,8 +2411,9 @@ function critApply(lvl,how){
   if(how==="auto") res=f.auto;
   else{
     let ok=how==="ok";
-    if(how==="test"){const n=f.test==="normal"?1:f.test==="hard"?2:3;const v=R.tot.tou+f.mod+woundPen(R);const rs=Array.from({length:n},()=>rnd(20));
-      ok=!rs.includes(20)&&(rs.every(x=>x<=v)||rs.every(x=>x===1));head=`Тест на Стойкость ${v}: ${rs.join(", ")} — ${ok?"успех":"провал"}. `;pushLog(`Критическое ранение ${lvl}, тест Стойкости ${v}: ${rs.join(", ")} — ${ok?"успех":"провал"}`);}
+    if(how==="test"){const n=f.test==="normal"?1:f.test==="hard"?2:3;const v=R.tot.tou+f.mod+woundPen(R);let txt;
+      if(n===1){const r=rnd(20);ok=r!==20&&(r<=v||r===1);txt=String(r);}else{const m=multiTest(n,v);ok=m.ok;txt=m.txt+(m.cl?", "+m.cl.toLowerCase():"");}
+      head=`Тест на Стойкость ${v}: ${txt} — ${ok?"успех":"провал"}. `;pushLog(`Критическое ранение ${lvl}, тест Стойкости ${v}: ${txt} — ${ok?"успех":"провал"}`);}
     res=ok?f.ok:f.fail; if(ok&&f.okNote) head+=f.okNote[0].toUpperCase()+f.okNote.slice(1)+". ";
   }
   const parts=[];
@@ -2339,6 +2436,7 @@ function woundUI(R){
   <label class="note inline noprint" style="gap:6px"><input type="checkbox" data-wound="apply" ${w.apply!==false?"checked":""}> учитывать штраф в бросках тестов</label>
   <div class="card noprint" style="margin:10px 0;padding:10px 12px">
     <div class="inline"><label class="note inline" style="gap:6px">Урон <input class="inp" type="number" min="0" id="wDmg" style="width:70px"></label>
+<label class="note inline" style="gap:6px">ББ <input class="inp" type="number" min="0" id="wAP" style="width:60px" title="Бронебойность атаки: уменьшает показатель брони"></label>
       <label class="note inline" style="gap:4px"><input type="checkbox" id="wIgnA"> игнорирует броню</label>
       <label class="note inline" style="gap:4px"><input type="checkbox" id="wIgnT"> игнорирует Стойкость</label>
       <button class="btn small primary" id="wTake">Получить урон</button></div>
@@ -2351,12 +2449,16 @@ function woundUI(R){
 }
 let WMSG="";
 function armorInfo(R){const ps=C.gear.filter(g=>g.on!==false).map(g=>profile(g,R)).filter(p=>p&&p.armor!=null);const bonus=(R&&R.extra&&R.extra.armor)||0;return {armor:ps.reduce((a,p)=>a+p.armor,0)+(ps.length?bonus:0),total:ps.filter(p=>p.dur!=null).reduce((a,p)=>a+p.dur,0)};}
-function applyDamage(d0,ignA,ignT){
-  const R=compute(C),w=W(),A=armorInfo(R),res=Math.max(0,Math.floor((R.tot.tou-1)/3))+(R.extra.res||0);
-  let d=d0,parts=[];
+function applyDamage(d0,ignA,ignT,ap){
+  const R=compute(C),w=W(),A=armorInfo(R),res=Math.min(9,Math.max(0,Math.floor((R.tot.tou-1)/3)))+(R.extra.res||0);ap=Math.max(0,Number(ap)||0);
+  let d=d0,parts=[],stop=false;
   if(w.dur==null)w.dur=A.total;
-  if(!ignA&&A.total>0&&w.dur>0){const red=Math.min(d,A.armor);d-=red;if(red)parts.push(`броня −${red}`);const ab=Math.min(d,w.dur);w.dur-=ab;d-=ab;if(ab)parts.push(`прочность поглотила ${ab} (осталось ${w.dur})`);}
-  else if(!ignT&&res>0){const red=Math.min(d,res);d-=red;if(red)parts.push(`Устойчивость −${red}`);}
+  if(!ignA&&A.total>0&&w.dur>0){
+    const arm=Math.max(0,A.armor-ap);d=Math.max(0,d-arm);parts.push(ap?`броня ${A.armor}−ББ ${ap}=${arm}`:`броня −${arm}`);
+    if(d<=0){stop=true;}
+    else{const ab=Math.min(d,w.dur);w.dur-=ab;d-=ab;parts.push(`прочность поглотила ${ab} (осталось ${w.dur})`);if(d<=0)stop=true;}
+  }
+  if(!stop&&d>0&&!ignT&&res>0){const red=Math.min(d,res);d-=red;if(red)parts.push(`Устойчивость −${red}`);}
   let msg=`Урон ${d0}${parts.length?": "+parts.join(", "):""}. По ОЗ: ${d}.`;
   if(d>0)msg+=takeDamage(d,R); else msg+=" ОЗ не изменились.";
   WMSG=msg;pushLog("Урон: "+msg);
@@ -2402,6 +2504,14 @@ function parseExpr(e){
     else if(/^\d+$/.test(b)) mod+=sign*Number(b); else return null;}
   return spec.length?{spec,mod}:null;
 }
+const HARDCRIT={2:{1:[1,2],2:[3,4],19:[37,38],20:[39,40]},3:{1:[1,3],2:[4,6],19:[55,57],20:[58,60]}};
+function multiTest(n,v,o){o=o||{};const rs=Array.from({length:n},()=>rnd(20)),S=rs.reduce((a,b)=>a+b,0),T=(C.settings&&C.settings.hardT==="1"?1:n)*v;
+  const B={1:7,2:3,19:o.ind?0:-3,20:o.ind?-3:-7};let bon=0;const bp=[];rs.forEach(x=>{if(B[x]){bon+=B[x];bp.push(`${x}: ${B[x]>0?"+"+B[x]+" ст. успеха":(-B[x])+" ст. провала"}`);}});
+  const tb=HARDCRIT[n]||{};let crit=0;[1,2,19,20].forEach(k=>{const q=tb[k];if(q&&S>=q[0]&&S<=q[1])crit=k;});
+  const net=T-S+bon, ok=crit===1?true:crit===20?false:net>=0;
+  const degs=net>=0?(net?`степеней успеха ${net}`:"базовый успех"):`степеней провала ${-net}`;
+  const cl={1:"Критический успех (сумма считается как 1)",2:"сумма считается как 2",19:"сумма считается как 19",20:"Критический провал (сумма считается как 20)"}[crit]||"";
+  return {rs,S,T,bon,net,crit,ok,degs,cl,txt:`${rs.join(" + ")} = ${S} против ${T}${bp.length?" ("+bp.join(", ")+")":""}`};}
 function degText(v,r){return r<=v?(v-r===0?"базовый успех":`степеней успеха ${v-r}`):`степеней провала ${r-v}`;}
 function runTest(R){
   const base=TEST.stat==="custom"?Number(TEST.custom)||0:R.tot[TEST.stat];
@@ -2409,12 +2519,16 @@ function runTest(R){
   const v=base+(Number(TEST.mod)||0)+wp;
   const nm=(TEST.stat==="custom"?"Значение":LABEL[TEST.stat])+` ${base}${TEST.mod?` (${sgn(Number(TEST.mod))})`:""}${wp?` (ранение ${sgn(wp)})`:""}`;
   const type={normal:"Обычный",hard:"Сложный",impossible:"Невозможный",opposed:"Встречный",waning:"Убывающий"}[TEST.type];
-  if(TEST.type==="normal"||TEST.type==="hard"||TEST.type==="impossible"){
-    const n=TEST.type==="normal"?1:TEST.type==="hard"?2:3, rs=Array.from({length:n},()=>rnd(20)), worst=Math.max(...rs);
-    const crit=rs.includes(20)?"Критический провал":rs.every(x=>x===1)?"Критический успех":"";
-    const ok=!rs.includes(20)&&(rs.every(x=>x<=v)||rs.every(x=>x===1));
-    const verdict=(crit?crit+", ":"")+(ok?"успех, ":"провал, ")+degText(v,worst);
-    pushLog(`${type} тест, ${nm}: ${rs.join(", ")} — ${verdict}`);fateOffer(worst);panel(`${type} тест: ${nm}${n>1?", кубы "+rs.join(", "):""}`,worst,esc(verdict.charAt(0).toUpperCase()+verdict.slice(1)),ok?"ok":"bad");return;}
+  if(TEST.type==="hard"||TEST.type==="impossible"){
+    const n=TEST.type==="hard"?2:3, m=multiTest(n,v);
+    const verdict=(m.cl?m.cl+". ":"")+(m.ok?"Успех, ":"Провал, ")+m.degs;
+    pushLog(`${type} тест, ${nm}: ${m.txt} — ${verdict}`);fateOffer(m.crit);panel(`${type} тест: ${nm}, ${m.txt}`,m.S,esc(verdict),m.ok?"ok":"bad");return;}
+  if(TEST.type==="normal"){
+    const r=rnd(20);
+    const crit=r===20?"Критический провал":r===1?"Критический успех":"";
+    const ok=r!==20&&(r<=v||r===1);
+    const verdict=(crit?crit+", ":"")+(ok?"успех, ":"провал, ")+degText(v,r);
+    pushLog(`${type} тест, ${nm}: ${r} — ${verdict}`);fateOffer(r);panel(`${type} тест: ${nm}`,r,esc(verdict.charAt(0).toUpperCase()+verdict.slice(1)),ok?"ok":"bad");return;}
   if(TEST.type==="opposed"){
     const o=Number(TEST.opp)||0,a=rnd(20),b=rnd(20);
     const sa=a===20?-99:a===1?99:v-a, sb=b===20?-99:b===1?99:o-b;
@@ -2449,7 +2563,7 @@ function renderInfl(){
   ${bs.length?`<div style="margin:8px 0"><div class="note">Бонусы:</div>${bs.map(b=>`<label class="inline note" style="gap:8px;margin:6px 0;align-items:flex-start;flex-wrap:nowrap;${b.used?"opacity:.5":""}"><input type="checkbox" data-inflchk="${b.key}" ${INFL.checks[b.key]&&!b.used?"checked":""} ${b.used?"disabled":""}> <span>${esc(b.label)}${b.used?" — уже использован":""}</span></label>`).join("")}</div>`:`<p class="note">Бонусов от талантов и одолжений к запросам нет.</p>`}
   ${(()=>{const rq=meritFlags("requests").filter(x=>!x.m.used);if(!rq.length)return "";const m=rq[0].m;if(m.reqLeft==null)m.reqLeft=rq[0].f[1];return `<label class="inline note" style="gap:8px;margin:8px 0;align-items:flex-start;flex-wrap:nowrap"><input type="checkbox" id="inflExtra" ${INFL.extra?"checked":""}> <span>Дополнительный запрос от «${esc(m.title)}» (осталось ${m.reqLeft}). Обычный запрос по нему проходит автоматически.</span></label>`;})()}
   <label class="note inline" style="gap:6px;margin:6px 0">Другой модификатор <input class="inp" type="number" id="inflMod" value="${INFL.mod}" style="width:70px"></label>
-  <p class="note">${inflSpecial()?"Место рождения Индия: у обычного запроса 19 не автоматический провал, а 20 тратит один запрос вместо двух; у сложного и невозможного 19 не даёт лишних степеней провала, а 20 даёт 3 вместо 7.":"Обычный запрос: 19 — автоматический провал, 20 — провал и тратит два запроса. Сложный и невозможный: 19 — ещё 3 степени провала, 20 — ещё 7."}</p>
+  <p class="note">${inflSpecial()?"Место рождения Индия: у обычного запроса 19 не автоматический провал, а 20 тратит один запрос вместо двух; у сложного и невозможного 19 на кубе не даёт лишних степеней провала, а 20 даёт 3 вместо 7.":"Обычный запрос: 19 — автоматический провал, 20 — провал и тратит два запроса. Сложный и невозможный: кубы складываются; на каждом кубе 1 даёт +7 степеней успеха, 2 — +3, 19 — 3 степени провала, 20 — 7."}</p>
   <div class="inline"><button class="btn primary" id="inflRoll">Бросить запрос</button>${honest&&INFL.revealed&&INFL.last&&!INFL.last.ok&&!INFL.rerolled?`<button class="btn" id="inflReroll">Перебросить (Честность)</button>`:""}</div>
   ${INFL.last?`<div class="inflres ${INFL.last.ok?"ok":"bad"}">${stamp(INFL.last.r,"infl")}<div>${INFL.last.html}</div></div>`:""}
   ${honest?`<label class="note inline" style="gap:8px;margin-top:8px;flex-wrap:nowrap;align-items:flex-start"><input type="checkbox" id="inflRevealed" ${INFL.revealed?"checked":""}> <span>Характер «Честность» раскрыт Мастером: можно перебросить один проваленный бросок на Влияние перед каждой миссией</span></label>`:""}`;
@@ -2461,21 +2575,22 @@ function inflRoll(){
     if(INFL.type==="normal"){LASTSTAMP="infl";INFL.last={ok:true,r:"✓",html:`<b>Обычный запрос по одолжению «${esc(m.title)}»</b>: снаряжение выдаётся автоматически. Осталось запросов: ${Math.max(0,m.reqLeft)}.`};pushLog("Запрос на Влияние (одолжение МИСП): автоматический успех");save();return;}}
   const used=bs.filter(b=>INFL.checks[b.key]&&!b.used);
   const v=v0+used.reduce((a,b)=>a+b.v,0)+(Number(INFL.mod)||0);
-  const n=INFL.type==="normal"?1:INFL.type==="hard"?2:3, rs=Array.from({length:n},()=>rnd(20)), worst=Math.max(...rs), ind=inflSpecial();
-  let ok=rs.every(x=>x<=v)||rs.every(x=>x===1), extra=0, note="";
+  const ind=inflSpecial(); let ok, note="", deg, rs, shown;
   if(INFL.type==="normal"){
-    if(worst===19&&!ind){ok=false;note="19: автоматический провал запроса.";}
-    if(worst===20){ok=false;note=ind?"20: провал, тратится один запрос.":"20: провал, тратятся два запроса.";}
+    const r=rnd(20); rs=[r]; shown=r; ok=r<=v||r===1;
+    if(r===19&&!ind){ok=false;note="19: автоматический провал запроса.";}
+    if(r===20){ok=false;note=ind?"20: провал, тратится один запрос.":"20: провал, тратятся два запроса.";}
+    deg=ok?`степеней успеха ${Math.max(0,v-r)}`:`степеней провала ${Math.max(0,r-v)}`;
   } else {
-    if(rs.includes(19)&&!ind){extra+=3;note="19: ещё 3 степени провала.";}
-    if(rs.includes(20)){extra+=ind?3:7;ok=false;note=`20: ещё ${ind?3:7} степеней провала.`;}
-    if(extra&&ok&&worst+extra>v)ok=false;
+    const m=multiTest(INFL.type==="hard"?2:3,v,{ind}); rs=[m.txt]; shown=m.S; ok=m.ok; deg=m.degs;
+    if(m.crit===19&&!ind){ok=false;}
+    if(m.cl)note=m.cl+(m.crit===19&&!ind?": провал запроса.":".");
+    INFL.crit=m.crit;
   }
-  const deg=ok?`степеней успеха ${Math.max(0,v-worst)}`:`степеней провала ${Math.max(0,worst-v)+extra}`;
   used.filter(b=>b.once).forEach(b=>{const m=C.merits.find(x=>x.id===b.mid);if(m)m.used=true;});
   const typeN={normal:"Обычный",hard:"Сложный",impossible:"Невозможный"}[INFL.type];
-  LASTSTAMP="infl"; INFL.last={ok,r:worst,html:`<b>${typeN} запрос, Влияние ${v}${v!==v0?` (${v0} ${sgn(v-v0)})`:""}: выпало ${rs.join(", ")}</b>. ${ok?"Успех":"Провал"}, ${deg}. ${note}${used.some(b=>b.once)?" Одноразовый бонус израсходован.":""}`};
-  pushLog(`Запрос на Влияние ${v}: ${rs.join(", ")} — ${ok?"успех":"провал"}, ${deg}`);fateOffer(worst);
+  LASTSTAMP="infl"; INFL.last={ok,r:shown,html:`<b>${typeN} запрос, Влияние ${v}${v!==v0?` (${v0} ${sgn(v-v0)})`:""}: выпало ${rs.join(", ")}</b>. ${ok?"Успех":"Провал"}, ${deg}. ${note}${used.some(b=>b.once)?" Одноразовый бонус израсходован.":""}`};
+  pushLog(`Запрос на Влияние ${v}: ${rs.join(", ")} — ${ok?"успех":"провал"}, ${deg}`);fateOffer(INFL.type==="normal"?shown:INFL.crit);
   save();
 }
 /* ---------- начало и конец миссии ---------- */
@@ -2586,9 +2701,9 @@ function gainApply(){
 function meritsUI(R){
   const pend=C.merits.filter(m=>R.meritOut[m.id]&&R.meritOut[m.id].pending).length;
   return C.merits.map(e=>{const o=R.meritOut[e.id];
-    return `<div class="entry" data-ik="m:${e.id}" ${e.used?'style="opacity:.75"':""}><div class="inline" style="justify-content:space-between">${e.book?`<h5 style="margin:0">${talToggle("m"+e.id,esc(e.title))}</h5>`:(EDITG.has(e.id)?`<input class="inp" style="flex:1;min-width:200px;font-weight:700" data-le="merits|${e.id}|title" value="${esc(e.title)}" placeholder="Название заслуги">`:`<h5 style="margin:0">${talToggle("m"+e.id,esc(e.title||"Без названия"))}</h5>`)}<span class="inline" style="gap:8px">${!e.book&&!EDITG.has(e.id)?`<button class="jump ph noprint" data-meritedit="${e.id}">изменить</button>`:""}<button class="del noprint delico" data-delle="merits|${e.id}" title="Удалить" aria-label="Удалить"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg></button></span></div>${e.used?`<div class="usedtag">израсходовано</div>`:""}
-    ${e.book?`${talBody("m"+e.id,`<div class="rules">${paras(e.text)}</div><div class="noprint" style="margin-top:4px"><button class="btn small" data-usedtog="${e.id}">${e.used?"Вернуть (не израсходовано)":"Отметить израсходованным"}</button></div>`)}${o?choicesUI(o,"merit:"+e.id)+fxSummary(o):""}`
-      :(EDITG.has(e.id)?`<textarea class="inp" style="margin-top:6px" data-le="merits|${e.id}|text" placeholder="Описание: за что получено, что даёт">${esc(e.text)}</textarea><button class="btn small primary noprint" data-meritdone="${e.id}" style="margin-top:6px">Готово</button>`:(e.text?talBody("m"+e.id,`<div class="rules" style="white-space:pre-wrap">${esc(e.text)}</div>`):""))}</div>`;}).join("")
+    return `<div class="entry" data-ik="m:${e.id}" ${e.used?'style="opacity:.75"':""}><div class="enthd">${e.book?`<h5>${talToggle("m"+e.id,esc(e.title))}</h5>`:(EDITG.has(e.id)?`<input class="inp" style="flex:1;min-width:0;font-weight:700" data-le="merits|${e.id}|title" value="${esc(e.title)}" placeholder="Название заслуги">`:`<h5>${talToggle("m"+e.id,esc(e.title||"Без названия"))}</h5>`)}</div>${e.used?`<div class="usedtag">израсходовано</div>`:""}
+    ${e.book?`${talBody("m"+e.id,`<div class="rules">${paras(e.text)}</div><div class="noprint inline" style="margin-top:6px;gap:8px;justify-content:space-between"><button class="btn small" data-usedtog="${e.id}">${e.used?"Вернуть (не израсходовано)":"Отметить израсходованным"}</button><button class="del noprint delico" data-delle="merits|${e.id}" title="Удалить" aria-label="Удалить"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg></button></div>`)}${o?choicesUI(o,"merit:"+e.id)+fxSummary(o):""}`
+      :(EDITG.has(e.id)?`<textarea class="inp" style="margin-top:6px" data-le="merits|${e.id}|text" placeholder="Описание: за что получено, что даёт">${esc(e.text)}</textarea><div class="noprint inline" style="margin-top:6px;gap:8px;justify-content:space-between"><button class="btn small primary" data-meritdone="${e.id}">Готово</button><button class="del noprint delico" data-delle="merits|${e.id}" title="Удалить" aria-label="Удалить"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg></button></div>`:talBody("m"+e.id,`${e.text?`<div class="rules" style="white-space:pre-wrap">${esc(e.text)}</div>`:`<div class="note">Без описания</div>`}<div class="noprint inline" style="margin-top:6px;gap:8px;justify-content:space-between"><button class="btn small" data-meritedit="${e.id}">Изменить</button><button class="del noprint delico" data-delle="merits|${e.id}" title="Удалить" aria-label="Удалить"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg></button></div>`))}</div>`;}).join("")
    +(pend?`<div class="warnbox noprint">У ${pend} заслуг не сделан выбор характеристики.</div>`:"")
    +`<div class="inline noprint" style="margin-top:8px"><button class="btn small primary" id="openFav">Выбрать одолжение из книги</button><button class="btn small" data-addle="merits">Добавить свою заслугу</button></div>`;
 }
@@ -2640,27 +2755,38 @@ document.addEventListener("click",e=>{
   if(d.plant){const g=C.gear.find(x=>x.id===d.plant);if(!g)return;const R=compute(C);showRoll(`Установка «${g.name}»: Сообразительность`,R.tot.wit,rnd(20));
     const ok=/verdict ok/.test($("#rollNow").innerHTML);$("#rollNow").insertAdjacentHTML("beforeend",`<div class="note" style="margin-top:6px">${ok?"Установлено.":"Не удалось установить — решает Мастер, потерян ли заряд."} Осталось: ${g.qty}. <button class="btn small" data-use="${g.id}" ${g.qty>0?"":"disabled"}>Списать 1</button></div>`);pushLog(`${g.name}: установка — ${ok?"успех":"провал"}`);return;}
   if(d.use){const g=C.gear.find(x=>x.id===d.use);if(g&&g.qty>0){g.qty--;toast(`${g.name}: осталось ${g.qty}`);render();}return;}
-  if(d.reload){const g=C.gear.find(x=>x.id===d.reload),p=profile(g,compute(C));if(g.spare!=null&&g.spare<=0){toast("Нет запасных магазинов");return;}if(g.spare!=null)g.spare--;g.ammo=p.mag;const fast=C.buys.some(b=>b.tid!=null&&TAL[b.tid]&&TAL[b.tid].name==="Быстрая перезарядка");toast("Перезаряжено"+(fast?" (Быстрая перезарядка: на одно действие меньше)":""));render();return;}
+  if(d.reload){const g=C.gear.find(x=>x.id===d.reload),p=profile(g,compute(C));if(g.spare!=null&&g.spare<=0){toast("Нет запасных магазинов");return;}const cb=CB(),cost=reloadCost();
+    if(cb.round>0&&cb.act<cost){toast(`Не хватает действий: перезарядка стоит ${cost}`);return;}
+    if(g.spare!=null)g.spare--;g.ammo=p.mag;if(cb.round>0)cb.act-=cost;toast(`Перезаряжено: ${cost} ${cost===1?"действие":"действия"}`+(hasFastReload()?" (Быстрая перезарядка)":""));render();return;}
+  if(d.act){const c=CB();c.act=Math.max(0,Math.min(Math.max(c.max,c.act+1),c.act+Number(d.act)));if(c.round<1)c.round=1;render();return;}
+  if(d.cbfree){const c=CB();c.free=!c.free;if(c.round<1)c.round=1;render();return;}
+  if(d.cbturn){cbTurn(CB().round<1);render();return;}
+  if(d.cbend){C.cb=null;render();return;}
+  if(d.react){doReact(d.react);return;}
   if(d.spare){const [id,dv]=d.spare.split("|");const g=C.gear.find(x=>x.id===id);let v=g.spare==null?(Number(dv)>0?1:null):g.spare+Number(dv);if(v!=null&&v<0)v=null;g.spare=v;render();return;}
   if(d.burst){const g=C.gear.find(x=>x.id===d.burst),R=compute(C),p=profile(g,R);const melee=p.kind==="melee";let n;
     if(melee)n=Math.max(1,p.whirl||1);else{n=Math.max(1,p.burst||1);if(p.mag){if(g.ammo==null)g.ammo=p.mag;n=Math.min(n,g.ammo);if(n<1){toast("Магазин пуст");return;}g.ammo-=n;}}
-    const k=p.step||BSTEP_DEF,wp=woundPen(R);let v=p.total+(ROLLMOD||0)+wp;const r=rnd(20);const ok=r!==20&&(r===1||r<=v);const hits=ok?Math.min(n,1+Math.floor(Math.max(0,v-r)/k)):0;
-    const seq=Array.from({length:n},(_,i)=>`${r+i*k}${i<hits?" ✓":" ✗"}`).join(" → ");
-    const dmgs=[];let crits=0;if(hits&&p.dice){for(let h=0;h<hits;h++){const dr=rollDmgP(p);dmgs.push(dr.sum);if(dr.crit)crits++;}}
-    const tot=dmgs.reduce((a,b)=>a+b,0);if(dmgs.length)LASTDMG=tot;LASTT={name:g.name,v,r};
+    const k=p.step||BSTEP_DEF,wp=woundPen(R);let v=p.total+(ROLLMOD||0)+wp;const r=rnd(20);const ok=r!==20&&(r===1||r<=v);const ve=r===2?v+3:v;
+    let hits=ok?(r===1?n:Math.min(n,1+Math.floor(Math.max(0,ve-r)/k))):0;const twin=!!(p.props&&p.props.includes("Спаренное"));const H0=hits;if(twin)hits*=2;
+    const seq=Array.from({length:n},(_,i)=>`${r+i*k}${i<H0?" ✓":" ✗"}`).join(" → ");
+    const dm=hits&&p.dice?rollHits(p,hits,r===1?2:1):"";const tot=dm?LASTDMG:0;LASTT={name:g.name,v,r};
     const what=melee?`вихрь ударов ${n}`:`очередь ${n}`,sk=melee?"ББ":"ДБ";
-    LASTSTAMP="roll";$("#rollNow").innerHTML=`<div class="big">${esc(g.name)}: ${what}, ${sk} ${v}${wp?` (ранение ${sgn(wp)})`:""}${ROLLMOD?` (${sgn(ROLLMOD)})`:""}</div><div class="inline" style="margin-top:4px">${stamp(r,"roll")}<span class="verdict ${ok?"ok":"bad"}">${r===1?"Критический успех, ":r===20?"Критический провал, ":""}${ok?`попаданий: ${hits} из ${n}`:"промах"}</span></div><div class="note" style="margin-top:4px">Степень ${melee?"вихря":"очереди"} ${k}: ${esc(seq)} (нужно не больше ${v})</div>${dmgs.length?`<div style="margin-top:6px;font-size:15px"><div class="inline" style="gap:12px;align-items:center;flex-wrap:nowrap">${dmgStamp(tot)}<span><b class="dmgbig">${tot} урона</b><br><span class="note">по попаданиям: ${dmgs.join(" + ")}</span></span></div>${p.bs.length?" "+esc(p.bs.join(""))+" за каждое попадание добавьте сами":""}${crits?` <b style="color:var(--base)">Критов по урону: ${crits} (крит на ${esc(p.crit)})</b>`:""}</div>`:""}${ok?wpnExtras(p):""}${!melee&&p.mag?`<div class="note">Осталось патронов: ${g.ammo}.</div>`:""}`;
-    pushLog(`${g.name}: ${what}, ${r} против ${v} — ${ok?"попаданий "+hits+(dmgs.length?", урон "+tot:""):"промах"}`);showPanel();render();fateOffer(r);const st=$("#rollNow .stamp");if(st)setTimeout(()=>st.classList.remove("hit"),400);return;}
+    const cn=r===1?`<div class="okbox" style="margin-top:6px">Крит 1: максимум попаданий, двойной урон, цель не может среагировать.</div>`:r===2&&ok?`<div class="okbox" style="margin-top:6px">Крит 2: +3 степени (считается против ${ve}), цель получает −3 к реакциям.</div>`:"";
+    LASTSTAMP="roll";$("#rollNow").innerHTML=`<div class="big">${esc(g.name)}: ${what}, ${sk} ${v}${wp?` (ранение ${sgn(wp)})`:""}${ROLLMOD?` (${sgn(ROLLMOD)})`:""}</div><div class="inline" style="margin-top:4px">${stamp(r,"roll")}<span class="verdict ${ok?"ok":"bad"}">${r===1?"Критический успех, ":r===20?"Критический провал, ":""}${ok?`попаданий: ${hits}${twin?` (спаренное: ${H0}×2)`:` из ${n}`}`:"промах"}</span></div><div class="note" style="margin-top:4px">Степень ${melee?"вихря":"очереди"} ${k}: ${esc(seq)} (нужно не больше ${ve})${twin?". Спаренное: каждая успешная реакция цели снимает 2 попадания":""}</div>${cn}${dm?`<div style="margin-top:6px;font-size:15px">${dm}</div>`:""}${ok?wpnExtras(p):""}${!melee&&p.mag?`<div class="note">Осталось патронов: ${g.ammo}.</div>`:""}`;
+    pushLog(`${g.name}: ${what}, ${r} против ${v} — ${ok?"попаданий "+hits+(dm?", урон "+tot:""):"промах"}`);showPanel();render();fateOffer(r);const st=$("#rollNow .stamp");if(st)setTimeout(()=>st.classList.remove("hit"),400);return;}
   if(d.shoot){const g=C.gear.find(x=>x.id===d.shoot),R=compute(C),p=profile(g,R);
     if(p.mag){if(g.ammo==null)g.ammo=p.mag;if(g.ammo<1){toast("Магазин пуст: перезарядите");return;}g.ammo--;setTimeout(render,0);}let v=p.total;const wp=woundPen(R);if(ROLLMOD)v+=ROLLMOD;if(wp)v+=wp;const r=rnd(20);
     const ok=r!==20&&(r===1||r<=v);const deg=ok?(v-r>0?`степеней успеха ${v-r}`:"базовый успех"):`степеней провала ${r-v}`;let dm="";
-    LASTT={name:g.name,v,r};if(ok&&p.dice){const dr=rollDmgP(p);LASTDMG=dr.sum;dm=`<div class="inline" style="gap:12px;align-items:center;flex-wrap:nowrap">${dmgStamp(dr.sum)}<span><b class="dmgbig">${dr.sum} урона</b>${p.bs.length?" "+esc(p.bs.join("")):""}<br><span class="note">${esc(p.dmg||"")}: ${dr.rolls.length?"выпало "+dr.rolls.join(" + "):"без кубов"}${p.flat?` ${p.flat>0?"+":"−"} ${Math.abs(p.flat)}`:""}</span>${critTag(p,dr)}</span></div>`;}
-    LASTSTAMP="roll";$("#rollNow").innerHTML=`<div class="big">${esc(g.name)}: ${p.skill==="rng"?"ДБ":"ББ"} ${v}${wp?` (ранение ${sgn(wp)})`:""}${ROLLMOD?` (${sgn(ROLLMOD)})`:""}</div><div class="inline" style="margin-top:4px">${stamp(r,"roll")}<span class="verdict ${ok?"ok":"bad"}">${r===1?"Критический успех, ":r===20?"Критический провал, ":""}${ok?"попадание":"промах"}, ${deg}.</span></div>${dm?`<div style="margin-top:6px;font-size:15px">${dm}</div>`:""}${ok?wpnExtras(p):""}`;
-    pushLog(`${g.name}: ${r} против ${v} — ${ok?"попадание":"промах"}${dm?", "+dm.replace(/<[^>]+>/g,""):""}`);showPanel();fateOffer(r);const st=$("#rollNow .stamp");if(st)setTimeout(()=>st.classList.remove("hit"),400);return;}
+    LASTT={name:g.name,v,r};const twin=!!(p.props&&p.props.includes("Спаренное"));if(ok&&p.dice){dm=rollHits(p,twin?2:1,1);}
+    LASTSTAMP="roll";$("#rollNow").innerHTML=`<div class="big">${esc(g.name)}: ${p.skill==="rng"?"ДБ":"ББ"} ${v}${wp?` (ранение ${sgn(wp)})`:""}${ROLLMOD?` (${sgn(ROLLMOD)})`:""}</div><div class="inline" style="margin-top:4px">${stamp(r,"roll")}<span class="verdict ${ok?"ok":"bad"}">${r===1?"Критический успех, ":r===20?"Критический провал, ":""}${ok?(twin?"2 попадания (спаренное)":"попадание"):"промах"}, ${deg}.</span></div>${dm?`<div style="margin-top:6px;font-size:15px">${dm}</div>`:""}${ok?wpnExtras(p):""}`;
+    pushLog(`${g.name}: ${r} против ${v} — ${ok?"попадание":"промах"}${dm?", урон "+LASTDMG:""}`);showPanel();fateOffer(r);const st=$("#rollNow .stamp");if(st)setTimeout(()=>st.classList.remove("hit"),400);return;}
   if(d.atk){const g=C.gear.find(x=>x.id===d.atk),R=compute(C),p=profile(g,R);showRoll(`${g.name}: ${p.skill==="rng"?"ДБ":"ББ"}`,p.total,rnd(20));return;}
-  if(d.dmg){const g=C.gear.find(x=>x.id===d.dmg),R=compute(C),p=profile(g,R);const dr=rollDmgP(p);showDamage(g.name,p.dmg,dr.rolls,p.flat,dr.sum,p.bs,(dr.crit?`<div style="margin-top:4px">${critTag(p,dr)}</div>`:"")+wpnExtras(p));return;}
+  if(d.dmg){const g=C.gear.find(x=>x.id===d.dmg),R=compute(C),p=profile(g,R);const twin=!!(p.props&&p.props.includes("Спаренное"));const dm=rollHits(p,twin?2:1,1);LASTSTAMP="roll";
+    $("#rollNow").innerHTML=`<div class="big">${esc(g.name)}: урон ${esc(p.dmg||"")}${twin?" × 2 попадания":""}</div><div style="margin-top:6px;font-size:15px">${dm}</div>${wpnExtras(p)}`;
+    ROLLS.unshift(`${g.name}: урон ${LASTDMG}`);ROLLS.length=Math.min(ROLLS.length,8);$("#rollLog").innerHTML=ROLLS.slice(1).map(x=>`<li>${esc(x)}</li>`).join("");showPanel();return;}
+  if(d.rzp){if(!DMGSEL)return;const [i,j]=d.rzp.split("|").map(Number);if(DMGSEL.H[i])DMGSEL.H[i].pick=j;LASTDMG=dmgTotal();const b=$("#dmgBox");if(b)b.innerHTML=dmgBoxHtml();pushLog(`Разрывающее: выбрано ${j?DMGSEL.H[i].b.sum:DMGSEL.H[i].a.sum}, итого ${LASTDMG}`);return;}
   if(d.rollres!=null){showRoll("Устойчивость",Number(d.rollres),rnd(20));return;}
-  if(d.rollini){const v=Number(d.rollini);let r=rnd(20);const mk=C.mark.i!=null?BOOK.fates[C.mark.i].name:"";if(mk==="Аура удачи"&&r===3){r=2;toast("Аура удачи: 3 считается как 2");}if(mk==="Аура неудачи"&&r===18){r=19;toast("Аура неудачи: 18 считается как 19");}showRoll("Инициатива",null,r,v-r);return;}
+  if(d.rollini){const v=Number(d.rollini);let r=rnd(20);const mk=C.mark.i!=null?BOOK.fates[C.mark.i].name:"";if(mk==="Аура удачи"&&r===3){r=2;toast("Аура удачи: 3 считается как 2");}if(mk==="Аура неудачи"&&r===18){r=19;toast("Аура неудачи: 18 считается как 19");}showRoll("Инициатива",null,r,v-r);if(STEP===10){cbIni(r);render();}return;}
   if(d.aca){const [key,dv]=d.aca.split("|");const A=C.academy;A.mods=A.mods||{};if(key.startsWith("m:")){const k=key.slice(2);A.mods[k]=(Number(A.mods[k])||0)+Number(dv);}else A[key]=(Number(A[key])||0)+Number(dv);render();return;}
   if(d.ck){calcKey(d.ck);render();if($("#mcDlg").open)renderMc();return;}
   if(d.disroll){disRoll(d.disroll);render();return;}
@@ -2875,7 +3001,7 @@ document.addEventListener("click",e=>{
     case "dpClear": DPOOL.dice={};DPOOL.mod=0;render();break;
     case "dpExprRoll":{const p=parseExpr(DPOOL.expr);if(!p){toast("Не понял формулу. Пример: 2d10+5");break;}rollPool(p.spec,p.mod,DPOOL.expr.replace(/\s+/g,""));render();break;}
     case "wHeal": W().cur=null;W().crit=0;W().temp=0;W().critDone=null;W().critMsg="";WMSG="";render();break;
-    case "wTake":{const v=Number($("#wDmg").value)||0;if(v>0){applyDamage(v,$("#wIgnA").checked,$("#wIgnT").checked);render();}break;}
+    case "wTake":{const v=Number($("#wDmg").value)||0;if(v>0){applyDamage(v,$("#wIgnA").checked,$("#wIgnT").checked,$("#wAP").value);render();}break;}
     case "wDoHeal":{const v=Number($("#wHealN").value)||0;if(v>0){applyHeal(v);render();}break;}
     case "wRepair": W().dur=null;WMSG="Прочность брони восстановлена.";render();break;
     case "wMission": W().perm=0;render();break;
@@ -2907,6 +3033,7 @@ function rollTable(label){
 }
 document.addEventListener("change",e=>{
   const t=e.target,d=t.dataset;
+  if(d.rstep){CB()[d.rstep].step=Math.max(0,Number(t.value)||0);render();return;}
   if(d.assign){if(t.value==="")delete C.stats.assign[d.assign];else C.stats.assign[d.assign]=Number(t.value);render();return;}
   if(d.poolv!=null){const v=Math.max(1,Math.min(5,Number(t.value)||1));C.stats.pool[Number(d.poolv)]=v;pruneAssign();render();return;}
   if(d.num){C.stats[d.num]=t.value===""?null:Number(t.value);render();return;}
@@ -2986,9 +3113,9 @@ document.addEventListener("keydown",e=>{const d=e.target.dataset;if(d&&d.txt&&(e
 $("#charSel").addEventListener("change",e=>{
   if(e.target.value==="__new"){const c=blank();DB.chars.push(c);C=c;STEP=0;render();scrollTo(0,0);toast("Создан новый персонаж");return;}
   C=DB.chars.find(c=>c.id===e.target.value);STEP=C.step||0;render();});
-(document.getElementById("settingsBtn")||document.createElement("i")).addEventListener("click",()=>{$("#reopenBox").hidden=!isFinished(C);$("#setBase").value=C.settings.base;$("#setFives").checked=!!C.settings.fives;$("#settingsDlg").showModal();});
+(document.getElementById("settingsBtn")||document.createElement("i")).addEventListener("click",()=>{$("#reopenBox").hidden=!isFinished(C);$("#setBase").value=C.settings.base;$("#setFives").checked=!!C.settings.fives;$("#setHardT").value=C.settings.hardT||"n";$("#setReload").value=C.settings.reload??2;$("#settingsDlg").showModal();});
 $("#reopenCreate").addEventListener("click",()=>{C.finished=false;C.reopen=true;$("#settingsDlg").close();STEP=C.lastStep??0;render();scrollTo(0,0);});
-$("#setClose").addEventListener("click",()=>{C.settings.base=Number($("#setBase").value)||0;C.settings.fives=$("#setFives").checked;$("#settingsDlg").close();render();});
+$("#setClose").addEventListener("click",()=>{C.settings.base=Number($("#setBase").value)||0;C.settings.fives=$("#setFives").checked;C.settings.hardT=$("#setHardT").value;C.settings.reload=Math.max(0,Number($("#setReload").value)||0);$("#settingsDlg").close();render();});
 $("#ioBtn").addEventListener("click",()=>{$("#pasteIn").value="";$("#reopenBox2").hidden=!isFinished(C);$("#ioDlg").showModal();});
 $("#resetOrder").addEventListener("click",()=>{DB.secOrder={};save();$("#ioDlg").close();render();toast("Порядок блоков сброшен");});
 $("#reopenCreate2").addEventListener("click",()=>{C.finished=false;C.reopen=true;$("#ioDlg").close();STEP=C.lastStep??0;render();scrollTo(0,0);});

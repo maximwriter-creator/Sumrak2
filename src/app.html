@@ -62,7 +62,7 @@ textarea.inp{width:100%;min-height:70px;resize:vertical;font-family:var(--serif)
 .rbtn .rtxt{display:flex;flex-direction:column;min-width:0;text-align:left}
 .rbtn .rttl{font-size:17px;line-height:1.2}
 .rbtn .rst{font-family:var(--sans);font-size:12px;color:var(--muted)}
-.rbtn .rst.done{color:var(--ok)} .rbtn .rst.pending{color:var(--warn)}
+.rbtn .rst.done{color:var(--ok)} .rbtn .rst.skip{color:var(--muted)} .rbtn .rst.pending{color:var(--warn)}
 nav.rail button.rbtn{grid-template-columns:auto minmax(0,1fr) auto!important;column-gap:8px}
 .rico{width:26px;height:26px;color:var(--accent);flex:none}
 main h2.stepttl{display:flex;align-items:center;gap:10px}
@@ -83,6 +83,7 @@ nav.rail button[aria-current="step"]{border-left-color:var(--accent);background:
 nav.rail button[aria-current="step"]::before{color:var(--accent)}
 .state{width:9px;height:9px;border-radius:50%;border:1.5px solid var(--muted)}
 .state.done{background:var(--ok);border-color:var(--ok)}
+.state.skip{background:repeating-linear-gradient(45deg,var(--muted) 0 2px,transparent 2px 5px);border-color:var(--muted)}
 .state.pending{background:var(--warn);border-color:var(--warn)}
 main h2{font-family:var(--narrow);font-size:30px;margin:0 0 4px;line-height:1.1}
 .lead{color:var(--muted);margin:0 0 18px;max-width:70ch}
@@ -505,16 +506,12 @@ tr.gdragging{opacity:.9;outline:2px dashed var(--accent);outline-offset:-2px;box
 .mstip{font-size:14px;color:var(--muted)}@media print{.mstip{display:none}}
 .haspm{position:relative}
 .dwrap.haspm{container-type:inline-size}
-.haspm>*{--pb:clamp(22px,13cqw,34px);--pv:clamp(18px,11cqw,30px)}
-.haspm>.gmpm{position:absolute;right:8px;top:50%;transform:translateY(-50%);margin:0;display:flex;flex-direction:row;align-items:center;gap:3px;z-index:2}
-.haspm>.gmpm .gmb{width:var(--pb);height:calc(var(--pb) - 2px);font-size:calc(var(--pb) * .6);padding:0;border-radius:5px}
-.haspm>.gmpm .gmv{min-width:var(--pv);font-size:clamp(11px,7cqw,14px);text-align:center}
-.haspm>.stbtn{row-gap:calc(var(--pb) + 8px)!important}
-.dwrap.haspm>.gmpm{top:auto;bottom:8px;transform:none}
-.dwrap.haspm>.dblk{padding-bottom:calc(var(--pb) + 14px)!important}
-.haspm>.gmpm .gmb{border:0;background:rgba(0,0,0,.12);background:color-mix(in srgb,var(--ink) 13%,transparent);box-shadow:none}
+.haspm>.gmpm{position:absolute;left:6px;right:6px;bottom:6px;margin:0;display:flex;flex-direction:row;align-items:stretch;gap:6px;z-index:2;transform:none;top:auto}
+.haspm>.gmpm .gmb{flex:1 1 0;min-width:0;width:auto;height:42px;font-size:26px;padding:0;border-radius:6px;border:0;background:color-mix(in srgb,var(--ink) 13%,transparent);box-shadow:none;touch-action:manipulation}
 .haspm>.gmpm .gmb:active{background:var(--accent);color:#fff}
-@container (max-width:170px){.haspm>.gmpm{top:auto;bottom:8px;transform:none}.haspm>.stbtn{row-gap:6px!important}}
+.haspm>.gmpm .gmv{flex:0 0 auto;min-width:34px;align-self:center;font-size:15px;font-weight:700;text-align:center}
+.stile.haspm>.stbtn{padding-bottom:58px!important}
+.dwrap.haspm>.dblk{padding-bottom:58px!important}
 /* отклик на нажатие: лёгкая подсветка и сжатие */
 :where(button,summary,.pill,label.btn,[role="button"],.opt,.kitopt){transition:transform .14s ease,box-shadow .2s ease,filter .2s ease}
 :where(button,.pill,label.btn,[role="button"],.opt,.kitopt):not(:disabled).tapped{transform:scale(.95);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 28%,transparent),0 0 14px color-mix(in srgb,var(--accent) 35%,transparent);filter:brightness(1.06)}
@@ -531,10 +528,21 @@ tr.gdragging{opacity:.9;outline:2px dashed var(--accent);outline-offset:-2px;box
 .nbpad,.nbtext{font:inherit;font-size:15px;line-height:1.45}
 .nbpad{width:100%;min-height:120px;resize:vertical;box-sizing:border-box}
 .nbitem{border:1px solid var(--line);border-radius:4px;margin:6px 0;background:var(--bg)}
-.nbitem>summary{display:flex;align-items:baseline;gap:8px;padding:9px 12px;cursor:pointer;list-style:none}.nbitem>summary::-webkit-details-marker{display:none}
-.nbitem>summary::before{content:"▸";color:var(--accent);transition:transform .15s}.nbitem[open]>summary::before{transform:rotate(90deg)}
-.nbtitle{font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.nbdate{flex:none}
-.nbbody{padding:0 12px 12px}.nbtext{width:100%;min-height:140px;resize:vertical;margin-top:6px;box-sizing:border-box}
+.nbhd{display:flex;align-items:center;gap:6px}.nbitem>.nbhd{padding:4px 6px 4px 4px}
+.nbtog{flex:1;min-width:0;display:flex;align-items:baseline;gap:8px;border:0;background:none;color:inherit;font:inherit;text-align:left;padding:7px 6px;cursor:pointer}
+.nbtog .caret{color:var(--accent);flex:none}.nbtitle{font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.nbdate{flex:none}
+.pedit{width:36px;height:36px;flex:none;display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:4px;background:none;color:var(--muted);cursor:pointer}
+.pedit:hover,.pedit:focus-visible{color:var(--accent);background:var(--soft)}
+.nbbody{padding:0 12px 12px}.nbtext{width:100%;min-height:140px;resize:vertical;box-sizing:border-box}
+.nbview{white-space:pre-wrap;cursor:text;padding:8px 10px;border-radius:4px;border:1px dashed transparent;min-height:1.5em;line-height:1.45}
+.nbview:hover{border-color:var(--line);background:var(--soft)}.nbpadv{border:1px solid var(--line);background:var(--bg);min-height:48px}
+.mangrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:6px 18px}.manrow{display:grid;grid-template-columns:minmax(0,1fr) 72px 64px;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid var(--line)}.manrow .inp{width:72px;box-sizing:border-box}.mann{display:flex;align-items:center;gap:6px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gmtabs{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:6px;overflow:hidden;margin:4px 0 10px}
+.gmtabs button{border:0;background:none;color:inherit;font:inherit;font-weight:600;padding:10px 8px;cursor:pointer}.gmtabs button[aria-selected="true"]{background:var(--accent);color:#fff}
+.vbgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px}
+.vbcard{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;padding:10px 12px;border:1px solid var(--line);border-radius:6px;background:var(--panel);color:inherit;font:inherit;cursor:pointer;min-width:0}
+.vbcard:hover{border-color:var(--accent)}.vbn{font-weight:700;font-size:17px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.vbd{font-size:12.5px}
+.skiprow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:flex-end;margin:14px 0 -4px}
 .dmgbig{font-size:19px;font-family:var(--narrow)}
 .enthd{display:flex;align-items:center;gap:8px;justify-content:space-between;flex-wrap:nowrap}
 .enthd>h5{margin:0;flex:1;min-width:0}
@@ -547,7 +555,7 @@ tr.gdragging{opacity:.9;outline:2px dashed var(--accent);outline-offset:-2px;box
   <header class="top">
     <div>
       <div class="brand">Сумрак 2096, генерация по Книге игрока</div>
-      <div class="titlerow"><div class="title" id="hdrName">Новый оперативник</div><button class="iconbtn delico" id="delBtn" style="color:var(--warn)" title="Удалить этого персонажа" aria-label="Удалить этого персонажа"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg></button><button class="iconbtn" id="soundBtn" title="Звук" aria-label="Звук" aria-pressed="true"></button><button class="iconbtn" id="ioBtn" title="Файл: сохранить, загрузить, перенести персонажа" aria-label="Файл"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M12 11v6m-3-3 3 3 3-3"/></svg></button></div>
+      <div class="titlerow"><div class="title" id="hdrName">Новый оперативник</div><button class="iconbtn delico" id="delBtn" style="color:var(--warn)" title="Удалить этого персонажа" aria-label="Удалить этого персонажа"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg></button><button class="iconbtn" id="soundBtn" title="Звук" aria-label="Звук" aria-pressed="true"></button><button class="iconbtn" data-notesopen="1" title="Блокнот" aria-label="Блокнот"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h11a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6z"/><path d="M6 3v18M4 7h4M4 12h4M4 17h4M10 8h6M10 12h6"/></svg></button><button class="iconbtn" id="ioBtn" title="Файл: сохранить, загрузить, перенести персонажа" aria-label="Файл"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M12 11v6m-3-3 3 3 3-3"/></svg></button></div>
     </div>
     <div class="toolbar">
       <select class="sel" id="charSel" aria-label="Персонаж"></select>
@@ -583,6 +591,7 @@ tr.gdragging{opacity:.9;outline:2px dashed var(--accent);outline-offset:-2px;box
     <label class="btn">Загрузить из файла <input type="file" id="fileIn" accept=".json,application/json" hidden></label>
   </div>
   <textarea class="inp" id="pasteIn" placeholder="Или вставьте JSON персонажа сюда"></textarea>
+  <div id="vaultBox" class="vault"></div>
   <div style="margin-top:12px"><button class="btn small" id="resetOrder">Вернуть исходный порядок блоков</button></div>
   <div id="reopenBox2" class="noprint" style="margin-top:12px"><p class="note">Создание персонажа завершено и скрыто. Если нужно что-то исправить в генерации, его можно открыть снова.</p><button class="btn small" id="reopenCreate2">Открыть создание персонажа</button></div>
   <div class="inline" style="justify-content:space-between;margin-top:12px">
@@ -746,7 +755,7 @@ function migrate(c){
 }
 DB.chars=DB.chars.map(migrate);
 let C = DB.chars.find(c=>c.id===DB.cur)||DB.chars[0];
-function save(){try{localStorage.setItem(KEY,JSON.stringify(DB));}catch(e){}try{roomPushSoon();}catch(e){}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(DB));}catch(e){}try{roomPushSoon();}catch(e){}try{vaultSoon();}catch(e){}}
 
 /* ---------- effects engine ---------- */
 function d66idx(a,b){return (a-1)*6+(b-1);}
@@ -885,8 +894,9 @@ function compute(c){
   if(c.missionFate){const L=(extra.light||0)+(c.adj.light||0),D=(extra.dark||0)+(c.adj.dark||0);if(L===D)fate+=c.missionFate;}
   return {stepItems,temps,meritOut,spent,base,tot,extra,steps,pool,hp,fate,cl,cl2,nat,vr,pr,ch,fl,mark:c.mark.i!=null?BOOK.fates[c.mark.i]:null};
 }
-function isFinished(c){if(c.reopen)return false;if(c.finished)return true;const R=compute(c);return [0,1,2,3,4,5,6].every(i=>stepStatus(c,R,i)==="done");}
+function isFinished(c){if(c.reopen)return false;if(c.finished)return true;const R=compute(c);return [0,1,2,3,4,5,6].every(i=>{const x=stepStatus(c,R,i);return x==="done"||x==="skip";});}
 function stepStatus(c,R,i){
+  if(c.skip&&c.skip[i])return "skip";
   const P = k=>R.steps[k].pending>0;
   switch(i){
     case 0: return c.cls.i==null?"":(P("cls")||(parseBase(c).choose&&parseBase(c).keys.length<2)||c.gear.some(g=>g.src==="class"&&g.opts&&!g.picked)||c.talents.some(t=>t.src==="class"&&t.opts&&!t.picked)||c.gear.some(g=>g.src==="class"&&g.kit&&!g.picked)||c.talents.some(t=>t.src==="class"&&t.kit&&!t.picked)?"pending":"done");
@@ -1060,7 +1070,7 @@ function renderInner(){
   $("#modeTabs").style.gridTemplateColumns=`repeat(${$("#modeTabs").children.length},minmax(0,1fr))`;
   $("#modeTabs").classList.toggle("five",$("#modeTabs").children.length>4);
   if(createMode) C.lastStep=STEP;
-  $("#rail").innerHTML = CREATE.map((i,n)=>{const st=stepStatus(C,R,i);return `<li><button class="rbtn" data-step="${i}" ${i===STEP?'aria-current="step"':""} aria-label="${n+1}. ${STEPS[i]}">${stepIco(i)}<span class="rtxt"><span class="rttl">${n+1}. ${STEPS[i]}</span><span class="rst ${st}">${st==="done"?"готово":st==="pending"?"не закончено":i===8?"по желанию":"не начато"}</span></span><span class="state ${st}" aria-hidden="true"></span></button></li>`;}).join("");
+  $("#rail").innerHTML = CREATE.map((i,n)=>{const st=stepStatus(C,R,i);return `<li><button class="rbtn" data-step="${i}" ${i===STEP?'aria-current="step"':""} aria-label="${n+1}. ${STEPS[i]}">${stepIco(i)}<span class="rtxt"><span class="rttl">${n+1}. ${STEPS[i]}</span><span class="rst ${st}">${st==="done"?"готово":st==="skip"?"пропущен":st==="pending"?"не закончено":i===8?"по желанию":"не начато"}</span></span><span class="state ${st}" aria-hidden="true"></span></button></li>`;}).join("");
   $("#main").innerHTML = [stClass,stStats,stBirth,stParents,stChar,stMark,stFlaw,stSheet,stAcademy,stDice,stMission,stRoom][STEP](R) + navBtns();
   sectionize();
   if(STEP===11)renderRoom();
@@ -1076,7 +1086,8 @@ function renderInner(){
 function navBtns(){
   const i=CREATE.indexOf(STEP); if(i<0) return "";
   const prev=CREATE[i-1], next=CREATE[i+1];
-  return `<div class="navbtns noprint">${prev!=null?`<button class="btn" data-go="${prev}">Назад: ${STEPS[prev]}</button>`:"<span></span>"}${next!=null?`<button class="btn primary" data-go="${next}">Далее: ${STEPS[next]}</button>`:`<button class="btn primary" data-go="7">Открыть лист персонажа</button>`}</div>`;
+  const sk=STEP<7?`<div class="skiprow noprint">${C.skip&&C.skip[STEP]?`<span class="note">Этап пропущен — лист открывается и без него.</span><button class="btn small" data-skipstep="${STEP}">Вернуть этап</button>`:`<button class="btn small" data-skipstep="${STEP}" title="Для переноса уже готового персонажа: этап не будет требоваться">Пропустить этап</button>`}${STEP===0?`<button class="btn small" data-skipall="1" title="Отметить все незаконченные этапы пропущенными и открыть лист">Пропустить всё и открыть лист</button>`:""}</div>`:"";
+  return sk+`<div class="navbtns noprint">${prev!=null?`<button class="btn" data-go="${prev}">Назад: ${STEPS[prev]}</button>`:"<span></span>"}${next!=null?`<button class="btn primary" data-go="${next}">Далее: ${STEPS[next]}</button>`:`<button class="btn primary" data-go="7">Открыть лист персонажа</button>`}</div>`;
 }
 function stamp(v,key){const hit=LASTSTAMP===key;if(hit)LASTSTAMP=null;return `<span class="stamp ${hit?"hit":""}" aria-label="Результат броска ${esc(v)}">${esc(v)}</span>`;}
 function fxSummary(out){
@@ -1314,6 +1325,8 @@ function stStats(R){
   ${s.pool.length?`<div class="card"><h3>Распределение</h3><p class="note">${s.drop==null?"Сначала отбросьте один кубик.":(left?"Осталось распределить: "+left:"Все результаты распределены.")}</p>
   <div class="statgrid">${STATS.map(([k,n,t])=>`<div class="statrow ${s.drop!=null?(s.assign[k]!=null?"asg":"unasg"):""}"><span class="${baseKeys.includes(k)?"basestat":""}" ${baseKeys.includes(k)?'title="Базовая характеристика класса"':""}>${icon(k)} ${n}</span>${opts(k)}<span class="tot" title="С учётом всех модификаторов">${R.tot[k]}</span></div>`).join("")}</div>
   <p class="note">Справа итог с учётом класса и уже выбранных шагов.</p>${baseStatsUI(R)}</div>`:""}
+  ${C.skip&&C.skip[1]?`<div class="card"><h3>Характеристики вручную</h3><p class="note">Этап пропущен: впишите значения характеристик готового персонажа без бонусов класса, рождения и других шагов (их приложение добавит само). Справа итог.</p>
+  <div class="mangrid">${STATS.map(([k,n])=>`<label class="manrow"><span class="mann">${icon(k)} ${n}</span><input class="inp" type="number" data-manstat="${k}" value="${R.base+(Number(s.assign[k])||0)}" aria-label="${n}"><span class="note">итог ${R.tot[k]}</span></label>`).join("")}</div></div>`:""}
   <div class="card grid2">
     <div><h3>Очки здоровья</h3><div class="inline">${C.stats.hp!=null?stamp(C.stats.hp,"hp"):""}<button class="btn" id="rollHp">Бросить d5+10</button><input class="inp" type="number" style="width:70px" data-num="hp" value="${C.stats.hp??""}" aria-label="Очки здоровья"></div>${R.extra.hp?`<p class="note">С модификаторами: ${R.hp}</p>`:""}</div>
     <div><h3>Очки судьбы</h3><div class="inline">${C.stats.fate!=null?stamp(C.stats.fate,"fate"):""}<button class="btn" id="rollFate">Бросить d3+3</button><input class="inp" type="number" style="width:70px" data-num="fate" value="${C.stats.fate??""}" aria-label="Очки судьбы"></div>${R.extra.fate?`<p class="note">С модификаторами: ${R.fate}</p>`:""}</div>
@@ -2142,6 +2155,7 @@ function stMission(R){
     ${f?mj('id="openFate"',sv('<path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/>'),`Судьба ${f.left}/${f.tot}`,"","Очки судьбы"):""}
     ${mj('id="openInfl"',icon("infl"),"Запрос")}
     ${mj('id="openMc"',sv('<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 11h2M12 11h2M16 11v6M8 15h2M12 15h2M8 18h6"/>'),"Калькулятор")}
+    ${mj('data-notesopen="1"',sv('<path d="M6 3h11a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6z"/><path d="M6 3v18M4 7h4M4 12h4M4 17h4M10 8h6M10 12h6"/>'),"Блокнот")}
     ${mj('data-roomopen="1"',sv('<circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.4"/><path d="M3 20c.8-3.4 3.2-5 6-5s5.2 1.6 6 5M15 15.2c2.6-.4 4.8 1 5.6 4"/>'),roomShortLabel(),"","Комната мастера")}
     ${[["Характеристики","Характ.","str"],["Состояние и ранения","Состояние",null],["Трекеры","Трекеры","light"],["Снаряжение","Снаряж.","parts"],["Таланты","Таланты","xp"]].map(([k,l,ic])=>mj(`data-jumpsec="${k}"`,ic?icon(ic):sv('<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/><path d="M8.5 11.5h2l1-2 1.5 4 1-2h1.5"/>'),l,"jump2",k)).join("")}
   </div>
@@ -2204,24 +2218,32 @@ function NB(){const n=C.notes||(C.notes={pad:"",items:[]});n.items=n.items||[];r
 function notesLabel(){const n=C.notes;const k=n&&n.items?n.items.length:0;return `Блокнот${k?` (${k})`:""}`;}
 function noteDate(t){try{return new Date(t).toLocaleDateString("ru-RU",{day:"numeric",month:"short"})+" "+new Date(t).toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit"});}catch(e){return "";}}
 const DELSVG='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>';
-function renderNotes(){const n=NB();
-  $("#notesBody").innerHTML=`<label class="note" style="display:block;margin:10px 0 4px">Пометки</label>
-  <textarea class="inp nbpad" data-nb="pad" placeholder="Быстрые пометки: имена, улики, должники, коды дверей…">${esc(n.pad||"")}</textarea>
+const PENSVG='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg>';
+const NOTEEDIT=new Set();
+function renderNotes(){const n=NB();const pe=NOTEEDIT.has("pad");
+  const body=it=>{const ed=NOTEEDIT.has(it.id),op=NOTEOPEN.has(it.id)||ed;
+    return `<div class="nbitem ${op?"open":""}" data-nid="${it.id}"><div class="nbhd">${ed?`<input class="inp" data-nb="title|${it.id}" value="${esc(it.title||"")}" placeholder="Заголовок" style="flex:1;min-width:0;font-weight:600">`
+      :`<button class="nbtog" data-nbtog="${it.id}" aria-expanded="${op}"><span class="caret" aria-hidden="true">${op?"▾":"▸"}</span><span class="nbtitle">${esc(it.title||"Без заголовка")}</span><span class="note nbdate">${noteDate(it.t)}</span></button><button class="pedit" data-nbedit="${it.id}" title="Изменить" aria-label="Изменить заметку">${PENSVG}</button>`}</div>
+      ${ed?`<div class="nbbody"><textarea class="inp nbtext" data-nb="text|${it.id}" placeholder="Текст заметки">${esc(it.text||"")}</textarea><div class="inline" style="justify-content:space-between;margin-top:6px"><button class="btn small primary" data-nbdone="${it.id}">Готово</button><button class="del delico" data-notedel="${it.id}" title="Удалить заметку" aria-label="Удалить заметку">${DELSVG}</button></div></div>`
+      :op?`<div class="nbbody"><div class="nbview" data-nbedit="${it.id}" role="button" tabindex="0" title="Нажмите, чтобы изменить">${it.text?esc(it.text):'<span class="note">Пусто — нажмите, чтобы написать</span>'}</div></div>`:""}</div>`;};
+  $("#notesBody").innerHTML=`<div class="nbhd" style="margin:10px 0 4px"><b style="flex:1">Пометки</b>${pe?"":`<button class="pedit" data-nbedit="pad" title="Изменить" aria-label="Изменить пометки">${PENSVG}</button>`}</div>
+  ${pe?`<textarea class="inp nbpad" data-nb="pad" placeholder="Быстрые пометки: имена, улики, должники, коды дверей…">${esc(n.pad||"")}</textarea><button class="btn small primary" data-nbdone="pad" style="margin-top:6px">Готово</button>`
+     :`<div class="nbview nbpadv" data-nbedit="pad" role="button" tabindex="0" title="Нажмите, чтобы изменить">${n.pad?esc(n.pad):'<span class="note">Быстрые пометки: имена, улики, должники, коды дверей… Нажмите, чтобы написать.</span>'}</div>`}
   <div class="inline" style="justify-content:space-between;margin:14px 0 6px"><b>Заметки</b><button class="btn small primary" id="noteAdd">+ Новая заметка</button></div>
-  ${n.items.length?n.items.map(it=>`<details class="nbitem" data-nid="${it.id}" ${NOTEOPEN.has(it.id)?"open":""}><summary><span class="nbtitle">${esc(it.title||"Без заголовка")}</span><span class="note nbdate">${noteDate(it.t)}</span></summary>
-    <div class="nbbody"><div class="inline" style="gap:6px;flex-wrap:nowrap"><input class="inp" data-nb="title|${it.id}" value="${esc(it.title||"")}" placeholder="Заголовок" style="flex:1;min-width:0"><button class="del delico" data-notedel="${it.id}" title="Удалить заметку" aria-label="Удалить заметку">${DELSVG}</button></div>
-    <textarea class="inp nbtext" data-nb="text|${it.id}" placeholder="Текст заметки">${esc(it.text||"")}</textarea></div></details>`).join(""):`<p class="note">Заметок пока нет. Создайте отдельную заметку с заголовком — для персонажа, задания или места.</p>`}`;
-  $("#notesBody").querySelectorAll("details.nbitem").forEach(d=>d.addEventListener("toggle",()=>{d.open?NOTEOPEN.add(d.dataset.nid):NOTEOPEN.delete(d.dataset.nid);}));}
+  ${n.items.length?n.items.map(body).join(""):`<p class="note">Заметок пока нет. Создайте отдельную заметку с заголовком — для персонажа, задания или места.</p>`}`;}
+function nbFocus(id){const el=id==="pad"?$('[data-nb="pad"]'):$(`[data-nb="title|${id}"]`)||$(`[data-nb="text|${id}"]`);if(el){el.focus();if(el.tagName==="TEXTAREA")el.setSelectionRange(el.value.length,el.value.length);}}
 let NBT=null;
 document.addEventListener("input",e=>{const t=e.target,k=t.dataset&&t.dataset.nb;if(!k)return;const n=NB();
-  if(k==="pad")n.pad=t.value;else{const [f,id]=k.split("|");const it=n.items.find(x=>x.id===id);if(!it)return;it[f]=t.value;it.t=Date.now();
-    if(f==="title"){const d=t.closest("details");const s2=d&&d.querySelector(".nbtitle");if(s2)s2.textContent=t.value||"Без заголовка";}}
+  if(k==="pad")n.pad=t.value;else{const [f,id]=k.split("|");const it=n.items.find(x=>x.id===id);if(!it)return;it[f]=t.value;it.t=Date.now();}
   clearTimeout(NBT);NBT=setTimeout(save,300);});
-document.addEventListener("click",e=>{const b=e.target.closest("#openNotes,#notesClose,#noteAdd,[data-notedel]");if(!b)return;
-  if(b.id==="openNotes"){renderNotes();$("#notesDlg").showModal();return;}
-  if(b.id==="notesClose"){save();$("#notesDlg").close();render();return;}
-  if(b.id==="noteAdd"){const n=NB(),id="n"+Date.now().toString(36)+Math.floor(Math.random()*1e4);n.items.unshift({id,title:"",text:"",t:Date.now()});NOTEOPEN.add(id);save();renderNotes();const i=$(`[data-nb="title|${id}"]`);if(i)i.focus();return;}
-  if(b.dataset.notedel){const id=b.dataset.notedel,n=NB(),it=n.items.find(x=>x.id===id);askConfirm(`Удалить заметку «${(it&&it.title)||"Без заголовка"}»?`,()=>{n.items=n.items.filter(x=>x.id!==id);save();renderNotes();});}});
+document.addEventListener("click",e=>{const b=e.target.closest("#openNotes,[data-notesopen],#notesClose,#noteAdd,[data-notedel],[data-nbtog],[data-nbedit],[data-nbdone]");if(!b)return;const d=b.dataset;
+  if(b.id==="openNotes"||d.notesopen){NOTEEDIT.clear();renderNotes();$("#notesDlg").showModal();return;}
+  if(b.id==="notesClose"){NOTEEDIT.clear();save();$("#notesDlg").close();render();return;}
+  if(b.id==="noteAdd"){const n=NB(),id="n"+Date.now().toString(36)+Math.floor(Math.random()*1e4);n.items.unshift({id,title:"",text:"",t:Date.now()});NOTEOPEN.add(id);NOTEEDIT.add(id);save();renderNotes();nbFocus(id);return;}
+  if(d.nbtog){const id=d.nbtog;NOTEOPEN.has(id)?NOTEOPEN.delete(id):NOTEOPEN.add(id);renderNotes();return;}
+  if(d.nbedit){const id=d.nbedit;NOTEEDIT.add(id);if(id!=="pad")NOTEOPEN.add(id);renderNotes();nbFocus(id);return;}
+  if(d.nbdone){NOTEEDIT.delete(d.nbdone);save();renderNotes();return;}
+  if(d.notedel){const id=d.notedel,n=NB(),it=n.items.find(x=>x.id===id);askConfirm(`Удалить заметку «${(it&&it.title)||"Без заголовка"}»?`,()=>{n.items=n.items.filter(x=>x.id!==id);NOTEEDIT.delete(id);save();renderNotes();});}});
 /* перетаскивание снаряжения */
 let GDRAG=null;
 function gearApplyOrder(tb){const ids=[...tb.querySelectorAll(":scope > tr[data-gid]")].map(r=>r.dataset.gid);const vis=new Set(ids);const byId=Object.fromEntries(C.gear.map(g=>[g.id,g]));let k=0;
@@ -2731,7 +2753,7 @@ function favTitle(fa,t){
 }
 function listEditor(key,ph){
   return C[key].map(e=>EDITG.has(e.id)?`<div class="entry"><div class="inline"><input class="inp" style="flex:1;min-width:200px;font-weight:700" data-le="${key}|${e.id}|title" value="${esc(e.title)}" placeholder="${ph}"><button class="del noprint delico" data-delle="${key}|${e.id}" title="Удалить" aria-label="Удалить"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg></button></div><textarea class="inp" style="margin-top:6px;min-height:90px" data-le="${key}|${e.id}|text" placeholder="Что произошло на миссии">${esc(e.text)}</textarea><button class="btn small primary noprint" data-ledone="${e.id}" style="margin-top:6px">Готово</button></div>`
-   :`<div class="entry"><button class="ownname" data-leedit="${e.id}" title="Нажмите, чтобы изменить">${esc(e.title||"Без названия")}</button>${e.text?`<div class="rules editable" data-leedit="${e.id}" role="button" tabindex="0" title="Нажмите, чтобы изменить" style="white-space:pre-wrap;cursor:pointer">${esc(e.text)}</div>`:""}</div>`).join("")+`<button class="btn small noprint" data-addle="${key}">${key==="missions"?"Добавить миссию":"Добавить заслугу"}</button>`;
+   :`<div class="entry"><div class="enthd"><h5>${talToggle("ms"+e.id,esc(e.title||"Без названия"))}</h5><button class="pedit noprint" data-leedit="${e.id}" title="Изменить" aria-label="Изменить">${PENSVG}</button></div>${talBody("ms"+e.id,e.text?`<div class="rules editable" data-leedit="${e.id}" role="button" tabindex="0" title="Нажмите, чтобы изменить" style="white-space:pre-wrap;cursor:pointer">${esc(e.text)}</div>`:`<div class="note editable" data-leedit="${e.id}" role="button" tabindex="0" style="cursor:pointer">Без описания — нажмите, чтобы добавить</div>`)}</div>`).join("")+`<button class="btn small noprint" data-addle="${key}">${key==="missions"?"Добавить миссию":"Добавить заслугу"}</button>`;
 }
 
 /* ---------- events ---------- */
@@ -2739,6 +2761,9 @@ document.addEventListener("click",e=>{
   const t=e.target.closest("button,[data-drop],[data-leedit]"); if(!t) return;
   const d=t.dataset;
   if(d.step!=null){STEP=Number(d.step);render();scrollTo(0,0);return;}
+  if(d.skipstep!=null){const i=Number(d.skipstep);C.skip=C.skip||{};if(C.skip[i]){delete C.skip[i];render();return;}C.skip[i]=true;const nx=CREATE[CREATE.indexOf(i)+1];toast(`Этап «${STEPS[i]}» пропущен`);if(i!==1&&nx!=null&&nx<7){STEP=nx;scrollTo(0,0);}render();return;}
+  if(d.skipall){const R=compute(C);C.skip=C.skip||{};[0,1,2,3,4,5,6].forEach(i=>{if(stepStatus(C,R,i)!=="done")C.skip[i]=true;});C.reopen=false;C.finished=true;STEP=7;render();scrollTo(0,0);toast("Незаконченные этапы пропущены");return;}
+  if(d.manstat){return;}
   if(d.go!=null){const g=Number(d.go);if(g===7&&CREATE.includes(STEP)){C.reopen=false;if(isFinished(C))C.finished=true;}STEP=g;render();scrollTo(0,0);return;}
   if(d.cls!=null){const i=Number(d.cls);if(C.cls.i!==i){C.cls={i,ans:{}};applyClassKit(C);}render();return;}
   if(d.drop!=null){C.stats.drop=Number(d.drop);pruneAssign();render();return;}
@@ -3035,6 +3060,7 @@ document.addEventListener("change",e=>{
   const t=e.target,d=t.dataset;
   if(d.rstep){CB()[d.rstep].step=Math.max(0,Number(t.value)||0);render();return;}
   if(d.assign){if(t.value==="")delete C.stats.assign[d.assign];else C.stats.assign[d.assign]=Number(t.value);render();return;}
+  if(d.manstat){const R=compute(C);const v=t.value===""?null:Number(t.value)-R.base;if(v==null)delete C.stats.assign[d.manstat];else C.stats.assign[d.manstat]=v;render();return;}
   if(d.poolv!=null){const v=Math.max(1,Math.min(5,Number(t.value)||1));C.stats.pool[Number(d.poolv)]=v;pruneAssign();render();return;}
   if(d.num){C.stats[d.num]=t.value===""?null:Number(t.value);render();return;}
   if(d.subsel){const [sc,p]=d.subsel.split("|");if(t.value){scopeObj(sc).ans[p]=Number(t.value);clearSub(scopeObj(sc).ans,p);}render();return;}
@@ -3116,7 +3142,7 @@ $("#charSel").addEventListener("change",e=>{
 (document.getElementById("settingsBtn")||document.createElement("i")).addEventListener("click",()=>{$("#reopenBox").hidden=!isFinished(C);$("#setBase").value=C.settings.base;$("#setFives").checked=!!C.settings.fives;$("#setHardT").value=C.settings.hardT||"n";$("#setReload").value=C.settings.reload??2;$("#settingsDlg").showModal();});
 $("#reopenCreate").addEventListener("click",()=>{C.finished=false;C.reopen=true;$("#settingsDlg").close();STEP=C.lastStep??0;render();scrollTo(0,0);});
 $("#setClose").addEventListener("click",()=>{C.settings.base=Number($("#setBase").value)||0;C.settings.fives=$("#setFives").checked;C.settings.hardT=$("#setHardT").value;C.settings.reload=Math.max(0,Number($("#setReload").value)||0);$("#settingsDlg").close();render();});
-$("#ioBtn").addEventListener("click",()=>{$("#pasteIn").value="";$("#reopenBox2").hidden=!isFinished(C);$("#ioDlg").showModal();});
+$("#ioBtn").addEventListener("click",()=>{$("#pasteIn").value="";VAULT.list=null;VAULT.other=null;vaultUI();$("#reopenBox2").hidden=!isFinished(C);$("#ioDlg").showModal();});
 $("#resetOrder").addEventListener("click",()=>{DB.secOrder={};save();$("#ioDlg").close();render();toast("Порядок блоков сброшен");});
 $("#reopenCreate2").addEventListener("click",()=>{C.finished=false;C.reopen=true;$("#ioDlg").close();STEP=C.lastStep??0;render();scrollTo(0,0);});
 $("#ioClose").addEventListener("click",()=>$("#ioDlg").close());
@@ -3168,7 +3194,7 @@ function synthClick(kind){const ctx=actx();if(!ctx)return;if(ctx.state==="suspen
   if(kind==="open"){synthTick(ctx,2700,now,0.022,0.6*v);synthTick(ctx,2000,now+0.05,0.028,0.5*v);}
   else if(kind==="close")synthTick(ctx,950,now,0.032,0.55*v);
   else synthTick(ctx,2700,now,0.022,0.6*v);}
-const OPEN_SEL='[role="tab"],.ptab,.rbtn,[data-go],[data-step],[data-roomopen],[data-jumpsec],[data-rmsel],[id^="open"],#addArs,#addGear,#openCat,[data-modopen],[data-kitopen],#soundBtn';
+const OPEN_SEL='[data-notesopen],[role="tab"],.ptab,.rbtn,[data-go],[data-step],[data-roomopen],[data-jumpsec],[data-rmsel],[id^="open"],#addArs,#addGear,#openCat,[data-modopen],[data-kitopen],#soundBtn';
 document.addEventListener("click",e=>{const c=sndCfg();if(c.mute)return;const el=e.target.closest('button,summary,a,select,label,input[type=checkbox],[role="button"],.pill,.kitopt');if(!el||el.closest("#soundDlg")||el.disabled)return;
   if(el.closest(DICE_SEL)&&!el.closest(".upbtn")&&c.dice){sndPlay("dice");return;}
   if(c.click){sndPlay("click");return;}
@@ -3243,6 +3269,59 @@ async function roomPush(){const st=ROOM.st;if(!st||st.role!=="player")return;con
     if(error){if(error.code==="23503"){roomGone("Комната закрыта мастером.");return;}throw error;}ROOM.lastPush=new Date();ROOM.err="";}catch(e){ROOM.err=roomErr(e);}
   roomRefresh();}
 function roomPushSoon(){if(!ROOM||!ROOM.st||ROOM.st.role!=="player")return;clearTimeout(ROOM.pushT);ROOM.pushT=setTimeout(roomPush,1500);}
+
+/* ---------- облачная копия персонажей (Supabase, vault.sql) ---------- */
+const VLT_KEY="sumrak2096_vault";
+var VAULT=Object.assign({key:null,auto:true,sent:{},last:null},lsGet(VLT_KEY)||{},{err:"",busy:false,list:null,other:null,otherKey:"",sb:null,t:null});
+function vaultStore(){lsSet(VLT_KEY,{key:VAULT.key,auto:VAULT.auto,sent:VAULT.sent,last:VAULT.last});}
+function vaultGenKey(){const A="ABCDEFGHJKLMNPQRSTUVWXYZ23456789",a=new Uint8Array(16);crypto.getRandomValues(a);return [...a].map(x=>A[x%32]).join("").replace(/(.{4})(?=.)/g,"$1-");}
+if(!VAULT.key){VAULT.key=vaultGenKey();vaultStore();}
+const vh=s=>{let h=5381;for(let i=0;i<s.length;i++)h=((h*33)^s.charCodeAt(i))|0;return h;};
+const vNorm=k=>String(k||"").toUpperCase().replace(/[^A-Z0-9]/g,"").replace(/(.{4})(?=.)/g,"$1-");
+async function vaultSb(){if(VAULT.sb)return VAULT.sb;if(!roomCfgOk())throw new Error("Не указан сервер (тот же, что у комнаты мастера)");await loadSupa();
+  VAULT.sb=window.supabase.createClient(ROOM.cfg.url.trim(),ROOM.cfg.key.trim(),{auth:{persistSession:false,autoRefreshToken:false,storageKey:"sumrak2096-vault"}});return VAULT.sb;}
+function vaultErr(e){const m=e&&(e.message||String(e))||"Ошибка";if(/vault_|PGRST202|does not exist|schema cache/i.test(m))return "На сервере ещё нет облачного хранилища: запустите vault.sql в Supabase → SQL Editor.";return roomErr(e);}
+async function vaultPush(force){if(!VAULT.key||VAULT.busy)return 0;VAULT.busy=true;let n=0;
+  try{const sb=await vaultSb();for(const c of DB.chars){if(!c.name&&!(c.step>0))continue;const snap=roomSnap(c),h=vh(JSON.stringify(snap));if(!force&&VAULT.sent[c.id]===h)continue;
+      const {error}=await sb.rpc("vault_put",{p_key:VAULT.key,p_char:c.id,p_name:c.name||"Без имени",p_data:snap,p_updated:new Date().toISOString()});if(error)throw error;VAULT.sent[c.id]=h;n++;}
+    VAULT.last=new Date().toISOString();VAULT.err="";}catch(e){VAULT.err=vaultErr(e);}
+  VAULT.busy=false;vaultStore();vaultUI();return n;}
+function vaultSoon(){if(typeof VAULT==="undefined"||!VAULT||!VAULT.auto||!VAULT.key)return;clearTimeout(VAULT.t);VAULT.t=setTimeout(()=>vaultPush(),4000);}
+async function vaultList(key){const sb=await vaultSb();const {data,error}=await sb.rpc("vault_list",{p_key:key});if(error)throw error;return data||[];}
+async function vaultLoad(key,id){const sb=await vaultSb();const {data,error}=await sb.rpc("vault_get",{p_key:key,p_char:id});if(error)throw error;if(!data)throw new Error("Персонаж не найден в облаке");
+  const nc=migrate(data);nc.id=id;const i=DB.chars.findIndex(c=>c.id===id);
+  const put=()=>{if(i>=0)DB.chars[i]=nc;else DB.chars.push(nc);if(key===VAULT.key)VAULT.sent[id]=vh(JSON.stringify(roomSnap(nc)));C=nc;STEP=nc.step||7;$("#ioDlg").close();render();toast(`«${nc.name||"Без имени"}» загружен из облака`);};
+  if(i>=0)askConfirm(`На этом устройстве уже есть «${DB.chars[i].name||"Без имени"}». Заменить облачной версией?`,put);else put();}
+const vDate=t=>{try{const d=new Date(t);return d.toLocaleDateString("ru-RU",{day:"numeric",month:"short"})+", "+d.toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit"});}catch(e){return "";}};
+function vaultRows(list,key,own){if(!list.length)return `<p class="note">${own?"В облаке пока пусто.":"По этому ключу ничего нет."}</p>`;
+  return `<div class="vlist">${list.map(r=>`<div class="vrow"><span><b>${esc(r.name||"Без имени")}</b><br><span class="note">${vDate(r.updated_at)} · ${Math.max(1,Math.round((r.size||0)/1024))} КБ${DB.chars.some(c=>c.id===r.char_id)?" · есть на устройстве":""}</span></span>
+    <span class="inline" style="gap:6px;flex-wrap:nowrap"><button class="btn small" data-vload="${own?"own":"other"}|${esc(r.char_id)}">Загрузить</button>${own?`<button class="del delico" data-vdel="${esc(r.char_id)}" title="Удалить из облака" aria-label="Удалить из облака">${DELSVG}</button>`:""}</span></div>`).join("")}</div>`;}
+function vaultUI(){const b=document.getElementById("vaultBox");if(!b)return;
+  b.innerHTML=`<h4 style="margin:14px 0 6px">Облачная копия</h4>
+  ${VAULT.err?`<div class="warnbox">${esc(VAULT.err)}</div>`:`<p class="note" style="margin:4px 0">${VAULT.auto?"Персонажи выгружаются в облако сами — через несколько секунд после изменений.":"Автовыгрузка выключена."} ${VAULT.last?`Последняя выгрузка: ${vDate(VAULT.last)}.`:"Выгрузок ещё не было."}${VAULT.busy?" Выгружаю…":""}</p>`}
+  <label class="inline note" style="gap:8px;margin:6px 0"><input type="checkbox" id="vAuto" ${VAULT.auto?"checked":""}> Выгружать автоматически</label>
+  <div class="vkey"><span class="note">Ключ хранилища</span><code id="vKeyTxt">${esc(VAULT.key)}</code><button class="btn small" id="vCopy">Скопировать</button></div>
+  <p class="note" style="margin:4px 0 8px">Запишите ключ: по нему персонажей можно вернуть на другом устройстве или после переустановки. Кто знает ключ, тот видит персонажей.</p>
+  <div class="inline" style="gap:6px"><button class="btn small primary" id="vPush" ${VAULT.busy?"disabled":""}>Выгрузить сейчас</button><button class="btn small" id="vShow">Что в облаке</button></div>
+  ${VAULT.list?vaultRows(VAULT.list,VAULT.key,true):""}
+  <details class="vother" ${VAULT.other?"open":""}><summary class="note">Восстановить по другому ключу</summary>
+    <div class="inline" style="gap:6px;margin-top:6px;flex-wrap:nowrap"><input class="inp" id="vOtherKey" placeholder="XXXX-XXXX-XXXX-XXXX" value="${esc(VAULT.otherKey||"")}" style="flex:1;min-width:0;text-transform:uppercase"><button class="btn small" id="vOpen">Открыть</button></div>
+    ${VAULT.other?vaultRows(VAULT.other,VAULT.otherKey,false)+(VAULT.other.length?`<button class="btn small" id="vAdopt" style="margin-top:6px">Сделать этот ключ ключом устройства</button><p class="note">Тогда новые выгрузки пойдут в это хранилище, вместе с персонажами оттуда.</p>`:""):""}
+  </details>`;}
+document.addEventListener("change",e=>{if(e.target.id==="vAuto"){VAULT.auto=e.target.checked;vaultStore();if(VAULT.auto)vaultPush();vaultUI();}});
+document.addEventListener("click",async e=>{const b=e.target.closest("#vCopy,#vPush,#vShow,#vOpen,#vAdopt,[data-vload],[data-vdel]");if(!b)return;
+  try{
+    if(b.id==="vCopy"){try{await navigator.clipboard.writeText(VAULT.key);toast("Ключ скопирован");}catch(_){const r=document.createRange();r.selectNodeContents($("#vKeyTxt"));const sl=getSelection();sl.removeAllRanges();sl.addRange(r);toast("Выделено: скопируйте вручную");}return;}
+    if(b.id==="vPush"){const n=await vaultPush(true);if(!VAULT.err)toast(`Выгружено персонажей: ${n}`);if(VAULT.list){VAULT.list=await vaultList(VAULT.key);vaultUI();}return;}
+    if(b.id==="vShow"){VAULT.list=await vaultList(VAULT.key);VAULT.err="";vaultUI();return;}
+    if(b.id==="vOpen"){const k=vNorm($("#vOtherKey").value);if(k.replace(/-/g,"").length<16){toast("Ключ — 16 символов");return;}VAULT.otherKey=k;VAULT.other=await vaultList(k);VAULT.err="";vaultUI();return;}
+    if(b.id==="vAdopt"){askConfirm(`Переключить устройство на ключ ${VAULT.otherKey}? Старый ключ ${VAULT.key} больше не будет показываться — запишите его, если он нужен.`,()=>{VAULT.key=VAULT.otherKey;VAULT.sent={};VAULT.list=VAULT.other;VAULT.other=null;VAULT.otherKey="";vaultStore();vaultPush(true);vaultUI();toast("Ключ устройства изменён");});return;}
+    if(b.dataset.vload){const [w,id]=b.dataset.vload.split("|");await vaultLoad(w==="own"?VAULT.key:VAULT.otherKey,id);return;}
+    if(b.dataset.vdel){const id=b.dataset.vdel,r=(VAULT.list||[]).find(x=>x.char_id===id);askConfirm(`Удалить «${(r&&r.name)||"Без имени"}» из облака? На устройстве персонаж останется.`,async()=>{try{const sb=await vaultSb();const {error}=await sb.rpc("vault_del",{p_key:VAULT.key,p_char:id});if(error)throw error;delete VAULT.sent[id];vaultStore();VAULT.list=await vaultList(VAULT.key);}catch(e2){VAULT.err=vaultErr(e2);}vaultUI();});return;}
+  }catch(err){VAULT.err=vaultErr(err);vaultUI();}});
+window.addEventListener("online",()=>{if(VAULT.auto)vaultPush();});
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden"&&VAULT.auto&&VAULT.t){clearTimeout(VAULT.t);VAULT.t=null;vaultPush();}});
+setTimeout(()=>{if(VAULT.auto)vaultPush();},5000);
 function roomGone(msg){clearInterval(ROOM.poll);ROOM.poll=null;const c=roomChar();if(c&&c.gmMods&&c.gmMods.length){c.gmMods=[];save();render();}if(ROOM.ch&&ROOM.sb)ROOM.sb.removeChannel(ROOM.ch);ROOM.ch=null;ROOM.st=null;lsSet(RST_KEY,null);ROOM.msg=msg||"";ROOM.players=[];ROOM.mods={};roomRefresh();renderRoomBtn();if(msg)toast(msg);}
 function roomApplyMods(row){const c=roomChar();if(!c)return;const mods=row&&Array.isArray(row.mods)?row.mods:[];const was=JSON.stringify(c.gmMods||[]);if(was===JSON.stringify(mods))return;c.gmMods=mods;localSave();render();roomRefresh();toast(mods.length?"Мастер изменил модификаторы на миссию":"Мастер снял модификаторы");pushLog("Мастер: "+(mods.length?mods.map(m=>`${fxLabel(m.k)} ${sgn(Number(m.v))}${m.note?" ("+m.note+")":""}`).join(", "):"модификаторы сняты"));}
 async function roomSubscribe(){const st=ROOM.st;if(!st)return;const sb=await roomClient();if(ROOM.ch)sb.removeChannel(ROOM.ch);
@@ -3298,14 +3377,39 @@ function roomModsUI(p,i){const key=rmKey(p),mods=ROOM.mods[key]||[],dr=rmDraft(k
    ${mods.length?mods.map((m,j)=>`<div class="inline" style="gap:6px;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--line)"><span><b>${esc(fxLabel(m.k))} ${sgn(Number(m.v))}</b>${m.note?` <span class="note">${esc(m.note)}</span>`:""}</span><button class="del delico" data-rmdel="${i}|${j}" aria-label="Убрать модификатор">×</button></div>`).join(""):`<div class="note">Нет. Добавленные модификаторы сразу учитываются у игрока в характеристиках и бросках.</div>`}
    <div class="inline" style="gap:6px;margin-top:8px"><select class="sel" data-rmd="${i}|k" aria-label="Что меняем">${FXKEYS().map(([k,l])=>`<option value="${k}" ${dr.k===k?"selected":""}>${esc(l)}</option>`).join("")}</select><input class="inp" type="number" inputmode="numeric" data-rmd="${i}|v" value="${esc(String(dr.v))}" placeholder="±" style="width:70px" aria-label="Значение"><input class="inp" data-rmd="${i}|n" value="${esc(dr.n)}" placeholder="за что (необязательно)" style="flex:1;min-width:140px"><button class="btn small primary" data-rmadd="${i}">Добавить</button></div>
    <div class="inline" style="gap:10px;margin-top:8px">${mods.length?`<button class="jump ph" data-rmclear="${i}">снять все у этого игрока</button>`:""}<button class="jump ph" data-rmkick="${i}" style="color:var(--warn)">убрать из комнаты</button></div></div>`;}
-function roomGMView(st,live){const ps=ROOM.players;if(ps.length&&!ps.some(p=>rmKey(p)===ROOM.sel))ROOM.sel=rmKey(ps[0]);
+function roomGMView(st,live){const ps=ROOM.players;const tb=ROOM.gmTab||"room";
+  const sw=`<div class="gmtabs" role="tablist"><button role="tab" aria-selected="${tb==="room"}" data-gmtab="room">Комната${ps.length?` (${ps.length})`:""}</button><button role="tab" aria-selected="${tb==="base"}" data-gmtab="base">База персонажей${window.VB&&VB.list?` (${VB.list.length})`:""}</button></div>`;
+  if(tb==="base")return sw+vbView();if(ps.length&&!ps.some(p=>rmKey(p)===ROOM.sel))ROOM.sel=rmKey(ps[0]);
   const i=ps.findIndex(p=>rmKey(p)===ROOM.sel),p=ps[i];const anyMods=Object.values(ROOM.mods).some(m=>m&&m.length);
   const tabs=ps.map((q,j)=>{const v=roomPeek(q.sheet,ROOM.mods[rmKey(q)]||[]);const n=(ROOM.mods[rmKey(q)]||[]).length;const bad=!v.err&&v.hpCur<v.hpMax/2;return `<button class="ptab" role="tab" aria-selected="${j===i}" data-rmsel="${j}"><span class="ptabn">${esc(q.name||"Без имени")}</span><span class="ptabs2" style="${bad?"color:var(--warn);font-weight:700":""}">${v.err?"?":`ОЗ ${v.hpCur}/${v.hpMax}`}${n?` · правок ${n}`:""}</span></button>`;}).join("");
-  return `<div class="card"><div class="inline" style="gap:10px;justify-content:space-between"><div>Код комнаты <b style="font-size:26px;letter-spacing:3px">${esc(st.code)}</b> <span class="note">· ${live}</span></div><button class="btn small" data-room="refresh">Обновить</button></div>
+  return sw+`<div class="card"><div class="inline" style="gap:10px;justify-content:space-between"><div>Код комнаты <b style="font-size:26px;letter-spacing:3px">${esc(st.code)}</b> <span class="note">· ${live}</span></div><button class="btn small" data-room="refresh">Обновить</button></div>
     <p class="note" style="margin-bottom:0">Игроки: «Комната» → «Я игрок» → этот код. Листы обновляются сами.</p></div>
     ${ps.length?`<div class="ptabbar" role="tablist">${tabs}</div>${p?`<div class="note" style="margin-top:6px">Лист обновлён ${agoTxt(p.updated_at)}. Здесь только просмотр, изменения игрок делает у себя.</div>${roomModsUI(p,i)}<div class="peek" id="peekBox">${roomPeekSheet(p)}</div>`:""}`:`<p class="note">Пока никто не подключился.</p>`}
     <div class="card" style="margin-top:12px"><div class="inline" style="gap:8px"><button class="btn small" data-room="clearall" ${anyMods?"":"disabled"}>Конец миссии: снять модификаторы у всех</button><button class="btn small" data-room="leave">Выйти (комната останется)</button><button class="btn small" data-room="close" style="color:var(--warn)">Закрыть комнату</button></div></div>`;}
-function roomFocusInside(){const a=document.activeElement;return !!(a&&$("#roomView")&&$("#roomView").contains(a)&&a.matches('[data-rmd],#rcUrl,#rcKey,#rmCode'));}
+/* ---------- мастер: база всех выгруженных персонажей ---------- */
+var VB={list:null,q:"",sel:null,sheet:null,err:"",busy:false};
+async function vbLoad(){VB.busy=true;VB.err="";renderRoom();try{const sb=await vaultSb();const {data,error}=await sb.rpc("vault_all",{p_q:null});if(error)throw error;VB.list=data||[];}catch(e){VB.err=vaultErr(e);}VB.busy=false;renderRoom();}
+function vbCls(r){const a=[r.cls,r.cls2].filter(x=>x!=null&&BOOK.classes[x]).map(x=>BOOK.classes[x].name);return a.join(" / ");}
+function vbItems(){const q=VB.q.trim().toLowerCase();const L=(VB.list||[]).map((r,i)=>[r,i]).filter(([r])=>!q||(r.name||"").toLowerCase().includes(q)||vbCls(r).toLowerCase().includes(q));
+  if(!L.length)return `<p class="note">${VB.list&&VB.list.length?"Никого не нашлось.":"В базе пока нет персонажей."}</p>`;
+  return L.map(([r,i])=>`<button class="vbcard" data-vbopen="${i}"><span class="vbn">${esc(r.name||"Без имени")}</span><span class="note">${esc(vbCls(r)||"класс не выбран")}${r.rank_lvl?` · ранг ${r.rank_lvl}`:""}</span><span class="note vbd">обновлён ${agoTxt(r.updated_at)}</span></button>`).join("");}
+function vbView(){
+  if(VB.err&&!VB.list)return `<div class="warnbox">${esc(VB.err)}</div><button class="btn small" data-vb="reload">Повторить</button>`;
+  if(VB.sel){const r=VB.sel;return `<div class="inline" style="gap:8px;justify-content:space-between;margin:10px 0 4px"><button class="btn small" data-vb="back">← Все персонажи</button><span class="note">обновлён ${agoTxt(r.updated_at)}</span></div>
+    <h3 style="margin:6px 0 2px">${esc(r.name||"Без имени")}</h3><div class="note">${esc(vbCls(r))}${r.rank_lvl?` · ранг ${r.rank_lvl}`:""} · только просмотр</div>
+    ${VB.sheet?`<div class="peek" id="peekBox">${roomPeekSheet({sheet:VB.sheet})}</div>`:`<p class="note">Загружаю лист…</p>`}`;}
+  return `<div class="inline" style="gap:8px;margin:10px 0;flex-wrap:nowrap"><input class="inp" id="vbSearch" type="search" placeholder="Поиск по имени или классу" value="${esc(VB.q)}" style="flex:1;min-width:0"><button class="btn small" data-vb="reload" ${VB.busy?"disabled":""}>${VB.busy?"Загрузка…":"Обновить"}</button></div>
+    ${VB.err?`<div class="warnbox">${esc(VB.err)}</div>`:""}
+    ${VB.list?`<div class="vbgrid" id="vbList">${vbItems()}</div>`:`<p class="note">Загружаю список…</p>`}
+    <p class="note">Здесь все персонажи, выгруженные в облачную копию с любых устройств.</p>`;}
+document.addEventListener("click",async e=>{const b=e.target.closest("[data-gmtab],[data-vbopen],[data-vb]");if(!b)return;const d=b.dataset;
+  if(d.gmtab){ROOM.gmTab=d.gmtab;if(d.gmtab==="base"&&!VB.list&&!VB.busy){vbLoad();return;}renderRoom();return;}
+  if(d.vb==="reload"){vbLoad();return;}
+  if(d.vb==="back"){VB.sel=null;VB.sheet=null;renderRoom();scrollTo(0,0);return;}
+  if(d.vbopen!=null){const r=VB.list[Number(d.vbopen)];if(!r)return;VB.sel=r;VB.sheet=null;renderRoom();scrollTo(0,0);
+    try{const sb=await vaultSb();const {data,error}=await sb.rpc("vault_peek",{p_owner:r.owner,p_char:r.char_id});if(error)throw error;if(VB.sel!==r)return;VB.sheet=data||{};}catch(err){VB.err=vaultErr(err);VB.sel=null;}renderRoom();}});
+document.addEventListener("input",e=>{if(e.target.id!=="vbSearch")return;VB.q=e.target.value;const l=$("#vbList");if(l)l.innerHTML=vbItems();});
+function roomFocusInside(){const a=document.activeElement;return !!(a&&$("#roomView")&&$("#roomView").contains(a)&&a.matches('[data-rmd],#rcUrl,#rcKey,#rmCode,#vbSearch'));}
 function roomRefresh(){if(STEP!==11||!$("#roomView"))return;if(roomFocusInside()){ROOM.dirty=true;return;}renderRoom();}
 function renderRoom(){const body=$("#roomView");if(!body)return;ROOM.dirty=false;
   const st=ROOM.st,err=ROOM.err?`<div class="warnbox" style="margin-top:8px">${esc(ROOM.err)}</div>`:"",msg=ROOM.msg?`<div class="okbox" style="margin-top:8px">${esc(ROOM.msg)}</div>`:"";
@@ -3323,7 +3427,7 @@ function renderRoom(){const body=$("#roomView");if(!body)return;ROOM.dirty=false
     <div class="iblk rev"><div class="iblk-t">Модификаторы от мастера на миссию</div><div class="iblk-b">${mods.length?mods.map(m=>`<div><b>${esc(fxLabel(m.k))} ${sgn(Number(m.v))}</b>${m.note?` <span class="note">${esc(m.note)}</span>`:""}</div>`).join(""):`<div class="note">Пока нет. Они сразу учитываются в характеристиках и бросках.</div>`}</div></div>
     <div class="inline" style="gap:8px;margin-top:10px"><button class="btn small" data-room="push">Отправить лист сейчас</button><button class="btn small" data-go="10">Открыть миссию</button><button class="btn small" data-room="leave">Выйти из комнаты</button></div></div>`;}
   else h=roomGMView(st,live);
-  body.innerHTML=msg+err+h;if(st&&st.role==="gm"){peekSectionize(body);const i=ROOM.players.findIndex(p=>rmKey(p)===ROOM.sel);if(i>=0)roomInjectPM(body,i);}}
+  body.innerHTML=msg+err+h;if(st&&st.role==="gm"){peekSectionize(body);if((ROOM.gmTab||"room")!=="room")return;const i=ROOM.players.findIndex(p=>rmKey(p)===ROOM.sel);if(i>=0)roomInjectPM(body,i);}}
 function roomInjectPM(body,i){const p=ROOM.players[i];if(!p)return;const mods=ROOM.mods[rmKey(p)]||[];const sum=k=>mods.filter(m=>m.k===k).reduce((a,m)=>a+(Number(m.v)||0),0);
   const ctl=(k,lbl)=>{const v=sum(k);return `<div class="gmpm noprint"><button class="gmb" data-rmpm="${i}|${k}|-1" aria-label="${esc(lbl)}: минус 1">−</button><span class="gmv ${v>0?"pos":v<0?"neg":""}">${v?sgn(v):"±0"}</span><button class="gmb" data-rmpm="${i}|${k}|1" aria-label="${esc(lbl)}: плюс 1">+</button></div>`;};
   body.querySelectorAll('#peekBox .stile[data-ik^="s:"]').forEach(t=>{const k=t.dataset.ik.slice(2);t.classList.add("haspm");t.insertAdjacentHTML("beforeend",ctl(k,LABEL[k]||k));});

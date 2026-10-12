@@ -1,0 +1,83 @@
+<style>
+  .page-title{ margin-bottom:10px !important; }
+  .auth-bar{ display:flex; align-items:center; flex-wrap:wrap; gap:8px 10px; margin:0 0 18px; font-family:var(--mono); font-size:12px; color:var(--text-dim); }
+  .auth-chip{ display:inline-flex; align-items:center; gap:7px; height:30px; padding:0 11px; border:1px solid var(--line-strong); border-radius:3px; background:var(--bg-panel); }
+  .auth-chip .dot{ width:7px; height:7px; border-radius:50%; background:var(--text-faint); flex:none; }
+  .auth-chip.edit{ border-color:#f3c969; color:#f6dc9a; }
+  .auth-chip.edit .dot{ background:#f3c969; box-shadow:0 0 6px rgba(243,201,105,.7); }
+  .auth-net{ display:inline-flex; align-items:center; gap:6px; color:var(--text-faint); }
+  .auth-net .dot{ width:6px; height:6px; border-radius:50%; background:#646277; }
+  .auth-net.online .dot{ background:#4fd18b; box-shadow:0 0 6px rgba(79,209,139,.6); }
+  .auth-net.offline{ color:#ff9b91; } .auth-net.offline .dot{ background:#ff6f61; }
+  .auth-btn{ height:30px; padding:0 12px; background:var(--bg-panel-2); color:var(--text); border:1px solid var(--line-strong); border-radius:3px; font-family:var(--mono); font-size:12px; cursor:pointer; }
+  .auth-btn:hover{ border-color:var(--veil); color:#fff; }
+  .auth-btn:focus-visible{ outline:2px solid var(--veil-soft); outline-offset:1px; }
+  .auth-btn.primary{ background:var(--veil-dim); border-color:var(--veil); color:#fff; }
+  .auth-dlg{ position:fixed; inset:0; z-index:100; display:grid; place-items:center; padding:16px; background:rgba(5,5,10,.72); }
+  .auth-card{ width:min(360px,100%); background:var(--bg-panel); border:1px solid var(--line-strong); border-radius:4px; padding:18px 18px 16px; box-shadow:0 20px 50px rgba(0,0,0,.6); }
+  .auth-card h2{ font-family:var(--mono); font-size:15px; margin:0 0 4px; letter-spacing:.02em; }
+  .auth-card p{ margin:0 0 14px; font-size:12.5px; line-height:1.5; color:var(--text-dim); }
+  .auth-card label{ display:block; font-family:var(--mono); font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--text-faint); margin:10px 0 5px; }
+  .auth-card input{ width:100%; height:38px; padding:6px 10px; background:#0b0b12; color:var(--text); border:1px solid var(--line-strong); border-radius:3px; font:16px var(--sans); }
+  .auth-card input:focus{ outline:none; border-color:var(--veil); }
+  .auth-err{ min-height:18px; margin-top:10px; font-size:12px; color:#ff9b91; }
+  .auth-row{ display:flex; justify-content:flex-end; gap:8px; margin-top:8px; }
+  html.in-app .page{ padding:16px 14px 28px; }
+  html.in-app .page-title{ font-size:24px; }
+  @media (max-width:640px){ html.in-app .page{ padding:12px 10px 24px; } }
+</style>
+<div class="auth-bar" id="authBar">
+  <span class="auth-chip" id="authChip"><span class="dot"></span><span id="authText">Только просмотр</span></span>
+  <button type="button" class="auth-btn" id="authBtn">Права на редактирование</button>
+  <span class="auth-net" id="authNet" title="Связь с общей базой"><span class="dot"></span><span id="authNetText">подключение…</span></span>
+</div>
+<div class="auth-dlg" id="authDlg" hidden role="dialog" aria-modal="true" aria-labelledby="authTtl">
+  <form class="auth-card" id="authForm" autocomplete="on">
+    <h2 id="authTtl">Права на редактирование</h2>
+    <p>Без входа карта открыта только для просмотра. Правки сразу сохраняются в общей базе и появляются у всех.</p>
+    <label for="authLogin">Логин</label>
+    <input id="authLogin" name="username" autocomplete="username" autocapitalize="off" spellcheck="false" required>
+    <label for="authPass">Пароль</label>
+    <input id="authPass" name="password" type="password" autocomplete="current-password" required>
+    <div class="auth-err" id="authErr" role="alert"></div>
+    <div class="auth-row">
+      <button type="button" class="auth-btn" id="authCancel">Отмена</button>
+      <button type="submit" class="auth-btn primary" id="authGo">Войти</button>
+    </div>
+  </form>
+</div>
+<script>
+(function(){
+  try{ if(window.parent !== window) document.documentElement.classList.add('in-app'); }catch(e){}
+  const $ = id => document.getElementById(id);
+  const dlg = $('authDlg'), err = $('authErr');
+  function paint(){
+    const ed = window.MECCA && MECCA.editor;
+    $('authChip').classList.toggle('edit', !!ed);
+    $('authText').textContent = ed ? 'Редактор: ' + ed : 'Только просмотр';
+    $('authBtn').textContent = ed ? 'Выйти из редактирования' : 'Права на редактирование';
+  }
+  function open(){ err.textContent = ''; $('authPass').value = ''; dlg.hidden = false; setTimeout(() => $('authLogin').focus(), 30); }
+  function close(){ dlg.hidden = true; }
+  $('authBtn').addEventListener('click', () => { if(MECCA.editor){ MECCA.logout(); } else open(); });
+  $('authCancel').addEventListener('click', close);
+  dlg.addEventListener('click', e => { if(e.target === dlg) close(); });
+  document.addEventListener('keydown', e => { if(e.key === 'Escape' && !dlg.hidden){ e.stopPropagation(); close(); } }, true);
+  $('authForm').addEventListener('submit', async e => {
+    e.preventDefault(); err.textContent = ''; const go = $('authGo'); go.disabled = true; go.textContent = 'Проверяю…';
+    try{
+      const ok = await MECCA.login($('authLogin').value, $('authPass').value);
+      if(ok) close(); else err.textContent = 'Неверный логин или пароль.';
+    }catch(x){
+      const m = (x && x.message) || '';
+      err.textContent = /function .*mecca_login|schema cache|does not exist/i.test(m) ? 'На сервере нет таблиц Мекки: запустите mecca.sql в Supabase.' : 'Нет связи с базой. Проверьте интернет.';
+    }finally{ go.disabled = false; go.textContent = 'Войти'; }
+  });
+  MECCA.onOwner((on, silent) => { paint(); if(window.__meccaOwner) window.__meccaOwner(on); if(silent && !on) window.__meccaToast && window.__meccaToast('Права редактора сняты: пароль больше не подходит', true); });
+  window.addEventListener('mecca-net', e => {
+    const n = $('authNet'); n.classList.toggle('online', e.detail === 'online'); n.classList.toggle('offline', e.detail === 'offline');
+    $('authNetText').textContent = e.detail === 'online' ? 'база на связи' : 'нет связи — показана сохранённая копия';
+  });
+  paint(); MECCA.recheck();
+})();
+</script>

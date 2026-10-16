@@ -70,6 +70,9 @@ function campShow(on){
     window.addEventListener("resize",()=>{if(STEP===13)campFit();});
   }
   requestAnimationFrame(campFit);setTimeout(campFit,300);
+  /* пока вкладка была скрыта, карта не могла измерить себя — перерисовать после показа */
+  const kick=()=>{try{CAMP.contentWindow.dispatchEvent(new Event("resize"));}catch(e){}};
+  requestAnimationFrame(()=>requestAnimationFrame(kick));setTimeout(kick,350);
 }
 '''
 s = rep(s, '/* ---------- Комната мастера (Supabase) ---------- */', js + '/* ---------- Комната мастера (Supabase) ---------- */')

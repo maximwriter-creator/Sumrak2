@@ -104,3 +104,91 @@ insert into public.mecca_docs(coll,id,data) values ('readiness','zhou-tech',$mec
 insert into public.mecca_docs(coll,id,data) values ('units','6gq1mrlb1rg1qm343a6k',$mecca${"color":"#f3c969","createdAt":1791804881617,"desc":"Крутые ребята с желтым керхером 10000000000 паскалей сосет","faction":"eagle-union","image":"q4f98qy571h4g14yud2l","name":"1-Я ДИВИЗИЯ ИМЕНИ ПЫЛЕСОСИКА ЧЛЕНОСОСИКА","patch":null,"updatedAt":1791805421225}$mecca$::jsonb) on conflict (coll,id) do nothing;
 insert into public.mecca_docs(coll,id,data) values ('units','qhyhpv0voter8vork262',$mecca${"color":"","createdAt":1791805052082,"desc":"Им помогает Один и они хотят повисеть на ясене","faction":"eagle-union","image":"o3agnxk3uasj1dwc6ssf","name":"2 дивизия имени Один Помоги","patch":null,"updatedAt":1791807512191}$mecca$::jsonb) on conflict (coll,id) do nothing;
 insert into public.mecca_docs(coll,id,data) values ('veilzones','k8wz0b3pggtfmak1ngha',$mecca${"center":{"lat":-19.051,"lon":-109.163},"createdAt":1791804012369,"name":"Очаг 17","ring":[-128.196,-27.568,-127.553,-25.555,-126.909,-23.542,-126.266,-21.529,-125.622,-19.516,-124.979,-17.503,-124.335,-15.491,-123.692,-13.478,-123.048,-11.465,-122.191,-9.599,-120.54,-8.28,-118.889,-6.961,-117.238,-5.642,-115.587,-4.322,-113.936,-3.003,-112.285,-1.684,-110.634,-0.365,-108.983,0.954,-107.332,2.273,-105.681,3.592,-103.617,3.733,-101.504,3.733,-99.39,3.733,-97.277,3.733,-95.921,2.579,-95.079,0.641,-94.237,-1.297,-93.394,-3.236,-93.153,-5.31,-93.075,-7.422,-92.996,-9.534,-92.91,-11.645,-92.719,-13.75,-92.527,-15.854,-92.336,-17.959,-92.232,-20.058,-92.675,-22.125,-93.117,-24.191,-93.56,-26.258,-94.394,-28.167,-95.503,-29.966,-96.612,-31.764,-97.721,-33.563,-98.83,-35.362,-100.28,-36.694,-102.332,-37.201,-104.383,-37.707,-106.435,-38.214,-108.487,-38.72,-110.559,-38.999,-112.669,-38.878,-114.779,-38.757,-116.889,-38.636,-118.998,-38.515,-121.108,-38.393,-121.855,-36.963,-121.892,-34.85,-121.929,-32.737,-121.789,-30.664,-120.845,-28.773,-120.231,-26.976,-122.05,-26.014,-124.098,-26.532,-126.147,-27.05]}$mecca$::jsonb) on conflict (coll,id) do nothing;
+
+-- ===== закрытый доступ (mecca-access) =====
+-- Сумрак 2096: «Проект Мекка» — кампейн только по логину и паролю.
+-- Запустить после mecca.sql: Supabase → SQL Editor → вставить целиком → Run. Повторный запуск безопасен.
+-- После этого читать данные карты напрямую нельзя: только через функции ниже, которые проверяют пароль.
+-- Роли: can_edit = true — правка (сейчас: Life), false — только просмотр (можно добавить позже).
+
+alter table public.mecca_editors add column if not exists can_edit boolean not null default true;
+
+-- роль по логину и паролю: 'edit', 'view' или null
+create or replace function public.mecca_role(p_login text, p_pass text) returns text
+language sql stable security definer set search_path = public as $$
+  select case when can_edit then 'edit' else 'view' end
+  from mecca_editors
+  where login = lower(trim(coalesce(p_login, '')))
+    and pass_hash = encode(sha256(convert_to('mecca|' || lower(trim(coalesce(p_login, ''))) || '|' || coalesce(p_pass, ''), 'UTF8')), 'hex');
+$$;
+
+-- запись: только роль edit (mecca_put / mecca_del из mecca.sql пользуются этой проверкой)
+create or replace function public.mecca_check(p_login text, p_pass text) returns boolean
+language sql stable security definer set search_path = public as $$
+  select coalesce(mecca_role(p_login, p_pass) = 'edit', false);
+$$;
+
+-- вход: возвращает роль, при ошибке притормаживает подбор пароля
+create or replace function public.mecca_login2(p_login text, p_pass text) returns text
+language plpgsql security definer set search_path = public as $$
+declare r text := mecca_role(p_login, p_pass);
+begin
+  if r is null then perform pg_sleep(1); end if;
+  return r;
+end $$;
+
+create or replace function public.mecca_need(p_login text, p_pass text) returns void
+language plpgsql security definer set search_path = public as $$
+begin
+  if mecca_role(p_login, p_pass) is null then
+    perform pg_sleep(1);
+    raise exception 'mecca: access denied';
+  end if;
+end $$;
+
+create or replace function public.mecca_list(p_login text, p_pass text, p_coll text)
+returns table(id text, data jsonb)
+language plpgsql security definer set search_path = public as $$
+begin
+  perform mecca_need(p_login, p_pass);
+  return query select d.id, d.data from mecca_docs d where d.coll = p_coll limit 5000;
+end $$;
+
+create or replace function public.mecca_ids(p_login text, p_pass text, p_coll text)
+returns setof text
+language plpgsql security definer set search_path = public as $$
+begin
+  perform mecca_need(p_login, p_pass);
+  return query select d.id from mecca_docs d where d.coll = p_coll limit 5000;
+end $$;
+
+create or replace function public.mecca_get(p_login text, p_pass text, p_coll text, p_id text)
+returns jsonb
+language plpgsql security definer set search_path = public as $$
+declare r jsonb;
+begin
+  perform mecca_need(p_login, p_pass);
+  select d.data into r from mecca_docs d where d.coll = p_coll and d.id = p_id;
+  return r;
+end $$;
+
+-- закрыть прямое чтение таблицы
+drop policy if exists mecca_read on public.mecca_docs;
+revoke select, insert, update, delete on public.mecca_docs from anon, authenticated;
+
+revoke all on function public.mecca_role(text, text) from public, anon, authenticated;
+revoke all on function public.mecca_check(text, text) from public, anon, authenticated;
+revoke all on function public.mecca_need(text, text) from public, anon, authenticated;
+revoke all on function public.mecca_login2(text, text) from public;
+revoke all on function public.mecca_list(text, text, text) from public;
+revoke all on function public.mecca_ids(text, text, text) from public;
+revoke all on function public.mecca_get(text, text, text, text) from public;
+grant execute on function public.mecca_login2(text, text) to anon, authenticated;
+grant execute on function public.mecca_list(text, text, text) to anon, authenticated;
+grant execute on function public.mecca_ids(text, text, text) to anon, authenticated;
+grant execute on function public.mecca_get(text, text, text, text) to anon, authenticated;
+
+-- Добавить логин только для просмотра (пример, раскомментировать и вписать свои значения):
+-- insert into public.mecca_editors(login, pass_hash, can_edit)
+-- values ('player', encode(sha256(convert_to('mecca|player|ПАРОЛЬ', 'UTF8')), 'hex'), false)
+-- on conflict (login) do update set pass_hash = excluded.pass_hash, can_edit = excluded.can_edit;

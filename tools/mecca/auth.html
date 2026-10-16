@@ -22,19 +22,28 @@
   .auth-card input:focus{ outline:none; border-color:var(--veil); }
   .auth-err{ min-height:18px; margin-top:10px; font-size:12px; color:#ff9b91; }
   .auth-row{ display:flex; justify-content:flex-end; gap:8px; margin-top:8px; }
+  .auth-dlg.gate{ background:var(--bg); place-items:start center; padding-top:min(18vh,140px); }
+  .auth-dlg.gate .auth-card{ box-shadow:0 0 0 1px rgba(168,85,247,.35), 0 20px 60px rgba(0,0,0,.6); }
+  .auth-dlg.gate #authCancel{ display:none; }
+  .gate-mark{ font-family:var(--mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--veil-soft); margin-bottom:8px; display:flex; align-items:center; gap:8px; }
+  .gate-mark::before{ content:""; width:6px; height:6px; border-radius:50%; background:var(--veil); box-shadow:0 0 8px 2px rgba(168,85,247,.6); }
+  html.mecca-locked body{ overflow:hidden; }
+  html.mecca-locked .page > *:not(#authDlg){ visibility:hidden; }
   html.in-app .page{ padding:16px 14px 28px; }
   html.in-app .page-title{ font-size:24px; }
   @media (max-width:640px){ html.in-app .page{ padding:12px 10px 24px; } }
 </style>
 <div class="auth-bar" id="authBar">
   <span class="auth-chip" id="authChip"><span class="dot"></span><span id="authText">Только просмотр</span></span>
-  <button type="button" class="auth-btn" id="authBtn">Права на редактирование</button>
+  <button type="button" class="auth-btn" id="authEdit" hidden>Права на редактирование</button>
+  <button type="button" class="auth-btn" id="authBtn">Выйти</button>
   <span class="auth-net" id="authNet" title="Связь с общей базой"><span class="dot"></span><span id="authNetText">подключение…</span></span>
 </div>
 <div class="auth-dlg" id="authDlg" hidden role="dialog" aria-modal="true" aria-labelledby="authTtl">
   <form class="auth-card" id="authForm" autocomplete="on">
-    <h2 id="authTtl">Права на редактирование</h2>
-    <p>Без входа карта открыта только для просмотра. Правки сразу сохраняются в общей базе и появляются у всех.</p>
+    <div class="gate-mark" id="authMark" hidden>Проект Мекка</div>
+    <h2 id="authTtl">Вход в кампейн</h2>
+    <p id="authLead">Кампейн открывается только по логину и паролю.</p>
     <label for="authLogin">Логин</label>
     <input id="authLogin" name="username" autocomplete="username" autocapitalize="off" spellcheck="false" required>
     <label for="authPass">Пароль</label>
@@ -51,32 +60,38 @@
   try{ if(window.parent !== window) document.documentElement.classList.add('in-app'); }catch(e){}
   const $ = id => document.getElementById(id);
   const dlg = $('authDlg'), err = $('authErr');
+  // без входа — закрывающий экран; после входа — плашка «кто вошёл» и «Выйти»
   function paint(){
-    const ed = window.MECCA && MECCA.editor;
+    const user = MECCA.user, ed = MECCA.editor, locked = !user;
+    document.documentElement.classList.toggle('mecca-locked', locked);
     $('authChip').classList.toggle('edit', !!ed);
-    $('authText').textContent = ed ? 'Редактор: ' + ed : 'Только просмотр';
-    $('authBtn').textContent = ed ? 'Выйти из редактирования' : 'Права на редактирование';
+    $('authText').textContent = !user ? 'Вход не выполнен' : ed ? 'Редактор: ' + user : 'Просмотр: ' + user;
+    $('authBtn').textContent = 'Выйти';
+    $('authEdit').hidden = !user || !!ed;
+    if(locked){ dlg.classList.add('gate'); $('authMark').hidden = false; $('authTtl').textContent = 'Вход в кампейн'; $('authLead').textContent = 'Кампейн открывается только по логину и паролю.'; if(dlg.hidden){ dlg.hidden = false; err.textContent = ''; } }
+    else if(dlg.classList.contains('gate')){ dlg.classList.remove('gate'); $('authMark').hidden = true; dlg.hidden = true; }
   }
-  function open(){ err.textContent = ''; $('authPass').value = ''; dlg.hidden = false; setTimeout(() => $('authLogin').focus(), 30); }
-  function close(){ dlg.hidden = true; }
-  $('authBtn').addEventListener('click', () => { if(MECCA.editor){ MECCA.logout(); } else open(); });
+  function openEdit(){ err.textContent = ''; $('authPass').value = ''; $('authTtl').textContent = 'Права на редактирование'; $('authLead').textContent = 'Войдите логином редактора — правки сразу появятся у всех.'; dlg.hidden = false; setTimeout(() => $('authLogin').focus(), 30); }
+  function close(){ if(dlg.classList.contains('gate')) return; dlg.hidden = true; }
+  $('authBtn').addEventListener('click', () => { MECCA.logout(); });
+  $('authEdit').addEventListener('click', openEdit);
   $('authCancel').addEventListener('click', close);
   dlg.addEventListener('click', e => { if(e.target === dlg) close(); });
-  document.addEventListener('keydown', e => { if(e.key === 'Escape' && !dlg.hidden){ e.stopPropagation(); close(); } }, true);
+  document.addEventListener('keydown', e => { if(e.key === 'Escape' && !dlg.hidden && !dlg.classList.contains('gate')){ e.stopPropagation(); close(); } }, true);
   $('authForm').addEventListener('submit', async e => {
     e.preventDefault(); err.textContent = ''; const go = $('authGo'); go.disabled = true; go.textContent = 'Проверяю…';
     try{
       const ok = await MECCA.login($('authLogin').value, $('authPass').value);
-      if(ok) close(); else err.textContent = 'Неверный логин или пароль.';
+      if(ok){ $('authPass').value = ''; if(!dlg.classList.contains('gate')) dlg.hidden = true; } else err.textContent = 'Неверный логин или пароль.';
     }catch(x){
       const m = (x && x.message) || '';
       err.textContent = /function .*mecca_login|schema cache|does not exist/i.test(m) ? 'На сервере нет таблиц Мекки: запустите mecca.sql в Supabase.' : 'Нет связи с базой. Проверьте интернет.';
     }finally{ go.disabled = false; go.textContent = 'Войти'; }
   });
-  MECCA.onOwner((on, silent) => { paint(); if(window.__meccaOwner) window.__meccaOwner(on); if(silent && !on) window.__meccaToast && window.__meccaToast('Права редактора сняты: пароль больше не подходит', true); });
+  MECCA.onOwner((on, silent, had) => { paint(); if(window.__meccaOwner) window.__meccaOwner(on); if(silent && had && !MECCA.user) err.textContent = 'Пароль больше не подходит — войдите заново.'; });
   window.addEventListener('mecca-net', e => {
     const n = $('authNet'); n.classList.toggle('online', e.detail === 'online'); n.classList.toggle('offline', e.detail === 'offline');
-    $('authNetText').textContent = e.detail === 'online' ? 'база на связи' : 'нет связи — показана сохранённая копия';
+    $('authNetText').textContent = e.detail === 'online' ? 'база на связи' : e.detail === 'locked' ? 'нужен вход' : 'нет связи — показана сохранённая копия';
   });
   paint(); MECCA.recheck();
 })();

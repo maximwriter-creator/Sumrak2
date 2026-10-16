@@ -44,7 +44,7 @@ rep('[stClass,stStats,stBirth,stParents,stChar,stMark,stFlaw,stSheet,stAcademy,s
 
 js = r'''
 /* ---------- Правка листа и перенос готового персонажа ---------- */
-var SHEETEDIT=false;
+var SHEETEDIT;
 function sheetEditOn(){try{return SHEETEDIT&&STEP===7;}catch(e){return false;}}
 function sheetCur(R,k){
   if(k==="hp")return R.hp; if(k==="fate")return R.fate;

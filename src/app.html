@@ -575,6 +575,18 @@ body.sheetedit .dbtn[data-rollres],body.sheetedit .dbtn[data-rollini]{display:no
 .histsrc{color:var(--accent);font-weight:700}
 @media print{.sedpanel{display:none!important}}
 
+/* ---- журнал бросков в комнате ---- */
+.rollfeed{margin-top:10px}
+.rollfeed>summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px}
+.rollfeed>summary::-webkit-details-marker{display:none}
+.rollfeed>summary::before{content:"▸";color:var(--muted);font-size:14px}
+.rollfeed[open]>summary::before{content:"▾"}
+.rlog{list-style:none;margin:8px 0 0;padding:0;max-height:320px;overflow-y:auto}
+.rlog li{display:block;padding:5px 0;border-bottom:1px solid var(--line);font-size:14px;line-height:1.35;overflow-wrap:anywhere}
+.rlog li:last-child{border-bottom:0}
+.rlog .rlt{display:inline-block;min-width:44px;margin-right:6px;color:var(--muted);font-variant-numeric:tabular-nums;font-size:13px}
+.rlog li.fresh{background:color-mix(in srgb,var(--accent) 12%,transparent);border-radius:4px;padding-left:6px;padding-right:6px}
+
 /* ---- Кампейн: Проект Мекка ---- */
 @media (max-width:560px){#modeTabs.seven{grid-template-columns:repeat(4,minmax(0,1fr))!important}#modeTabs.seven button{font-size:14px;letter-spacing:0;padding:8px 2px}#modeTabs.seven button:nth-child(n+5){border-top:1px solid var(--line)}#modeTabs.seven button:nth-child(5){border-left:0}}
 @media (min-width:561px){#modeTabs.seven button{font-size:12px;letter-spacing:-.01em;padding-left:2px;padding-right:2px}}
@@ -2904,7 +2916,7 @@ function showRoll(name,v,r,ini){
   }
   LASTSTAMP="roll";
   $("#rollNow").innerHTML=`<div class="big">${esc(name)}${v!=null?" "+v:""}: d20</div><div class="inline" style="margin-top:4px">${stamp(r,"roll")}<span class="verdict ${cls}">${esc(verdict)}</span></div>`;
-  ROLLS.unshift(`${name}${v!=null?" "+v:""}: ${r}${ini!=null?" → "+ini:" — "+verdict.charAt(0).toLowerCase()+verdict.slice(1)}`);ROLLS.length=Math.min(ROLLS.length,8);
+  rollRec(`${name}${v!=null?" "+v:""}: ${r}${ini!=null?" → "+ini:" — "+verdict.charAt(0).toLowerCase()+verdict.slice(1)}`);ROLLS.length=Math.min(ROLLS.length,8);
   $("#rollLog").innerHTML=ROLLS.slice(1).map(x=>`<li>${esc(x)}</li>`).join("");
   showPanel();
   const st=$("#rollNow .stamp");if(st)setTimeout(()=>st.classList.remove("hit"),400);
@@ -2927,7 +2939,7 @@ function showDamage(name,expr,rolls,flat,sum,bs,extra){
   LASTDMG=sum;
   LASTSTAMP="roll";
   $("#rollNow").innerHTML=`<div class="big">${esc(name)}: урон ${esc(expr)}</div><div class="inline" style="margin-top:4px">${stamp(sum,"roll").replace('class="stamp','class="stamp dmg')}<span class="verdict" style="font-size:20px">${sum} урона${bs.length?` ${esc(bs.join(""))}`:""}</span></div><div style="margin-top:4px;font-size:15px">${esc(expr)}: ${rolls.length?`выпало ${rolls.join(" + ")}`:"без кубов"}${flat?` ${flat>0?"+":"−"} ${Math.abs(flat)}`:""} = <b>${sum}</b>${bs.length?`<div class="note">${esc(bs.join(""))} добавьте сами</div>`:""}</div>${extra||""}`;
-  ROLLS.unshift(`${name}: урон ${sum}${bs.length?" "+bs.join(""):""}`);ROLLS.length=Math.min(ROLLS.length,8);
+  rollRec(`${name}: урон ${sum}${bs.length?" "+bs.join(""):""}`);ROLLS.length=Math.min(ROLLS.length,8);
   $("#rollLog").innerHTML=ROLLS.slice(1).map(x=>`<li>${esc(x)}</li>`).join("");showPanel();
   const st=$("#rollNow .stamp");if(st)setTimeout(()=>st.classList.remove("hit"),400);
 }
@@ -3493,7 +3505,7 @@ function disRoll(cat){const v=d66();const e=(BOOK.tables[cat]||[]).find(x=>v>=x.
   const L=C.disorders||(C.disorders=[]);
   if(L.some(x=>x.cat===cat&&x.lo===e.lo)){DISMSG=`Выпало ${v}: это расстройство уже есть. По правилам вместо него получите ${DIS[cat].dup} очков Безумия. <button class="btn small" data-disdup="${cat}">Бросить ${DIS[cat].dup} и добавить</button>`;return;}
   L.push({id:uid(),cat,lo:e.lo,hi:e.hi,text:e.text});OPENT.add("ds"+L[L.length-1].id);DISMSG=`Выпало ${v}: добавлено ${DIS[cat].n.toLowerCase()} расстройство.`;pushLog(`${DIS[cat].n} расстройство: ${v}`);}
-function pushLog(x){ROLLS.unshift(x);ROLLS.length=Math.min(ROLLS.length,20);}
+function pushLog(x){rollRec(x);ROLLS.length=Math.min(ROLLS.length,20);}
 function panel(title,big,verdict,cls){
   LASTSTAMP="roll";
   $("#rollNow").innerHTML=`<div class="big">${esc(title)}</div><div class="inline" style="margin-top:4px">${stamp(big,"roll")}<span class="verdict ${cls||""}" style="font-size:16px">${verdict}</span></div>`;
@@ -3804,7 +3816,7 @@ document.addEventListener("click",e=>{
   if(d.atk){const g=C.gear.find(x=>x.id===d.atk),R=compute(C),p=profile(g,R);if(!spendAct(g,p))return;showRoll(`${g.name}: ${skLbl(p)}`,p.total,rnd(20));return;}
   if(d.dmg){const g=C.gear.find(x=>x.id===d.dmg),R=compute(C),p=profile(g,R);const twin=!!(p.props&&p.props.includes("Спаренное"));const dm=rollHits(p,twin?2:1,1);LASTSTAMP="roll";
     $("#rollNow").innerHTML=`<div class="big">${esc(g.name)}: урон ${esc(p.dmg||"")}${twin?" × 2 попадания":""}</div><div style="margin-top:6px;font-size:15px">${dm}</div>${wpnExtras(p)}`;
-    ROLLS.unshift(`${g.name}: урон ${LASTDMG}`);ROLLS.length=Math.min(ROLLS.length,8);$("#rollLog").innerHTML=ROLLS.slice(1).map(x=>`<li>${esc(x)}</li>`).join("");showPanel();return;}
+    rollRec(`${g.name}: урон ${LASTDMG}`);ROLLS.length=Math.min(ROLLS.length,8);$("#rollLog").innerHTML=ROLLS.slice(1).map(x=>`<li>${esc(x)}</li>`).join("");showPanel();return;}
   if(d.rzp){if(!DMGSEL)return;const [i,j]=d.rzp.split("|").map(Number);if(DMGSEL.H[i])DMGSEL.H[i].pick=j;LASTDMG=dmgTotal();const b=$("#dmgBox");if(b)b.innerHTML=dmgBoxHtml();pushLog(`Разрывающее: выбрано ${j?DMGSEL.H[i].b.sum:DMGSEL.H[i].a.sum}, итого ${LASTDMG}`);return;}
   if(d.rollres!=null){showRoll("Устойчивость",Number(d.rollres),rnd(20));return;}
   if(d.rollini){const v=Number(d.rollini);let r=rnd(20);const mk=C.mark.i!=null?BOOK.fates[C.mark.i].name:"";if(mk==="Аура удачи"&&r===3){r=2;toast("Аура удачи: 3 считается как 2");}if(mk==="Аура неудачи"&&r===18){r=19;toast("Аура неудачи: 18 считается как 19");}showRoll("Инициатива",null,r,v-r);if(STEP===10){cbIni(r);render();}return;}
@@ -4239,7 +4251,7 @@ if(NATIVE&&window.Capacitor.Plugins.App){
 }
 
 /* ---------- Правка листа и перенос готового персонажа ---------- */
-var SHEETEDIT=false;
+var SHEETEDIT;
 function sheetEditOn(){try{return SHEETEDIT&&STEP===7;}catch(e){return false;}}
 function sheetCur(R,k){
   if(k==="hp")return R.hp; if(k==="fate")return R.fate;
@@ -4354,9 +4366,32 @@ document.addEventListener("click",e=>{const b=e.target.closest("[data-roomback],
   if(b.dataset.room==="reset"){askConfirm("Сбросить подключение к комнате на этом устройстве? Комната на сервере останется.",()=>{roomGone("");ROOM.err="";ROOM.uidBad=false;ROOM.mine=null;renderRoom();});return;}
 },true);
 
+/* ---------- Журнал бросков (виден мастеру в комнате) ---------- */
+function rollRec(x){
+  ROLLS.unshift(x);
+  try{const c=C;if(c){c.rollLog=Array.isArray(c.rollLog)?c.rollLog:[];
+    c.rollLog.unshift({t:Date.now(),x:String(x).slice(0,400)});if(c.rollLog.length>150)c.rollLog.length=150;rollSaveSoon();}}catch(e){}
+  return ROLLS.length;}
+function rollSaveSoon(){clearTimeout(rollSaveSoon.t);rollSaveSoon.t=setTimeout(()=>{try{save();}catch(e){}},300);}
+function rollClock(t){return new Date(t).toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit"});}
+function rollFresh(t){return Date.now()-t<90*1000;}
+function rollLogOf(p){const l=p&&p.sheet&&p.sheet.rollLog;return Array.isArray(l)?l.filter(r=>r&&r.x&&r.t):[];}
+function roomFeedUI(ps){
+  const all=[];ps.forEach(p=>rollLogOf(p).slice(0,40).forEach(r=>all.push({...r,n:p.name||"Без имени"})));
+  all.sort((a,b)=>b.t-a.t);const top=all.slice(0,12);
+  const open=ROOM.feedOpen!==false;
+  return `<details class="card rollfeed" data-rfeed="1" ${open?"open":""}><summary><h3 style="display:inline;margin:0">Последние броски в комнате</h3></summary>
+    ${top.length?`<ol class="rlog">${top.map(r=>`<li class="${rollFresh(r.t)?"fresh":""}"><span class="rlt">${rollClock(r.t)}</span><b>${esc(r.n)}</b>: ${esc(r.x)}</li>`).join("")}</ol>`:`<p class="note">Пока никто не бросал кубы. Броски игроков появляются здесь сами.</p>`}</details>`;}
+function roomRollsUI(p){
+  const l=rollLogOf(p),open=ROOM.rollOpen!==false;
+  return `<details class="card rollfeed" data-rlog="1" ${open?"open":""}><summary><h3 style="display:inline;margin:0">Броски: ${esc(p.name||"Без имени")}${l.length?` (${l.length})`:""}</h3></summary>
+    ${l.length?`<ol class="rlog">${l.slice(0,40).map(r=>`<li class="${rollFresh(r.t)?"fresh":""}"><span class="rlt">${rollClock(r.t)}</span>${esc(r.x)}</li>`).join("")}</ol>${l.length>40?`<p class="note">Показаны последние 40 из ${l.length}.</p>`:""}`
+      :`<p class="note">Бросков пока нет. Если игрок уже бросал, а здесь пусто, у него старая версия приложения.</p>`}</details>`;}
+document.addEventListener("toggle",e=>{const d=e.target;if(!(d instanceof HTMLElement))return;if(d.dataset.rfeed)ROOM.feedOpen=d.open;if(d.dataset.rlog)ROOM.rollOpen=d.open;},true);
+
 /* ---------- Кампейн: Проект Мекка (карта государств, общая база) ---------- */
 function stCampaign(){return "";}
-var CAMP=null;
+var CAMP;  /* без «=null»: приложение может открыться сразу на «Кампейн», и окно карты уже создано */
 function campFrame(){return CAMP;}
 function meccaDecode(){const el=document.getElementById("meccaSrc");if(!el)throw new Error("нет блока meccaSrc");
   const b=atob(el.textContent.replace(/[^A-Za-z0-9+/=]/g,""));const u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);
@@ -4366,6 +4401,7 @@ function campShow(on){
   document.body.classList.toggle("camp",on);
   const host=$("#campHost");host.hidden=!on;
   if(!on)return;
+  if(!CAMP)CAMP=host.querySelector("iframe");
   if(!CAMP){
     CAMP=document.createElement("iframe");CAMP.title="Проект Мекка — карта государств";
     CAMP.setAttribute("allow","clipboard-write");
@@ -4526,7 +4562,7 @@ function roomGMView(st,live){const ps=ROOM.players;const tb=ROOM.gmTab||"room";
   const tabs=ps.map((q,j)=>{const v=roomPeek(q.sheet,ROOM.mods[rmKey(q)]||[]);const n=(ROOM.mods[rmKey(q)]||[]).length;const bad=!v.err&&v.hpCur<v.hpMax/2;return `<button class="ptab" role="tab" aria-selected="${j===i}" data-rmsel="${j}"><span class="ptabn">${esc(q.name||"Без имени")}</span><span class="ptabs2" style="${bad?"color:var(--warn);font-weight:700":""}">${v.err?"?":`ОЗ ${v.hpCur}/${v.hpMax}`}${n?` · правок ${n}`:""}</span></button>`;}).join("");
   return sw+`<div class="card"><div class="inline" style="gap:10px;justify-content:space-between"><div>Код комнаты <b style="font-size:26px;letter-spacing:3px">${esc(st.code)}</b> <span class="note">· ${live}</span></div><button class="btn small" data-room="refresh">Обновить</button></div>
     <p class="note" style="margin-bottom:0">Игроки: «Комната» → «Я игрок» → этот код. Листы обновляются сами.</p></div>
-    ${ps.length?`<div class="ptabbar" role="tablist">${tabs}</div>${p?`<div class="note" style="margin-top:6px">Лист обновлён ${agoTxt(p.updated_at)}. Здесь только просмотр, изменения игрок делает у себя.</div>${roomModsUI(p,i)}<div class="peek" id="peekBox">${roomPeekSheet(p)}</div>`:""}`:`<p class="note">Пока никто не подключился.</p>`}
+    ${ps.length?`${roomFeedUI(ps)}<div class="ptabbar" role="tablist">${tabs}</div>${p?`<div class="note" style="margin-top:6px">Лист обновлён ${agoTxt(p.updated_at)}. Здесь только просмотр, изменения игрок делает у себя.</div>${roomModsUI(p,i)}${roomRollsUI(p)}<div class="peek" id="peekBox">${roomPeekSheet(p)}</div>`:""}`:`<p class="note">Пока никто не подключился.</p>`}
     <div class="card" style="margin-top:12px"><div class="inline" style="gap:8px"><button class="btn small" data-room="clearall" ${anyMods?"":"disabled"}>Конец миссии: снять модификаторы у всех</button><button class="btn small" data-room="leave">Выйти (комната останется)</button><button class="btn small" data-room="close" style="color:var(--warn)">Закрыть комнату</button></div></div>`;}
 /* ---------- мастер: база всех выгруженных персонажей ---------- */
 var VB={list:null,q:"",sel:null,sheet:null,err:"",busy:false};

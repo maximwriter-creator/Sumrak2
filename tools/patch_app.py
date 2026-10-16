@@ -52,7 +52,7 @@ s = s[:i] + css + s[i+len('</style>'):]
 js = r'''
 /* ---------- Кампейн: Проект Мекка (карта государств, общая база) ---------- */
 function stCampaign(){return "";}
-var CAMP=null;
+var CAMP;  /* без «=null»: приложение может открыться сразу на «Кампейн», и окно карты уже создано */
 function campFrame(){return CAMP;}
 function meccaDecode(){const el=document.getElementById("meccaSrc");if(!el)throw new Error("нет блока meccaSrc");
   const b=atob(el.textContent.replace(/[^A-Za-z0-9+/=]/g,""));const u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);
@@ -62,6 +62,7 @@ function campShow(on){
   document.body.classList.toggle("camp",on);
   const host=$("#campHost");host.hidden=!on;
   if(!on)return;
+  if(!CAMP)CAMP=host.querySelector("iframe");
   if(!CAMP){
     CAMP=document.createElement("iframe");CAMP.title="Проект Мекка — карта государств";
     CAMP.setAttribute("allow","clipboard-write");

@@ -587,6 +587,48 @@ body.sheetedit .dbtn[data-rollres],body.sheetedit .dbtn[data-rollini]{display:no
 .rlog .rlt{display:inline-block;min-width:44px;margin-right:6px;color:var(--muted);font-variant-numeric:tabular-nums;font-size:13px}
 .rlog li.fresh{background:color-mix(in srgb,var(--accent) 12%,transparent);border-radius:4px;padding-left:6px;padding-right:6px}
 
+/* ---- подсказки по кнопке ---- */
+.hint{margin:8px 0}
+.hint>summary{list-style:none}
+.hint>summary::-webkit-details-marker{display:none}
+.hintbtn{display:inline-flex;align-items:center;gap:7px;min-height:38px;padding:6px 14px 6px 10px;border:1px solid var(--line);border-radius:999px;background:var(--panel);color:var(--accent);font-family:var(--narrow);font-size:16px;cursor:pointer;user-select:none}
+.hintbtn .ico{width:20px;height:20px}
+.hint[open]>.hintbtn{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.hintbody{margin-top:8px;padding:10px 12px;border-left:3px solid var(--accent);background:var(--soft);border-radius:4px;font-size:15px;line-height:1.45}
+.hintbody p{margin:0 0 6px}.hintbody p:last-child{margin-bottom:0}
+.hintbody .hsub{font-weight:700;margin-top:8px}
+/* ---- раскрывающиеся заголовки ---- */
+.hsec>summary{list-style:none;display:flex;align-items:center;gap:8px;cursor:pointer}
+.hsec>summary::-webkit-details-marker{display:none}
+.hsec>summary h4{display:inline}
+.hsec-i{display:inline-flex;color:var(--accent)}
+.hsec-i .ico{width:20px;height:20px}
+.hsec[open] .hsec-i{opacity:.55}
+.hsec>.hintbody{margin:2px 0 10px}
+/* ---- крупные кнопки с иконками ---- */
+.bigbtns{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:6px 0 10px}
+.btn.big{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:10px 14px;font-size:17px;line-height:1.2;text-align:left;border-radius:8px}
+.btn.big .ico{width:24px;height:24px;flex:none}
+.btn.big:disabled{opacity:.45}
+.btn.big .ico{color:inherit}
+.btn.big:not(.primary) .ico{color:var(--accent)}
+.hint[open]>.hintbtn .ico{color:inherit}
+.hintbtn .ico{color:var(--accent)}
+body.mis .hint[data-hint="stats"]{display:none}
+@media print{.hint{display:none!important}}
+
+/* ---- броски мастера ---- */
+.gmroll .btn.big,.gmbar .btn.big{width:100%;justify-content:flex-start}
+.gmbar{margin-bottom:12px}
+
+/* ---- сумрачная карма ---- */
+.duskbox{border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin-top:6px;background:var(--panel)}
+.duskbox .q{font-weight:700}
+.duskrow{display:grid;grid-template-columns:minmax(0,1fr) 44px 36px 44px auto;align-items:center;gap:6px;margin:6px 0}
+.duskrow .dn{display:inline-flex;align-items:center;gap:6px}
+.duskrow .dv{text-align:center;font-size:20px;font-variant-numeric:tabular-nums}
+.duskrow .pm{width:44px;height:40px;font-size:20px}
+
 /* ---- Кампейн: Проект Мекка ---- */
 @media (max-width:560px){#modeTabs.seven{grid-template-columns:repeat(4,minmax(0,1fr))!important}#modeTabs.seven button{font-size:14px;letter-spacing:0;padding:8px 2px}#modeTabs.seven button:nth-child(n+5){border-top:1px solid var(--line)}#modeTabs.seven button:nth-child(5){border-left:0}}
 @media (min-width:561px){#modeTabs.seven button{font-size:12px;letter-spacing:-.01em;padding-left:2px;padding-right:2px}}
@@ -678,19 +720,17 @@ body.camp .layout{margin-top:0}
 <dialog id="fateDlg" style="max-width:min(560px,94vw)">
   <div class="inline" style="justify-content:space-between"><h3 style="font-family:var(--narrow);margin:0">Очки судьбы</h3><button class="btn" id="fateClose">Закрыть</button></div>
   <p class="note" id="fateState"></p>
-  <h4 style="font-family:var(--narrow);margin:10px 0 4px">Активировать</h4>
-  <p class="note">Нужно пройти тест на Волю или потратить 5 любой кармы. Затем бросьте 2d6 на Безудержные Силы, как при обычном Взывании. Активированное очко возвращается в конце миссии.</p>
-  <div class="inline"><button class="btn small primary" id="fateTest">Тест на Волю</button><button class="btn small" id="fateLight">За 5 светлой кармы</button><button class="btn small" id="fateDark">За 5 тёмной кармы</button></div>
+  <details class="hsec" data-hint="fate-act"><summary><h4 style="font-family:var(--narrow);margin:10px 0 4px">Активировать</h4><span class="hsec-i" aria-hidden="true"></span></summary><div class="hintbody"><p>Нужно пройти тест на Волю или потратить 5 любой кармы.</p><p>Затем бросьте 2d6 на Безудержные Силы, как при обычном Взывании.</p><p>Активированное очко возвращается в конце миссии.</p></div></details>
+  <div class="bigbtns"><button class="btn big primary" id="fateTest" data-ico="wil"><span class="lbl">Тест на Волю</span></button><button class="btn big" id="fateLight" data-ico="light"><span class="lbl">За 5 светлой кармы</span></button><button class="btn big" id="fateDark" data-ico="dark"><span class="lbl">За 5 тёмной кармы</span></button><button class="btn big" id="fateDusk" data-ico="dusk"><span class="lbl">За 5 сумрачной кармы</span></button></div>
   <p id="fateRes" style="font-size:15px"></p>
   <div id="fateUf" hidden style="border-left:3px solid var(--accent);padding:6px 10px;margin:6px 0 10px">
-    <div class="inline"><b>Бросок на Безудержные Силы</b><label class="note inline" style="gap:6px">Сила <select class="sel" id="fateUfForce"><option value="light">Свет</option><option value="dusk">Сумрак</option><option value="dark">Тьма</option></select></label><button class="btn small primary" id="fateUfRoll">Бросить 2d6</button></div>
+    <div class="inline"><b>Бросок на Безудержные Силы</b><label class="note inline" style="gap:6px">Сила <select class="sel" id="fateUfForce"><option value="light">Свет</option><option value="dusk">Сумрак</option><option value="dark">Тьма</option></select></label><button class="btn big primary" id="fateUfRoll" data-ico="dice"><span class="lbl">Бросить 2d6</span></button></div>
     <div id="fateUfRes" style="margin-top:6px"></div>
   </div>
-  <details><summary>Что даёт активация</summary><ul class="rules" style="margin:4px 0;padding-left:20px"><li>Перебросить почти любой куб, кроме бросков на Безудержные Силы.</li><li>Добавить +1 к любому броску, даже уже совершённому.</li><li>Добавить +1 к любой характеристике на 10 минут.</li><li>Добавить 1 очко урона к своему броску.</li><li>Добавить 5 к своей инициативе.</li><li>Получить 3 очка любой кармы, не чаще раза в два часа.</li><li>Получить на 1 очко урона меньше, не чаще раза в два часа.</li></ul></details>
+  <details class="hsec" data-hint="fate-gives"><summary><h4 style="font-family:var(--narrow);margin:12px 0 4px">Что даёт активация</h4><span class="hsec-i" aria-hidden="true"></span></summary><ul class="rules" style="margin:4px 0;padding-left:20px"><li>Перебросить почти любой куб, кроме бросков на Безудержные Силы.</li><li>Добавить +1 к любому броску, даже уже совершённому.</li><li>Добавить +1 к любой характеристике на 10 минут.</li><li>Добавить 1 очко урона к своему броску.</li><li>Добавить 5 к своей инициативе.</li><li>Получить 3 очка любой кармы, не чаще раза в два часа.</li><li>Получить на 1 очко урона меньше, не чаще раза в два часа.</li></ul></details>
   <div id="fateUses"></div>
-  <h4 style="font-family:var(--narrow);margin:12px 0 4px">Другое</h4>
-  <p class="note">Сжигается очко навсегда и только в крайнем случае: чтобы избежать смерти, отменить Безудержные Силы и т.п. Особые способы использования есть у класса и Отметки судьбы.</p>
-  <div class="inline"><button class="btn small" id="fateBurn" style="color:var(--warn)">Сжечь очко</button><button class="btn small" id="fateUnburn">Вернуть сожжённое</button><button class="btn small" id="fateReset">Миссия завершена: вернуть активированные</button></div>
+  <details class="hsec" data-hint="fate-other"><summary><h4 style="font-family:var(--narrow);margin:12px 0 4px">Другое</h4><span class="hsec-i" aria-hidden="true"></span></summary><div class="hintbody"><p>Сжигается очко навсегда и только в крайнем случае: чтобы избежать смерти, отменить Безудержные Силы и т.п.</p><p>Особые способы использования есть у класса и Отметки судьбы.</p></div></details>
+  <div class="bigbtns"><button class="btn big" id="fateBurn" data-ico="burn" style="color:var(--warn)"><span class="lbl">Сжечь очко</span></button><button class="btn big" id="fateUnburn" data-ico="undo"><span class="lbl">Вернуть сожжённое</span></button><button class="btn big" id="fateReset" data-ico="reset"><span class="lbl">Миссия завершена: вернуть активированные</span></button></div>
 </dialog>
 <dialog id="mcDlg" style="max-width:min(560px,94vw)">
   <div class="inline" style="justify-content:space-between"><h3 style="font-family:var(--narrow);margin:0">Калькулятор</h3><button class="btn" id="mcClose">Закрыть</button></div>
@@ -2023,6 +2063,7 @@ function renderInner(){
   $("#main").innerHTML = [stClass,stStats,stBirth,stParents,stChar,stMark,stFlaw,stSheet,stAcademy,stDice,stMission,stRoom,stLore,stCampaign][STEP](R) + navBtns();
   campShow(STEP===13);
   document.body.classList.toggle("sheetedit",sheetEditOn());
+  gmDiceBar();
   sectionize();
   if(STEP===11)renderRoom();
   $("#toTop").hidden=!(STEP===10||STEP===11||STEP===12);placeToTop();
@@ -2337,7 +2378,7 @@ function stSheet(R){
     ${ms.length||statLevel(k)?`<div class="smods mods">${ms.map(m=>`<span class="${m.v>0?"pos":"neg"}">${sgn(m.v)} (${esc(m.src)})</span>`).join(" ")}${statLevel(k)?` <button class="jump ph noprint" data-unstat="${k}">отменить прокачку</button>`:""}</div>`:""}</div>`;}).join("");
   const sectionH=(title,html,id="")=>html?`<details class="entry" ${id?`id="det-${id}"`:""}><summary><h5 style="display:inline">${title}</h5></summary><div class="secin">${html}</div></details>`:"";
   const section=(title,obj,extra="",id="")=>obj?`<details class="entry" ${id?`id="det-${id}"`:""}><summary><h5 style="display:inline">${title}</h5></summary><div class="rules">${extra}${paras(obj)}</div></details>`:"";
-  return `<div class="inline" style="justify-content:space-between;align-items:flex-end"><div><h2>Лист персонажа</h2><p class="lead" style="margin-bottom:12px">Здесь ведётся персонаж по ходу кампании: опыт, таланты, снаряжение, одолжения и миссии.</p></div>${isFinished(C)?"":`<button class="btn noprint" data-go="${C.lastStep??0}">Вернуться к созданию</button>`}</div>
+  return `<div class="inline" style="justify-content:space-between;align-items:flex-end"><div><h2>Лист персонажа</h2></div>${isFinished(C)?"":`<button class="btn noprint" data-go="${C.lastStep??0}">Вернуться к созданию</button>`}</div>
   ${pend.length?`<div class="warnbox noprint">Не завершены шаги: ${pend.join(", ")}.</div>`:""}
   <div class="noprint inline" style="margin-bottom:12px"><button class="btn primary" id="openMission">Начало и конец миссии</button><button class="btn" id="openNotes">${notesLabel()}</button><button class="btn ${sheetEditOn()?"primary":""}" id="sheetEdit" aria-pressed="${sheetEditOn()}">${sheetEditOn()?"Готово":"Редактировать лист"}</button>${!C.legacy&&!isFinished(C)?`<button class="btn" data-legacy="1" title="Перенести готового персонажа: все этапы создания пропускаются, значения вписываются вручную">У меня уже есть персонаж</button>`:""}<button class="btn" data-roomopen="1">${roomBtnLabel()}</button>${NATIVE?"":`<button class="btn" id="printBtn">Печать или PDF</button>`}<button class="btn" id="dlSheet">${NATIVE?"Поделиться листом":"Скачать лист (.html)"}</button></div>
   ${sheetEditOn()?sheetEditPanel(R,res,ini):""}<div class="sheet" id="sheet">
@@ -2367,7 +2408,7 @@ function stSheet(R){
   ${(()=>{const ps=c.gear.filter(g=>g.on!==false).map(g=>profile(g,R)).filter(p=>p&&p.kind==="armor");const cls=ps.length?(String(ps[0].line).match(/(лёгкая|легкая|средняя|тяжелая|тяжёлая)/i)||[])[1]:"";const v=!ps.length?2:/легк|лёгк/i.test(cls)?2:/средн/i.test(cls)?3:/тяж/i.test(cls)?4:null;return v?`<div class="dblk"><span class="dname">${icon("agi")} Парирование и Уклонение</span><span class="dval">−${v}</span><div class="note">${ps.length?"броня: "+cls.toLowerCase():"без брони"}</div></div>`:"";})()}
   <button class="dblk dbtn" data-rollini="${ini}" title="Бросить инициативу"><span class="dname">${icon("agi")} Инициатива</span><span class="dval">${ini}&nbsp;−&nbsp;d20</span><span class="note">по Ловкости ${R.tot.agi}${R.extra.ini?", "+sgn(R.extra.ini)+" бонус":""}</span></button>
   </div>
-  <p class="note">Урон: сначала броня (минус ББ атаки), затем прочность брони, остаток снижает Устойчивость. Инициатива: удвоенная Ловкость минус d20. <span class="noprint">Нажмите на любой блок характеристики, Устойчивости или Инициативы, чтобы бросить d20.</span></p>
+  ${hintBtn("stats","<p>Нажмите на любой блок характеристики, Устойчивости или Инициативы, чтобы бросить d20.</p><p>Урон: сначала броня (минус ББ атаки), затем прочность брони, остаток снижает Устойчивость.</p><p>Инициатива: удвоенная Ловкость минус d20.</p>")}
   ${c.manual.length?`<div class="noprint card" style="margin-top:12px"><h4 style="margin-top:0">Ручные модификаторы</h4><p class="note">Этот раздел убран. Ниже модификаторы, добавленные раньше: они ещё учитываются, удалите их, если они больше не нужны.</p>
   ${c.manual.map(m=>`<div class="inline" style="margin:6px 0"><select class="sel" data-man="${m.id}|k">${[...STATS.map(s=>s[0]),"hp","fate","res","ini"].map(k=>`<option value="${k}" ${m.k===k?"selected":""}>${LABEL[k]}</option>`).join("")}</select><input class="inp" type="number" style="width:70px" data-man="${m.id}|v" value="${m.v}"><input class="inp" data-man="${m.id}|src" value="${esc(m.src)}" placeholder="Источник"><button class="del delico" data-delman="${m.id}" title="Удалить" aria-label="Удалить"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg></button></div>`).join("")}
 </div>`:""}
@@ -2976,16 +3017,16 @@ function markFateUI(f){
   const need=f.left>0?"":` <span class="note">— Очков судьбы не осталось</span>`;
   const dis=f.left>0?"":"disabled";
   let act="";
-  if(M.kind==="soul") act=`<div class="inline" style="gap:6px;margin-top:6px"><span>Очки для союзников: <b>${C.soulPts||0}</b></span><button class="btn small" data-mk="soulroll">Перед миссией: d3+1</button><button class="pm sm" data-mk="soul-">−</button><button class="pm sm" data-mk="soul+">+</button></div><p class="note">Союзники могут тратить и ваши обычные Очки судьбы.</p>`;
-  else if(M.kind==="roll") act=`<button class="btn small primary" data-mk="roll" ${dis}>Использовать и бросить d${M.s}+${M.add}</button>${need}`;
-  else if(M.kind==="chaos") act=`<div class="inline" style="gap:6px"><button class="btn small primary" data-mk="chaos" ${dis}>Вне Пелены: +d3 к тестам на раунд</button><button class="btn small primary" data-mk="chaosV" ${dis}>В Пелене: +d6 на d3 раундов</button></div>${need}<p class="note">Бонус добавится в «Модификатор следующих тестов» на панели бросков. Сбросьте его, когда эффект закончится.</p>`;
-  else if(M.kind==="fear") act=`<div class="inline" style="gap:6px"><button class="btn small primary" data-mk="fear|Тест на Страх пройден автоматически" ${dis}>Страх: пройти автоматически</button><button class="btn small" data-mk="fear|Парализующий Страх: обычный тест вместо сложного" ${dis}>Парализующий: обычный тест</button><button class="btn small" data-mk="fear|Инфернальный Страх: сложный тест вместо невозможного" ${dis}>Инфернальный: сложный тест</button></div>${need}`;
-  else if(M.kind==="double") act=`<div class="inline" style="gap:6px"><label class="note inline" style="gap:4px">Урон атаки <input class="inp" type="number" id="mkDmg" value="${LASTDMG??""}" style="width:80px"></label><button class="btn small primary" data-mk="double" ${dis}>Удвоить</button></div>${need}<p class="note">Нельзя применять к атаке с Критической удачей.</p>`;
-  else if(M.kind==="flip") act=`<div class="inline" style="gap:6px"><label class="note inline" style="gap:4px">Выпало <input class="inp" type="number" min="1" max="20" id="mkFlipR" value="${LASTT?LASTT.r:""}" style="width:64px"></label><label class="note inline" style="gap:4px">Значение теста <input class="inp" type="number" id="mkFlipV" value="${LASTT&&LASTT.v!=null?LASTT.v:""}" style="width:64px"></label><button class="btn small primary" data-mk="flip" ${dis}>Перевернуть</button></div>${need}<p class="note">Нельзя при Критическом провале 20.</p>`;
-  else if(M.kind==="uf2") act=`<button class="btn small primary" data-mk="uf2" ${dis}>Выпали Безудержные Силы: бросить дважды</button>${need}<p class="note">Используйте, когда выпали Безудержные Силы: таблица бросается дважды, выберите один эффект.</p>`;
-  else act=`<button class="btn small primary" data-mk="use" ${dis}>${esc(M.use)}</button>${need}${M.hint?`<p class="note">${esc(M.hint(R))}</p>`:""}`;
-  const on=C.markOn&&C.markOnFor===mk.name?`<div class="tempbox" style="margin-top:6px"><b>Действует:</b> ${esc(C.markOn)} <button class="btn small" data-mk="off">Закончилось</button></div>`:"";
-  return `<h4 style="font-family:var(--narrow);margin:12px 0 4px">Отметка судьбы: ${esc(mk.name)}</h4><p class="note">После нажатия выберите оплату: светлая карма, тёмная карма или тест на Волю. Затем тратится Очко судьбы и сразу бросается 2d6 на Безудержные Силы. Осталось очков: <b>${f.left}</b> из ${f.tot}.</p><details class="iblk"><summary>Что даёт Очко судьбы</summary><div class="rules">${paras(sp)}</div></details>${on}<div style="margin-top:6px">${act}</div><div id="mkRes" style="margin-top:6px"></div>`;
+  if(M.kind==="soul") act=`<div class="inline" style="gap:6px;margin-top:6px"><span>Очки для союзников: <b>${C.soulPts||0}</b></span><button class="btn big" data-mk="soulroll">Перед миссией: d3+1</button><button class="pm sm" data-mk="soul-">−</button><button class="pm sm" data-mk="soul+">+</button></div><p class="note">Союзники могут тратить и ваши обычные Очки судьбы.</p>`;
+  else if(M.kind==="roll") act=`<button class="btn big primary" data-mk="roll" ${dis}>Использовать и бросить d${M.s}+${M.add}</button>${need}`;
+  else if(M.kind==="chaos") act=`<div class="inline" style="gap:6px"><button class="btn big primary" data-mk="chaos" ${dis}>Вне Пелены: +d3 к тестам на раунд</button><button class="btn big primary" data-mk="chaosV" ${dis}>В Пелене: +d6 на d3 раундов</button></div>${need}<p class="note">Бонус добавится в «Модификатор следующих тестов» на панели бросков. Сбросьте его, когда эффект закончится.</p>`;
+  else if(M.kind==="fear") act=`<div class="inline" style="gap:6px"><button class="btn big primary" data-mk="fear|Тест на Страх пройден автоматически" ${dis}>Страх: пройти автоматически</button><button class="btn big" data-mk="fear|Парализующий Страх: обычный тест вместо сложного" ${dis}>Парализующий: обычный тест</button><button class="btn big" data-mk="fear|Инфернальный Страх: сложный тест вместо невозможного" ${dis}>Инфернальный: сложный тест</button></div>${need}`;
+  else if(M.kind==="double") act=`<div class="inline" style="gap:6px"><label class="note inline" style="gap:4px">Урон атаки <input class="inp" type="number" id="mkDmg" value="${LASTDMG??""}" style="width:80px"></label><button class="btn big primary" data-mk="double" ${dis}>Удвоить</button></div>${need}<p class="note">Нельзя применять к атаке с Критической удачей.</p>`;
+  else if(M.kind==="flip") act=`<div class="inline" style="gap:6px"><label class="note inline" style="gap:4px">Выпало <input class="inp" type="number" min="1" max="20" id="mkFlipR" value="${LASTT?LASTT.r:""}" style="width:64px"></label><label class="note inline" style="gap:4px">Значение теста <input class="inp" type="number" id="mkFlipV" value="${LASTT&&LASTT.v!=null?LASTT.v:""}" style="width:64px"></label><button class="btn big primary" data-mk="flip" ${dis}>Перевернуть</button></div>${need}<p class="note">Нельзя при Критическом провале 20.</p>`;
+  else if(M.kind==="uf2") act=`<button class="btn big primary" data-mk="uf2" ${dis}>Выпали Безудержные Силы: бросить дважды</button>${need}<p class="note">Используйте, когда выпали Безудержные Силы: таблица бросается дважды, выберите один эффект.</p>`;
+  else act=`<button class="btn big primary" data-mk="use" ${dis}>${esc(M.use)}</button>${need}${M.hint?`<p class="note">${esc(M.hint(R))}</p>`:""}`;
+  const on=C.markOn&&C.markOnFor===mk.name?`<div class="tempbox" style="margin-top:6px"><b>Действует:</b> ${esc(C.markOn)} <button class="btn big" data-mk="off">Закончилось</button></div>`:"";
+  return `<details class="hsec" data-hint="fate-mark"><summary><h4 style="font-family:var(--narrow);margin:12px 0 4px">Отметка судьбы: ${esc(mk.name)}</h4><span class="hsec-i" aria-hidden="true">${hintIco()}</span></summary><div class="hintbody"><p>После нажатия выберите оплату: светлая карма, тёмная карма или тест на Волю. Затем тратится Очко судьбы и сразу бросается 2d6 на Безудержные Силы.</p><p class="hsub">Что даёт Очко судьбы</p><div class="rules">${paras(sp)}</div></div></details>${on}<div style="margin-top:6px">${act}</div><div id="mkRes" style="margin-top:6px"></div>`;
 }
 function markUse(){C.fateUsed=(C.fateUsed||0)+1;TRIBEMSG=fateAfterSpend();}
 /* ---------- Место рождения: Очки судьбы и ритуалы ---------- */
@@ -3002,11 +3043,11 @@ function tribalRoll(ally){const r=rnd(6),thr=C.tribalAllies?6:5,keep=r>=thr;retu
 function fateAfterSpend(){const bf=birthFate();if(!bf||bf.kind!=="tribal")return "";const t=tribalRoll(false);if(t.keep)C.fateUsed=Math.max(0,(C.fateUsed||0)-1);pushLog("Племенной житель: d6 = "+t.r+(t.keep?", очко сохранено":""));return t.msg;}
 function baikalCut(){const a=rnd(5),b=rnd(5);return {r:Math.max(a,b),a,b,txt:` (Байкальские отшельники: d5 дважды — ${a} и ${b}, −${Math.max(a,b)})`};}
 function birthFateUI(f){const bf=birthFate(f.R);if(!bf)return "";let act="";
-  if(bf.kind==="tribal"){act=`<div class="inline" style="gap:6px;margin-top:6px"><span>Режим: <b>${C.tribalAllies?"вы и союзники, очко сохраняется только на 6":"только вы, очко сохраняется на 5–6"}</b></span></div><div class="inline" style="gap:6px;margin-top:6px"><button class="btn small" data-bf="tribmode">${C.tribalAllies?"Вернуть только на себя":"Распространить на союзников"}: тест на Волю (${f.R.tot.wil})</button>${C.tribalAllies?`<button class="btn small primary" data-bf="tribally">Союзник тратит очко: бросить d6</button>`:""}</div><p class="note">Ваш собственный d6 бросается автоматически при каждой трате Очка судьбы в этом окне.</p>`;}
+  if(bf.kind==="tribal"){act=`<div class="inline" style="gap:6px;margin-top:6px"><span>Режим: <b>${C.tribalAllies?"вы и союзники, очко сохраняется только на 6":"только вы, очко сохраняется на 5–6"}</b></span></div><div class="inline" style="gap:6px;margin-top:6px"><button class="btn big" data-bf="tribmode">${C.tribalAllies?"Вернуть только на себя":"Распространить на союзников"}: тест на Волю (${f.R.tot.wil})</button>${C.tribalAllies?`<button class="btn big primary" data-bf="tribally">Союзник тратит очко: бросить d6</button>`:""}</div><p class="note">Ваш собственный d6 бросается автоматически при каждой трате Очка судьбы в этом окне.</p>`;}
   else if(bf.kind==="prison") act=`<p class="note">d20 бросается автоматически при нажатии «Сжечь очко».</p>`;
   else if(bf.kind==="baikal") act=`<p class="note">При оплате кармой d5 бросается дважды автоматически, стоимость снижается на большее значение. Штраф к тесту на Волю при Взывании считается по первоначальной стоимости.</p>`;
-  else if(bf.kind==="tibet"){const pen=f.left;act=`<div class="inline" style="gap:6px;margin-top:6px"><button class="btn small primary" data-bf="tibet" ${C.tibetUsed||!(f.used>0)?"disabled":""}>Восстановить очко: тест на Волю ${f.R.tot.wil}${pen?" −"+pen:""}, 4 действия</button><span class="note">${C.tibetUsed?"в этой миссии уже восстановлено":!(f.used>0)?"нет потраченных очков":"раз за миссию"}</span></div>`;}
-  return `<h4 style="font-family:var(--narrow);margin:12px 0 4px">Место рождения: ${esc(bf.name)}</h4><details class="iblk" open><summary>Правило</summary><div class="rules">${paras(bf.text)}</div></details>${act}<div id="bfRes" style="margin-top:6px"></div>`;}
+  else if(bf.kind==="tibet"){const pen=f.left;act=`<div class="inline" style="gap:6px;margin-top:6px"><button class="btn big primary" data-bf="tibet" ${C.tibetUsed||!(f.used>0)?"disabled":""}>Восстановить очко: тест на Волю ${f.R.tot.wil}${pen?" −"+pen:""}, 4 действия</button><span class="note">${C.tibetUsed?"в этой миссии уже восстановлено":!(f.used>0)?"нет потраченных очков":"раз за миссию"}</span></div>`;}
+  return `<details class="hsec" data-hint="fate-birth"><summary><h4 style="font-family:var(--narrow);margin:12px 0 4px">Место рождения: ${esc(bf.name)}</h4><span class="hsec-i" aria-hidden="true">${hintIco()}</span></summary><div class="hintbody rules">${paras(bf.text)}</div></details>${act}<div id="bfRes" style="margin-top:6px"></div>`;}
 function ritualOf(R){R=R||compute(C);if(!R.vr||R.vr.name!=="Индейский выживший")return null;const ch=(R.steps.birth.choices||[]).find(x=>x.type==="opt"&&x.options.some(o=>RITDESC[o]));if(!ch||ch.sel==null)return null;return ch.options[ch.sel];}
 function vrText(R,sheet){if(!R.vr)return "";if(R.vr.name!=="Индейский выживший"||!RITPRE.text)return R.vr.text;const rt=sheet?ritualOf(R):null;return RITPRE.text+(rt?`\nВыбран ритуал: ${rt.replace(/^Ритуал /,"")}. Описание и кнопка проведения — в блоке «${rt}» ниже.`:"");}
 function spiritCard(live){const t=RITSPIRIT.text;const rows=[["Очки Здоровья","ОЗ"],["ББ","ББ"],["ДБ","ДБ"],["Сила","Сила"],["Ловкость","Ловкость"],["Стойкость","Стойкость"],["Воля","Воля"],["Интеллект","Интеллект"],["Сообразительность","Сообр."],["Наблюдательность","Наблюд."],["Харизма","Харизма"]].map(([k,l])=>{const m=t.match(new RegExp(k+":\\s*(\\d+)"));return m?[l,Number(m[1])]:null;}).filter(Boolean);
@@ -3018,17 +3059,18 @@ function ritualUI(R){const rt=ritualOf(R);if(!rt)return "";const max=Math.floor(
   return `<div class="entry"><h5 style="margin:0">${esc(rt)} <span class="note">(Индейский выживший)</span></h5>${blk("Описание",`<div class="rules">${paras(RITDESC[rt]||"")}</div>`,"pot")}${rt==="Ритуал Кукулькана"&&!C.spirit?spiritCard(false):""}${on}${sp}
   <div class="inline noprint" style="gap:8px;margin-top:6px"><button class="btn small primary" data-rit="go" ${used>=max?"disabled":""}>Провести ритуал (−1 ОЗ)</button><span class="note">Проведено в этой миссии: <b>${used}</b> из ${max} (Воля ${R.tot.wil} / 2)</span>${used?`<button class="jump ph" data-rit="reset">сбросить</button>`:""}</div>${C.ritLast?`<div style="margin-top:6px">${C.ritLast}</div>`:""}</div>`;}
 
-function payFate(how){const f=fateInfo();
+function payFate(how){if(how==="dusk")return payDusk();const f=fateInfo();
   if(how==="test"){const v=f.R.tot.wil+woundPen(f.R),r=rnd(20);const ok=r!==20&&(r===1||r<=v);showRoll("Воля (Очко судьбы)",v,r);return ok?{ok:true,msg:`Тест на Волю ${v}: выпало ${r}, успех.`}:{ok:false,msg:`Тест на Волю ${v}: выпало ${r}, провал. Очко не потрачено, способность не сработала.`};}
   const k=how,fc=fateCost(k);let cost=fc.c,bk="";if(fc.baikal){const b=baikalCut();cost=Math.max(0,cost-b.r);bk=b.txt;}
   const have=(f.R.extra[k]||0)+(C.adj[k]||0);if(have<cost)return {ok:false,msg:`Не хватает ${k==="light"?"светлой":"тёмной"} кармы: есть ${have}, нужно ${cost}.`};
   C.adj[k]=(C.adj[k]||0)-cost;return {ok:true,msg:`Потрачено ${cost} ${k==="light"?"светлой":"тёмной"} кармы${bk}${fc.why.length?" ["+fc.why.join(", ")+"]":""}.`};}
 const FORCE_NAME={light:"Свет",dark:"Тьма",dusk:"Сумрак"};
 function fateInfo(){const R=compute(C);const tot=R.fate-(C.fateBurned||0);const used=Math.min(C.fateUsed||0,tot);return {R,tot,used,left:tot-used};}
-function renderFate(msg){const f=fateInfo();const fu=meritFlags("fateuses");const el=$("#fateUses");if(el)el.innerHTML=birthFateUI(f)+markFateUI(f)+(fu.length?`<h4 style="font-family:var(--narrow);margin:12px 0 4px">Особые способы от заслуг</h4>${fu.map(({m})=>`<details class="iblk"><summary>${esc(m.title)}</summary><div class="rules">${paras(m.text)}</div></details>`).join("")}`:"");["light","dark"].forEach(k=>{const fc=fateCost(k);const b=$(k==="light"?"#fateLight":"#fateDark");if(b)b.textContent=`За ${fc.c}${fc.baikal?"−d5":""} ${k==="light"?"светлой":"тёмной"} кармы`;});$("#fateState").textContent=`Доступно ${f.left} из ${f.tot}${f.used?", активировано "+f.used:""}${C.fateBurned?", сожжено "+C.fateBurned:""}.`;if(msg!=null)$("#fateRes").innerHTML=msg;
-  ["fateTest","fateLight","fateDark","fateBurn"].forEach(id=>$("#"+id).disabled=f.left<=0);$("#fateUnburn").disabled=!C.fateBurned;$("#fateReset").disabled=!f.used;}
+function renderFate(msg){bigIcons();const f=fateInfo();const fu=meritFlags("fateuses");const el=$("#fateUses");if(el)el.innerHTML=birthFateUI(f)+markFateUI(f)+(fu.length?`<h4 style="font-family:var(--narrow);margin:12px 0 4px">Особые способы от заслуг</h4>${fu.map(({m})=>`<details class="iblk"><summary>${esc(m.title)}</summary><div class="rules">${paras(m.text)}</div></details>`).join("")}`:"");["light","dark","dusk"].forEach(k=>{const fc=fateCost(k);const b=$(k==="light"?"#fateLight":k==="dark"?"#fateDark":"#fateDusk");if(b){const l=b.querySelector(".lbl");(l||b).textContent=`За ${fc.c}${fc.baikal?"−d5":""} ${k==="light"?"светлой":k==="dark"?"тёмной":"сумрачной"} кармы`;}});$("#fateState").textContent=`Доступно ${f.left} из ${f.tot}${f.used?", активировано "+f.used:""}${C.fateBurned?", сожжено "+C.fateBurned:""}.`;if(msg!=null)$("#fateRes").innerHTML=msg;
+  ["fateTest","fateLight","fateDark","fateDusk","fateBurn"].forEach(id=>{const b=$("#"+id);if(b)b.disabled=f.left<=0;});$("#fateUnburn").disabled=!C.fateBurned;$("#fateReset").disabled=!f.used;}
 function fateActivate(how){const f=fateInfo();if(f.left<=0)return;
   if(how==="test"){const v=f.R.tot.wil+woundPen(f.R),r=rnd(20);const ok=r!==20&&(r===1||r<=v);showRoll("Воля (Очко судьбы)",v,r);if(!ok){renderFate(`Тест на Волю ${v}: выпало ${r}, провал. Очко не активировано.`);return;} var tmsg=`Тест на Волю ${v}: выпало ${r}, успех. `;}
+  else if(how==="dusk"){const pr=payDusk();if(!pr.ok){renderFate(pr.msg);return;}var kmsg=pr.msg+" ";}
   else{const k=how;const fc=fateCost(k);let cost=fc.c;let bk="";if(fc.baikal){const b=baikalCut();cost=Math.max(0,cost-b.r);bk=b.txt;}const have=(f.R.extra[k]||0)+(C.adj[k]||0);if(have<cost){renderFate(`Не хватает ${k==="light"?"светлой":"тёмной"} кармы: есть ${have}, нужно ${cost}.`);return;}C.adj[k]=(C.adj[k]||0)-cost;var kmsg=`Потрачено ${cost} ${k==="light"?"светлой":"тёмной"} кармы${bk}${fc.why.length?" ["+fc.why.join(", ")+"]":""}. `;}
   C.fateUsed=(C.fateUsed||0)+1;const trb=fateAfterSpend();render();renderFate((typeof tmsg!=="undefined"?tmsg:"")+(typeof kmsg!=="undefined"?kmsg:"")+(trb?trb+" ":"")+`Очко судьбы активировано. Теперь бросьте 2d6 на Безудержные Силы${how==="test"?": выберите Силу, к которой взывали":""}.`);
   $("#fateUf").hidden=false;$("#fateUfRes").innerHTML="";$("#fateUfRoll").disabled=false;$("#fateUfForce").value=how==="test"?UF.force:how;}
@@ -3173,7 +3215,7 @@ function combatCard(R){const c=CB(),on=c.round>0;
     <span class="cbbtns"><button class="btn small" data-cbturn="1" title="Начало вашего хода: действия и реакции восстанавливаются">${on?"Новый ход":"Начать бой"}</button>${on?`<button class="btn small" data-cbend="1">Конец боя</button>`:""}</span></div>
     <div class="cbreact">${rx("dodge","Уклонение",R.tot.agi)}${rx("parry","Парирование",R.tot.mel)}</div>
     <details class="cbwdet" ${c.wclosed?"":"open"}><summary class="cbwtitle">Оружие с собой</summary>${cbWeapons(R)}</details>
-    <p class="note" style="margin:4px 0 0">Против ближнего боя — уклонение или парирование, против дальнего — только уклонение. Перезарядка: ${reloadCost()} ${reloadCost()===1?"действие":"действия"}${hasFastReload()?" (Быстрая перезарядка)":""}. Атаки и предметы списывают действия; если их не хватает, недостача спишется в следующем раунде.</p></div>`;}
+    ${hintBtn("combat",`<p>Против ближнего боя — уклонение или парирование, против дальнего — только уклонение.</p><p>Перезарядка: ${reloadCost()} ${reloadCost()===1?"действие":"действия"}${hasFastReload()?" (Быстрая перезарядка)":""}.</p><p>Атаки и предметы списывают действия; если их не хватает, недостача спишется в следующем раунде.</p>`)}</div>`;}
 function cbTurn(start){const c=CB();if(start||c.round<1){c.round=Math.max(1,c.round+(start?0:1));}else c.round++;
   c.max=ACT_BASE;const dbt=Math.min(c.debt||0,c.max);c.act=c.max-dbt;c.debt=(c.debt||0)-dbt;if(dbt)toast(`Долг с прошлого раунда: −${dbt} ${dbt===1?"действие":"действия"}`);c.free=false;["dodge","parry"].forEach(k=>{c[k].n=0;c[k].x=0;c[k].blk=false;});}
 function cbIni(r){const c=CB();c.round=1;c.max=r===1?ACT_BASE+4:r===20?2:ACT_BASE;c.act=c.max;c.debt=0;c.free=false;["dodge","parry"].forEach(k=>{c[k].n=0;c[k].x=0;c[k].blk=false;c[k].auto=false;});}
@@ -3289,7 +3331,7 @@ function misInjectPM(sh){const A=C.misAdj||{};
   sh.querySelectorAll('.stile[data-ik^="s:"]').forEach(t=>{const k=t.dataset.ik.slice(2);t.classList.add("haspm");t.insertAdjacentHTML("beforeend",ctl(k,LABEL[k]||k));});
   [["[data-rollres]","res","Устойчивость"],["[data-rollini]","ini","Инициатива"]].forEach(([sel,k,l])=>{const b=sh.querySelector(sel);if(!b||b.closest(".misbar"))return;const w=document.createElement("div");w.className="dwrap haspm";b.before(w);w.appendChild(b);w.insertAdjacentHTML("beforeend",ctl(k,l));});
   const st=sh.querySelector(':scope > details.sec[data-sec="Характеристики"] .stiles');const act=Object.entries(A).filter(([,v])=>Number(v));
-  if(st)st.insertAdjacentHTML("beforebegin",`<div class="mstip" style="margin:0 0 8px">Кнопки − и + меняют значения только на эту миссию, в листе персонажа их нет.${act.length?` Сейчас: <b>${act.map(([k,v])=>esc(fxLabel(k))+" "+sgn(Number(v))).join(", ")}</b> <button class="jump ph" data-msreset="1">сбросить</button>`:""}</div>`);}
+  if(st)st.insertAdjacentHTML("beforebegin",`${act.length?`<div class="mstip" style="margin:0 0 8px">Только на эту миссию: <b>${act.map(([k,v])=>esc(fxLabel(k))+" "+sgn(Number(v))).join(", ")}</b> <button class="jump ph" data-msreset="1">сбросить</button></div>`:""}${hintBtn("mispm","<p>Кнопки − и + меняют значения только на эту миссию, в листе персонажа их нет.</p><p>Нажмите на блок характеристики, Устойчивости или Инициативы, чтобы бросить d20.</p><p>Урон: сначала броня (минус ББ атаки), затем прочность брони, остаток снижает Устойчивость.</p><p>Инициатива: удвоенная Ловкость минус d20.</p>")}`);}
 /* отклик на нажатие */
 document.addEventListener("pointerdown",e=>{const el=e.target.closest('button,summary,.pill,label.btn,[role="button"],.opt,.kitopt');if(!el||el.disabled||el.closest(".gdrag"))return;el.classList.add("tapped");const off=()=>{setTimeout(()=>el.classList.remove("tapped"),160);};el.addEventListener("pointerup",off,{once:true});el.addEventListener("pointercancel",off,{once:true});el.addEventListener("pointerleave",off,{once:true});setTimeout(()=>el.classList.remove("tapped"),900);},true);
 /* нажатие на край карточки/блока тоже раскрывает его */
@@ -3583,13 +3625,13 @@ function renderInfl(){
   const R=compute(C), v=inflValue(R), bs=inflBonuses(R), honest=C.char.i!=null&&/Честность/i.test(BOOK.chars[C.char.i].name);
   bs.forEach(b=>{if(INFL.checks[b.key]==null)INFL.checks[b.key]=b.def;});
   const sum=bs.filter(b=>INFL.checks[b.key]&&!b.used).reduce((a,b)=>a+b.v,0)+(Number(INFL.mod)||0);
-  $("#inflBody").innerHTML=`<p style="margin:6px 0">Влияние: <b>${v}</b>${sum?`, с бонусами <b>${v+sum}</b>`:""}. Бросок d20, успех если выпало не больше значения.</p>
+  $("#inflBody").innerHTML=`<p style="margin:6px 0">Влияние: <b>${v}</b>${sum?`, с бонусами <b>${v+sum}</b>`:""}. Бросок d20: успех, если выпало не больше значения.</p>
   <label class="note" style="display:flex;flex-direction:column;gap:4px;margin:8px 0">Сложность запроса <select class="sel" id="inflType">${[["normal","Обычный запрос"],["hard","Сложный запрос (2d20)"],["impossible","Невозможный запрос (3d20)"]].map(([k,n])=>`<option value="${k}" ${INFL.type===k?"selected":""}>${n}</option>`).join("")}</select></label>
   ${bs.length?`<div style="margin:8px 0"><div class="note">Бонусы:</div>${bs.map(b=>`<label class="inline note" style="gap:8px;margin:6px 0;align-items:flex-start;flex-wrap:nowrap;${b.used?"opacity:.5":""}"><input type="checkbox" data-inflchk="${b.key}" ${INFL.checks[b.key]&&!b.used?"checked":""} ${b.used?"disabled":""}> <span>${esc(b.label)}${b.used?" — уже использован":""}</span></label>`).join("")}</div>`:`<p class="note">Бонусов от талантов и одолжений к запросам нет.</p>`}
   ${(()=>{const rq=meritFlags("requests").filter(x=>!x.m.used);if(!rq.length)return "";const m=rq[0].m;if(m.reqLeft==null)m.reqLeft=rq[0].f[1];return `<label class="inline note" style="gap:8px;margin:8px 0;align-items:flex-start;flex-wrap:nowrap"><input type="checkbox" id="inflExtra" ${INFL.extra?"checked":""}> <span>Дополнительный запрос от «${esc(m.title)}» (осталось ${m.reqLeft}). Обычный запрос по нему проходит автоматически.</span></label>`;})()}
   <label class="note inline" style="gap:6px;margin:6px 0">Другой модификатор <input class="inp" type="number" id="inflMod" value="${INFL.mod}" style="width:70px"></label>
-  <p class="note">${inflSpecial()?"Место рождения Индия: у обычного запроса 19 не автоматический провал, а 20 тратит один запрос вместо двух; у сложного и невозможного 19 на кубе не даёт лишних степеней провала, а 20 даёт 3 вместо 7.":"Обычный запрос: 19 — автоматический провал, 20 — провал и тратит два запроса. Сложный и невозможный: кубы складываются; на каждом кубе 1 даёт +7 степеней успеха, 2 — +3, 19 — 3 степени провала, 20 — 7."}</p>
-  <div class="inline"><button class="btn primary" id="inflRoll">Бросить запрос</button>${honest&&INFL.revealed&&INFL.last&&!INFL.last.ok&&!INFL.rerolled?`<button class="btn" id="inflReroll">Перебросить (Честность)</button>`:""}</div>
+  ${hintBtn("infl",inflSpecial()?"<p>Место рождения Индия: у обычного запроса 19 не автоматический провал, а 20 тратит один запрос вместо двух.</p><p>У сложного и невозможного 19 на кубе не даёт лишних степеней провала, а 20 даёт 3 вместо 7.</p>":"<p>Обычный запрос: 19 — автоматический провал, 20 — провал и тратит два запроса.</p><p>Сложный и невозможный: кубы складываются; на каждом кубе 1 даёт +7 степеней успеха, 2 — +3, 19 — 3 степени провала, 20 — 7.</p>")}
+  <div class="inline"><button class="btn big primary" id="inflRoll">${icon("infl")}<span>Бросить запрос</span></button>${honest&&INFL.revealed&&INFL.last&&!INFL.last.ok&&!INFL.rerolled?`<button class="btn" id="inflReroll">Перебросить (Честность)</button>`:""}</div>
   ${INFL.last?`<div class="inflres ${INFL.last.ok?"ok":"bad"}">${stamp(INFL.last.r,"infl")}<div>${INFL.last.html}</div></div>`:""}
   ${honest?`<label class="note inline" style="gap:8px;margin-top:8px;flex-wrap:nowrap;align-items:flex-start"><input type="checkbox" id="inflRevealed" ${INFL.revealed?"checked":""}> <span>Характер «Честность» раскрыт Мастером: можно перебросить один проваленный бросок на Влияние перед каждой миссией</span></label>`:""}`;
 }
@@ -3924,7 +3966,7 @@ document.addEventListener("click",e=>{
     const lbl={use:M.use,roll:`бросок d${M.s}+${M.add}`,chaos:"+d3 к тестам",chaosV:"+d6 в Пелене",double:"удвоить урон",flip:"перевернуть бросок",uf2:"двойной бросок Безудержных Сил"}[a]||(a.startsWith("fear|")?a.slice(5):a);
     MKPEND={a,dmg:Number(($("#mkDmg")||{}).value),fr:Number(($("#mkFlipR")||{}).value),fv:Number(($("#mkFlipV")||{}).value)};
     const fl=fateCost("light").c,fd=fateCost("dark").c,K=k=>(R.extra[k]||0)+(C.adj[k]||0);
-    out(`<div class="choice need" style="margin-top:4px"><div class="q">${esc(lbl)}: чем оплатить Очко судьбы?</div><div class="inline" style="gap:6px"><button class="btn small primary" data-mkgo="light" ${K("light")<fl?"disabled":""}>${fl} светлой кармы <span style="opacity:.85;font-weight:400">(есть ${K("light")})</span></button><button class="btn small primary" data-mkgo="dark" ${K("dark")<fd?"disabled":""}>${fd} тёмной кармы <span style="opacity:.85;font-weight:400">(есть ${K("dark")})</span></button><button class="btn small" data-mkgo="test">Тест на Волю (${R.tot.wil})</button></div><label class="note inline" style="gap:6px;margin-top:6px">Сила при тесте на Волю <select class="sel" id="mkForce">${["light","dusk","dark"].map(k=>`<option value="${k}" ${(C.mkForce||UF.force||"light")===k?"selected":""}>${FORCE_NAME[k]}</option>`).join("")}</select></label><button class="jump ph" data-mkgo="cancel" style="margin-top:6px">отмена</button></div>`);return;}
+    out(`<div class="choice need" style="margin-top:4px"><div class="q">${esc(lbl)}: чем оплатить Очко судьбы?</div><div class="inline" style="gap:6px"><button class="btn big primary" data-mkgo="light" ${K("light")<fl?"disabled":""}>${icon("light")}${fl} светлой кармы <span style="opacity:.85;font-weight:400">(есть ${K("light")})</span></button><button class="btn big primary" data-mkgo="dark" ${K("dark")<fd?"disabled":""}>${icon("dark")}${fd} тёмной кармы <span style="opacity:.85;font-weight:400">(есть ${K("dark")})</span></button><button class="btn big primary" data-duskopen="mark" ${K("light")+K("dark")<fateCost("dusk").c?"disabled":""}>${bigIco("dusk")}${fateCost("dusk").c} сумрачной кармы <span style="opacity:.85;font-weight:400">(свет + тьма)</span></button><button class="btn big" data-mkgo="test">${icon("wil")}<span>Тест на Волю (${R.tot.wil})</span></button></div><label class="note inline" style="gap:6px;margin-top:6px">Сила при тесте на Волю <select class="sel" id="mkForce">${["light","dusk","dark"].map(k=>`<option value="${k}" ${(C.mkForce||UF.force||"light")===k?"selected":""}>${FORCE_NAME[k]}</option>`).join("")}</select></label><button class="jump ph" data-mkgo="cancel" style="margin-top:6px">отмена</button></div>`);return;}
   if(d.mkgo){const f=fateInfo(),R=f.R,M=MARKFX[R.mark.name],out=h=>{$("#mkRes").innerHTML=h;};const how=d.mkgo;const P=MKPEND;
     if(how==="cancel"||!P){MKPEND=null;out("");return;}
     if(!(f.left>0)){toast("Очков судьбы не осталось");return;}
@@ -4025,6 +4067,7 @@ document.addEventListener("click",e=>{
     case "fateTest": fateActivate("test");break;
     case "fateLight": fateActivate("light");break;
     case "fateDark": fateActivate("dark");break;
+    case "fateDusk": duskOpen("fate");break;
     case "fateBurn":{const bf=birthFate();if(bf&&bf.kind==="prison"){const r=rnd(20);LASTSTAMP="roll";if([1,2,19,20].includes(r)){pushLog("Узники аномалий: d20 = "+r+", очко не сожжено");render();renderFate(`Узники аномалий: d20 = <b>${r}</b> — Очко судьбы <b>не сжигается</b>.`);break;}C.fateBurned=(C.fateBurned||0)+1;render();renderFate(`Узники аномалий: d20 = <b>${r}</b> (нужно 1, 2, 19 или 20) — Очко судьбы сожжено.`);break;}
       C.fateBurned=(C.fateBurned||0)+1;render();renderFate("Очко судьбы сожжено.");break;}
     case "fateUnburn": C.fateBurned=Math.max(0,(C.fateBurned||0)-1);render();renderFate("Сожжённое очко возвращено.");break;
@@ -4371,13 +4414,14 @@ function rollRec(x){
   ROLLS.unshift(x);
   try{const c=C;if(c){c.rollLog=Array.isArray(c.rollLog)?c.rollLog:[];
     c.rollLog.unshift({t:Date.now(),x:String(x).slice(0,400)});if(c.rollLog.length>150)c.rollLog.length=150;rollSaveSoon();}}catch(e){}
+  try{gmRollPush(x);}catch(e){}
   return ROLLS.length;}
 function rollSaveSoon(){clearTimeout(rollSaveSoon.t);rollSaveSoon.t=setTimeout(()=>{try{save();}catch(e){}},300);}
 function rollClock(t){return new Date(t).toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit"});}
 function rollFresh(t){return Date.now()-t<90*1000;}
 function rollLogOf(p){const l=p&&p.sheet&&p.sheet.rollLog;return Array.isArray(l)?l.filter(r=>r&&r.x&&r.t):[];}
 function roomFeedUI(ps){
-  const all=[];ps.forEach(p=>rollLogOf(p).slice(0,40).forEach(r=>all.push({...r,n:p.name||"Без имени"})));
+  const all=[];ps.forEach(p=>rollLogOf(p).slice(0,40).forEach(r=>all.push({...r,n:p.name||"Без имени"})));(ROOM.gmMine||ROOM.gmLog||[]).slice(0,40).forEach(r=>all.push({...r,n:"Мастер"+(r.hid?" (скрыто)":"")}));
   all.sort((a,b)=>b.t-a.t);const top=all.slice(0,12);
   const open=ROOM.feedOpen!==false;
   return `<details class="card rollfeed" data-rfeed="1" ${open?"open":""}><summary><h3 style="display:inline;margin:0">Последние броски в комнате</h3></summary>
@@ -4388,6 +4432,95 @@ function roomRollsUI(p){
     ${l.length?`<ol class="rlog">${l.slice(0,40).map(r=>`<li class="${rollFresh(r.t)?"fresh":""}"><span class="rlt">${rollClock(r.t)}</span>${esc(r.x)}</li>`).join("")}</ol>${l.length>40?`<p class="note">Показаны последние 40 из ${l.length}.</p>`:""}`
       :`<p class="note">Бросков пока нет. Если игрок уже бросал, а здесь пусто, у него старая версия приложения.</p>`}</details>`;}
 document.addEventListener("toggle",e=>{const d=e.target;if(!(d instanceof HTMLElement))return;if(d.dataset.rfeed)ROOM.feedOpen=d.open;if(d.dataset.rlog)ROOM.rollOpen=d.open;},true);
+
+/* ---------- Подсказки по кнопке и крупные кнопки с иконками ---------- */
+function hintSet(){return window.__hintOpen||(window.__hintOpen=new Set());}
+function hintIco(){return `<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.2"/><path d="M9.6 9.3a2.5 2.5 0 0 1 4.8 1c0 1.7-2.4 2.2-2.4 3.7"/><path d="M12 17.2h.01"/></svg>`;}
+function hintBtn(id,html,label){const o=hintSet().has(id);return `<details class="hint noprint" data-hint="${id}" ${o?"open":""}><summary class="hintbtn">${hintIco()}<span>${label||"Подсказка"}</span></summary><div class="hintbody">${html}</div></details>`;}
+function bigIco(k){const P={
+  burn:'<path d="M12 3c1 3.5 5 5.2 5 10a5 5 0 0 1-10 0c0-2.4 1.3-3.8 2.4-5 .3 1.6 1 2.6 2.1 3.1C11 8.6 11.2 5.6 12 3z"/>',
+  undo:'<path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/>',
+  reset:'<path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/>',
+  dusk:'<path d="M12 3v18"/><path d="M12 7a5 5 0 0 0 0 10"/><path d="M12 3a9 9 0 0 1 0 18"/><path d="M5 5l1.4 1.4M3 12h2M5 19l1.4-1.4"/>',
+  dice:'<rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="9" cy="9" r="1.2" fill="currentColor"/><circle cx="15" cy="15" r="1.2" fill="currentColor"/><circle cx="15" cy="9" r="1.2" fill="currentColor"/><circle cx="9" cy="15" r="1.2" fill="currentColor"/>'};
+  if(P[k])return `<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${P[k]}</svg>`;
+  return icon(k);}
+function bigIcons(){document.querySelectorAll("[data-ico]").forEach(b=>{if(!b.querySelector("svg"))b.insertAdjacentHTML("afterbegin",bigIco(b.dataset.ico));});
+  document.querySelectorAll(".hsec-i:empty").forEach(x=>x.innerHTML=hintIco());}
+document.addEventListener("toggle",e=>{const d=e.target;if(!(d instanceof HTMLElement)||!d.dataset.hint)return;if(d.open)hintSet().add(d.dataset.hint);else hintSet().delete(d.dataset.hint);},true);
+document.addEventListener("DOMContentLoaded",bigIcons);
+
+/* ---------- Броски мастера в комнате ---------- */
+function gmIsMaster(){return typeof ROOM!=="undefined"&&ROOM&&ROOM.st&&ROOM.st.role==="gm";}
+function gmHid(){if(ROOM.gmHidden==null){try{ROOM.gmHidden=localStorage.getItem("sumrak2096_gm_hidden")==="1";}catch(e){ROOM.gmHidden=false;}}return ROOM.gmHidden;}
+function gmSetHid(v){ROOM.gmHidden=!!v;try{localStorage.setItem("sumrak2096_gm_hidden",v?"1":"0");}catch(e){}}
+function gmEye(open){return open
+  ?'<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>'
+  :'<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3l18 18"/><path d="M10.6 5.1A10.8 10.8 0 0 1 12 5c6.4 0 10 7 10 7a17.6 17.6 0 0 1-3.2 4.2M6.6 6.6C3.8 8.4 2 12 2 12s3.6 7 10 7a10 10 0 0 0 4.4-1"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>';}
+function gmRollPush(x){
+  if(!gmIsMaster())return;
+  const t=Date.now(),txt=String(x).slice(0,300),hid=gmHid();
+  ROOM.gmMine=[{t,x:txt,hid},...(ROOM.gmMine||[])].slice(0,40);
+  ROOM.gmLog=[hid?{t,x:"Скрытый бросок",hid:true}:{t,x:txt},...(ROOM.gmLog||[])].slice(0,40);
+  clearTimeout(ROOM.gmT);ROOM.gmT=setTimeout(gmLogSave,400);
+  try{roomRefresh();}catch(e){}}
+async function gmLogSave(){const st=ROOM.st;if(!st||st.role!=="gm")return;
+  try{const sb=await roomClient();const {error}=await sb.from("rooms").update({gm_log:ROOM.gmLog||[]}).eq("code",st.code);
+    if(error)throw error;ROOM.gmLogMissing=false;}
+  catch(e){const m=String(e&&e.message||e);if(/gm_log|column/i.test(m))ROOM.gmLogMissing=true;}
+  try{roomRefresh();}catch(e){}}
+async function gmLogLoad(initial){const st=ROOM.st;if(!st)return;
+  try{const sb=await roomClient();const {data,error}=await sb.from("rooms").select("gm_log").eq("code",st.code).maybeSingle();
+    if(error)throw error;ROOM.gmLogMissing=false;if(data&&Array.isArray(data.gm_log))gmLogSet(data.gm_log,initial);}
+  catch(e){const m=String(e&&e.message||e);if(/gm_log|column/i.test(m))ROOM.gmLogMissing=true;}}
+function gmLogSet(list,initial){
+  list=(list||[]).filter(r=>r&&r.t&&r.x);
+  if(gmIsMaster()){if(ROOM.gmLog==null)ROOM.gmLog=list;return;}
+  const seen=ROOM.gmSeen||0,fresh=list.filter(r=>r.t>seen);
+  const was=JSON.stringify(ROOM.gmLog||[]);ROOM.gmLog=list;ROOM.gmSeen=list.reduce((a,r)=>Math.max(a,r.t),seen);
+  if(!initial&&seen&&fresh.length){const r=fresh[0];toast(r.hid?"Мастер бросил кубы втайне":"Мастер: "+r.x);}
+  if(was!==JSON.stringify(list))try{roomRefresh();}catch(e){}}
+function gmToggleBtn(){const h=gmHid();
+  return `<button class="btn big ${h?"":"primary"}" data-gmhide="1" aria-pressed="${h}">${gmEye(!h)}<span>${h?"Мои броски скрыты от игроков":"Мои броски видны игрокам"}</span></button>`;}
+function gmRollCard(){const mine=(ROOM.gmMine||[]).slice(0,5);
+  return `<div class="card gmroll"><h3 style="margin-top:0">Ваши броски</h3>${gmToggleBtn()}
+    <p class="note" style="margin:8px 0 0">${gmHid()?"Игроки увидят только, что вы бросили кубы втайне. Нажмите, чтобы снова показывать броски.":"Игроки видят ваши броски из любого раздела приложения: «Кубы», калькулятор, тесты. Нажмите, чтобы бросать втайне."}</p>
+    ${ROOM.gmLogMissing?`<div class="warnbox" style="margin-top:8px">На сервере нет колонки для бросков мастера: запустите в Supabase → SQL Editor файл <b>room-gmlog.sql</b>.</div>`:""}
+    ${mine.length?`<ol class="rlog">${mine.map(r=>`<li class="${rollFresh(r.t)?"fresh":""}"><span class="rlt">${rollClock(r.t)}</span>${r.hid?`<span class="note">скрыто · </span>`:""}${esc(r.x)}</li>`).join("")}</ol>`:""}</div>`;}
+function gmLogPlayerUI(){const l=(ROOM.gmLog||[]).slice(0,15);
+  return `<div class="iblk rev" style="margin-top:10px"><div class="iblk-t">Броски мастера</div><div class="iblk-b">${l.length?`<ol class="rlog" style="margin-top:0">${l.map(r=>`<li class="${rollFresh(r.t)?"fresh":""}"><span class="rlt">${rollClock(r.t)}</span>${r.hid?`<i class="note">Скрытый бросок</i>`:esc(r.x)}</li>`).join("")}</ol>`:`<div class="note">Мастер пока не бросал кубы открыто.</div>`}</div></div>`;}
+function gmDiceBar(){if(STEP!==9||!gmIsMaster())return;const m=$("#main");if(!m||m.querySelector(".gmbar"))return;
+  m.insertAdjacentHTML("afterbegin",`<div class="card gmbar"><div class="note" style="margin-bottom:6px">Вы мастер комнаты <b>${esc(ROOM.st.code)}</b></div>${gmToggleBtn()}</div>`);}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-gmhide]");if(!b)return;
+  gmSetHid(!gmHid());toast(gmHid()?"Броски скрыты: игроки увидят только, что вы бросили":"Броски снова видны игрокам");
+  if(STEP===9)render();else try{renderRoom();}catch(err){}});
+
+/* ---------- Очко судьбы за сумрачную карму ---------- */
+var DUSK=null;
+function duskHave(){const R=compute(C);return {L:Math.max(0,(R.extra.light||0)+(C.adj.light||0)),D:Math.max(0,(R.extra.dark||0)+(C.adj.dark||0))};}
+function duskOpen(ctx){const fc=fateCost("dusk");let cost=fc.c,bk="";if(fc.baikal){const b=baikalCut();cost=Math.max(0,cost-b.r);bk=b.txt;}
+  const h=duskHave();let L=Math.max(cost-h.D,Math.min(h.L,Math.ceil(cost/2)));L=Math.max(0,Math.min(L,cost));
+  DUSK={ctx,cost,bk,L,why:fc.why};duskRender();}
+function duskRender(){const d=DUSK;if(!d)return;const h=duskHave(),D=d.cost-d.L,enough=d.L<=h.L&&D<=h.D;
+  const html=`<div class="duskbox"><div class="q">Сумрачная карма: всего ${d.cost}${d.bk?` <span class="note">${esc(d.bk)}</span>`:""}</div>
+    <p class="note" style="margin:2px 0 8px">Выберите, сколько потратить светлой — остальное спишется из тёмной.</p>
+    <div class="duskrow"><span class="dn">${icon("light")} Светлой</span><button class="pm" data-dusk="-" aria-label="Меньше светлой" ${d.L<=0?"disabled":""}>−</button><b class="dv">${d.L}</b><button class="pm" data-dusk="+" aria-label="Больше светлой" ${d.L>=d.cost?"disabled":""}>+</button><span class="note">есть ${h.L}</span></div>
+    <div class="duskrow"><span class="dn">${icon("dark")} Тёмной</span><span></span><b class="dv">${D}</b><span></span><span class="note">есть ${h.D}</span></div>
+    ${enough?"":`<div class="warnbox" style="margin-top:6px">${h.L+h.D<d.cost?`Не хватает кармы: всего есть ${h.L+h.D}, нужно ${d.cost}.`:`Столько ${d.L>h.L?"светлой":"тёмной"} кармы нет — сдвиньте распределение.`}</div>`}
+    <div class="inline" style="gap:10px;margin-top:8px"><button class="btn big primary" data-dusk="go" ${enough?"":"disabled"}>${bigIco("dusk")}<span>Оплатить ${d.L} + ${D}</span></button><button class="jump ph" data-dusk="cancel">отмена</button></div></div>`;
+  const el=d.ctx==="fate"?$("#fateRes"):$("#mkRes");if(el)el.innerHTML=html;}
+function payDusk(){const d=DUSK;if(!d)return {ok:false,msg:"Не выбрано, сколько светлой и тёмной кармы потратить."};
+  const h=duskHave(),D=d.cost-d.L;if(d.L>h.L||D>h.D)return {ok:false,msg:`Не хватает кармы: светлой есть ${h.L}, тёмной ${h.D}.`};
+  C.adj.light=(C.adj.light||0)-d.L;C.adj.dark=(C.adj.dark||0)-D;DUSK=null;
+  return {ok:true,msg:`Потрачено ${d.L} светлой и ${D} тёмной кармы (Сумрак)${d.bk}${d.why&&d.why.length?" ["+d.why.join(", ")+"]":""}.`};}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-dusk],[data-duskopen]");if(!b)return;
+  if(b.dataset.duskopen){duskOpen(b.dataset.duskopen);return;}
+  const d=DUSK;if(!d)return;const a=b.dataset.dusk;
+  if(a==="-"){d.L=Math.max(0,d.L-1);duskRender();return;}
+  if(a==="+"){d.L=Math.min(d.cost,d.L+1);duskRender();return;}
+  if(a==="cancel"){DUSK=null;const el=d.ctx==="fate"?$("#fateRes"):$("#mkRes");if(el)el.innerHTML="";if(d.ctx==="mark")MKPEND=null;return;}
+  if(a==="go"){if(d.ctx==="fate"){fateActivate("dusk");return;}
+    const box=$("#mkRes");if(!box)return;const t=document.createElement("button");t.dataset.mkgo="dusk";t.hidden=true;box.appendChild(t);t.click();}});
 
 /* ---------- Кампейн: Проект Мекка (карта государств, общая база) ---------- */
 function stCampaign(){return "";}
@@ -4507,9 +4640,11 @@ async function roomSubscribe(){const st=ROOM.st;if(!st)return;const sb=await roo
   if(st.role==="gm"){ch.on("postgres_changes",{event:"*",schema:"public",table:"room_players",filter:`room=eq.${st.code}`},()=>roomFetchSoon());ch.on("postgres_changes",{event:"*",schema:"public",table:"room_mods",filter:`room=eq.${st.code}`},()=>roomFetchSoon());}
   else{ch.on("postgres_changes",{event:"*",schema:"public",table:"room_mods",filter:`room=eq.${st.code}`},p=>{const n=p.new&&p.new.uid?p.new:null,o=p.old||{};if(n&&n.uid===ROOM.uid&&n.char_id===st.charId)roomApplyMods(n);else if(p.eventType==="DELETE"&&(!o.uid||(o.uid===ROOM.uid&&o.char_id===st.charId)))roomApplyMods(null);});
     ch.on("postgres_changes",{event:"DELETE",schema:"public",table:"room_players",filter:`room=eq.${st.code}`},p=>{const o=p.old||{};if(o.uid===ROOM.uid&&o.char_id===st.charId)roomGone("Мастер убрал вас из комнаты или закрыл её.");});}
+  if(st.role!=="gm")ch.on("postgres_changes",{event:"UPDATE",schema:"public",table:"rooms",filter:`code=eq.${st.code}`},p=>{if(p.new&&Array.isArray(p.new.gm_log))gmLogSet(p.new.gm_log,false);});
+  if(st.role!=="gm"||ROOM.gmLog==null)gmLogLoad(st.role!=="gm");
   ch.subscribe(s=>{ROOM.status=s;roomRefresh();renderRoomBtn();});ROOM.ch=ch;
   clearInterval(ROOM.poll);ROOM.poll=setInterval(()=>{if(!document.hidden)roomPoll();},8000);}
-async function roomPoll(){const st=ROOM.st;if(!st)return;if(st.role==="gm")return roomFetch();try{const sb=await roomClient();const m=await sb.from("room_mods").select("*").eq("room",st.code).eq("uid",ROOM.uid).eq("char_id",st.charId).maybeSingle();if(!m.error)roomApplyMods(m.data);}catch(e){}}
+async function roomPoll(){const st=ROOM.st;if(!st)return;if(st.role==="gm")return roomFetch();gmLogLoad(false);try{const sb=await roomClient();const m=await sb.from("room_mods").select("*").eq("room",st.code).eq("uid",ROOM.uid).eq("char_id",st.charId).maybeSingle();if(!m.error)roomApplyMods(m.data);}catch(e){}}
 async function roomFetch(){const st=ROOM.st;if(!st||st.role!=="gm")return;try{const sb=await roomClient();
     const [a,b]=await Promise.all([sb.from("room_players").select("*").eq("room",st.code).order("name"),sb.from("room_mods").select("*").eq("room",st.code)]);
     if(a.error)throw a.error;if(b.error)throw b.error;ROOM.players=a.data||[];ROOM.mods={};(b.data||[]).forEach(r=>ROOM.mods[rmKey(r)]=r.mods||[]);ROOM.err="";roomCheckUid();}catch(e){ROOM.err=roomErr(e);}roomRefresh();renderRoomBtn();}
@@ -4561,8 +4696,8 @@ function roomGMView(st,live){const ps=ROOM.players;const tb=ROOM.gmTab||"room";
   const i=ps.findIndex(p=>rmKey(p)===ROOM.sel),p=ps[i];const anyMods=Object.values(ROOM.mods).some(m=>m&&m.length);
   const tabs=ps.map((q,j)=>{const v=roomPeek(q.sheet,ROOM.mods[rmKey(q)]||[]);const n=(ROOM.mods[rmKey(q)]||[]).length;const bad=!v.err&&v.hpCur<v.hpMax/2;return `<button class="ptab" role="tab" aria-selected="${j===i}" data-rmsel="${j}"><span class="ptabn">${esc(q.name||"Без имени")}</span><span class="ptabs2" style="${bad?"color:var(--warn);font-weight:700":""}">${v.err?"?":`ОЗ ${v.hpCur}/${v.hpMax}`}${n?` · правок ${n}`:""}</span></button>`;}).join("");
   return sw+`<div class="card"><div class="inline" style="gap:10px;justify-content:space-between"><div>Код комнаты <b style="font-size:26px;letter-spacing:3px">${esc(st.code)}</b> <span class="note">· ${live}</span></div><button class="btn small" data-room="refresh">Обновить</button></div>
-    <p class="note" style="margin-bottom:0">Игроки: «Комната» → «Я игрок» → этот код. Листы обновляются сами.</p></div>
-    ${ps.length?`${roomFeedUI(ps)}<div class="ptabbar" role="tablist">${tabs}</div>${p?`<div class="note" style="margin-top:6px">Лист обновлён ${agoTxt(p.updated_at)}. Здесь только просмотр, изменения игрок делает у себя.</div>${roomModsUI(p,i)}${roomRollsUI(p)}<div class="peek" id="peekBox">${roomPeekSheet(p)}</div>`:""}`:`<p class="note">Пока никто не подключился.</p>`}
+    <p class="note" style="margin-bottom:0">Вы — мастер этой комнаты. Игроки: «Комната» → «Я игрок» → этот код. Попали сюда по ошибке? Нажмите внизу «Выйти» и введите код в поле «Я игрок».</p></div>
+    ${gmRollCard()}${ps.length?`${roomFeedUI(ps)}<div class="ptabbar" role="tablist">${tabs}</div>${p?`<div class="note" style="margin-top:6px">Лист обновлён ${agoTxt(p.updated_at)}. Здесь только просмотр, изменения игрок делает у себя.</div>${roomModsUI(p,i)}${roomRollsUI(p)}<div class="peek" id="peekBox">${roomPeekSheet(p)}</div>`:""}`:`<p class="note">Пока никто не подключился.</p>`}
     <div class="card" style="margin-top:12px"><div class="inline" style="gap:8px"><button class="btn small" data-room="clearall" ${anyMods?"":"disabled"}>Конец миссии: снять модификаторы у всех</button><button class="btn small" data-room="leave">Выйти (комната останется)</button><button class="btn small" data-room="close" style="color:var(--warn)">Закрыть комнату</button></div></div>`;}
 /* ---------- мастер: база всех выгруженных персонажей ---------- */
 var VB={list:null,q:"",sel:null,sheet:null,err:"",busy:false};
@@ -4589,7 +4724,7 @@ document.addEventListener("click",async e=>{const b=e.target.closest("[data-gmta
 document.addEventListener("input",e=>{if(e.target.id!=="vbSearch")return;VB.q=e.target.value;const l=$("#vbList");if(l)l.innerHTML=vbItems();});
 function roomFocusInside(){const a=document.activeElement;return !!(a&&$("#roomView")&&$("#roomView").contains(a)&&a.matches('[data-rmd],#rcUrl,#rcKey,#rmCode,#vbSearch'));}
 function roomRefresh(){if(STEP!==11||!$("#roomView"))return;if(roomFocusInside()){ROOM.dirty=true;return;}renderRoom();}
-function renderRoom(){const body=$("#roomView");if(!body)return;try{renderRoomInner(body);}catch(e){console.error(e);body.innerHTML=roomCrashHTML(e);}}
+function renderRoom(){const body=$("#roomView");if(!body)return;if(typeof ROOM==="undefined"||!ROOM){setTimeout(renderRoom,30);return;}try{renderRoomInner(body);}catch(e){console.error(e);body.innerHTML=roomCrashHTML(e);}}
 function renderRoomInner(body){ROOM.dirty=false;
   const st=ROOM.st,err=ROOM.err?`<div class="warnbox" style="margin-top:8px">${esc(ROOM.err)}${ROOM.uidBad?`<div style="margin-top:8px"><button class="btn small" data-room="reset">Сбросить подключение</button></div>`:""}</div>`:"",msg=ROOM.msg?`<div class="okbox" style="margin-top:8px">${esc(ROOM.msg)}</div>`:"";
   const live=ROOM.status==="SUBSCRIBED"?`<span style="color:var(--ok)">● на связи</span>`:ROOM.status?`<span style="color:var(--warn)">● ${ROOM.status==="CHANNEL_ERROR"||ROOM.status==="TIMED_OUT"||ROOM.status==="CLOSED"?"мгновенные обновления недоступны, обновляю раз в несколько секунд":"подключение…"}</span>`:"";
@@ -4604,7 +4739,7 @@ function renderRoomInner(body){ROOM.dirty=false;
     h=`<div class="card"><div>Комната <b style="font-size:24px;letter-spacing:2px">${esc(st.code)}</b> <span class="note">· ${live}</span></div><div class="note">Персонаж: <b>${esc(c?c.name||"Без имени":"удалён")}</b></div>
     <p class="note">Лист отправляется мастеру автоматически при каждом изменении${ROOM.lastPush?`, последний раз ${agoTxt(ROOM.lastPush)}`:""}.${c&&C.id!==c.id?" Сейчас открыт другой персонаж: в комнате остаётся тот, с которым вы вошли.":""}</p>
     <div class="iblk rev"><div class="iblk-t">Модификаторы от мастера на миссию</div><div class="iblk-b">${mods.length?mods.map(m=>`<div><b>${esc(fxLabel(m.k))} ${sgn(Number(m.v))}</b>${m.note?` <span class="note">${esc(m.note)}</span>`:""}</div>`).join(""):`<div class="note">Пока нет. Они сразу учитываются в характеристиках и бросках.</div>`}</div></div>
-    <div class="inline" style="gap:8px;margin-top:10px"><button class="btn small" data-room="push">Отправить лист сейчас</button><button class="btn small" data-go="10">Открыть миссию</button><button class="btn small" data-room="leave">Выйти из комнаты</button></div></div>`;}
+    ${gmLogPlayerUI()}<div class="inline" style="gap:8px;margin-top:10px"><button class="btn small" data-room="push">Отправить лист сейчас</button><button class="btn small" data-go="10">Открыть миссию</button><button class="btn small" data-room="leave">Выйти из комнаты</button></div></div>`;}
   else h=roomGMView(st,live);
   body.innerHTML=msg+err+h;if(st&&st.role==="gm"){peekSectionize(body);if((ROOM.gmTab||"room")!=="room")return;const i=ROOM.players.findIndex(p=>rmKey(p)===ROOM.sel);if(i>=0)roomInjectPM(body,i);}}
 function roomInjectPM(body,i){const p=ROOM.players[i];if(!p)return;const mods=ROOM.mods[rmKey(p)]||[];const sum=k=>mods.filter(m=>m.k===k).reduce((a,m)=>a+(Number(m.v)||0),0);
@@ -4617,7 +4752,7 @@ async function roomAction(a){
   if(a==="cfgsave"){const url=$("#rcUrl").value.trim(),key=$("#rcKey").value.trim();if(!/^https:\/\/.+/.test(url)||key.length<20){ROOM.err="Проверьте адрес (https://…supabase.co) и ключ.";renderRoom();return;}ROOM.cfg={url,key};lsSet(RCFG_KEY,ROOM.cfg);ROOM.sb=null;ROOM.uid=null;ROOM.editCfg=false;ROOM.err="";renderRoom();return;}
   if(a==="cfgedit"){ROOM.editCfg=true;renderRoom();return;}
   if(a==="cfgcancel"){ROOM.editCfg=false;renderRoom();return;}
-  if(a==="create")return roomCreate();
+  if(a==="create")return askConfirm("Создать новую комнату? Вы станете в ней мастером. Если вы игрок — нажмите «Отмена» и введите код в поле «Я игрок».",()=>roomCreate());
   if(a==="join")return roomJoin(($("#rmCode")||{}).value);
   if(a==="push"){await roomPush();toast("Лист отправлен");return;}
   if(a==="leave")return roomLeave(false);

@@ -15,11 +15,15 @@ if 'function renderRoomInner' in s:
 
 # 1. ошибка отрисовки больше не оставляет пустую вкладку
 rep('function renderRoom(){const body=$("#roomView");if(!body)return;ROOM.dirty=false;',
-    'function renderRoom(){const body=$("#roomView");if(!body)return;try{renderRoomInner(body);}catch(e){console.error(e);body.innerHTML=roomCrashHTML(e);}}\n'
+    'function renderRoom(){const body=$("#roomView");if(!body)return;if(typeof ROOM==="undefined"||!ROOM){setTimeout(renderRoom,30);return;}try{renderRoomInner(body);}catch(e){console.error(e);body.innerHTML=roomCrashHTML(e);}}\n'
     'function renderRoomInner(body){ROOM.dirty=false;')
 
 rep('err=ROOM.err?`<div class="warnbox" style="margin-top:8px">${esc(ROOM.err)}</div>`:""',
     'err=ROOM.err?`<div class="warnbox" style="margin-top:8px">${esc(ROOM.err)}${ROOM.uidBad?`<div style="margin-top:8px"><button class="btn small" data-room="reset">Сбросить подключение</button></div>`:""}</div>`:""')
+# 1б. случайное «Создать комнату» вместо входа игрока
+rep('if(a==="create")return roomCreate();', 'if(a==="create")return askConfirm("Создать новую комнату? Вы станете в ней мастером. Если вы игрок — нажмите «Отмена» и введите код в поле «Я игрок».",()=>roomCreate());')
+rep('<p class="note" style="margin-bottom:0">Игроки: «Комната» → «Я игрок» → этот код. Листы обновляются сами.</p></div>',
+    '<p class="note" style="margin-bottom:0">Вы — мастер этой комнаты. Игроки: «Комната» → «Я игрок» → этот код. Попали сюда по ошибке? Нажмите внизу «Выйти» и введите код в поле «Я игрок».</p></div>')
 # 2. мастер может вернуться в свою комнату
 rep('<div class="card"><h3 style="margin-top:0">Я мастер</h3><button class="btn primary" data-room="create" ${ROOM.busy?"disabled":""}>Создать комнату</button></div>',
     '<div class="card"><h3 style="margin-top:0">Я мастер</h3><button class="btn primary" data-room="create" ${ROOM.busy?"disabled":""}>Создать комнату</button>${gmRoomsHTML()}</div>')

@@ -654,6 +654,29 @@ body.mis .hint[data-hint="stats"]{display:none}
 .npclast{margin-top:8px;padding:8px 10px;border:1px solid var(--line);border-radius:6px}
 label.chk{display:flex;gap:8px;align-items:center;margin:8px 0}
 
+/* ---- бой: сбор инициативы ---- */
+.iniwait{margin-top:10px;padding:8px 10px;border:1px solid var(--line);border-radius:6px}
+.iniwl{display:flex;flex-direction:column;gap:6px;margin-top:6px}
+.iniw{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.iniw>span{min-width:0;overflow-wrap:anywhere}
+.iniasked{padding:6px 0}
+.initcard .iniaskbtn{width:100%;justify-content:flex-start}
+#iniAsk{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(72px + env(safe-area-inset-bottom,0px));z-index:900;max-width:calc(100% - 32px);box-shadow:0 4px 18px rgba(0,0,0,.45);font-size:17px;padding:12px 18px;white-space:nowrap}
+
+/* ---- очередь боя руками ---- */
+.iniadd{margin-top:10px;border:1px solid var(--line);border-radius:6px;padding:0 10px}
+.iniadd>summary{cursor:pointer;padding:10px 0;font-weight:600;color:var(--accent)}
+.iniadd-b{padding-bottom:10px}
+.iadrow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
+.iadrow label{display:flex;flex-direction:column;gap:2px}.iadrow .inp{width:100%;box-sizing:border-box}
+.initt td.ininum{text-align:center;padding:2px 4px}
+.initt td.ininum>span{display:block;padding:2px 0}
+.initt .mvb{display:block;width:30px;height:26px;margin:0 auto;padding:0;border:1px solid var(--line);border-radius:6px;background:none;color:inherit;font-size:12px;line-height:1;cursor:pointer}
+.initt .inihp{width:48px}
+@media (max-width:380px){.initt{font-size:14px}.initt th,.initt td{padding:4px 3px}.initt td.ininum{padding:2px 1px}.initt .mvb{width:26px}
+ .initt .inihp{width:42px;padding:4px 2px}.initt td .note{font-size:11px}.initt td:last-child{padding-left:0;padding-right:0}}
+.initt .mvb:disabled{opacity:.3;cursor:default}
+
 /* ---- Кампейн: Проект Мекка ---- */
 @media (max-width:560px){#modeTabs.seven{grid-template-columns:repeat(4,minmax(0,1fr))!important}#modeTabs.seven button{font-size:14px;letter-spacing:0;padding:8px 2px}#modeTabs.seven button:nth-child(n+5){border-top:1px solid var(--line)}#modeTabs.seven button:nth-child(5){border-left:0}}
 @media (min-width:561px){#modeTabs.seven button{font-size:12px;letter-spacing:-.01em;padding-left:2px;padding-right:2px}}
@@ -1970,6 +1993,7 @@ function render(){
   if(C&&C.cls&&C.cls.i!=null)kitNormalize(C);
   const fk=focusKey(); const ae=document.activeElement; const sel=ae&&typeof ae.selectionStart==="number"?[ae.selectionStart,ae.selectionEnd]:null;
   renderInner();
+  try{iniAskBar();}catch(e){}
   if(fk){const el=document.querySelector(fk);if(el&&el!==document.activeElement&&!el.closest("dialog:not([open])")){el.focus({preventScroll:true});if(sel&&typeof el.setSelectionRange==="function"){try{el.setSelectionRange(sel[0],sel[1]);}catch(e){}}}}
 }
 const SEC={};
@@ -4649,8 +4673,8 @@ function initRollAll(){const rows=[],skip=[];
   try{gmRollPush("Инициатива: "+rows.map((r,i)=>`${i+1}. ${r.sec?"???":r.n} ${r.ini}`).join(", "));}catch(e){}
   toast(`Инициатива брошена: ${rows.length} участников`+(skip.length?`. Не удалось прочитать лист: ${skip.join(", ")}`:""));renderRoom();}
 function initKey(){return "sumrak2096_init_"+(ROOM.st&&ROOM.st.code||"");}
-function initShared(){const I=ROOM.init;if(!I)return {t:Date.now(),list:[]};if(I.show===false)return {t:I.t,off:true};
-  return {t:I.t,round:I.round,cur:I.cur,list:I.list.map(r=>({k:r.k,n:r.sec?"???":r.n,ini:r.ini,r:r.r,act:r.act,u:r.u||null,who:r.who||null}))};}
+function initShared(){const I=ROOM.init;if(!I)return {t:Date.now(),list:[]};if(I.show===false)return {t:I.t,off:true,ask:I.ask?1:0};
+  return {t:I.t,ask:I.ask?1:0,go:I.moved?1:0,round:I.round,cur:I.cur,list:I.list.map(r=>({k:r.k,n:r.sec?"???":r.n,ini:r.ini,r:r.r,act:r.act,u:r.u||null,who:r.who||null}))};}
 function initSave(now){lsSet(initKey(),ROOM.init);clearTimeout(initSave.t);initSave.t=setTimeout(initPush,now?50:400);}
 async function initPush(){const st=ROOM.st;if(!st||st.role!=="gm")return;
   try{const sb=await roomClient();const {error}=await sb.from("rooms").update({gm_init:initShared()}).eq("code",st.code);if(error)throw error;ROOM.initMissing=false;}
@@ -4658,42 +4682,139 @@ async function initPush(){const st=ROOM.st;if(!st||st.role!=="gm")return;
 function initBoot(){const st=ROOM.st;if(!st)return;if(st.role==="gm"){const l=lsGet(initKey());if(l&&Array.isArray(l.list)){ROOM.init=l;return;}ROOM.init=null;initLoad(true);}else initLoad(true);}
 async function initLoad(initial){const st=ROOM.st;if(!st)return;
   try{const sb=await roomClient();const {data,error}=await sb.from("rooms").select("gm_init").eq("code",st.code).maybeSingle();if(error)throw error;ROOM.initMissing=false;
-    if(!data||!data.gm_init)return;if(st.role==="gm"){if(!ROOM.init&&Array.isArray(data.gm_init.list)&&data.gm_init.list.length){ROOM.init={...data.gm_init,show:!data.gm_init.off,list:data.gm_init.list.map(r=>({...r,base:r.ini+r.r,ab:ACT_BASE,agi:0,d100:0,sec:r.n==="???"}))};roomRefresh();}return;}
+    if(!data||!data.gm_init)return;if(st.role==="gm"){if(!ROOM.init&&Array.isArray(data.gm_init.list)&&data.gm_init.list.length){ROOM.init={...data.gm_init,moved:data.gm_init.go?1:0,show:!data.gm_init.off,list:data.gm_init.list.map(r=>({...r,base:r.ini+r.r,ab:ACT_BASE,agi:0,d100:0,sec:r.n==="???"}))};roomRefresh();}return;}
     initSetP(data.gm_init,initial);}
   catch(e){const m=String(e&&e.message||e);if(/gm_init|column/i.test(m))ROOM.initMissing=true;}}
 function initMine(r){const st=ROOM.st;return !!(st&&r.k==="p"&&r.who===st.charId&&(!r.u||r.u===ROOM.uid));}
 function initSetP(v,initial){if(gmIsMaster()||!v)return;const old=ROOM.initP;const was=JSON.stringify(old||null);ROOM.initP=v;if(was===JSON.stringify(v))return;
   const list=Array.isArray(v.list)?v.list:[];const me=list.findIndex(initMine);
-  if(!initial&&!v.off&&list.length){
-    if(!old||old.t!==v.t){if(me>=0){const r=list[me];toast(`Инициатива: вы ходите ${me+1}-м из ${list.length}, действий ${r.act}`);
-        try{const c=roomChar();if(c&&C&&C.id===c.id){cbIni(r.r);save();if(STEP===10)render();}}catch(e){}}else toast("Мастер бросил инициативу");}
+  if(!initial&&v.ask&&v.off&&(!old||old.t!==v.t))toast("Бой! Бросьте инициативу");
+  if(!initial&&!v.off&&(list.length||v.ask)){
+    if(!old||old.t!==v.t){if(me>=0){const r=list[me];if(!v.ask)toast(`Инициатива: вы ходите ${me+1}-м из ${list.length}, действий ${r.act}`);
+        try{const c=roomChar();if(c&&C&&C.id===c.id){cbIni(r.r);save();if(STEP===10)render();}}catch(e){}}else toast(v.ask?"Бой! Бросьте инициативу":"Мастер бросил инициативу");}
     else if(old.cur!==v.cur||old.round!==v.round){const c=list[v.cur];if(c&&initMine(c))toast("Ваш ход!");else if(old.round!==v.round)toast(`Раунд ${v.round}`);}}
-  try{roomRefresh();}catch(e){}}
-function iniRollTxt(r){return `${r.base!=null?r.base:r.ini+r.r} − ${r.r}`;}
-function initTable(I,gm){const list=I.list||[];
-  return `<div class="tblwrap"><table class="initt"><thead><tr><th>#</th><th>Кто</th><th>Иниц.</th><th>Действий</th>${gm?"<th>ОЗ</th><th></th>":""}</tr></thead><tbody>${list.map((r,i)=>{const me=!gm&&initMine(r);
-    return `<tr class="${i===I.cur?"cur":""} ${me?"me":""}"><td>${i===I.cur?"▶":i+1}</td><td><b>${esc(r.n)}</b>${r.k==="npc"?` <span class="note">бест.</span>`:""}${me?` <span class="note">вы</span>`:""}</td>
-      <td><b>${r.ini}</b> <span class="note">${gm?iniRollTxt(r):"d20 "+r.r}</span>${r.r===1?` <span class="pos">крит!</span>`:r.r===20?` <span class="neg">провал</span>`:""}</td><td>${r.act}</td>
+  try{roomRefresh();}catch(e){}try{iniAskBar();}catch(e){}}
+function iniRollTxt(r){return r.r==null?"без броска":`${r.base!=null?r.base:r.ini+r.r} − ${r.r}`;}
+function initTable(I,gm){const list=I.list||[],cu=gm||!I.ask||I.go?I.cur:-1;
+  return `<div class="tblwrap"><table class="initt"><thead><tr><th>#</th><th>Кто</th><th>Иниц.</th><th>Дейст.</th>${gm?"<th>ОЗ</th><th></th>":""}</tr></thead><tbody>${list.map((r,i)=>{const me=!gm&&initMine(r);
+    return `<tr class="${i===cu?"cur":""} ${me?"me":""}"><td class="ininum">${gm?`<button class="mvb" data-ini="up|${i}" ${i?"":"disabled"} aria-label="${esc(r.n)}: выше">▲</button>`:""}<span>${i===cu?"▶":i+1}</span>${gm?`<button class="mvb" data-ini="dn|${i}" ${i<list.length-1?"":"disabled"} aria-label="${esc(r.n)}: ниже">▼</button>`:""}</td><td><b>${esc(r.n)}</b>${gm&&r.man?` <span class="note">${r.k==="npc"?"бест., ":""}добавлен</span>`:r.k==="npc"?` <span class="note">бест.</span>`:gm&&r.gm?` <span class="note">бросил мастер</span>`:""}${me?` <span class="note">вы</span>`:""}</td>
+      <td><b>${r.ini}</b> <span class="note">${gm||r.r==null?iniRollTxt(r):"d20 "+r.r}</span>${r.r===1?` <span class="pos">крит!</span>`:r.r===20?` <span class="neg">провал</span>`:""}</td><td>${r.act}</td>
       ${gm?`<td>${r.k==="npc"?`<input class="inp inihp ${r.hp<=0?"neg":""}" type="number" data-inihp="${i}" value="${r.hp}" aria-label="ОЗ ${esc(r.n)}"><span class="note">/${r.hpMax}</span>`:`<span class="note">${r.hp!=null&&r.hpMax?r.hp+"/"+r.hpMax:""}</span>`}</td><td><button class="del delico" data-ini="drop|${i}" aria-label="Убрать ${esc(r.n)} из боя">×</button></td>`:""}</tr>`;}).join("")}</tbody></table></div>`;}
-function initCard(){const I=ROOM.init,np=(ROOM.players||[]).length,nb=bestS().list.filter(n=>n.on).reduce((a,n)=>a+n.qty,0);
-  return `<div class="card initcard"><h3 style="margin-top:0">Инициатива</h3>
-   <button class="btn big primary" data-ini="roll">${bigIco("dice")}<span>${I?"Перебросить инициативу всем":"Бросить инициативу всем"} <span style="opacity:.85;font-weight:400">(${np} игр. + ${nb} из бестиария)</span></span></button>
-   ${hintBtn("hIni",`<p>Каждому участнику: 2 × Ловкость + бонусы инициативы − d20 (у игроков учитываются ваши модификаторы). Выше результат — раньше ход.</p><p>Выпала 1 — ходит первым и получает 8 действий; 2 — первым, если ни у кого нет 1. Выпало 19 — последним; 20 — последним и только 2 действия (это только в первом раунде). При равенстве раньше ходит тот, у кого выше Ловкость, затем d100.</p><p>Из бестиария в бросок попадают персонажи с отметкой «В бою», каждый экземпляр отдельно.</p>`,"Как считается")}
+function iniNpcN(){return bestS().list.filter(n=>n.on).reduce((a,n)=>a+n.qty,0);}
+function iniHas(I,p){return I.list.some(r=>r.k==="p"&&r.u===p.uid&&r.who===p.char_id);}
+function iniPending(I){return I?(ROOM.players||[]).filter(p=>!iniHas(I,p)):[];}
+function iniResort(I,c){if(I.manual){const old=I.list.filter(r=>r.o),nw=I.list.filter(r=>!r.o).sort(iniSort);I.list=old;
+    nw.forEach(r=>{r.o=1;const j=I.list.findIndex(x=>iniSort(r,x)<0);I.list.splice(j<0?I.list.length:j,0,r);});}
+  else{I.list.sort(iniSort);I.list.forEach(r=>r.o=1);}
+  if(!I.moved||!c){I.cur=0;return;}const i=I.list.indexOf(c);I.cur=i<0?0:i;}
+function iniPRow(p,x,v){return {k:"p",n:p.name||"Без имени",u:p.uid,who:p.char_id,base:x.base,r:x.r,ini:x.ini,agi:x.agi,d100:x.d100,ab:ACT_BASE,act:iniActs(x.r,ACT_BASE),hp:v&&!v.err?v.hpCur:null,hpMax:v&&!v.err?v.hpMax:null,gm:!!x.gm};}
+function iniRollFor(v){let r=rnd(20);const mk=v.s&&v.s.mark&&v.s.mark.i!=null&&BOOK.fates[v.s.mark.i]?BOOK.fates[v.s.mark.i].name:"";
+  if(mk==="Аура удачи"&&r===3)r=2;if(mk==="Аура неудачи"&&r===18)r=19;return {r,base:v.ini,ini:v.ini-r,agi:v.R.tot.agi,d100:rnd(100)};}
+/* мастер: подхватить броски игроков из их листов */
+function initMerge(){const I=ROOM.init;if(!gmIsMaster()||!I||!I.ask)return;const got=[],cur0=I.list[I.cur];
+  (ROOM.players||[]).forEach(p=>{const x=p.sheet&&p.sheet.iniRoll;if(!x||x.t!==I.t||iniHas(I,p))return;
+    const v=roomPeek(p.sheet,ROOM.mods[rmKey(p)]||[]);I.list.push(iniPRow(p,x,v));got.push(`${p.name||"Без имени"} ${x.ini}`);});
+  if(!got.length)return;iniResort(I,cur0);initSave(true);
+  const left=iniPending(I).length;toast(`Инициатива: ${got.join(", ")}`+(left?` · ждём ещё ${left}`:" · все игроки бросили ✓"));}
+function initStart(){const show=ROOM.init?ROOM.init.show!==false:true;
+  ROOM.init={t:Date.now(),round:1,cur:0,list:[],show,ask:1};initNpcRoll(true);initSave(true);
+  toast("Бой! Игроки получили запрос на инициативу"+(iniNpcN()?`, бестиарий брошен (${iniNpcN()})`:""));renderRoom();}
+function initNpcRoll(quiet){const I=ROOM.init;if(!I)return;const rows=[];
+  bestS().list.filter(n=>n.on).forEach(n=>{for(let q=1;q<=n.qty;q++){const base=npcIni(n),r=rnd(20),ab=Math.max(1,npcEff(n,"act")),hm=npcEff(n,"hp");
+    rows.push({k:"npc",id:n.id,n:(n.name||"Без имени")+(n.qty>1?" "+q:""),sec:n.secret,base,r,ini:base-r,agi:npcEff(n,"agi"),d100:rnd(100),ab,act:iniActs(r,ab),hp:hm,hpMax:hm});}});
+  if(!rows.length){if(!quiet)toast("В бестиарии никто не отмечен «В бою»");return;}
+  const c=I.list[I.cur];I.list=I.list.filter(r=>r.k!=="npc"||r.man);I.list.push(...rows);
+  iniResort(I,c&&c.k==="npc"?null:c);
+  try{gmRollPush("Инициатива бестиария: "+rows.map(r=>`${r.sec?"???":r.n} ${r.ini}`).join(", "));}catch(e){}
+  if(!quiet){initSave(true);toast(`Бестиарий брошен: ${rows.length}`);renderRoom();}}
+function initGmFor(list){const I=ROOM.init;if(!I)return;const cur0=I.list[I.cur];const skip=[],done=[];
+  list.forEach(p=>{if(iniHas(I,p))return;const v=roomPeek(p.sheet,ROOM.mods[rmKey(p)]||[]);if(v.err){skip.push(p.name||"Без имени");return;}
+    const x={...iniRollFor(v),gm:true};I.list.push(iniPRow(p,x,v));done.push(`${p.name||"Без имени"} ${x.ini}`);});
+  if(done.length){iniResort(I,cur0);initSave(true);try{gmRollPush("Инициатива за игроков: "+done.join(", "));}catch(e){}}
+  toast((done.length?`Брошено за: ${done.join(", ")}`:"Никого не бросили")+(skip.length?`. Не удалось прочитать лист: ${skip.join(", ")}`:""));renderRoom();}
+function initCard(){const I=ROOM.init,np=(ROOM.players||[]).length,nb=iniNpcN(),pend=iniPending(I);
+  const hint=hintBtn("hIni",`<p>Нажмите «Бой!» — каждый игрок в комнате получит запрос и сам бросит инициативу в своём приложении: 2 × Ловкость + бонусы − d20. Броски сразу попадают в таблицу. Персонажи бестиария с отметкой «В бою» бросаются автоматически (каждый экземпляр отдельно), их можно перебросить кнопкой.</p><p>Если игрок не может бросить сам — бросьте за него (учитываются ваши модификаторы).</p><p>Выпала 1 — ходит первым и получает 8 действий; 2 — первым, если ни у кого нет 1. Выпало 19 — последним; 20 — последним и только 2 действия (только в первом раунде). При равенстве раньше ходит тот, у кого выше Ловкость, затем d100.</p>`,"Как это работает");
+  if(!I)return `<div class="card initcard"><h3 style="margin-top:0">Инициатива</h3>
+   <button class="btn big primary" data-ini="start">${bigIco("dice")}<span>Бой! <span style="opacity:.85;font-weight:400">(${np} игр. бросят сами + ${nb} из бестиария)</span></span></button>
+   <button class="btn small" data-ini="manual" style="margin-top:8px">Собрать очередь вручную</button>${hint}
+   ${ROOM.initMissing?`<div class="warnbox" style="margin-top:8px">Запрос не уходит игрокам: на сервере нет колонки. Запустите в Supabase → SQL Editor файл <b>room-bestiary.sql</b>.</div>`:""}</div>`;
+  const rolled=I.list.filter(r=>r.k==="p").length;
+  return `<div class="card initcard"><div class="inline" style="gap:8px;justify-content:space-between"><h3 style="margin:0">Бой · раунд ${I.round}</h3><span class="note">начат ${agoTxt(I.t)}</span></div>
+   ${!I.ask?`<p class="note" style="margin:6px 0 0">Очередь собрана вручную: игрокам запрос на бросок не отправлялся.</p>`:""}${I.ask?`<div class="iniwait">${pend.length?`<b>Ждём бросков (${rolled}/${rolled+pend.length}):</b><div class="iniwl">${pend.map(p=>`<span class="iniw"><span>${esc(p.name||"Без имени")}</span><button class="btn small" data-ini="gmfor|${esc(p.uid)}|${esc(p.char_id)}">Бросить за него</button></span>`).join("")}</div>${pend.length>1?`<button class="btn small" data-ini="gmall" style="margin-top:6px">Бросить за всех оставшихся (${pend.length})</button>`:""}`
+     :np?`<b class="pos">Все игроки бросили ✓</b>`:`<span class="note">В комнате нет игроков.</span>`}</div>`:""}
+   <div class="inline" style="gap:8px;margin-top:8px"><button class="btn small" data-ini="npc">${I.list.some(r=>r.k==="npc")?"Перебросить бестиарий":"Бросить за бестиарий"} (${nb})</button></div>
    ${ROOM.initMissing?`<div class="warnbox" style="margin-top:8px">Порядок ходов не уходит игрокам: на сервере нет колонки. Запустите в Supabase → SQL Editor файл <b>room-bestiary.sql</b>.</div>`:""}
-   ${I&&I.list&&I.list.length?`<div class="inline" style="gap:8px;justify-content:space-between;margin-top:10px"><b>Раунд ${I.round}</b><span class="note">брошено ${agoTxt(I.t)}</span></div>${initTable(I,true)}
-   <div class="inline" style="gap:8px;margin-top:8px"><button class="btn primary" data-ini="next">Следующий ход →</button><button class="btn small" data-ini="round">Новый раунд</button><button class="btn small" data-ini="show">${I.show===false?"Игроки не видят порядок":"Игроки видят порядок"}</button><button class="btn small" data-ini="clear">Закончить бой</button></div>`:""}</div>`;}
-function initPlayerUI(){const v=ROOM.initP;if(!v||v.off||!Array.isArray(v.list)||!v.list.length)return "";
-  const c=v.list[v.cur];
-  return `<div class="iblk rev initcard" style="margin-top:10px"><div class="iblk-t">Порядок ходов · раунд ${v.round||1}</div><div class="iblk-b">${c?`<div style="margin-bottom:6px">Сейчас ходит: <b>${esc(c.n)}</b>${initMine(c)?" — это вы!":""}</div>`:""}${initTable(v,false)}</div></div>`;}
+   ${I.list.length?`<h4 style="margin:12px 0 0">Очерёдность</h4>${initTable(I,true)}`:`<p class="note" style="margin:10px 0 0">${I.ask?"Таблица заполнится, когда придут первые броски.":"Очередь пуста — добавьте участников ниже."}</p>`}
+   ${I.manual&&I.list.length>1?`<button class="btn small" data-ini="sort" style="margin-top:6px">Упорядочить по инициативе</button> <span class="note">порядок задан вручную</span>`:""}
+   ${iniAddUI()}
+   <div class="inline" style="gap:8px;margin-top:8px">${I.list.length?`<button class="btn primary" data-ini="next">Следующий ход →</button><button class="btn small" data-ini="round">Новый раунд</button>`:""}<button class="btn small" data-ini="show">${I.show===false?"Игроки не видят порядок":"Игроки видят порядок"}</button><button class="btn small" data-ini="start">Новый бой</button><button class="btn small" data-ini="clear">Закончить бой</button></div>${hint}</div>`;}
+/* игрок */
+function iniMyRoll(v){const c=roomChar();if(!v||!c)return null;const me=(v.list||[]).find(initMine);if(me)return me;const x=c.iniRoll;return x&&x.t===v.t?x:null;}
+function initMeRoll(){const v=ROOM.initP,c=roomChar();if(!v||!v.ask){toast("Мастер ещё не начал бой");return;}if(!c){toast("Нет персонажа в комнате");return;}
+  if(iniMyRoll(v)){toast("Вы уже бросили инициативу в этом бою");return;}
+  const pk=roomPeek(c);if(pk.err){toast("Не удалось прочитать лист: "+pk.err);return;}
+  const x=iniRollFor(pk);c.iniRoll={t:v.t,...x};const txt=`Инициатива: ${x.base} − d20 (${x.r}) = ${x.ini}${x.r===1?" — критический успех, 8 действий!":x.r===20?" — провал, 2 действия":""}`;
+  try{ROLLS.unshift(txt);c.rollLog=Array.isArray(c.rollLog)?c.rollLog:[];c.rollLog.unshift({t:Date.now(),x:txt});if(c.rollLog.length>150)c.rollLog.length=150;}catch(e){}
+  try{if(C&&C.id===c.id){cbIni(x.r);}}catch(e){}
+  save();roomPush();toast(txt);try{iniAskBar();}catch(e){}try{roomRefresh();}catch(e){}if(STEP===10)try{render();}catch(e){}}
+function initPlayerUI(){const v=ROOM.initP;if(!v)return "";const list=Array.isArray(v.list)?v.list:[];const mine=v.ask?iniMyRoll(v):null;
+  const ask=v.ask?(mine?`<div class="iniasked">Ваша инициатива: <b>${mine.ini}</b> <span class="note">(d20 = ${mine.r}${mine.r===1?", крит!":mine.r===20?", провал":""})</span>${list.some(initMine)?"":" · отправлено мастеру"}</div>`
+    :`<button class="btn big primary iniaskbtn" data-ini="me">${bigIco("dice")}<span>Бой! Бросить инициативу</span></button>`):"";
+  if(v.off||!list.length)return ask?`<div class="iblk rev initcard" style="margin-top:10px"><div class="iblk-t">Бой</div><div class="iblk-b">${ask}${v.off?`<div class="note" style="margin-top:6px">Порядок ходов мастер пока не показывает.</div>`:mine?`<div class="note" style="margin-top:6px">Ждём остальных.</div>`:""}</div></div>`:"";
+  const c=list[v.cur];
+  return `<div class="iblk rev initcard" style="margin-top:10px"><div class="iblk-t">Порядок ходов · раунд ${v.round||1}</div><div class="iblk-b">${ask}${c&&(!v.ask||v.go)?`<div style="margin:6px 0">Сейчас ходит: <b>${esc(c.n)}</b>${initMine(c)?" — это вы!":""}</div>`:""}${initTable(v,false)}</div></div>`;}
+/* плашка «Бросить инициативу» поверх любой вкладки, пока игрок не бросил */
+function iniAskBar(){let el=document.getElementById("iniAsk");const v=typeof ROOM==="undefined"?null:ROOM.initP;
+  const need=!!(v&&v.ask&&ROOM.st&&ROOM.st.role==="player"&&!iniMyRoll(v))&&STEP!==11;
+  if(!need){if(el)el.remove();return;}
+  if(!el){el=document.createElement("button");el.id="iniAsk";el.type="button";el.className="btn primary";el.dataset.ini="me";el.innerHTML=`<span aria-hidden="true">⚔</span> Бой! Бросить инициативу`;document.body.appendChild(el);}}
 document.addEventListener("click",e=>{const b=e.target.closest("[data-ini]");if(!b)return;const [a,x]=b.dataset.ini.split("|"),I=ROOM.init;
+  if(a==="me"){initMeRoll();return;}
+  if(a==="manual"){if(I)return;const A=iniAddS();A.open=true;ROOM.init={t:Date.now(),round:1,cur:0,list:[],show:true,ask:0};initSave(true);renderRoom();return;}
+  if(a==="start"){if(I)askConfirm("Начать новый бой? Текущий порядок и раунд сбросятся, игроки бросят заново.",initStart);else initStart();return;}
   if(a==="roll"){if(I&&I.list&&I.list.length)askConfirm("Перебросить инициативу всем? Текущий порядок и раунд сбросятся.",initRollAll);else initRollAll();return;}
   if(!I)return;
-  if(a==="next"){I.cur++;if(I.cur>=I.list.length){I.cur=0;I.round++;I.list.forEach(r=>r.act=r.ab||ACT_BASE);toast(`Раунд ${I.round}`);}initSave(true);renderRoom();return;}
-  if(a==="round"){I.cur=0;I.round++;I.list.forEach(r=>r.act=r.ab||ACT_BASE);initSave(true);toast(`Раунд ${I.round}`);renderRoom();return;}
+  if(a==="next"){I.moved=1;I.cur++;if(I.cur>=I.list.length){I.cur=0;I.round++;I.list.forEach(r=>r.act=r.ab||ACT_BASE);toast(`Раунд ${I.round}`);}initSave(true);renderRoom();return;}
+  if(a==="round"){I.moved=1;I.cur=0;I.round++;I.list.forEach(r=>r.act=r.ab||ACT_BASE);initSave(true);toast(`Раунд ${I.round}`);renderRoom();return;}
   if(a==="show"){I.show=I.show===false;initSave(true);renderRoom();return;}
+  if(a==="addroll"||a==="addfix"){iniAddDo(a==="addroll");return;}
+  if(a==="up"||a==="dn"){const i=Number(x),j=a==="up"?i-1:i+1;if(j<0||j>=I.list.length)return;const c=I.list[I.cur];
+    [I.list[i],I.list[j]]=[I.list[j],I.list[i]];I.manual=1;I.list.forEach(r=>r.o=1);I.cur=I.moved&&c?I.list.indexOf(c):0;initSave(true);renderRoom();return;}
+  if(a==="sort"){const c=I.list[I.cur];I.manual=0;iniResort(I,c);initSave(true);renderRoom();return;}
+  if(a==="npc"){if(I.list.some(r=>r.k==="npc"))askConfirm("Перебросить инициативу всему бестиарию?",()=>initNpcRoll(false));else initNpcRoll(false);return;}
+  if(a==="gmall"){initGmFor(iniPending(I));return;}
+  if(a==="gmfor"){const [,u,w]=b.dataset.ini.split("|");const p=(ROOM.players||[]).find(p=>p.uid===u&&p.char_id===w);if(p)initGmFor([p]);return;}
   if(a==="drop"){const i=Number(x),r=I.list[i];if(!r)return;askConfirm(`Убрать «${r.n}» из порядка ходов?`,()=>{I.list.splice(i,1);if(I.cur>i||I.cur>=I.list.length)I.cur=Math.max(0,I.cur>i?I.cur-1:0);initSave(true);renderRoom();});return;}
   if(a==="clear"){askConfirm("Закончить бой и убрать порядок ходов у всех?",()=>{ROOM.init=null;lsSet(initKey(),null);clearTimeout(initSave.t);initPush();renderRoom();});return;}
 });
+
+/* ---------- Очередь боя: добавление руками ---------- */
+function iniAddS(){return ROOM.iniAdd||(ROOM.iniAdd={open:false,src:"",name:"",base:"",act:"",sec:false});}
+function iniAddUI(){const A=iniAddS(),B=bestS().list;
+  return `<details class="iniadd" ${A.open?"open":""}><summary data-iadsum>＋ Добавить в очередь</summary><div class="iniadd-b">
+   <label class="note" for="iadSrc">Кто</label><select class="inp" id="iadSrc" data-iad="src" style="width:100%;box-sizing:border-box"><option value="" ${A.src?"":"selected"}>Свой вариант — ввести имя</option>${B.map(n=>`<option value="${n.id}" ${A.src===n.id?"selected":""}>Бестиарий: ${esc(n.name||"Без имени")}</option>`).join("")}</select>
+   ${A.src?"":`<label class="note" for="iadName" style="display:block;margin-top:6px">Имя</label><input class="inp" id="iadName" data-iad="name" value="${esc(A.name)}" placeholder="Например: Подкрепление, Турель" style="width:100%;box-sizing:border-box">`}
+   <div class="iadrow"><label class="note">Инициатива<input class="inp" type="number" inputmode="numeric" data-iad="base" value="${esc(A.base)}" placeholder="20"></label>
+    <label class="note">Действий<input class="inp" type="number" inputmode="numeric" data-iad="act" value="${esc(A.act)}" placeholder="${ACT_BASE}"></label></div>
+   <label class="chk"><input type="checkbox" data-iad="sec" ${A.sec?"checked":""}> Скрыть имя от игроков («???»)</label>
+   <div class="inline" style="gap:8px"><button class="btn small primary" data-ini="addroll">Бросить d20 и добавить</button><button class="btn small" data-ini="addfix">Добавить с этим числом</button></div>
+   <p class="note" style="margin:6px 0 0">«Бросить»: в поле — база (2 × Ловкость + бонус), итог = база − d20, крит/провал как у всех. «С этим числом» — встанет ровно с ним, без броска.</p></div></details>`;}
+function iniAddPick(id){const A=iniAddS(),n=id&&npcById(id);A.src=n?id:"";if(n){A.base=String(npcIni(n));A.act=String(Math.max(1,npcEff(n,"act")));A.sec=!!n.secret;}}
+function iniAddDo(roll){const I=ROOM.init,A=iniAddS();if(!I)return;const base=Math.round(Number(String(A.base).replace("−","-")));
+  if(String(A.base).trim()===""||!Number.isFinite(base)){toast("Укажите инициативу (число)");return;}
+  const npc=A.src&&npcById(A.src);let name=npc?(npc.name||"Без имени"):String(A.name||"").trim();if(!name){toast("Введите имя");return;}
+  if(npc){const k=I.list.filter(r=>r.k==="npc"&&r.id===npc.id).length;if(k)name+=" "+(k+1);}
+  const r=roll?rnd(20):null,ab=Math.max(1,Math.round(Number(A.act))||ACT_BASE),hm=npc?npcEff(npc,"hp"):null;
+  const row={k:npc?"npc":"x",id:npc?npc.id:null,n:name,sec:!!A.sec,base,r,ini:roll?base-r:base,agi:npc?npcEff(npc,"agi"):0,d100:rnd(100),ab,act:roll?iniActs(r,ab):ab,hp:hm,hpMax:hm,man:1};
+  const c=I.list[I.cur];I.list.push(row);iniResort(I,c);initSave(true);
+  const pos=I.list.indexOf(row)+1;const t=`${name}: инициатива ${row.ini}${roll?` (${base} − d20 ${r})`:""}, место ${pos}`;
+  if(roll)try{gmRollPush("Инициатива: "+(row.sec?"??? ("+name+")":name)+" "+row.ini);}catch(e){}
+  toast(t);if(!npc)A.name="";renderRoom();}
+document.addEventListener("input",e=>{const t=e.target;if(!t.dataset||!t.dataset.iad||t.type==="checkbox"||t.tagName==="SELECT")return;iniAddS()[t.dataset.iad]=t.value;});
+document.addEventListener("change",e=>{const t=e.target;if(!t.dataset||!t.dataset.iad)return;const A=iniAddS();
+  if(t.dataset.iad==="src"){iniAddPick(t.value);t.blur();renderRoom();return;}
+  if(t.type==="checkbox"){A.sec=t.checked;return;}});
+document.addEventListener("toggle",e=>{const d=e.target;if(d&&d.classList&&d.classList.contains("iniadd"))iniAddS().open=d.open;},true);
 
 /* ---------- Кампейн: Проект Мекка (карта государств, общая база) ---------- */
 function stCampaign(){return "";}
@@ -4821,7 +4942,7 @@ async function roomSubscribe(){const st=ROOM.st;if(!st)return;const sb=await roo
 async function roomPoll(){const st=ROOM.st;if(!st)return;if(st.role==="gm")return roomFetch();gmLogLoad(false);initLoad(false);try{const sb=await roomClient();const m=await sb.from("room_mods").select("*").eq("room",st.code).eq("uid",ROOM.uid).eq("char_id",st.charId).maybeSingle();if(!m.error)roomApplyMods(m.data);}catch(e){}}
 async function roomFetch(){const st=ROOM.st;if(!st||st.role!=="gm")return;try{const sb=await roomClient();
     const [a,b]=await Promise.all([sb.from("room_players").select("*").eq("room",st.code).order("name"),sb.from("room_mods").select("*").eq("room",st.code)]);
-    if(a.error)throw a.error;if(b.error)throw b.error;ROOM.players=a.data||[];ROOM.mods={};(b.data||[]).forEach(r=>ROOM.mods[rmKey(r)]=r.mods||[]);ROOM.err="";roomCheckUid();}catch(e){ROOM.err=roomErr(e);}roomRefresh();renderRoomBtn();}
+    if(a.error)throw a.error;if(b.error)throw b.error;ROOM.players=a.data||[];ROOM.mods={};(b.data||[]).forEach(r=>ROOM.mods[rmKey(r)]=r.mods||[]);ROOM.err="";roomCheckUid();try{initMerge();}catch(e){}}catch(e){ROOM.err=roomErr(e);}roomRefresh();renderRoomBtn();}
 function roomFetchSoon(){clearTimeout(ROOM.fetchT);ROOM.fetchT=setTimeout(roomFetch,400);}
 async function roomCreate(){ROOM.busy=true;ROOM.err="";roomRefresh();try{const sb=await roomClient();const A="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";let code,err;
     for(let t=0;t<5;t++){code=Array.from({length:5},()=>A[rnd(A.length)-1]).join("");const r=await sb.from("rooms").insert({code,gm:ROOM.uid,title:""});err=r.error;if(!err||err.code!=="23505")break;}
@@ -4896,7 +5017,7 @@ document.addEventListener("click",async e=>{const b=e.target.closest("[data-gmta
   if(d.vbopen!=null){const r=VB.list[Number(d.vbopen)];if(!r)return;VB.sel=r;VB.sheet=null;renderRoom();scrollTo(0,0);
     try{const sb=await vaultSb();const {data,error}=await sb.rpc("vault_peek",{p_owner:r.owner,p_char:r.char_id});if(error)throw error;if(VB.sel!==r)return;VB.sheet=data||{};}catch(err){VB.err=vaultErr(err);VB.sel=null;}renderRoom();}});
 document.addEventListener("input",e=>{if(e.target.id!=="vbSearch")return;VB.q=e.target.value;const l=$("#vbList");if(l)l.innerHTML=vbItems();});
-function roomFocusInside(){const a=document.activeElement;return !!(a&&$("#roomView")&&$("#roomView").contains(a)&&a.matches('[data-rmd],#rcUrl,#rcKey,#rmCode,#vbSearch,[data-npc],[data-npcn],[data-bd],[data-inihp]'));}
+function roomFocusInside(){const a=document.activeElement;return !!(a&&$("#roomView")&&$("#roomView").contains(a)&&a.matches('[data-rmd],#rcUrl,#rcKey,#rmCode,#vbSearch,[data-npc],[data-npcn],[data-bd],[data-inihp],[data-iad]'));}
 function roomRefresh(){if(STEP!==11||!$("#roomView"))return;if(roomFocusInside()){ROOM.dirty=true;return;}renderRoom();}
 function renderRoom(){const body=$("#roomView");if(!body)return;if(typeof ROOM==="undefined"||!ROOM){setTimeout(renderRoom,30);return;}try{renderRoomInner(body);}catch(e){console.error(e);body.innerHTML=roomCrashHTML(e);}}
 function renderRoomInner(body){ROOM.dirty=false;

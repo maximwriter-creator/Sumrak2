@@ -1923,6 +1923,65 @@ body.x50dead #main .combat .cbttl b{color:var(--warn)}
   body.x40fight .mstrip .x40mod:not(.x48open) .x56z{display:none}
   body.x40fight .mstrip .x48open .x56z{display:block}
 }
+
+/* ===== ux57: ошибки телефона по снимкам пользователя (12.11.2026) ===== */
+/* 1. Строка состояния Android: когда шапка уезжает, содержимое не должно идти под часы и значки */
+body::before{content:"";position:fixed;top:0;left:0;right:0;height:var(--sat,0px);background:var(--chrome,var(--bg));z-index:60;pointer-events:none}
+/* 2. Полоса Миссии: высота шапки уже включает строку состояния, второй раз её не прибавлять */
+.mstrip{top:max(var(--sat,0px),var(--x3hdrh,0px))!important}
+/* 3. Кнопка прокачки характеристики снова в углу плитки (ux34 сделал её частью потока, и right/bottom сдвигали её) */
+.stile>.upbtn{position:absolute}
+/* 3а. «Активировать» и «Запрос» в трекерах переносятся под подпись, а не вылезают за карточку (на любой ширине) */
+#sheet .trk>.trkl>span:first-child{flex-wrap:wrap!important;row-gap:4px!important;min-width:0}
+#sheet .trk>.trkl>span:first-child>span{white-space:normal!important}
+@media (max-width:560px){
+  /* 4. Названия талантов и редактируемые тексты — по левому краю (ux44 центрировал) */
+  .ownname{justify-content:flex-start;text-align:left}
+  /* 5. Трекеры: одна колонка, строка «название — значение − +»; цели 44 px больше не вылезают за карточку */
+  #sheet .trk{grid-template-columns:minmax(0,1fr)!important;gap:8px!important}
+  #sheet .trk>.trkl,#sheet .trk>label{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;column-gap:8px;padding:6px 10px}
+  #sheet .trk>.trkl>span:first-child{flex-wrap:wrap!important;justify-content:flex-start!important;align-items:center;gap:4px 8px!important;min-width:0}
+  #sheet .trk>.trkl>span:first-child>span{white-space:normal!important;font-size:15px!important}
+  #sheet .trk>.trkl>.trkrow{grid-column:2;width:144px;justify-content:flex-start;gap:4px}
+  #sheet .trk .trkrow input,#sheet .trk .trkrow .fateval{flex:0 0 48px!important;width:48px;min-width:0!important}
+  #sheet .trk>.trkl>span:first-child>.btn{min-height:44px;padding:2px 6px!important}
+  /* 6. Фишки действий: четыре помещаются в строку и на 375 px */
+  .combat .cbacts .apip{width:20px;height:20px}
+  .combat .cbacts .actpips{column-gap:3px}
+}
+
+/* ===== ux58: мелкие замечания четвёртой критики ===== */
+/* Штамп критического успеха: в светлой теме золото как текст (#7A5C12), в тёмной — прежний --crit */
+:root{--x58critT:#7A5C12}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--x58critT:var(--crit)}}
+:root[data-theme="dark"]{--x58critT:var(--crit)}
+.stamp.r-cok{color:var(--x58critT);border-color:var(--x58critT)}
+/* Вкладки мастера: слова переносятся целиком («База / персонажей»), а не «персонаже-й» */
+.gmtabs button{overflow-wrap:normal;word-break:normal;hyphens:manual}
+@media (max-width:380px){.gmtabs button{font-size:14px;padding-left:4px;padding-right:4px}}
+
+/* ===== ux59: остаток мелких замечаний четвёртой критики ===== */
+/* Кнопки и поля шириной 100% не вылезают за свой блок на 320 px (меню «Ещё», поля событий мастера) */
+.morepop .btn{box-sizing:border-box}
+.x3invgrid .inp,.x3invgrid .sel{box-sizing:border-box;min-width:0}
+/* Полоса в бою на телефоне: «Мод.» всегда последней — раскрытый модификатор уходит отдельным рядом, а «Ранение» остаётся в первом */
+@media (max-width:560px){body.x40fight .mstrip>.msi.x40mod{order:1}}
+/* ≤ 360 px: ОЗ, Судьба, Ранение и Мод. помещаются в один ряд (раньше при ранении или гибели — два ряда) */
+@media (max-width:360px){
+  body.x40fight .mstrip{column-gap:3px!important;padding-left:4px!important;padding-right:4px!important}
+  body.x40fight .mstrip>.msi:not(.mshp):not(.x40mod){flex:1 1 44px!important;min-width:0!important}
+  body.x40fight .mstrip>.msi.x40mod:not(.x48open){flex:0 0 46px!important;min-width:0!important}
+  body.x40fight .mstrip .msl{font-size:10px!important;letter-spacing:.02em!important}
+}
+
+/* ===== ux60: действия с персонажем в «Базе персонажей» ===== */
+.x60acts{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 6px}
+.x60acts .btn{flex:1 1 auto;box-sizing:border-box}
+.x60mine{margin:4px 0 8px}
+.x60pw{margin:6px 0 12px;padding:10px 12px;border:1px solid color-mix(in srgb,var(--warn) 45%,var(--line));border-radius:6px;background:color-mix(in srgb,var(--warn) 6%,var(--panel))}
+.x60row{gap:8px;flex-wrap:wrap;margin:4px 0}
+#x60pass{flex:1 1 160px;min-width:0;box-sizing:border-box}
+@media (max-width:420px){#x60pass{flex-basis:100%}.x60row .btn{flex:1 1 0}}
 </style>
 </head>
 <body>
@@ -15733,7 +15792,7 @@ function runTest(R){
     const r=rnd(20);
     const crit=r===20?"Критический провал":r===1?"Критический успех":"";
     const ok=r!==20&&(r<=v||r===1);
-    const verdict=(crit?crit+", ":"")+(ok?"успех, ":"провал, ")+degText(v,r);
+    const verdict=crit?(((r===1&&r<=v)||(r===20&&r>v))?crit+", "+degText(v,r):crit):(ok?"успех, ":"провал, ")+degText(v,r);
     pushLog(`${type} тест, ${nm}: ${r} — ${verdict}`);fateOffer(r);panel(`${type} тест: ${nm}`,r,esc(verdict.charAt(0).toUpperCase()+verdict.slice(1)),ok?"ok":"bad");return;}
   if(TEST.type==="opposed"){
     const o=Number(TEST.opp)||0,a=rnd(20),b=rnd(20);
@@ -17421,7 +17480,7 @@ X3.statusStrip=function(R){if(C.stats.hp==null&&C.stats.fate==null)return "";con
     ${wp?`<div class="msi warn"><span class="msl">Ранение</span><b>${sgn(wp)}</b></div>`:""}
     ${C.perfNext&&X3.ch()==="Перфекционизм"?`<div class="msi ok"><span class="msl">След. тест</span><b>+${C.perfNext}</b></div>`:""}
   </div>`;};
-document.addEventListener("click",e=>{const b=e.target.closest("[data-hpd]");if(!b)return;const R=compute(C),w=W();const cur=w.cur==null?R.hp:Number(w.cur);w.cur=Math.max(-99,Math.min(R.hp,cur+Number(b.dataset.hpd)));save();render();});
+document.addEventListener("click",e=>{const b=e.target.closest("[data-hpd]");if(!b)return;const R=compute(C),w=W();const cur=w.cur==null?R.hp:Number(w.cur),d=Number(b.dataset.hpd);if(d<0&&cur<=0){toast("ОЗ уже 0. Урон сверх этого даёт критическое ранение: коснитесь плитки ОЗ и введите урон.");return;}w.cur=Math.max(0,Math.min(R.hp,cur+d));save();render();});
 
 /* --- временные модификаторы в миссии: скрыты за кнопкой --- */
 X3.pmOn=()=>{try{return localStorage.getItem("x3pm")==="1";}catch(e){return false;}};
@@ -17920,7 +17979,7 @@ X3.defPanel=function(R){const w=W();let A={armor:0,total:0};try{A=armorInfo(R);}
   if(C.withdrawal)tile("Ломка","−3","ко всем тестам","warn");
   if(C.stim&&C.stim.left)tile("Стимулятор",C.stim.left,"раундов без эффекта крит.","ok");
   const acts=[];
-  const hits=(C.gmAsks||[]).filter(a=>a.type==="hit"||a.type==="dmg");if(hits.length)acts.push(`<div class="warnbox" style="margin:6px 0">Входящие атаки: ${hits.length}. Ответьте в карточке слева внизу: реакция, затем силовое поле и броня считаются сами.</div>`);
+  const hits=(C.gmAsks||[]).filter(a=>a.type==="hit"||a.type==="dmg");if(hits.length)acts.push(`<div class="warnbox" style="margin:6px 0">Входящие атаки: ${hits.length}. Ответьте в карточке запроса внизу экрана: реакция, затем силовое поле и броня считаются сами.</div>`);
   if(anyF.length){const g=f||anyF[0];if(g.st.cur<g.max||g.st.down)acts.push(`<button class="btn small" data-fld="restart|${g.key}">Перезапустить поле: Интеллект${CB().round>0?", 2 д.":""}</button>`);}
   const an=X3.armoredN?X3.armoredN(C):0,left=Math.max(0,an-(C.armoredUsed||0));if(Number(w.crit)>0&&left)acts.push(`<button class="btn small primary" id="x3armored">Армированный имплант: игнорировать ${w.crit}-е ранение</button>`);
   if(X3.hasArmorMod&&X3.hasArmorMod(C,/инъекции стимулятор/i)&&!(C.stim&&C.stim.left)&&Number(w.crit)>0)acts.push(`<button class="btn small" id="x3stim">Инъекция стимуляторов: 2d10 раундов</button>`);
@@ -19821,7 +19880,7 @@ X3.skRoll32=function(n,again){const k=(X3.SKILLS.find(x=>x[0]===n)||[])[1];if(!k
   const t=X3.test(k,mod),deg=t.ok?(t.deg?`степеней успеха ${t.deg}`:"базовый успех"):`степеней провала ${t.deg}`;
   const ex=[];if(I.parts.length)ex.push(I.parts.join(", "));if(P.why)ex.push(P.why);if(X3.skMod32)ex.push(`модификатор ${sgn(Number(X3.skMod32))}`);
   const rr=!again&&I.reroll?`<div style="margin-top:6px"><button type="button" class="btn small primary" data-x32r="${n}">${E32(I.reroll)}: перебросить</button></div>`:"";
-  X3.say(`${n}: ${LABEL[k]} ${t.v}${again?" (переброс)":""}`,t.r,`${t.r===1?"Критический успех, ":t.r===20?"Критический провал, ":""}${t.ok?"успех":"провал"}, ${deg}.${ex.length?`<div class="note">${X3.esc(ex.join("; "))}</div>`:""}${rr}`,t.ok?"ok":"bad");
+  X3.say(`${n}: ${LABEL[k]} ${t.v}${again?" (переброс)":""}`,t.r,`${(()=>{const c=t.r===1?"Критический успех":t.r===20?"Критический провал":"";if(c)return ((t.r===1&&t.r<=t.v)||(t.r===20&&t.r>t.v))?c+", "+deg:c;return t.ok?(t.deg?"Успех, "+deg:"Базовый успех"):"Провал, "+deg;})()}.${ex.length?`<div class="note">${X3.esc(ex.join("; "))}</div>`:""}${rr}`,t.ok?"ok":"bad");
   if(typeof fateOffer==="function")fateOffer(t.r);};
 const E32=s=>X3.esc(String(s||""));
 document.addEventListener("click",e=>{const b=e.target.closest("[data-x32],[data-x32r]");if(!b)return;if(b.dataset.x32r){b.disabled=true;X3.skRoll32(b.dataset.x32r,true);return;}X3.skRoll32(b.dataset.x32,false);});
@@ -21039,6 +21098,52 @@ try{render();}catch(e){console.error(e);}
   if(b){delete b.dataset.x40mod;b.removeAttribute("role");b.removeAttribute("tabindex");b.removeAttribute("title");b.setAttribute("aria-label",`Модификатор тестов ${b.textContent}`);}
   t.classList.toggle("x56on",v!==0);
   if(v!==0)t.insertAdjacentHTML("beforeend",`<button type="button" class="btn small x56z" data-x40mod="0" aria-label="Сбросить модификатор тестов в 0">Сбросить</button>`);};})();
+
+/* ===== ux59: X3.anim учитывает «уменьшить движение» сама, а не только в вызывающем коде =====
+   При prefers-reduced-motion из кадров убираются transform и translate/scale/rotate; если в кадрах ничего не осталось — анимации нет. */
+(function(){const a0=X3.anim;X3.anim=function(el,kf,o){o=o||{};try{if(typeof RM==="function"&&RM()&&Array.isArray(kf)){const K=["transform","translate","scale","rotate"];kf=kf.map(f=>{const g=Object.assign({},f);K.forEach(k=>delete g[k]);return g;});if(!kf.some(f=>Object.keys(f).some(k=>k!=="offset"&&k!=="easing"&&k!=="composite")))return null;}}catch(e){}return a0.call(this,el,kf,o);};})();
+
+/* ===== ux60: «База персонажей» мастера — выгрузка персонажа (на устройство и файлом) и удаление из базы =====
+   Свои (выгружены с этого устройства, есть в vault_list ключа устройства) удаляются штатной vault_del ключом устройства.
+   Чужие — новой функцией сервера vault_admin_del по паролю администратора базы (SQL: sumrak-build/supabase/vault-admin.sql). */
+(function(){
+VB.mine=null;VB.x60=null;VB.x60pw="";
+X3.vbMine60=async function(){try{if(typeof VAULT==="undefined"||!VAULT||!VAULT.key){VB.mine=new Set();return;}const l=await vaultList(VAULT.key);VB.mine=new Set((l||[]).map(r=>r.char_id));}catch(e){if(!VB.mine)VB.mine=new Set();}};
+X3.mine60=r=>!!(r&&VB.mine&&VB.mine.has(r.char_id));
+X3.name60=r=>(r&&r.name)||"Без имени";
+X3.gone60=function(r){VB.list=(VB.list||[]).filter(x=>x!==r);VB.sel=null;VB.sheet=null;VB.x60=null;renderRoom();scrollTo(0,0);};
+const l0=vbLoad;vbLoad=async function(){const p=X3.vbMine60();await l0.apply(this,arguments);await p;renderRoom();};
+const f0=roomFocusInside;roomFocusInside=function(){const a=document.activeElement;if(a&&a.id==="x60pass")return true;return f0.apply(this,arguments);};
+const v0=vbView;vbView=function(){const h=v0.apply(this,arguments);if(!VB.sel)return h;const r=VB.sel,mine=X3.mine60(r),st=VB.x60||{},ready=!!(VB.sheet&&VB.sheet.stats);
+  const acts=`<div class="x60acts noprint">
+    <button class="btn small primary" data-x60="take" ${ready?"":"disabled"}>Взять на это устройство</button>
+    <button class="btn small" data-x60="file" ${ready?"":"disabled"}>Скачать файл</button>
+    <button class="btn small danger" data-x60="del" ${st.busy?"disabled":""}>Удалить из базы</button></div>
+    ${mine?`<p class="note x60mine">Этот персонаж выгружен с этого устройства.</p>`:""}
+    ${st.ask&&!mine?`<div class="x60pw noprint"><label class="note" for="x60pass">Пароль администратора базы</label><div class="inline x60row"><input class="inp" id="x60pass" type="password" autocomplete="current-password"><button class="btn small danger" data-x60="delgo" ${st.busy?"disabled":""}>${st.busy?"Удаляю…":"Удалить"}</button><button class="btn small" data-x60="cancel">Отмена</button></div><p class="note">Чужого персонажа удаляет только администратор базы. Удаление из облака нельзя отменить.</p></div>`:""}
+    ${st.err?`<div class="warnbox">${esc(st.err)}</div>`:""}`;
+  const mark="только просмотр</div>",i=h.indexOf(mark);return i<0?acts+h:h.slice(0,i+mark.length)+acts+h.slice(i+mark.length);};
+const srvErr=err=>{const m=String((err&&err.code)||"")+" "+String((err&&err.message)||err||"");return /PGRST202|vault_admin_del|Could not find the function/i.test(m)?"На сервере ещё нет функции удаления чужих персонажей. Выполните SQL из файла supabase/vault-admin.sql в панели Supabase (SQL Editor).":vaultErr(err);};
+document.addEventListener("click",async e=>{const b=e.target.closest("[data-x60],[data-vbopen],[data-vb]");if(!b)return;
+  if(!b.dataset.x60){if(b.dataset.vbopen!=null||b.dataset.vb==="back")VB.x60=null;return;}
+  const a=b.dataset.x60,r=VB.sel;if(!r||b.disabled)return;const n=X3.name60(r);
+  if(a==="take"){const c=VB.sheet;if(!c||!c.stats){toast("Лист ещё не загружен");return;}
+    askConfirm(`Добавить копию «${n}» на это устройство? Это будет отдельный персонаж: его изменения не попадут к владельцу.`,()=>{try{const nc=migrate(JSON.parse(JSON.stringify(c)));nc.id=uid();DB.chars.push(nc);save();render();toast(`«${n}» добавлен на устройство: он в списке персонажей`);}catch(err){toast("Не удалось добавить персонажа");}});return;}
+  if(a==="file"){const c=VB.sheet;if(!c||!c.stats){toast("Лист ещё не загружен");return;}
+    const fn=(n.replace(/[\\/:*?"<>|]+/g,"_").trim()||"персонаж")+".json";offer(fn,JSON.stringify({format:"sumrak2096-character",version:1,character:c},null,1),"application/json");return;}
+  if(a==="cancel"){VB.x60=null;renderRoom();return;}
+  if(a==="del"){
+    if(X3.mine60(r)){const here=DB.chars.some(c=>c.id===r.char_id),back=here&&VAULT.auto;
+      askConfirm([`Удалить «${n}» из базы?`,here?"На устройстве персонаж останется.":"",back?"Облачная копия здесь включена: после следующего изменения персонаж выгрузится снова.":"","Удаление из облака нельзя отменить."].filter(Boolean).join(" "),async()=>{try{const sb=await vaultSb();const {error}=await sb.rpc("vault_del",{p_key:VAULT.key,p_char:r.char_id});if(error)throw error;try{delete VAULT.sent[r.char_id];vaultStore();}catch(_){}if(VB.mine)VB.mine.delete(r.char_id);X3.gone60(r);toast(`«${n}» удалён из базы`);}catch(err){VB.x60={err:vaultErr(err)};renderRoom();}});return;}
+    VB.x60={ask:true};renderRoom();setTimeout(()=>{const p=document.getElementById("x60pass");if(p){p.value=VB.x60pw||"";p.focus();}},0);return;}
+  if(a==="delgo"){const pw=((document.getElementById("x60pass")||{}).value||"");if(!pw){toast("Введите пароль администратора");return;}
+    askConfirm(`Удалить «${n}» из базы? Удаление из облака нельзя отменить.`,async()=>{VB.x60={ask:true,busy:true};renderRoom();
+      try{const sb=await vaultSb();const {data,error}=await sb.rpc("vault_admin_del",{p_pass:pw,p_owner:r.owner,p_char:r.char_id});if(error)throw error;
+        if(Number(data)===-1){VB.x60pw="";VB.x60={ask:true,err:"Неверный пароль администратора."};renderRoom();return;}
+        VB.x60pw=pw;X3.gone60(r);toast(Number(data)>0?`«${n}» удалён из базы`:"Этого персонажа в базе уже нет");}
+      catch(err){VB.x60={ask:true,err:srvErr(err)};renderRoom();}});return;}
+},true);
+})();
 </script>
 </body>
 </html>

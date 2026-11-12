@@ -1945,8 +1945,8 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;height:var(--sat,0px
   #sheet .trk>.trkl>.trkrow{grid-column:2;width:144px;justify-content:flex-start;gap:4px}
   #sheet .trk .trkrow input,#sheet .trk .trkrow .fateval{flex:0 0 48px!important;width:48px;min-width:0!important}
   #sheet .trk>.trkl>span:first-child>.btn{min-height:44px;padding:2px 6px!important}
-  /* 6. Фишки действий: четыре помещаются в строку и на 375 px */
-  .combat .cbacts .apip{width:20px;height:20px}
+  /* 6. Фишки действий: 22 px (не меньше принятого исключения), промежуток 3 px — четыре в строку на 375 px */
+  .combat .cbacts .apip{width:22px;height:22px}
   .combat .cbacts .actpips{column-gap:3px}
 }
 
@@ -1982,6 +1982,52 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;height:var(--sat,0px
 .x60row{gap:8px;flex-wrap:wrap;margin:4px 0}
 #x60pass{flex:1 1 160px;min-width:0;box-sizing:border-box}
 @media (max-width:420px){#x60pass{flex-basis:100%}.x60row .btn{flex:1 1 0}}
+
+/* ===== ux61: панель боя, тосты, невысокий экран ===== */
+#x3cbbar .cbb.x61off{border-style:dashed;display:inline-flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.05}
+#x3cbbar .x61why{display:block;font-size:11.5px;font-weight:400;color:var(--warn);letter-spacing:0}
+#x3cbbar .cbb.x61warn{border-color:var(--warn);color:var(--ink)}
+/* тост встаёт над всей стопкой нижних панелей (меню + панель боя), а не только над меню */
+body.x3bar .toast{bottom:calc(var(--x61stack,136px) + 8px)!important}
+/* невысокий экран в бою: шапка не закреплена (ux51), значит и полоса не держит под неё отступ */
+@media (max-width:560px) and (max-height:700px){body.x40fight .mstrip{top:var(--sat,0px)!important}}
+
+/* ===== ux62: цвета-сигналы по One Signal Rule (DESIGN.md) ===== */
+/* Заметки к результату броска: нейтральный текст; плохое событие (заклин, поломка) — Тревогой. Раньше все заметки были «Нормой» (зелёным) */
+.x3note{color:var(--ink)}
+.x3note .x62bad{color:var(--warn)}
+/* Базовые характеристики класса — «выбрано классом»: лавандовая рамка, текст обычный. Оранжевая метка остаётся за «изменено / требует внимания» */
+.isbase .stbtn{color:var(--ink);box-shadow:inset 0 0 0 2px color-mix(in srgb,var(--accent) 60%,transparent),0 2px 6px rgba(20,18,30,.12)}
+.basestat,.stile.isbase .sname,.statrow .basestat{color:var(--accent)!important}
+
+/* ===== ux63: Кубы ===== */
+#tRoll.x63hid{display:none!important}
+.x63hint{margin:10px 0 6px}
+#tCustom~#tRoll,.grid2+#tRoll{display:block;width:100%;margin:8px 0 4px;box-sizing:border-box}
+
+/* ===== ux64: лист легче — ручки перетаскивания только в режиме «Редактировать лист», свёрнутые разделы на телефоне ниже (78 → 62 px; касание заголовка по-прежнему 44 px) ===== */
+body:not(.sheetedit) #sheet details.sec>summary .draghandle{display:none}
+@media (max-width:560px){
+  #sheet>details.sec:not([open]){padding-top:2px;padding-bottom:2px;margin-bottom:8px}
+  #sheet>details.sec>summary h3{margin-top:0;margin-bottom:0}
+}
+
+/* ===== ux65: мелочи пятой критики ===== */
+/* «(d20 = 4)» у инициативы переносится целиком, а не «= 4)» отдельно */
+.combat .cbini .note{display:inline-block;white-space:nowrap}
+
+/* ===== ux66: «Без имени» в «Базе персонажей» — свёрнутая область внизу списка ===== */
+.x66nn{grid-column:1/-1;margin-top:8px;border:1px dashed var(--line);border-radius:6px;padding:0 12px;background:var(--bg)}
+.x66nn>summary{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:44px;cursor:pointer;font-family:var(--narrow);font-weight:700;font-size:16px;list-style:none}
+.x66nn>summary::-webkit-details-marker{display:none}
+.x66nn>summary::before{content:"";width:0;height:0;border-left:6px solid var(--muted);border-top:5px solid transparent;border-bottom:5px solid transparent;margin-right:4px;transition:transform .15s}
+.x66nn[open]>summary::before{transform:rotate(90deg)}
+.x66nn>summary>span:first-of-type{flex:1}
+.x66nn>summary .note{font-family:var(--sans);font-weight:400}
+.x66nn>.vbgrid{margin:4px 0 12px}
+.x66nn>p.note{margin:0 0 8px}
+.x66none{grid-column:1/-1}
+@media (prefers-reduced-motion:reduce){.x66nn>summary::before{transition:none}}
 </style>
 </head>
 <body>
@@ -17480,7 +17526,7 @@ X3.statusStrip=function(R){if(C.stats.hp==null&&C.stats.fate==null)return "";con
     ${wp?`<div class="msi warn"><span class="msl">Ранение</span><b>${sgn(wp)}</b></div>`:""}
     ${C.perfNext&&X3.ch()==="Перфекционизм"?`<div class="msi ok"><span class="msl">След. тест</span><b>+${C.perfNext}</b></div>`:""}
   </div>`;};
-document.addEventListener("click",e=>{const b=e.target.closest("[data-hpd]");if(!b)return;const R=compute(C),w=W();const cur=w.cur==null?R.hp:Number(w.cur),d=Number(b.dataset.hpd);if(d<0&&cur<=0){toast("ОЗ уже 0. Урон сверх этого даёт критическое ранение: коснитесь плитки ОЗ и введите урон.");return;}w.cur=Math.max(0,Math.min(R.hp,cur+d));save();render();});
+document.addEventListener("click",e=>{const b=e.target.closest("[data-hpd]");if(!b)return;const R=compute(C),w=W();const cur=w.cur==null?R.hp:Number(w.cur),d=Number(b.dataset.hpd);if(d<0&&cur<=0){toast("ОЗ уже 0. Урон сверх этого даёт критическое ранение: коснитесь плитки ОЗ и введите урон.");return;}w.cur=Math.max(0,Math.min(R.hp,cur+d));save();render();if(w.cur===0&&cur>0)toast("ОЗ 0. Следующий урон даёт критическое ранение: коснитесь плитки ОЗ и введите урон.");});
 
 /* --- временные модификаторы в миссии: скрыты за кнопкой --- */
 X3.pmOn=()=>{try{return localStorage.getItem("x3pm")==="1";}catch(e){return false;}};
@@ -18499,7 +18545,7 @@ document.addEventListener("click",e=>{const m=document.querySelector("#main .she
 
 /* --- плитка «Начало и конец миссии» во вкладке «Миссия» --- */
 X3.misTile=function(){if(STEP!==10)return;const row=document.querySelector("#main .misjump");if(!row||row.querySelector("#openMission"))return;
-  const b=document.createElement("button");b.className="mj";b.id="openMission";b.title="Начало и конец миссии";b.innerHTML=X3.ICO_FLAG+"<span>Начало/ конец</span>";
+  const b=document.createElement("button");b.className="mj";b.id="openMission";b.title="Начало и конец миссии";b.innerHTML=X3.ICO_FLAG+"<span>Начало/<wbr>конец</span>";
   const first=row.querySelector(".mj");if(first&&first.nextSibling)row.insertBefore(b,first.nextSibling);else row.appendChild(b);};
 
 /* --- короткие подписи в полоске на телефоне --- */
@@ -19948,10 +19994,10 @@ document.addEventListener("click",e=>{const b=e.target.closest("[data-shoot],[da
   const c=CB(),x=c.round>0?X3.cbx():null;
   if(x&&x.aim35&&x.aim35[g.id]){delete x.aim35[g.id];notes.push("Точное: +4 за прицеливание учтено.");}
   if(p.kind==="ranged"&&!X3.blind35active){const rel=X3.hasP35(p,"Надежное");
-    if(r===19&&!rel){g.x3jam=true;notes.push(`<b>Заклинило</b> (выпало 19): «${X3.esc(g.name)}» не стреляет, пока заклин не устранён.`);}
+    if(r===19&&!rel){g.x3jam=true;notes.push(`<b class="x62bad">Заклинило</b> (выпало 19): «${X3.esc(g.name)}» не стреляет, пока заклин не устранён.`);}
     else if(r===19&&rel)notes.push("Надёжное: 19 — без заклина, обычный бросок.");
-    else if(r===20&&rel){g.x3jam=true;notes.push(`Надёжное: 20 — оружие не сломалось, но <b>заклинило</b>.`);}
-    else if(r===20){g.x3broken=true;notes.push(`<b>Оружие сломано</b> (выпало 20): «${X3.esc(g.name)}» не стреляет до ремонта.`);}}
+    else if(r===20&&rel){g.x3jam=true;notes.push(`Надёжное: 20 — оружие не сломалось, но <b class="x62bad">заклинило</b>.`);}
+    else if(r===20){g.x3broken=true;notes.push(`<b class="x62bad">Оружие сломано</b> (выпало 20): «${X3.esc(g.name)}» не стреляет до ремонта.`);}}
   if(X3.hasP35(p,"Непреодолимое подавление"))notes.push("Непреодолимое подавление: враги под огнём проходят невозможный тест Стойкости, при провале теряют 2 действия.");
   else if(X3.hasP35(p,"Подавление"))notes.push("Подавление: враги под огнём проходят тест Стойкости, при провале теряют 2 действия.");
   if(ok&&X3.hasP35(p,"Отбрасывающее"))notes.push("Отбрасывающее: цель проходит тест Стойкости, иначе отброшена на 5 м.");
@@ -20950,7 +20996,7 @@ document.addEventListener("click",e=>{if(!(e.target.closest&&e.target.closest('[
 
 /* база персонажей видна мастерам намеренно: текст о ключе этому не противоречит, пустые записи не показываются */
 (function(){const v0=vaultUI;vaultUI=function(){const out=v0.apply(this,arguments);try{const b=document.getElementById("vaultBox");if(b)b.querySelectorAll("p.note").forEach(p=>{if(p.innerHTML.includes("Кто знает ключ, тот видит персонажей."))p.innerHTML=p.innerHTML.replace("Кто знает ключ, тот видит персонажей.","Кто знает ключ, тот может вернуть этих персонажей к себе. Мастера комнат видят выгруженных персонажей в разделе «База персонажей».");});}catch(e){console.error(e);}return out;};})();
-(function(){const l0=vbLoad;vbLoad=async function(){const out=await l0.apply(this,arguments);try{if(VB.list){const n=VB.list.length;VB.list=VB.list.filter(r=>(r.name||"").trim()||r.cls!=null||r.cls2!=null);if(VB.list.length!==n)renderRoom();}}catch(e){console.error(e);}return out;};})();
+/* v80: фильтр безымянных без класса снят — все безымянные теперь в области «Без имени» (ux66), где их можно открыть и удалить */
 
 /* ===== ux51: урон от мастера — шторка на месте; модификатор сворачивается после броска; инициатива не перебрасывается случайно; Кампейн в оформлении планшета ===== */
 X3.gm51={key:null,v:"",ignA:false,ignT:false,ap:0,last:null};
@@ -21143,6 +21189,51 @@ document.addEventListener("click",async e=>{const b=e.target.closest("[data-x60]
         VB.x60pw=pw;X3.gone60(r);toast(Number(data)>0?`«${n}» удалён из базы`:"Этого персонажа в базе уже нет");}
       catch(err){VB.x60={ask:true,err:srvErr(err)};renderRoom();}});return;}
 },true);
+})();
+
+/* ===== ux61: панель боя говорит правду — сломанное/заклинившее оружие видно до нажатия, при крите 8–9 атака не главная (предупреждение, без блокировки — решение пользователя); тосты над панелью ===== */
+(function(){
+X3.stack61=function(){let top=innerHeight;document.querySelectorAll("#x3cbbar,#x3nav,.x50bar").forEach(e=>{const cs=getComputedStyle(e);if(cs.position!=="fixed"||cs.display==="none")return;const r=e.getBoundingClientRect();if(r.height<1||r.top<innerHeight*0.5)return;top=Math.min(top,r.top);});document.documentElement.style.setProperty("--x61stack",Math.max(0,Math.round(innerHeight-top))+"px");};
+X3.bar61=function(){const el=document.getElementById("x3cbbar");if(el){const b=el.querySelector("[data-shoot],[data-burst]");if(b){const id=b.dataset.shoot||b.dataset.burst,g=(C.gear||[]).find(z=>z.id===id);const why=g?(g.x3broken?"сломано":g.x3jam?"заклин":""):"";
+  if(why){const t=b.textContent.trim();b.classList.remove("primary");b.classList.add("x41off","x61off");b.setAttribute("aria-disabled","true");b.setAttribute("aria-label",`${t}: ${g.name} — ${why}`);b.innerHTML=`${X3.esc(t)}<small class="x61why">${why}</small>`;}
+  else{const cr=Number((W()||{}).crit)||0;if(cr>=8&&cr<10){b.classList.remove("primary");b.classList.add("x61warn");}}}}
+  X3.stack61();};
+const c0=X3.cbBar;X3.cbBar=function(){const out=c0.apply(this,arguments);try{X3.bar61();}catch(e){}return out;};
+addEventListener("resize",()=>{try{X3.stack61();}catch(e){}},{passive:true});
+})();
+
+/* ===== ux63: Кубы — бросок в зоне пальца =====
+   Плитка характеристики бросает сразу (ux38), поэтому «Бросить: <характеристика>» внизу карточки был дублем на ~1100 px — скрыт, над плитками подсказка.
+   «Своё значение»: кнопка #tRoll переносится сразу под поле значения и модификатора (раньше 1194 px при поле на 528). */
+(function(){
+X3.dice63=function(){if(STEP!==9)return;const b=document.getElementById("tRoll"),tiles=document.querySelector("#main .x38tiles");if(!b||!tiles)return;
+  const custom=typeof TEST!=="undefined"&&TEST&&TEST.stat==="custom";
+  if(b.classList.contains("x63hid")===custom)b.classList.toggle("x63hid",!custom);
+  let h=tiles.previousElementSibling;if(!h||!h.classList.contains("x63hint")){h=document.createElement("p");h.className="note x63hint";h.textContent="Касание характеристики — сразу бросок с выбранным типом и модификатором.";tiles.before(h);}
+  if(custom){const inp=document.getElementById("tCustom"),row=inp&&(inp.closest(".grid2")||inp.closest("label"));if(row&&row.nextElementSibling!==b)row.after(b);}};
+let q=false;const mo=new MutationObserver(()=>{if(q||STEP!==9)return;q=true;Promise.resolve().then(()=>{q=false;try{X3.dice63();}catch(e){}});});
+const start=()=>{const m=document.getElementById("main");if(m)mo.observe(m,{childList:true,subtree:true});else setTimeout(start,50);};start();
+})();
+
+/* ===== ux65: мелочи пятой критики — тост не переживает смену шага ===== */
+(function(){
+const t0=toast;toast=function(){X3.toastAt65=Date.now();X3.toastStep65=STEP;return t0.apply(this,arguments);};
+const r0=render;render=function(){const out=r0.apply(this,arguments);try{const t=document.getElementById("toast");if(t&&t.classList.contains("on")&&X3.toastStep65!=null&&X3.toastStep65!==STEP&&Date.now()-(X3.toastAt65||0)>400){t.classList.remove("on");clearTimeout(toast.h);clearTimeout(t0.h);}}catch(e){}return out;};
+})();
+
+/* ===== ux66: «База персонажей» — безымянные отдельно =====
+   Записи без имени (пустое имя или «Без имени»: так vault_put подписывает безымянных) уходят в свёрнутую область внизу списка.
+   Открыть, взять, скачать и удалить их можно так же, как остальных (индексы data-vbopen прежние). */
+(function(){
+X3.noName66=r=>{const n=String((r&&r.name)||"").trim().toLowerCase();return !n||n==="без имени";};
+const card=([r,i])=>`<button class="vbcard" data-vbopen="${i}"><span class="vbn">${esc(r.name||"Без имени")}</span><span class="note">${esc(vbCls(r)||"класс не выбран")}${r.rank_lvl?` · ранг ${r.rank_lvl}`:""}</span><span class="note vbd">обновлён ${agoTxt(r.updated_at)}</span></button>`;
+vbItems=function(){const q=VB.q.trim().toLowerCase();const L=(VB.list||[]).map((r,i)=>[r,i]).filter(([r])=>!q||(r.name||"").toLowerCase().includes(q)||vbCls(r).toLowerCase().includes(q));
+  if(!L.length)return `<p class="note">${VB.list&&VB.list.length?"Никого не нашлось.":"В базе пока нет персонажей."}</p>`;
+  const A=L.filter(([r])=>!X3.noName66(r)),B=L.filter(([r])=>X3.noName66(r));
+  let h=A.map(card).join("")||`<p class="note x66none">${q?"С именем никого не нашлось.":"Персонажей с именем пока нет."}</p>`;
+  if(B.length){const open=VB.x66open||(q&&!A.length);h+=`<details class="x66nn"${open?" open":""}><summary><span>Без имени</span><span class="note">${B.length}</span></summary><p class="note">Персонажи, которым не дали имя. Их можно открыть, взять на устройство, скачать или удалить, как остальных.</p><div class="vbgrid">${B.map(card).join("")}</div></details>`;}
+  return h;};
+document.addEventListener("toggle",e=>{const d=e.target;if(d&&d.classList&&d.classList.contains("x66nn"))VB.x66open=d.open;},true);
 })();
 </script>
 </body>

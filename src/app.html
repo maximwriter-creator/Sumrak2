@@ -1971,7 +1971,7 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;height:var(--sat,0px
   body.x40fight .mstrip{column-gap:3px!important;padding-left:4px!important;padding-right:4px!important}
   body.x40fight .mstrip>.msi:not(.mshp):not(.x40mod){flex:1 1 44px!important;min-width:0!important}
   body.x40fight .mstrip>.msi.x40mod:not(.x48open){flex:0 0 46px!important;min-width:0!important}
-  body.x40fight .mstrip .msl{font-size:10px!important;letter-spacing:.02em!important}
+  body.x40fight .mstrip .msl{font-size:11.5px!important;letter-spacing:0!important}
 }
 
 /* ===== ux60: действия с персонажем в «Базе персонажей» ===== */
@@ -2028,6 +2028,80 @@ body:not(.sheetedit) #sheet details.sec>summary .draghandle{display:none}
 .x66nn>p.note{margin:0 0 8px}
 .x66none{grid-column:1/-1}
 @media (prefers-reduced-motion:reduce){.x66nn>summary::before{transition:none}}
+
+/* ===== ux67: бой на узком экране ===== */
+#x3cbbar .x54w{padding:4px 10px;font-size:13.5px;font-weight:400;line-height:1.25}
+#x3cbbar .x54w.x67hid{display:none}
+/* стрелки ряда переходов */
+.misbar.x67bar{position:relative}
+.x67sc{position:absolute;right:0;z-index:2;width:44px;display:flex;align-items:center;justify-content:flex-end;padding:0 2px;border:0;background:linear-gradient(to left,var(--bg) 55%,color-mix(in srgb,var(--bg) 0%,transparent));color:var(--accent);cursor:pointer}
+.x67sc[data-x67sc="-1"]{right:auto;left:0;justify-content:flex-start;background:linear-gradient(to right,var(--bg) 55%,color-mix(in srgb,var(--bg) 0%,transparent))}
+.x67sc[hidden]{display:none}
+.x67sc:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+
+/* ===== ux68: лист и текст ===== */
+/* Подписи на плитках характеристик — один размер 14 px (раньше подгонялись под ширину: 18 → 11 px); длинное название переносится на вторую строку */
+.stile:not(.sedit) .stbtn{font-size:14px;letter-spacing:.02em}
+.stile:not(.sedit) .stbtn .sname{white-space:normal;overflow:visible;hyphens:manual;line-height:1.15}
+/* Кнопка прокачки «N EXP» — только когда опыта хватает (без опыта скрыта; книга называет стоимость в EXP, слово оставлено) */
+body:not(.sheetedit) .stile>.upbtn.cant{display:none}
+/* Шаг «Характеристики»: строка «Все результаты распределены» не повторяет подсказку палитры «Все значения распределены…» */
+.card:has(.x42pt)>h3+p.note{display:none}
+/* Ручки перетаскивания разделов (Кубы и др.): зона касания 44 px в высоту */
+#main details.sec>summary .draghandle{min-height:44px}
+/* строка значения высотой с кнопку прокачки (44 px): кнопка стоит рядом со значением и не наезжает на двухстрочное название */
+.stile:not(.sedit) .stbtn .sval{min-height:44px;display:flex;align-items:center}
+
+/* ===== ux69: комната мастера ===== */
+/* вкладки «Комната / Бестиарий / База персонажей» — 44 px */
+.gmtabs button{min-height:44px}
+.x69dup{display:none!important}
+/* «Закрыть комнату» отделена от «Выйти»: отступ и оформление опасного действия (подтверждение уже есть) */
+.x69exit{display:flex;flex-wrap:wrap;gap:24px 12px;align-items:center}
+.x69exit [data-room="close"]{margin-left:auto}
+@media (max-width:560px){.x69exit [data-room="close"]{margin-left:0;margin-top:16px}}
+/* строка последнего броска игрока — до двух строк, без обрыва многоточием на первой */
+.x46r .x46rl.note{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+/* разделы комнаты внизу — переключатель-сегменты, а не второе нижнее меню */
+@media (max-width:999px){
+  .x46tabs{left:8px!important;right:8px!important;margin-bottom:6px;border:1px solid var(--line)!important;border-radius:8px;background:var(--panel)!important;box-shadow:0 8px 28px rgba(10,8,20,.22);overflow:hidden}
+  .x46tabs button{border-top:0!important;min-height:44px}
+  .x46tabs button[aria-selected="true"]{background:color-mix(in srgb,var(--accent) 16%,transparent);color:var(--accent)}
+}
+
+/* ===== ux70: мелочи шестой критики ===== */
+/* «Звук» — последним из значков шапки: Блокнот и Файл нужнее за столом */
+header.top .titlerow #soundBtn{order:2}
+
+/* ===== ux71: седьмая критика ===== */
+/* шаг «Характеристики»: строка «откуда итог» под характеристикой */
+.statrow>.x71br{grid-column:1/-1;display:block;margin:2px 0 0;font-size:13px;line-height:1.3;white-space:normal;overflow-wrap:anywhere}
+.statrow>.x71br .x71bk{color:var(--accent);font-weight:700}
+/* последствия крит-ранения */
+.critblk .x71res{flex:1 1 100%;margin:2px 0 4px;font-size:14px;line-height:1.35}
+.critblk .x71res.x71bad b{color:color-mix(in srgb,var(--warn) 80%,var(--ink))}
+.critblk .x71res.x71ok b{color:var(--ok)}
+.critblk .okbox.x71res{margin:4px 0}
+/* контраст: пояснение в блоке крита, вопрос «нужно выбрать», метки ранения у мастера, выбранный раздел комнаты */
+.critblk .note{color:color-mix(in srgb,var(--muted) 65%,var(--ink))}
+.choice.need .q{color:color-mix(in srgb,var(--base) 72%,var(--ink))}
+#roomView .sqtag.bad,#roomView td.bad,#roomView td.bad b{color:color-mix(in srgb,var(--warn) 82%,var(--ink))}
+.x46tabs button[aria-selected="true"]{color:color-mix(in srgb,var(--accent) 72%,var(--ink))!important}
+/* таблица мест рождения: пробел между заголовком и подсказкой d66 */
+.x3tbl>summary{column-gap:6px;flex-wrap:wrap}
+/* мастер: исход броска первым */
+.x46rl .x71v{font-weight:700}
+.x46rl .x71v.x71bad{color:color-mix(in srgb,var(--warn) 82%,var(--ink))}
+.x46rl .x71v.x71ok{color:var(--ok)}
+.x46rl .x71t{color:var(--muted);font-size:12px}
+@media (max-width:360px){.x46tabs button{font-size:13px;overflow-wrap:normal;letter-spacing:-.01em}}
+/* док боя: «Уклонение», «Парирование» одной строкой, где помещается */
+@media (min-width:370px){
+  #x3cbbar{gap:4px}
+  #x3cbbar .cbb{font-size:14px;padding-left:3px;padding-right:3px}
+  #x3cbbar .cbb:not(:last-child){flex:0 1 auto}
+  #x3cbbar .cbb.x71nw{white-space:nowrap;hyphens:none;letter-spacing:-.01em}
+}
 </style>
 </head>
 <body>
@@ -14528,7 +14602,7 @@ function kitChoices(){
 }
 function kitChoicesOr(){
   const rows=[...C.gear.filter(g=>g.src==="class"&&g.opts).map(g=>({g,kind:"gear"})),...C.talents.filter(t=>t.src==="class"&&t.opts).map(g=>({g,kind:"tal"}))];
-  return rows.map(({g,kind})=>`<div class="choice"><div class="q">${kind==="gear"?"Стартовое снаряжение":"Стартовый талант"}: выберите один вариант</div>${g.picked?`<div class="note">Выбрано: <b>${esc(g.name)}</b> <button class="jump ph" data-kitedit="${kind}|${g.id}">изменить</button></div>`:`<div class="kitopts">${g.opts.map((o,i)=>{const r=kind==="gear"?(exactArsenal(o)??matchArsenal(o)):null;const bt=kind==="tal"?findTal(o):null;return `<button class="kitopt" data-kit="${kind}|${g.id}|${i}"><b>${esc(o)}</b>${r!=null?`<span class="note">${esc(ARS[r].text)}</span>`:bt!=null?`<span class="note">${esc(TAL[bt].text.slice(0,160))}…</span>`:""}</button>`;}).join("")}</div>`}</div>`).join("");
+  return rows.map(({g,kind})=>`<div class="choice"><div class="q">${kind==="gear"?"Стартовое снаряжение":"Стартовый талант"}${g.picked?"":": выберите один вариант"}</div>${g.picked?`<div class="note">Выбрано: <b>${esc(g.name)}</b> <button class="jump ph" data-kitedit="${kind}|${g.id}">изменить</button></div>`:`<div class="kitopts">${g.opts.map((o,i)=>{const r=kind==="gear"?(exactArsenal(o)??matchArsenal(o)):null;const bt=kind==="tal"?findTal(o):null;return `<button class="kitopt" data-kit="${kind}|${g.id}|${i}"><b>${esc(o)}</b>${r!=null?`<span class="note">${esc(ARS[r].text)}</span>`:bt!=null?`<span class="note">${esc(TAL[bt].text.slice(0,160))}…</span>`:""}</button>`;}).join("")}</div>`}</div>`).join("");
 }
 function stClass(R){
   const groups=[];BOOK.classes.forEach((c,i)=>{let g=groups.find(x=>x.name===c.group);if(!g)groups.push(g={name:c.group,items:[]});g.items.push(i);});
@@ -15192,7 +15266,7 @@ function showRoll(name,v,r,ini){
   const wp=v!=null?woundPen():0; if(wp){v=v+wp;name=name+` (ранение ${sgn(wp)})`;}
   const crit=r===1?"Критический успех":r===20?"Критический провал":"";
   let verdict="",cls="";
-  if(ini!=null){const ic={1:"ходите первым и получаете 8 действий (4 + 4)",2:"ходите первым (если ни у кого не выпала 1)",19:"ходите последним (если ни у кого не выпала 20)",20:"ходите последним и получаете только 2 действия"}[r];verdict=`Инициатива: ${ini}`+(ic?`. Выпало ${r}: ${ic}`:". Действий: 4")+". При равенстве раньше ходит тот, у кого выше Ловкость, затем d100.";cls=r<=2?"ok":r>=19?"bad":"";}
+  if(ini!=null){const ic={1:"ходите первым и получаете 8 действий (4 + 4)",2:"ходите первым (если ни у кого не выпала 1)",19:"ходите последним (если ни у кого не выпала 20)",20:"ходите последним и получаете только 2 действия"}[r];verdict=`Инициатива: ${ini} (d20 = ${r})`+(ic?`. Выпало ${r}: ${ic}`:". Действий: 4")+". При равенстве раньше ходит тот, у кого выше Ловкость, затем d100.";cls="";}
   else {
     const deg=r<=v?(v-r===0?"базовый успех":`степеней успеха: ${v-r}`):`степеней провала: ${r-v}`;
     if(crit){const consistent=(r===1&&r<=v)||(r===20&&r>v);verdict=consistent?`${crit}, ${deg}`:crit;cls=r===1?"ok":"bad";}
@@ -15200,7 +15274,7 @@ function showRoll(name,v,r,ini){
     else {verdict=`Провал, степеней провала: ${r-v}`;cls="bad";}
   }
   LASTSTAMP="roll";
-  $("#rollNow").innerHTML=`<div class="big">${esc(name)}${v!=null?" "+v:""}: d20</div><div class="inline" style="margin-top:4px">${stamp(r,"roll")}<span class="verdict ${cls}">${esc(verdict)}</span></div>`;
+  $("#rollNow").innerHTML=`<div class="big">${esc(name)}${v!=null?" "+v:""}: ${ini!=null?(ini+r)+" − d20":"d20"}</div><div class="inline" style="margin-top:4px">${ini!=null?stamp(ini,"roll").replace('<span class="stamp','<span data-d20="'+r+'" class="stamp'):stamp(r,"roll")}<span class="verdict ${cls}">${esc(verdict)}</span></div>`;
   rollRec(`${name}${v!=null?" "+v:""}: ${r}${ini!=null?" → "+ini:" — "+verdict.charAt(0).toLowerCase()+verdict.slice(1)}`);ROLLS.length=Math.min(ROLLS.length,8);
   $("#rollLog").innerHTML=ROLLS.slice(1).map(x=>`<li>${esc(x)}</li>`).join("");
   showPanel();
@@ -18075,7 +18149,7 @@ if(typeof initCard==="function"){const ic1=initCard;initCard=function(){const h=
 if(typeof roomFocusInside==="function"){const rf2=roomFocusInside;roomFocusInside=function(){const a=document.activeElement;return rf2.apply(this,arguments)||!!(a&&a.closest&&a.closest(".gmhits")&&a.matches("select"));};}
 
 /* --- 2. инициатива в карточке боя --- */
-document.addEventListener("click",e=>{const b=e.target.closest("[data-rollini]");if(!b)return;setTimeout(()=>{try{const st=document.querySelector("#rollNow .stamp");const vd=document.querySelector("#rollNow .verdict");if(!st||!vd)return;const r=Number(st.textContent);const m=vd.textContent.match(/Инициатива:\s*(-?\d+)/);if(!m)return;
+document.addEventListener("click",e=>{const b=e.target.closest("[data-rollini]");if(!b)return;setTimeout(()=>{try{const st=document.querySelector("#rollNow .stamp");const vd=document.querySelector("#rollNow .verdict");if(!st||!vd)return;const r=Number(st.dataset.d20||st.textContent);const m=vd.textContent.match(/Инициатива:\s*(-?\d+)/);if(!m)return;
   CB().ini={r,n:Number(m[1]),t:Date.now()};save();render();}catch(_){}} ,0);});
 (function(){const ce=X3.combatEnhance;X3.combatEnhance=function(R){ce.apply(this,arguments);try{const card=document.querySelector("#main .combat");if(!card||card.querySelector(".cbini"))return;const c=CB(),ini=2*R.tot.agi+(R.extra.ini||0);const x=c.ini;
   const html=x?`<span class="cbini" title="Бросок инициативы в этом бою">Инициатива <b>${x.n}</b> <span class="note">(d20 = ${x.r}${x.r===1?", 8 действий":x.r===20?", 2 действия":""})</span></span>`:`<button class="btn small cbini" data-rollini="${ini}">Бросить инициативу (${ini})</button>`;
@@ -18333,7 +18407,7 @@ X3.finalCard=function(R){const pend=[];try{STEPS.slice(0,7).forEach((s,i)=>{cons
     <p class="note" style="margin:4px 0"><b>Снаряжение:</b> ${gear||"нет"}</p><p class="note" style="margin:4px 0"><b>Таланты:</b> ${tal||"нет"}</p></div>`;};
 X3.academySum=function(){const A=C.academy||{};const m=Object.entries(A.mods||{}).filter(([,v])=>Number(v));const res=[["xp","опыт"],["hp","ОЗ"],["fate","Очки судьбы"],["light","светлая карма"],["dark","тёмная карма"],["infl","Влияние"]].filter(([k])=>Number(A[k]));const items=(C.gear||[]).filter(g=>g.src==="academy").length;
   const parts=[];if(m.length)parts.push(m.map(([k,v])=>`${LABEL[k]||k} ${sgn(Number(v))}`).join(", "));if(res.length)parts.push(res.map(([k,n])=>`${n} ${sgn(Number(A[k]))}`).join(", "));if(items)parts.push(`предметов: ${items}`);
-  return `<div class="card acasum"><b>Записано в Академии:</b> ${parts.length?X3.esc(parts.join("; ")):"пока ничего"}<div class="note">Академия — необязательная запись того, что персонаж получил. Бюджета очков здесь нет: впишите то, что выдал Мастер.</div></div>`;};
+  return `<div class="card acasum"><b>Записано в Академии:</b> ${parts.length?X3.esc(parts.join("; ")):"пока ничего"}<div class="note">Бюджета очков здесь нет: впишите то, что выдал Мастер.</div></div>`;};
 
 /* --- каталог: сразу «только доступные», если есть что взять --- */
 X3.catTouched=false;document.addEventListener("change",e=>{if(e.target.id==="catOnlyOk")X3.catTouched=true;});
@@ -21234,6 +21308,129 @@ vbItems=function(){const q=VB.q.trim().toLowerCase();const L=(VB.list||[]).map((
   if(B.length){const open=VB.x66open||(q&&!A.length);h+=`<details class="x66nn"${open?" open":""}><summary><span>Без имени</span><span class="note">${B.length}</span></summary><p class="note">Персонажи, которым не дали имя. Их можно открыть, взять на устройство, скачать или удалить, как остальных.</p><div class="vbgrid">${B.map(card).join("")}</div></details>`;}
   return h;};
 document.addEventListener("toggle",e=>{const d=e.target;if(d&&d.classList&&d.classList.contains("x66nn"))VB.x66open=d.open;},true);
+})();
+
+/* ===== ux67: бой на узком экране — предупреждение «Неспособен действовать» не повторяется =====
+   В панели боя (ux54) — одна короткая строка; пока такая же плашка карточки боя видна на экране, строка в панели скрыта (было: карточка + панель + шторка). */
+(function(){
+X3.warn67=function(){const bar=document.getElementById("x3cbbar");const bw=bar&&bar.querySelector(".x54w");if(!bw)return;
+  if(!bw.dataset.x67){const n=(bw.textContent.match(/критическое ранение (\d+)/)||[])[1]||"";bw.dataset.x67="1";bw.setAttribute("aria-label",bw.textContent.trim());bw.innerHTML=`<b>Неспособен действовать</b><span> · крит ${n}</span>`;}
+  const cw=document.querySelector("#main .combat .x54w");let vis=false;if(cw){const r=cw.getBoundingClientRect(),top=(document.querySelector(".mstrip")||{getBoundingClientRect:()=>({bottom:0})}).getBoundingClientRect().bottom,bot=bar.getBoundingClientRect().top;vis=r.height>0&&r.bottom>top+8&&r.top<bot-8;}
+  bw.classList.toggle("x67hid",vis);};
+const c0=X3.cbBar;X3.cbBar=function(){const out=c0.apply(this,arguments);try{X3.warn67();X3.stack61&&X3.stack61();}catch(e){}return out;};
+addEventListener("scroll",()=>{try{const before=document.querySelector("#x3cbbar .x54w.x67hid");X3.warn67();if(!!before!==!!document.querySelector("#x3cbbar .x54w.x67hid"))X3.stack61&&X3.stack61();}catch(e){}},{passive:true});
+})();
+/* ряд переходов Миссии (.misjump): стрелки у краёв показывают, что ряд прокручивается, и листают его; видны только когда в эту сторону есть куда листать */
+(function(){
+const CH=d=>`<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${d>0?"M9 6l6 6-6 6":"M15 6l-6 6 6 6"}"/></svg>`;
+X3.sc67=function(){const mj=document.querySelector("#main .misbar .misjump");if(!mj)return;const bar=mj.parentElement;
+  [1,-1].forEach(d=>{let b=bar.querySelector(`:scope > .x67sc[data-x67sc="${d}"]`);if(!b){b=document.createElement("button");b.type="button";b.className="x67sc";b.dataset.x67sc=d;b.setAttribute("aria-label",d>0?"Листать переходы вперёд":"Листать переходы назад");b.innerHTML=CH(d);bar.appendChild(b);}
+    const can=d>0?mj.scrollLeft+mj.clientWidth<mj.scrollWidth-4:mj.scrollLeft>4;b.hidden=!can;b.style.top=mj.offsetTop+"px";b.style.height=mj.offsetHeight+"px";});
+  bar.classList.add("x67bar");mj.classList.toggle("x67l",mj.scrollLeft>4);
+  if(!mj.dataset.x67){mj.dataset.x67="1";mj.addEventListener("scroll",()=>X3.sc67(),{passive:true});}};
+document.addEventListener("click",e=>{const b=e.target.closest(".x67sc");if(!b)return;const mj=b.parentElement.querySelector(".misjump");if(mj){mj.scrollBy({left:Number(b.dataset.x67sc)*Math.round(mj.clientWidth*0.7),behavior:RM()?"auto":"smooth"});setTimeout(()=>{try{X3.sc67();}catch(_){}},RM()?0:450);}});
+const r0=render;render=function(){const out=r0.apply(this,arguments);try{if(STEP===10)X3.sc67();}catch(e){}return out;};
+addEventListener("resize",()=>{try{if(STEP===10)X3.sc67();}catch(e){}},{passive:true});
+})();
+
+/* ===== ux68: лист и текст — подписи характеристик одного размера; длинные названия переносятся по слогам ===== */
+(function(){
+const SH={"Сообразительность":"Сообрази­тельность","Наблюдательность":"Наблюда­тельность"};
+X3.names68=function(){document.querySelectorAll("#main .stile .sname").forEach(e=>{const t=e.textContent;if(SH[t])e.textContent=SH[t];});};
+/* исходный render зовёт classList.toggle("sheetedit", sheetEditOn()), а sheetEditOn() вне правки отдаёт undefined — toggle без второго аргумента переключал класс при каждой отрисовке */
+const r0=render;render=function(){const out=r0.apply(this,arguments);try{document.body.classList.toggle("sheetedit",!!sheetEditOn());}catch(e){}try{X3.names68();}catch(e){}return out;};
+})();
+
+/* ===== ux69: комната мастера — без повторов заголовков; «Закрыть комнату» отделена от «Выйти» ===== */
+(function(){
+X3.room69=function(){const v=document.getElementById("roomView");if(!v)return;
+  /* свёрнутый блок (ux43 fold) и карточка внутри него с тем же заголовком — внутренний заголовок прячем */
+  v.querySelectorAll("details").forEach(d=>{const s=d.querySelector(":scope>summary");if(!s)return;const st=(s.firstChild&&s.firstChild.nodeType===3?s.firstChild.textContent:(s.querySelector("span,b,h3,h4")||s).textContent).trim();if(!st)return;
+    const h=[...d.querySelectorAll("h3,h4")].find(x=>!s.contains(x)&&x.textContent.trim()===st);if(h)h.classList.add("x69dup");});
+  const close=v.querySelector('[data-room="close"]');if(close&&!close.classList.contains("danger")){close.classList.add("danger");close.removeAttribute("style");const row=close.parentElement;if(row)row.classList.add("x69exit");}};
+const r0=renderRoom;renderRoom=function(){const out=r0.apply(this,arguments);try{X3.room69();}catch(e){}return out;};
+})();
+
+/* ===== ux70: мелочи шестой критики =====
+   Шаг 8: «Что получилось» (.x3final) — сразу под вводной, над необязательной формой Академии.
+   Комната мастера: в шапке «Мастер · <код комнаты>» вместо имени своего персонажа. */
+(function(){
+X3.after70=function(){
+  if(STEP===8){const m=document.getElementById("main"),fin=m&&m.querySelector(":scope > .card.x3final"),lead=m&&m.querySelector(":scope > p.lead");
+    if(fin&&lead&&lead.nextElementSibling!==fin)lead.after(fin);}
+  const h=document.getElementById("hdrName");if(!h)return;
+  const gm=STEP===11&&typeof ROOM!=="undefined"&&ROOM&&ROOM.st&&ROOM.st.role==="gm";
+  document.body.classList.toggle("x70gm",!!gm);
+  if(gm){const t=`Мастер · ${ROOM.st.code||"комната"}`;if(h.textContent!==t){h.textContent=t;h.setAttribute("aria-label",`Мастер, комната ${ROOM.st.code||""}`);}}
+  else if(h.hasAttribute("aria-label")&&/^Мастер/.test(h.getAttribute("aria-label")))h.removeAttribute("aria-label");};
+const r0=render;render=function(){const out=r0.apply(this,arguments);try{X3.after70();}catch(e){}return out;};
+const q0=renderRoom;renderRoom=function(){const out=q0.apply(this,arguments);try{X3.after70();}catch(e){}return out;};
+})();
+
+/* ===== ux71: седьмая критика — пояснения на виду, последствия крит-ранения, бой на узком, исход броска у мастера ===== */
+(function(){
+const E=s=>X3.esc(String(s==null?"":s)),M=v=>String(v).replace("-","−");
+
+/* --- шаг «Характеристики»: откуда итог — строкой под характеристикой, не в title --- */
+X3.stats71=function(){if(STEP!==1)return;const g=document.querySelector("#main .statgrid");if(!g||C.skip&&C.skip[1])return;
+  const R=compute(C),bk=parseBase(C).keys||[];
+  g.querySelectorAll(":scope > .statrow").forEach(row=>{const sel=row.querySelector("select[data-assign]");if(!sel)return;const k=sel.dataset.assign;
+    let br=row.querySelector(":scope > .x71br");const ms=modsFor(R,k),isB=bk.includes(k),a=C.stats.assign[k];
+    if(!ms.length&&!isB){if(br)br.remove();return;}
+    const parts=[`${R.base}`+(a!=null?` + куб ${a}`:" + куб")].concat(ms.map(m=>`${m.v>0?"+":"−"} ${Math.abs(m.v)} ${E(m.src)}`));
+    const html=`${parts.join(" ")}${isB?' <span class="x71bk">· базовая для класса</span>':""}`;
+    if(!br){br=document.createElement("span");br.className="note x71br";row.appendChild(br);}
+    if(br.innerHTML!==html)br.innerHTML=html;
+    const t=row.querySelector(".tot");if(t)t.removeAttribute("title");const n=row.querySelector(".basestat");if(n)n.removeAttribute("title");});
+  const card=g.closest(".card");if(card)card.querySelectorAll(":scope > p.note").forEach(p=>{if(/^Справа итог/.test(p.textContent))p.textContent=`Итог справа = ${R.base} + куб + бонусы шагов. Откуда бонус — написано под строкой.`;});};
+
+/* --- критическое ранение: тест → вывод «что теперь» → «Применить» --- */
+X3.critOut71=function(lvl,ok){const f=CRITFX[lvl];if(!f)return "";const r=f.auto||(ok?f.ok:f.fail)||{},p=[];
+  if(ok&&f.okNote)p.push(f.okNote);
+  if(r.temp!=null)p.push(`временный штраф ${M(r.temp)} на все тесты`);
+  if(r.perm!=null)p.push(`постоянный штраф ${M(r.perm)}`);
+  if(r.rand)p.push(r.rand===1?"одна случайная характеристика −1":`${r.rand} случайные характеристики −1`);
+  if(r.note)p.push(r.note);
+  const s=p.join("; ")||"без последствий";return s[0].toUpperCase()+s.slice(1);};
+const cb0=X3.critBlock;
+X3.critBlock=function(R){let h=cb0.apply(this,arguments);if(!h)return h;const w=W(),n=Number(w.crit),f=typeof CRITFX!=="undefined"&&CRITFX[n];if(!f)return h;
+  let act;
+  if(w.critDone===n)act=`<div class="okbox x71res">${w.critMsg||"Последствия применены."}</div>`;
+  else if(w.critPend&&w.critPend.lvl===n){const ok=w.critPend.ok;
+    act=`<div class="x71res ${ok?"x71ok":"x71bad"}"><b>${ok?"Тест пройден":"Тест провален"}.</b> ${E(X3.critOut71(n,ok))}.</div><button class="btn small primary" data-x71apply="${n}">Применить</button><button class="btn small" data-x71undo="${n}">Отменить</button>`;}
+  else if(f.auto)act=`<div class="x71res x71bad"><b>Последствия:</b> ${E(X3.critOut71(n,false))}.</div><button class="btn small primary" data-crit="${n}|auto">Применить последствия</button>`;
+  else{const tn={normal:"Тест",hard:"Сложный тест",impossible:"Невозможный тест"}[f.test];act=`<button class="btn small primary" data-x71crit="${n}">${tn} на Стойкость${f.mod?` (${M(f.mod)})`:""}</button>`;}
+  const re=/<button class="btn small primary" data-x3crit="[^"]*">[\s\S]*?<\/button>/;
+  return re.test(h)?h.replace(re,act):h.replace(/<div class="dfacts">/,`<div class="dfacts">${act}`);};
+document.addEventListener("click",e=>{const b=e.target.closest("[data-x71crit],[data-x71apply],[data-x71undo]");if(!b)return;const w=W(),n=Number(w.crit),f=CRITFX[n];if(!f)return;
+  if(b.dataset.x71undo){delete w.critPend;save();render();return;}
+  if(b.dataset.x71apply){const ok=!!(w.critPend&&w.critPend.ok);delete w.critPend;critApply(n,ok?"ok":"fail");w.critMsg=(ok?"Тест пройден. ":"Тест провален. ")+String(w.critMsg||"").replace(/штраф -(\d)/g,"штраф −$1");
+    pushLog(`Критическое ранение ${n}-е: ${ok?"тест пройден":"тест провален"}, применено`);save();render();return;}
+  const saved={...TEST},p0=panel;let cls="";panel=function(){cls=arguments[3]||"";return p0.apply(this,arguments);};
+  try{Object.assign(TEST,{stat:"tou",type:f.test,mod:f.mod||0});runTest(compute(C));const hd=$("#rollNow .big");if(hd)hd.insertAdjacentText("afterbegin",`Критическое ранение ${n}-е: `);}
+  finally{panel=p0;Object.assign(TEST,saved);}
+  w.critPend={lvl:n,ok:cls==="ok"};save();render();});
+
+/* --- бой: стрелки ряда переходов — на высоте самого ряда --- */
+const sc0=X3.sc67;if(sc0)X3.sc67=function(){const out=sc0.apply(this,arguments);try{X3.scPos71();}catch(e){}return out;};
+X3.scPos71=function(){document.querySelectorAll(".misbar.x67bar").forEach(bar=>{const mj=bar.querySelector(".misjump");if(!mj)return;
+  bar.querySelectorAll(":scope > .x67sc").forEach(b=>{const t=mj.offsetTop+"px",hh=mj.offsetHeight+"px";if(b.style.top!==t)b.style.top=t;if(b.style.height!==hh)b.style.height=hh;});});};
+
+/* --- мастер: в строке отряда исход броска первым словом --- */
+X3.rollShort71=function(x){x=String(x||"");const i=x.lastIndexOf(" — ");if(i<0)return null;
+  let head=x.slice(0,i).replace(/^(Обычный|Сложный|Невозможный|Встречный|Убывающий)\s+тест,?\s*/i,"").replace(/\s*\(ранение\s*[−-]\d+\)/,"").trim();
+  const ver=x.slice(i+3).trim();let v;const deg=ver.match(/степеней (успеха|провала) (\d+)/);
+  if(/^Критический провал/i.test(ver))v="Крит. провал";else if(/^Критический успех/i.test(ver))v="Крит. успех";
+  else{v=ver.split(/[,.]\s*/)[0];v=v[0].toUpperCase()+v.slice(1);if(deg&&/^(Успех|Провал)$/.test(v))v+=` ${deg[2]} ст.`;}
+  const bad=/провал|промах|побеждает противник/i.test(v);return {v,head,bad};};
+X3.room71=function(){const v=document.getElementById("roomView");if(!v)return;
+  v.querySelectorAll(".x46r .x46rl").forEach(el=>{if(el.dataset.x71)return;const t=el.textContent.trim(),m=t.match(/^(\d{1,2}:\d{2})\s+(.*)$/);if(!m)return;const s=X3.rollShort71(m[2]);if(!s)return;
+    el.dataset.x71="1";el.title=t;el.innerHTML=`<b class="x71v ${s.bad?"x71bad":"x71ok"}">${E(s.v)}</b> · ${E(s.head)} <span class="x71t">${E(m[1])}</span>`;});};
+
+X3.dock71=()=>document.querySelectorAll("#x3cbbar .cbb").forEach(b=>b.classList.toggle("x71nw",/Уклон|Парир/.test(b.textContent.replace(/­/g,""))));
+const bb0=X3.cbBar;if(bb0)X3.cbBar=function(){const out=bb0.apply(this,arguments);try{X3.dock71();}catch(e){}return out;};
+const r0=render;render=function(){const out=r0.apply(this,arguments);try{X3.stats71();}catch(e){}try{X3.scPos71();}catch(e){}try{X3.dock71();}catch(e){}return out;};
+const q0=renderRoom;renderRoom=function(){const out=q0.apply(this,arguments);try{X3.room71();}catch(e){}return out;};
 })();
 </script>
 </body>

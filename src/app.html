@@ -97,7 +97,7 @@ details.entry>summary{color:var(--ink)}
 details.entry>summary h5{font-size:18px}
 .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
 .groups{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px 22px}
-.group h4{font-family:var(--narrow);margin:0 0 4px;font-size:15px;color:var(--muted);font-weight:700}
+.group h3{font-family:var(--narrow);margin:0 0 4px;font-size:15px;color:var(--muted);font-weight:700}
 .opt{display:block;width:100%;text-align:left;border:1px solid transparent;background:none;padding:4px 8px;border-radius:3px;cursor:pointer}
 .opt:hover{border-color:var(--line);background:var(--panel)}
 .opt[aria-pressed="true"]{border-color:var(--accent);background:var(--panel);font-weight:700}
@@ -324,7 +324,7 @@ details.sec>summary>h3{border-bottom:0!important}
 .statrow.unasg{border-left:4px solid var(--base);padding-left:8px;background:color-mix(in srgb,var(--base) 8%,transparent)}
 .statrow.asg{border-left:4px solid var(--ok);padding-left:8px;background:color-mix(in srgb,var(--ok) 7%,transparent)}
 .groups .group{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 10px 6px}
-.groups .group h4{font-size:16px!important;color:var(--accent)!important;margin:0 0 6px!important}
+.groups .group h3{font-size:16px!important;color:var(--accent)!important;margin:0 0 6px!important}
 .groups .group .opt{display:block;width:100%;background:var(--panel);border:1px solid var(--line);border-radius:6px;margin:0 0 6px;padding:8px 10px;box-sizing:border-box}
 .groups .group .opt[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
 .groups>.opt{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:9px 11px;box-sizing:border-box}
@@ -829,7 +829,7 @@ body.mis:not(.x3pm) .stile.haspm>.stbtn{padding-bottom:10px!important}
 
 /* группы классов: свой цвет */
 .groups .group{border-top:3px solid var(--gc,var(--line))}
-.groups .group h4{color:var(--gc,var(--muted))!important}
+.groups .group h3{color:var(--gc,var(--muted))!important}
 
 /* каталог: только доступные */
 #catBody.onlyok .entry:has(button[data-buy]:disabled),#catBody.onlyok .entry:not(:has(button[data-buy])){display:none}
@@ -1636,7 +1636,7 @@ body.x40fight.x3cbseen .x3cbbar{transform:none!important;opacity:1!important;poi
 .basestat,.stile.isbase .sname,.statrow .basestat{color:var(--x44baseT)!important}
 .kbar .kl b{color:var(--x44goldT)}
 /* цвет фракции в тексте — смешан с цветом текста, оттенок сохраняется, контраст ≥4.5 */
-.dsgrp,.groups .group h4{color:color-mix(in oklab,var(--gc,var(--accent)) 50%,var(--ink))!important}
+.dsgrp,.groups .group h3{color:color-mix(in oklab,var(--gc,var(--accent)) 50%,var(--ink))!important}
 /* нижнее меню: неактивные пункты в светлой теме темнее, активный — светлее лаванды в тёмной */
 .x3nb{color:var(--x44navT)}
 .x3nb.on{color:color-mix(in oklab,var(--accent) 78%,var(--ink))}
@@ -2270,6 +2270,105 @@ html body.x40fight:has(#rollPanel:not([hidden])) #x3cbbar{transform:translateY(1
 .groups .group>h4::before{content:"";display:inline-block;width:10px;height:10px;margin-right:8px;border-radius:2px;background:var(--gc,var(--line));vertical-align:1px}
 .dossier{border-top:1px solid var(--line)!important}
 .dossier::before{content:"";position:absolute;top:12px;right:12px;width:10px;height:10px;border-radius:2px;background:var(--gc,var(--accent))}
+
+/* ===== ux84: полировка v86 — журнал боя, полоса «Миссии», быстрые кубы, тип теста ===== */
+/* «Отменить» в журнале боя — только когда в журнале есть записи: при пустом журнале кнопка откатывала бросок из создания */
+.cblog:not(:has(> ol)) #x3undo{display:none}
+/* подписи полосы «Миссии» не мельче 12 px и на узком экране */
+.mstrip .msi .msl{font-size:12px}
+/* быстрые кубы: подпись строкой, шесть кубов ровной сеткой без «сиротского» ряда */
+.x3quick{display:grid;grid-template-columns:repeat(6,minmax(0,1fr))}
+.x3quick .note{grid-column:1/-1}
+.x3quick .btn{min-width:0;padding-left:0;padding-right:0}
+/* тип теста на телефоне: всегда 3 + 2 («Убывающий» не остаётся один); первая строка делится по длине слов, вторая пополам */
+@media (max-width:559px){
+  .x38seg .pill{flex:1 1 auto}
+  .x38seg .pill:nth-child(n+4){flex:1 1 40%}
+}
+
+/* ===== ux85: ручная правка ранений свёрнута ===== */
+.x85man{margin-top:12px;border-top:1px solid var(--line);padding-top:4px}
+.x85man>summary{min-height:44px;display:flex;flex-direction:column;justify-content:center;cursor:pointer;font-weight:600}
+.x85man>summary small{font-weight:400;color:var(--muted);font-size:12.5px}
+.x85man[open]>summary{margin-bottom:8px}
+/* точки действий на телефоне: своим рядом, без переноса 3 + 1, касание 44 px */
+@media (max-width:560px){
+  .combat .cbacts .actpips{flex:1 0 100%;order:5;flex-wrap:nowrap;justify-content:center;gap:8px}
+  .combat .cbacts .apip,.combat .apip{width:34px!important;height:34px!important;position:relative}
+  .combat .cbacts .apip::after{content:"";position:absolute;inset:-5px -4px}
+}
+/* шторка броска в бою не прячет панель боя (действия «4/4 д.», реакции): шторка поднимается над ней */
+html body.x3hasnav.x40fight:has(#rollPanel:not([hidden])) #x3cbbar{transform:none!important;opacity:1!important;pointer-events:auto!important}
+/* и сама шторка стоит над панелью боя: меню 60 px + панель 61 px */
+html body.x3hasnav.x40fight:has(#rollPanel:not([hidden])) .rollpanel{bottom:calc(121px + env(safe-area-inset-bottom,0px))!important}
+/* модификатор ко всем тестам на «Миссии» — один, в полосе; поле в шторке там лишнее */
+body:has(#main .mstrip) #rollPanel label:has(#rollMod){display:none}
+.x85sr{position:absolute!important;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+/* «Ещё N» в полосе «Миссии» не уже соседних пунктов */
+.misbar.x83 .x83more{min-width:76px}
+
+/* ===== ux86: «Миссия» в бою — вкладки ===== */
+.x86tabs{display:none}
+body.x86 .x86tabs{position:sticky;z-index:14;top:calc(env(safe-area-inset-top,0px) + var(--x3hdrh,0px) + var(--x86sh,64px));
+  display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:2px;margin:0 0 12px;padding:4px;background:var(--bg);border-bottom:1px solid var(--line);transition:top .22s cubic-bezier(.23,1,.32,1)}
+.x86t{min-width:0;min-height:44px;display:flex;align-items:center;justify-content:center;gap:4px;padding:0 2px;border:1px solid transparent;border-radius:8px;background:transparent;color:var(--muted);
+  font-family:var(--narrow);font-size:14px;letter-spacing:.01em;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;white-space:nowrap}
+.x86t[aria-selected="true"]{color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,transparent);border-color:color-mix(in srgb,var(--accent) 35%,transparent);font-weight:700}
+.x86t:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.x86b{font-size:11.5px;font-weight:700;line-height:1;padding:3px 4px;border-radius:6px;background:color-mix(in srgb,var(--ink) 10%,transparent);color:var(--ink);font-variant-numeric:tabular-nums}
+.x86b.bad{background:color-mix(in srgb,var(--warn) 22%,transparent);color:color-mix(in srgb,var(--warn) 80%,var(--ink))}
+.x86b.new{background:var(--accent);color:var(--panel)}
+/* метка (ОЗ, число записей) — под подписью: в колонке шириной 1/5 экрана рядом не помещается */
+.x86t:has(.x86b){flex-direction:column;gap:2px}
+@media (max-width:359px){.x86t{font-size:13px}}
+
+/* одна вкладка на экране */
+#main[data-x86t="hod"] > [data-x86]:not([data-x86~="hod"]):not([data-x86~="all"]){display:none!important}
+#main[data-x86t="dmg"] > [data-x86]:not([data-x86~="dmg"]):not([data-x86~="all"]){display:none!important}
+#main[data-x86t="tal"] > [data-x86]:not([data-x86~="tal"]):not([data-x86~="all"]){display:none!important}
+#main[data-x86t="log"] > [data-x86]:not([data-x86~="log"]):not([data-x86~="all"]){display:none!important}
+#main[data-x86t="sheet"] > [data-x86]:not([data-x86~="sheet"]):not([data-x86~="all"]){display:none!important}
+/* карточка боя: во «Ходе» без журнала, в «Журнале» только журнал */
+#main[data-x86t="hod"] .combat > .cblog{display:none!important}
+#main[data-x86t="log"] .combat > :not(.cblog){display:none!important}
+#main[data-x86t="log"] .combat .cblog{margin-top:0}
+
+/* «Инициатива не брошена» одной строкой с кнопкой; «Закончить бой» внизу */
+.combat .cbwarn.x86ini{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.combat .cbwarn.x86ini .btn{margin:0}
+.combat .x86end{display:flex;justify-content:flex-end;margin-top:12px}
+
+/* ===== ux87: «Лист» — вкладки (вид кнопок общий с ux86) ===== */
+#main .x87tabs{display:grid;position:sticky;z-index:14;top:calc(env(safe-area-inset-top,0px) + var(--x3hdrh,0px));
+  grid-template-columns:repeat(5,minmax(0,1fr));gap:2px;margin:0 0 12px;padding:4px;background:var(--bg);border-bottom:1px solid var(--line);transition:top .22s cubic-bezier(.23,1,.32,1)}
+#sheet[data-x87t="char"] > details.sec[data-x87]:not([data-x87="char"]),
+#sheet[data-x87t="state"] > details.sec[data-x87]:not([data-x87="state"]),
+#sheet[data-x87t="gear"] > details.sec[data-x87]:not([data-x87="gear"]),
+#sheet[data-x87t="tal"] > details.sec[data-x87]:not([data-x87="tal"]),
+#sheet[data-x87t="bio"] > details.sec[data-x87]:not([data-x87="bio"]){display:none!important}
+/* печать — весь лист */
+@media print{#sheet[data-x87t] > details.sec[data-x87]{display:block!important}}
+
+/* ===== ux88: быстрый доступ во время игры ===== */
+/* в бою на телефоне вкладки внизу — верхний ряд не нужен */
+body.x88 #main .x86tabs{display:none!important}
+.x88nb{position:relative}
+.x88nb .x88m{position:absolute;top:3px;left:calc(50% + 6px);font-style:normal;pointer-events:none}
+.x88nb .x88m .x86b{display:inline-block;min-width:18px;text-align:center;padding:2px 4px;font-size:11px;box-shadow:0 0 0 2px var(--bg)}
+.x86b.spent{opacity:.55}
+.x3navmore .x88end{color:color-mix(in srgb,var(--warn) 80%,var(--ink))}
+
+/* «Ход»: строка характеристик — касание бросает тест */
+.x88stats{margin:12px 0 4px}
+.x88sh{font-family:var(--narrow);font-size:12.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
+.x88sg{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.x88s{min-width:0;min-height:44px;display:flex;align-items:baseline;justify-content:center;gap:4px;padding:0 2px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--ink);cursor:pointer;
+  font-family:var(--narrow);-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.x88s span{font-size:12.5px;color:var(--muted)}
+.x88s b{font-size:18px;font-variant-numeric:tabular-nums}
+.x88s:active{background:color-mix(in srgb,var(--accent) 16%,var(--panel));border-color:var(--accent)}
+.x88s:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+@media (max-width:359px){.x88s span{font-size:11.5px}.x88s b{font-size:16px}}
 </style>
 </head>
 <body>
@@ -14199,12 +14298,20 @@ function blank(){
     rankLvl:1, buys:[], baseStats:null, academy:{mods:{},light:0,dark:0,xp:0,hp:0,fate:0,infl:0}};
 }
 let DB;
-try{DB=JSON.parse(localStorage.getItem(KEY)||"null");}catch(e){DB=null;}
+const SKEY=KEY+".sounds";let SNDJSON=null,DBBAD=false,DBLOCK=false;
+{let raw=null;try{raw=localStorage.getItem(KEY);DB=JSON.parse(raw||"null");}catch(e){DB=null;}
+  /* битое сохранение не затирать: сырая строка уходит в KEY+".bad" (первая копия не перезаписывается); не удалось скопировать — запись запрещена */
+  if(raw&&(!DB||typeof DB!=="object"||!Array.isArray(DB.chars))){DBBAD=true;try{if(localStorage.getItem(KEY+".bad")==null)localStorage.setItem(KEY+".bad",raw);}catch(e){DBLOCK=true;}}}
 if(!DB||!Array.isArray(DB.chars)||!DB.chars.length){const c=blank();DB={chars:[c],cur:c.id};}
+/* свои звуки (до ~1 МБ каждый) — отдельной записью, чтобы переполнение из-за них не мешало сохранять персонажей */
+if(!DB.sounds){try{const sj=localStorage.getItem(SKEY);const so=sj&&JSON.parse(sj);if(so){DB.sounds=so;SNDJSON=sj;}}catch(e){}}
+if(DBBAD)setTimeout(()=>{try{toast(DBLOCK?"Сохранение повреждено, копию сделать не удалось — изменения не записываются, чтобы не затереть старые данные.":"Сохранение было повреждено: копия лежит в памяти браузера («"+KEY+".bad»), начат новый лист.");}catch(e){}},1500);
 const TKEY=t=>t.group+"|"+t.sub+"|"+t.name;
 const TIDX=Object.fromEntries(BOOK.talents.map((t,i)=>[TKEY(t),i]));
+/* чужие данные (комната, база персонажей, файл, ключ) вставляются в HTML местами без экранирования — убрать из строк символы разметки */
+function untrust(o){return JSON.parse(JSON.stringify(o==null?null:o),(k,v)=>typeof v==="string"?v.replace(/[<>"'`]/g,""):v);}
 function migrate(c){
-  c=Object.assign(blank(),c);
+  c=Object.assign(blank(),untrust(c));
   (c.buys||[]).forEach(b=>{
     if(b.tid!=null&&!b.tkey&&BOOK.oldTalentKeys) b.tkey=BOOK.oldTalentKeys[b.tid];
     if(b.tkey) b.tid=TIDX[b.tkey]??null;
@@ -14222,7 +14329,15 @@ function migrate(c){
 }
 DB.chars=DB.chars.map(migrate);
 let C = DB.chars.find(c=>c.id===DB.cur)||DB.chars[0];
-function save(){try{localStorage.setItem(KEY,JSON.stringify(DB));}catch(e){}try{roomPushSoon();}catch(e){}try{vaultSoon();}catch(e){}}
+let SAVEERR=0;
+/* запись в память браузера; ok — персонажи записаны, snd — звуки записаны (или не менялись) */
+function saveLocal(){if(DBLOCK){toast("Изменения не записываются: старое сохранение повреждено и не скопировано.");return {ok:false,snd:false};}
+  const {sounds,...rest}=DB;let ok=true,snd=true;
+  try{localStorage.setItem(KEY,JSON.stringify(rest));}catch(e){ok=false;}
+  if(sounds){const sj=JSON.stringify(sounds);if(sj!==SNDJSON){try{localStorage.setItem(SKEY,sj);SNDJSON=sj;}catch(e){snd=false;}}}
+  if(!ok&&Date.now()-SAVEERR>15000){SAVEERR=Date.now();toast("Не сохранилось: память браузера заполнена. Удалите свои звуки («Звук») или сохраните персонажа в файл («Файл»).");}
+  return {ok,snd};}
+function save(){saveLocal();try{roomPushSoon();}catch(e){}try{vaultSoon();}catch(e){}}
 
 /* ---------- effects engine ---------- */
 function d66idx(a,b){return (a-1)*6+(b-1);}
@@ -14782,7 +14897,7 @@ function stClass(R){
     ${choicesUI(R.steps.cls,"cls")}${kitChoices()}${parseBase(C).choose?baseStatsUI(R,true):""}${fxSummary(R.steps.cls)}</div>`;
   }
   return `<h2>Класс</h2><p class="lead">Класс выбирается, а не бросается. Бонусы к характеристикам, снаряжение и таланты перенесутся в лист автоматически.</p>
-  <div class="card" id="clsList"><div class="groups">${groups.map(g=>`<div class="group"><h4>${esc(g.name)}</h4>${g.items.map(i=>{const c=BOOK.classes[i];const wip=/в разработке/i.test(c.feat+c.desc);return `<button class="opt" aria-pressed="${C.cls.i===i}" data-cls="${i}">${esc(c.name)}${wip?' <small>в разработке</small>':""}</button>`;}).join("")}</div>`).join("")}</div></div>${detail}`;
+  <div class="card" id="clsList"><div class="groups">${groups.map(g=>`<div class="group"><h3>${esc(g.name)}</h3>${g.items.map(i=>{const c=BOOK.classes[i];const wip=/в разработке/i.test(c.feat+c.desc);return `<button class="opt" aria-pressed="${C.cls.i===i}" data-cls="${i}">${esc(c.name)}${wip?' <small>в разработке</small>':""}</button>`;}).join("")}</div>`).join("")}</div></div>${detail}`;
 }
 /* step 2 */
 function stStats(R){
@@ -16755,7 +16870,7 @@ $("#soundBtn").addEventListener("click",()=>{renderSoundDlg("");$("#soundDlg").s
 $("#soundClose").addEventListener("click",()=>$("#soundDlg").close());
 document.addEventListener("change",e=>{const t=e.target;
   if(t.dataset&&t.dataset.sndfile){const f=t.files[0];if(!f)return;if(f.size>700*1024){renderSoundDlg("Файл слишком большой: максимум 700 КБ. Обрежьте звук до секунды-двух.");return;}
-    const rd=new FileReader();rd.onload=()=>{const c=sndCfg();c[t.dataset.sndfile]=rd.result;try{save();localStorage.getItem(KEY);}catch(err){}delete SNDA[t.dataset.sndfile];renderSoundDlg("Звук сохранён.");renderSoundBtn();sndPlay(t.dataset.sndfile);};rd.readAsDataURL(f);}
+    const rd=new FileReader();rd.onload=()=>{const c=sndCfg();c[t.dataset.sndfile]=rd.result;if(!saveLocal().snd){delete c[t.dataset.sndfile];SNDJSON=null;saveLocal();renderSoundDlg("Звук не сохранён: в памяти браузера не хватает места. Выберите файл поменьше или удалите другой звук.");return;}delete SNDA[t.dataset.sndfile];renderSoundDlg("Звук сохранён.");renderSoundBtn();sndPlay(t.dataset.sndfile);};rd.readAsDataURL(f);}
   if(t.id==="sndVol"){sndCfg().vol=Number(t.value);save();}
   if(t.id==="sndMute"){sndCfg().mute=t.checked;save();renderSoundBtn();}
   if(t.id==="sndSynth"){sndCfg().synth=t.checked;save();renderSoundBtn();if(t.checked)synthClick("open");}
@@ -17291,7 +17406,7 @@ var ROOM={cfg:lsGet(RCFG_KEY)||{...ROOM_DEF},st:lsGet(RST_KEY),sb:null,uid:null,
 if(!ROOM.cfg.url&&ROOM_DEF.url)ROOM.cfg={...ROOM_DEF};
 const roomCfgOk=()=>!!(ROOM.cfg&&ROOM.cfg.url&&ROOM.cfg.key);
 const rmKey=p=>p.uid+"|"+p.char_id;
-function loadSupa(){if(window.supabase&&window.supabase.createClient)return Promise.resolve();return new Promise((ok,bad)=>{const s=document.createElement("script");s.src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js";s.onload=()=>ok();s.onerror=()=>bad(new Error("Не удалось загрузить библиотеку Supabase: нет интернета?"));document.head.appendChild(s);});}
+function loadSupa(){if(window.supabase&&window.supabase.createClient)return Promise.resolve();return new Promise((ok,bad)=>{const s=document.createElement("script");s.src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.3/dist/umd/supabase.min.js";s.onload=()=>ok();s.onerror=()=>bad(new Error("Не удалось загрузить библиотеку Supabase: нет интернета?"));document.head.appendChild(s);});}
 async function roomClient(){
   if(ROOM.sb&&ROOM.uid)return ROOM.sb;
   if(!roomCfgOk())throw new Error("Не указан сервер комнаты");
@@ -17383,12 +17498,12 @@ async function roomSubscribe(){const st=ROOM.st;if(!st)return;const sb=await roo
 async function roomPoll(){const st=ROOM.st;if(!st)return;if(st.role==="gm")return roomFetch();gmLogLoad(false);initLoad(false);try{const sb=await roomClient();const m=await sb.from("room_mods").select("*").eq("room",st.code).eq("uid",ROOM.uid).eq("char_id",st.charId).maybeSingle();if(!m.error)roomApplyMods(m.data);}catch(e){}}
 async function roomFetch(){const st=ROOM.st;if(!st||st.role!=="gm")return;try{const sb=await roomClient();
     const [a,b]=await Promise.all([sb.from("room_players").select("*").eq("room",st.code).order("name"),sb.from("room_mods").select("*").eq("room",st.code)]);
-    if(a.error)throw a.error;if(b.error)throw b.error;ROOM.players=a.data||[];ROOM.mods={};(b.data||[]).forEach(r=>ROOM.mods[rmKey(r)]=r.mods||[]);ROOM.err="";roomCheckUid();try{initMerge();}catch(e){}}catch(e){ROOM.err=roomErr(e);}roomRefresh();renderRoomBtn();}
+    if(a.error)throw a.error;if(b.error)throw b.error;ROOM.players=untrust(a.data||[]);ROOM.mods={};(b.data||[]).forEach(r=>ROOM.mods[rmKey(r)]=r.mods||[]);ROOM.err="";roomCheckUid();try{initMerge();}catch(e){}}catch(e){ROOM.err=roomErr(e);}roomRefresh();renderRoomBtn();}
 function roomFetchSoon(){clearTimeout(ROOM.fetchT);ROOM.fetchT=setTimeout(roomFetch,400);}
 async function roomCreate(){ROOM.busy=true;ROOM.err="";roomRefresh();try{const sb=await roomClient();const A="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";let code,err;
-    for(let t=0;t<5;t++){code=Array.from({length:5},()=>A[rnd(A.length)-1]).join("");const r=await sb.from("rooms").insert({code,gm:ROOM.uid,title:""});err=r.error;if(!err||err.code!=="23505")break;}
+    for(let t=0;t<5;t++){code=Array.from({length:8},()=>A[rnd(A.length)-1]).join("");const r=await sb.from("rooms").insert({code,gm:ROOM.uid,title:""});err=r.error;if(!err||err.code!=="23505")break;}
     if(err)throw err;ROOM.st={role:"gm",code,uid:ROOM.uid};lsSet(RST_KEY,ROOM.st);ROOM.mine=null;ROOM.msg="";await roomSubscribe();await roomFetch();}catch(e){ROOM.err=roomErr(e);}ROOM.busy=false;roomRefresh();renderRoomBtn();}
-async function roomJoin(code){code=String(code||"").toUpperCase().replace(/[^A-Z0-9]/g,"");if(code.length<5){ROOM.err="Введите код комнаты из 5 символов.";roomRefresh();return;}
+async function roomJoin(code){code=String(code||"").toUpperCase().replace(/[^A-Z0-9]/g,"");if(code.length<5){ROOM.err="Введите код комнаты целиком (5–8 символов).";roomRefresh();return;}
   ROOM.busy=true;ROOM.err="";roomRefresh();try{const sb=await roomClient();const c=C;
     const {error}=await sb.from("room_players").upsert({room:code,uid:ROOM.uid,char_id:c.id,name:c.name||"Без имени",sheet:roomSnap(c),updated_at:new Date().toISOString()},{onConflict:"room,uid,char_id"});
     if(error){if(error.code==="23503")throw new Error("Комната с таким кодом не найдена.");throw error;}
@@ -17416,7 +17531,7 @@ function roomPeek(sheet,mods){const keep=C;let o=null;try{const s=JSON.parse(JSO
     o={R,s,hpMax,hpCur,crit,tr,fTot,fLeft,wpn,arm,oth,tal,eff,ini:2*R.tot.agi+(R.extra.ini||0),cls:R.cl?R.cl.variant:"—",cls2:R.cl2?R.cl2.variant:null};}catch(e){o={err:String(e&&e.message||e)};}finally{C=keep;}return o;}
 const agoTxt=t=>{const d=Math.round((Date.now()-new Date(t).getTime())/1000);return d<60?"только что":d<3600?Math.round(d/60)+" мин назад":Math.round(d/3600)+" ч назад";};
 function rmDraft(key){return ROOM.draft[key]||(ROOM.draft[key]={k:"rng",v:"",n:""});}
-function roomPeekSheet(p){const keep=C;let html="";try{const s=JSON.parse(JSON.stringify(p.sheet||{}));s.gmMods=ROOM.mods[rmKey(p)]||[];const b=blank();Object.keys(b).forEach(k=>{if(s[k]==null)s[k]=b[k];});C=s;const R=compute(s);const full=stSheet(R);const i=full.indexOf('<div class="sheet" id="sheet">');html=i>=0?full.slice(i):full;}catch(e){html=`<div class="warnbox">Не удалось показать лист: ${esc(String(e&&e.message||e))}</div>`;}finally{C=keep;}return html;}
+function roomPeekSheet(p){const keep=C;let html="";try{const s=untrust(p.sheet||{});s.gmMods=ROOM.mods[rmKey(p)]||[];const b=blank();Object.keys(b).forEach(k=>{if(s[k]==null)s[k]=b[k];});C=s;const R=compute(s);const full=stSheet(R);const i=full.indexOf('<div class="sheet" id="sheet">');html=i>=0?full.slice(i):full;}catch(e){html=`<div class="warnbox">Не удалось показать лист: ${esc(String(e&&e.message||e))}</div>`;}finally{C=keep;}return html;}
 const PEEK_SECS=["Характеристики","Состояние и ранения","Трекеры","Временные эффекты","Снаряжение","Таланты","Заслуги","Детали и особенности"],PEEK_OPEN=["Характеристики","Состояние и ранения","Трекеры","Снаряжение"];
 function peekSectionize(box){const sh=box.querySelector("#sheet");if(!sh)return;const groups=[];let cur=null;[...sh.children].forEach(n=>{if(n.tagName==="H3"){cur={h:n,nodes:[]};groups.push(cur);}else if(cur)cur.nodes.push(n);});
   sh.innerHTML="";groups.forEach(g=>{const key=g.h.textContent.trim();if(!PEEK_SECS.includes(key))return;const d=document.createElement("details");d.className="sec missec";d.dataset.sec=key;d.open=ROOM.peekOpen[key]!=null?ROOM.peekOpen[key]:PEEK_OPEN.includes(key);const sm=document.createElement("summary");sm.appendChild(g.h);d.appendChild(sm);g.nodes.forEach(n=>d.appendChild(n));d.addEventListener("toggle",()=>{ROOM.peekOpen[key]=d.open;});sh.appendChild(d);});
@@ -17437,7 +17552,7 @@ function roomGMView(st,live){const ps=ROOM.players;const tb=ROOM.gmTab||"room";
     <div class="card" style="margin-top:12px"><div class="inline" style="gap:8px"><button class="btn small" data-room="clearall" ${anyMods?"":"disabled"}>Конец миссии: снять модификаторы у всех</button><button class="btn small" data-room="leave">Выйти (комната останется)</button><button class="btn small" data-room="close" style="color:var(--warn)">Закрыть комнату</button></div></div>`;}
 /* ---------- мастер: база всех выгруженных персонажей ---------- */
 var VB={list:null,q:"",sel:null,sheet:null,err:"",busy:false};
-async function vbLoad(){VB.busy=true;VB.err="";renderRoom();try{const sb=await vaultSb();const {data,error}=await sb.rpc("vault_all",{p_q:null});if(error)throw error;VB.list=data||[];}catch(e){VB.err=vaultErr(e);}VB.busy=false;renderRoom();}
+async function vbLoad(){VB.busy=true;VB.err="";renderRoom();try{const sb=await vaultSb();const {data,error}=await sb.rpc("vault_all",{p_q:null});if(error)throw error;VB.list=untrust(data||[]);}catch(e){VB.err=vaultErr(e);}VB.busy=false;renderRoom();}
 function vbCls(r){const a=[r.cls,r.cls2].filter(x=>x!=null&&BOOK.classes[x]).map(x=>BOOK.classes[x].name);return a.join(" / ");}
 function vbItems(){const q=VB.q.trim().toLowerCase();const L=(VB.list||[]).map((r,i)=>[r,i]).filter(([r])=>!q||(r.name||"").toLowerCase().includes(q)||vbCls(r).toLowerCase().includes(q));
   if(!L.length)return `<p class="note">${VB.list&&VB.list.length?"Никого не нашлось.":"В базе пока нет персонажей."}</p>`;
@@ -17456,7 +17571,7 @@ document.addEventListener("click",async e=>{const b=e.target.closest("[data-gmta
   if(d.vb==="reload"){vbLoad();return;}
   if(d.vb==="back"){VB.sel=null;VB.sheet=null;renderRoom();scrollTo(0,0);return;}
   if(d.vbopen!=null){const r=VB.list[Number(d.vbopen)];if(!r)return;VB.sel=r;VB.sheet=null;renderRoom();scrollTo(0,0);
-    try{const sb=await vaultSb();const {data,error}=await sb.rpc("vault_peek",{p_owner:r.owner,p_char:r.char_id});if(error)throw error;if(VB.sel!==r)return;VB.sheet=data||{};}catch(err){VB.err=vaultErr(err);VB.sel=null;}renderRoom();}});
+    try{const sb=await vaultSb();const {data,error}=await sb.rpc("vault_peek",{p_owner:r.owner,p_char:r.char_id});if(error)throw error;if(VB.sel!==r)return;VB.sheet=untrust(data||{});}catch(err){VB.err=vaultErr(err);VB.sel=null;}renderRoom();}});
 document.addEventListener("input",e=>{if(e.target.id!=="vbSearch")return;VB.q=e.target.value;const l=$("#vbList");if(l)l.innerHTML=vbItems();});
 function roomFocusInside(){const a=document.activeElement;return !!(a&&$("#roomView")&&$("#roomView").contains(a)&&a.matches('[data-rmd],#rcUrl,#rcKey,#rmCode,#vbSearch,[data-npc],[data-npcn],[data-bd],[data-inihp],[data-iad]'));}
 function roomRefresh(){if(STEP!==11||!$("#roomView"))return;if(roomFocusInside()){ROOM.dirty=true;return;}renderRoom();}
@@ -17496,7 +17611,7 @@ async function roomAction(a){
   if(a==="refresh")return roomFetch();
   if(a==="clearall"){try{const sb=await roomClient();const {error}=await sb.from("room_mods").update({mods:[],updated_at:new Date().toISOString()}).eq("room",ROOM.st.code);if(error)throw error;Object.keys(ROOM.mods).forEach(k=>ROOM.mods[k]=[]);ROOM.err="";toast("Модификаторы сняты у всех игроков");}catch(e){ROOM.err=roomErr(e);}roomRefresh();roomFetchSoon();return;}
 }
-function localSave(){try{localStorage.setItem(KEY,JSON.stringify(DB));}catch(e){}}
+function localSave(){saveLocal();}
 function roomShortLabel(){return typeof ROOM!=="undefined"&&ROOM&&ROOM.st?esc(ROOM.st.code):"Комната";}
 function roomBtnLabel(){return `Комната${typeof ROOM!=="undefined"&&ROOM&&ROOM.st?` <b>${esc(ROOM.st.code)}</b>`:""}`;}
 document.addEventListener("focusout",e=>{if(ROOM&&ROOM.dirty&&$("#roomView")&&$("#roomView").contains(e.target))setTimeout(roomRefresh,80);});
@@ -17855,7 +17970,7 @@ X3.gmPanel=function(s){/* вызывается при C = лист игрока 
     ${chLine}${perf}${fight}${charges?`<h4 class="x3sub">Заряды</h4>${charges}`:""}${flawR}${tb?`<h4 class="x3sub">Бонусы талантов</h4>${tb}`:""}${asc?`<div class="gmrow"><span>Аскетичность</span><span class="gmv">${asc}</span></div>`:""}
     ${log?`<h4 class="x3sub">Журнал боя</h4><ol class="gmlog">${log}</ol>`:""}${rem}</div>`;};
 if(typeof roomPeekSheet==="function"){const rps0=roomPeekSheet;roomPeekSheet=function(p){const html=rps0.apply(this,arguments);let add="";const keep=C;
-  try{const s=JSON.parse(JSON.stringify(p.sheet||{}));const b=blank();Object.keys(b).forEach(k=>{if(s[k]==null)s[k]=b[k];});C=s;add=X3.gmPanel(s);}catch(e){add="";}finally{C=keep;}
+  try{const s=untrust(p.sheet||{});const b=blank();Object.keys(b).forEach(k=>{if(s[k]==null)s[k]=b[k];});C=s;add=X3.gmPanel(s);}catch(e){add="";}finally{C=keep;}
   return add+html;};}
 /* вкладки игроков у мастера: раунд и действия */
 X3.gmTabs=function(){const bar=document.querySelector(".ptabbar");if(!bar||!ROOM||!ROOM.players)return;
@@ -19587,7 +19702,8 @@ X3.BOOKS={"Книга Защиты/Проклятия":[["Защита: отме
   if(fv.length)secs.push(["Одолжения",`<p class="note">${fv.map(E).join("<br>")}</p>`]);
   if(!secs.length)return h;const html=secs.map(([t,b])=>`<div class="x3tsec"><h4 class="x3sub">${t}</h4>${b}</div>`).join("");
   if(!h)return `<div class="card x3tal noprint" id="x3tal"><h3 style="margin-top:0">Таланты и снаряжение в бою</h3>${html}</div>`;return h.replace(/<\/div>$/,html+"</div>");}catch(e){console.error(e);}return h;};})();
-document.addEventListener("click",e=>{const b=e.target.closest("[data-x3w],[data-x3book2]");if(!b)return;const cf=X3.cf(),f=X3.cbx();
+/* только кнопки талантов: карточка боя тоже помечена data-x3w="1" (ux15), и раньше любой клик в ней давал лишние save()+render() */
+document.addEventListener("click",e=>{const b=e.target.closest("button[data-x3w],[data-x3book2]");if(!b)return;const cf=X3.cf(),f=X3.cbx();
   if(b.dataset.x3book2){const [nm,i]=b.dataset.x3book2.split("|"),s=(X3.BOOKS[nm]||[])[Number(i)];if(!s)return;const [lbl,eff]=s;let v=null,txt=lbl;
     if(eff==="heal2d10"){v=rnd(10)+rnd(10);applyHeal(v);txt=`восстановлено ${v} ОЗ`;}else if(eff==="healAll"){v=rnd(10);applyHeal(v);txt=`${v} ОЗ себе и всем союзникам`;}
     else if(/^(\d+)d(\d+)$/.test(eff)){const m=eff.match(/^(\d+)d(\d+)$/);v=0;for(let k=0;k<Number(m[1]);k++)v+=rnd(Number(m[2]));txt=`${lbl.split(":")[0]}: ${v}`;}else if(eff==="d5"){v=rnd(5);txt=`${lbl.split(":")[0]}: ${v}`;}
@@ -20888,7 +21004,10 @@ X3.bar41=function(){const el=document.getElementById("x3cbbar");if(!el)return;
   const L={dodge:"Уклоне­ние",parry:"Пари­рование"},S={dodge:"Уклон.",parry:"Парир."};
   el.querySelectorAll("[data-react]").forEach(b=>{const k=b.dataset.react;if(!L[k])return;b.textContent=L[k];if(!b.hasAttribute("aria-label"))b.setAttribute("aria-label",X3.RXN41[k]);});
   /* не влезло (узкий экран, крупный шрифт) — короткие подписи обеим, полное имя остаётся в aria-label */
-  const rx=[...el.querySelectorAll("[data-react]")];if(rx.some(b=>b.scrollWidth>b.clientWidth+1||b.scrollHeight>b.clientHeight+1))rx.forEach(b=>{const k=b.dataset.react;if(S[k]){b.textContent=S[k];b.title=b.title||X3.RXN41[k];}});
+  const rx=[...el.querySelectorAll("[data-react]")];
+  /* замер ширины заставляет пересчитать раскладку всей страницы — делаем его один раз на ширину экрана, а не на каждую перерисовку */
+  if(X3.rxW41!==innerWidth){X3.rxW41=innerWidth;X3.rxS41=rx.some(b=>b.scrollWidth>b.clientWidth+1||b.scrollHeight>b.clientHeight+1);}
+  if(X3.rxS41)rx.forEach(b=>{const k=b.dataset.react;if(S[k]){b.textContent=S[k];b.title=b.title||X3.RXN41[k];}});
   const to=el.querySelector("[data-x3tocb]");if(to){to.setAttribute("aria-label","К карточке боя");to.title="К карточке боя";}
   X3.rx41(el);};
 (function(){const c0=X3.cbBar;X3.cbBar=function(){const out=c0.apply(this,arguments);try{X3.bar41();}catch(e){console.error(e);}return out;};})();
@@ -21491,7 +21610,9 @@ addEventListener("scroll",()=>{try{const before=document.querySelector("#x3cbbar
 /* ряд переходов Миссии (.misjump): стрелки у краёв показывают, что ряд прокручивается, и листают его; видны только когда в эту сторону есть куда листать */
 (function(){
 const CH=d=>`<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${d>0?"M9 6l6 6-6 6":"M15 6l-6 6 6 6"}"/></svg>`;
-X3.sc67=function(){const mj=document.querySelector("#main .misbar .misjump");if(!mj)return;const bar=mj.parentElement;
+X3.sc67=function(){const mj=document.querySelector("#main .misbar .misjump");if(!mj)return;
+  /* в бою полоса спрятана вкладками (ux86) — мерить нечего */
+  if(STEP===10&&(CB().round||0)>0&&(X3.tab86||"hod")!=="sheet")return;const bar=mj.parentElement;
   [1,-1].forEach(d=>{let b=bar.querySelector(`:scope > .x67sc[data-x67sc="${d}"]`);if(!b){b=document.createElement("button");b.type="button";b.className="x67sc";b.dataset.x67sc=d;b.setAttribute("aria-label",d>0?"Листать переходы вперёд":"Листать переходы назад");b.innerHTML=CH(d);bar.appendChild(b);}
     const can=d>0?mj.scrollLeft+mj.clientWidth<mj.scrollWidth-4:mj.scrollLeft>4;b.hidden=!can;b.style.top=mj.offsetTop+"px";b.style.height=mj.offsetHeight+"px";});
   bar.classList.add("x67bar");mj.classList.toggle("x67l",mj.scrollLeft>4);
@@ -21975,7 +22096,7 @@ X3.bottomNav=function(){let el=document.getElementById("x3nav");const on=X3.isPh
   if(!el){el=document.createElement("nav");el.id="x3nav";el.className="x3nav noprint";el.setAttribute("aria-label","Разделы");document.body.appendChild(el);}
   const dots=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h.01M12 12h.01M19 12h.01"/></svg>`;
   el.innerHTML=main.map(t=>`<button type="button" class="x3nb ${t.sel?"on":""}" data-go="${t.go}" aria-current="${t.sel?"page":"false"}">${X3.navIco(t.go)}<span>${E(t.label)}</span></button>`).join("")+
-    (rest.length?`<button type="button" class="x3nb ${rs?"on":""}" data-x3more="1" aria-expanded="${X3.navOpen}" aria-label="${rs?`Ещё: открыт раздел ${E(rs.label)}`:"Ещё разделы"}">${rs?X3.navIco(rs.create?"0":rs.go):dots}<span>${rs?E(rs.label):"Ещё"}</span></button>`:"")+
+    (rest.length?`<button type="button" class="x3nb ${rs?"on":""}" data-x3more="1" aria-expanded="${X3.navOpen}" aria-label="${rs?`Ещё: открыт раздел ${E(rs.label)}`:"Ещё разделы"}">${dots}<span>Ещё</span></button>`:"")+
     (X3.navOpen&&rest.length?`<div class="x3navmore" role="menu">${rest.map(t=>`<button type="button" class="x3nmi ${t.sel?"on":""}" data-go="${t.go}" role="menuitem">${X3.navIco(t.create?"0":t.go)}<span>${E(t.create?"Создание персонажа":t.label)}</span></button>`).join("")}</div>`:"");};
 try{X3.bottomNav();}catch(e){}
 })();
@@ -22002,10 +22123,14 @@ window.addEventListener("click",e=>{if(pass)return;const b=e.target.closest&&e.t
 X3.pend82=function(){if(STEP<1||STEP>6)return null;let R,st;try{R=compute(C);st=stepStatus(C,R,STEP);}catch(e){return null;}if(st!=="pending")return null;
   const w=X3.why41?X3.why41(STEP,R):[];return w[0]||"выбор на шаге не сделан";};
 X3.next82=function(){if(STEP<1||STEP>6)return;const b=document.querySelector(`#main .navbtns [data-go="${STEP+1}"]`);if(!b)return;const p=X3.pend82();
-  b.classList.toggle("primary",!p);if(p){b.dataset.x82="1";b.setAttribute("aria-label",`Далее: шаг не закончен, осталось — ${p}`);}else{delete b.dataset.x82;b.removeAttribute("aria-label");}};
+  b.classList.toggle("primary",!p);if(p){b.dataset.x82="1";b.setAttribute("aria-label",`Пропустить шаг: не закончен, осталось — ${p}`);
+    /* два состояния словами: «Далее» — шаг готов, «Пропустить» — можно идти дальше, но шаг не закончен */
+    const tw=document.createTreeWalker(b,NodeFilter.SHOW_TEXT);let n;while((n=tw.nextNode()))if(/^\s*Далее/.test(n.nodeValue)){n.nodeValue=n.nodeValue.replace("Далее","Пропустить");break;}}
+  else{delete b.dataset.x82;b.removeAttribute("aria-label");}};
 window.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("#main .navbtns [data-x82]");if(!b)return;const p=X3.pend82();if(!p)return;
-  const h=document.querySelector("#main h2"),nm=(h&&h.textContent.trim())||"этот";const back=document.querySelector(`#main .navbtns [data-go="${STEP-1}"]`);
-  setTimeout(()=>toast(`Шаг «${nm}» не закончен: ${p.charAt(0).toLowerCase()+p.slice(1)}.${back?` Вернуться — «${back.textContent.trim()}».`:""}`),0);},true);
+  const h=document.querySelector("#main h2"),nm=(h&&h.textContent.trim())||"этот";
+  /* вернуться нужно на этот же шаг, а не на предыдущий: после перехода это «Назад» */
+  setTimeout(()=>toast(`Шаг «${nm}» не закончен: ${p.charAt(0).toLowerCase()+p.slice(1)}. Вернуться к нему — «Назад: ${nm}».`),0);},true);
 
 /* --- «Место рождения»: на кнопке варианта — что он меняет («−1 Сила, +1 Ловкость», «и выбор») --- */
 const FX=new Map();
@@ -22037,11 +22162,13 @@ X3.state83=function(){if(STEP!==10)return;const m=document.getElementById("main"
   const box=document.createElement("div");box.className="sheet x83state";box.appendChild(sec);anchor.after(box);
   const sub=fold.querySelector("summary .x40sub,summary small,summary .note");if(sub&&/ранения/.test(sub.textContent))sub.textContent="характеристики, трекеры, снаряжение, таланты";};
 
-/* ---------- лента пунктов «Миссии»: четыре на виду, остальное под «Ещё»; в бою инициатива и начало/конец уходят в «Ещё» ---------- */
+/* ---------- лента пунктов «Миссии»: четыре на виду, остальное под «Ещё»; порядок один и тот же в бою и вне боя ---------- */
 X3.all83=false;
 const KEY=b=>b.matches("[data-rollini]")?"ini":b.id==="openMission"?"mis":b.id==="openInfl"?"infl":b.id==="openMc"?"mc":b.classList.contains("jump2")?"st":b.classList.contains("x40pm")?"pm":"z";
 X3.strip83=function(){if(STEP!==10)return;const bar=document.querySelector("#main .misbar"),row=bar&&bar.querySelector(".misjump");if(!row)return;
-  const fight=(CB().round||0)>0,P=fight?["st","mc","pm","infl","ini","mis"]:["ini","mis","st","mc","infl","pm"];
+  /* в бою полоса спрятана вкладками (ux86) — не мерить её зря */
+  if(STEP===10&&(CB().round||0)>0&&(X3.tab86||"hod")!=="sheet")return;
+  const P=["st","mc","pm","mis","ini","infl"];
   const bs=[...row.querySelectorAll(":scope > button.mj:not(.x83more)")].filter(b=>getComputedStyle(b).display!=="none"||b.classList.contains("x83h"));
   const lim=innerWidth<400?3:4;
   bs.sort((a,b)=>P.indexOf(KEY(a))-P.indexOf(KEY(b))).forEach((b,i)=>{b.style.order=String(i);b.classList.toggle("x83h",i>=lim&&!X3.all83);});
@@ -22072,15 +22199,16 @@ document.addEventListener("click",e=>{const a=e.target.closest&&e.target.closest
   if(a.dataset.x83ok){c.gmOk83=Number(W().crit);try{X3.log&&X3.log(`Крит ${c.gmOk83}: мастер разрешил действовать`);}catch(_){}}else{delete c.gmOk83;}save();render();});
 
 /* ---------- 3. урон: смертельный или с критом — сначала подтверждение; после — «Отменить: урон N» в шторке ---------- */
-X3.risk83=v=>{const w=W(),cur=Number(w.cur)||0;if(!(v>0))return "";if(cur<=0)return `ОЗ уже 0: урон ${v} даст критическое ранение и может убить персонажа.`;
-  if(v>=cur)return `Урон ${v} при ${cur} ОЗ может обнулить здоровье: будет критическое ранение, возможно смертельное (броня не учтена).`;return "";};
+/* нетронутый персонаж хранит cur = null — это полные ОЗ, а не 0 */
+X3.risk83=v=>{const {cur,max}=X3.hpNow39();if(!(v>0))return "";if(cur<=0)return `ОЗ уже 0: урон ${v} даст критическое ранение и может убить персонажа.`;
+  if(v>=cur)return `Урон ${v} при ${cur} из ${max} ОЗ: здоровье упадёт до 0, излишек ${v-cur} — критическое ранение, возможно смертельное (броня и Стойкость ещё не вычтены). Отменить можно сразу после.`;return "";};
 let pass=false;
-const confirm83=(msg,go,label)=>{askConfirm(msg,()=>{pass=true;try{go();}finally{pass=false;}});const y=document.getElementById("confirmYes"),d=document.getElementById("confirmDlg");if(y&&d){y.textContent=label;const back=()=>{y.textContent="Подтвердить";d.removeEventListener("close",back);};d.addEventListener("close",back);}};
+const confirm83=(msg,go,label,warn)=>{askConfirm(msg,()=>{pass=true;try{go();}finally{pass=false;}});const y=document.getElementById("confirmYes"),d=document.getElementById("confirmDlg");if(y&&d){y.textContent=label;y.classList.toggle("danger",!!warn);const back=()=>{y.textContent="Подтвердить";y.classList.remove("danger");d.removeEventListener("close",back);};d.addEventListener("close",back);}};
 window.addEventListener("click",e=>{if(pass||!e.target.closest)return;const b=e.target.closest("#wTake,#wHeal");if(!b)return;
   if(b.id==="wHeal"){e.stopImmediatePropagation();e.preventDefault();confirm83("Снять всё: ОЗ до максимума, временные штрафы и критическое ранение? Отменить можно сразу после.",()=>b.click(),"Полностью здоров");return;}
-  const v=Number((document.getElementById("wDmg")||{}).value)||0,r=X3.risk83(v);if(!r)return;e.stopImmediatePropagation();e.preventDefault();confirm83(r,()=>b.click(),`Получить урон ${v}`);},true);
+  const v=Number((document.getElementById("wDmg")||{}).value)||0,r=X3.risk83(v);if(!r)return;e.stopImmediatePropagation();e.preventDefault();confirm83(r,()=>b.click(),`Получить урон ${v}`,true);},true);
 const h0=X3.hpApply39;if(h0)X3.hpApply39=function(){const s=X3.hp39;if(pass||!s||s.mode!=="dmg")return h0.apply(this,arguments);const v=Number(s.v)||0,r=X3.risk83(v);if(!r)return h0.apply(this,arguments);
-  const self=this,args=arguments;confirm83(r,()=>h0.apply(self,args),`Получить урон ${v}`);};
+  const self=this,args=arguments;confirm83(r,()=>h0.apply(self,args),`Получить урон ${v}`,true);};
 /* после урона шторка показывает «Отменить» (раньше кнопка не появлялась, если запись о действии пришла после показа) */
 X3.undoBtn83=function(){const p=document.getElementById("rollPanel"),n=document.getElementById("rollNow");if(!p||p.hidden||!n||n.querySelector(".x38acts"))return;const j=X3.j52;if(!j||!C||j.id!==C.id||!/^(урон|лечение|Полностью)/i.test(j.label||""))return;
   if(!X3.last38||!X3.acts38)return;try{X3.acts38();const a=n.querySelector(".x38acts"),w=n.querySelector(".x47w");if(a&&w)w.before(a);}catch(e){}};
@@ -22101,7 +22229,11 @@ X3.cap83=function(){const v=document.querySelector("#rollNow .verdict");if(!v)re
 /* брошенный результат стоит — кнопка броска становится «Перебросить» и не главной */
 X3.reroll83=function(){if(STEP<2||STEP>6)return;document.querySelectorAll("#main .rollrow").forEach(r=>{if(!r.querySelector(".stamp"))return;const b=r.querySelector("#rollBirth,[data-table]");if(!b)return;b.classList.remove("primary");b.textContent=b.textContent.replace(/^Бросить/,"Перебросить");});};
 /* отмена: шторка уже говорит «Отменено: …» — тост не повторяет */
-const u0=X3.doUndo;X3.doUndo=function(){const p=document.getElementById("rollPanel"),open=p&&!p.hidden,t0=toast;if(open)toast=function(){};try{return u0.apply(this,arguments);}finally{toast=t0;}};
+/* отчёт об уроне (WMSG) живёт вне листа — после отмены его тоже убрать, иначе висит «Урон 30 … крит» */
+const quiet83=f=>function(){const p=document.getElementById("rollPanel"),open=p&&!p.hidden,t0=toast;if(open)toast=function(){};try{WMSG="";return f.apply(this,arguments);}finally{toast=t0;}};
+X3.doUndo=quiet83(X3.doUndo);if(X3.restore38)X3.restore38=quiet83(X3.restore38);
+/* «Отменить» в шторке: шторка уже пишет «Урон отменён» — тост «Бросок отменён» лишний */
+window.addEventListener("click",e=>{if(!e.target.closest||!e.target.closest('[data-x38="undo"]'))return;const t0=toast;toast=function(m){if(m!=="Бросок отменён")return t0.apply(this,arguments);};setTimeout(()=>{toast=t0;},0);},true);
 
 /* вход в «Миссию»: лист свёрнут (урон и ранения теперь под боем); раскрыть можно, но до следующего входа */
 X3.fold83=function(){const f=document.querySelector('#main .x40fold[data-x40="sheet"]');if(f&&f.open)f.open=false;};
@@ -22109,6 +22241,215 @@ const after=()=>{const ent=STEP===10&&lastStep!==10;try{X3.panelStep83();}catch(
 const r0=render;render=function(){const out=r0.apply(this,arguments);after();return out;};
 const bb0=X3.cbBar;if(bb0)X3.cbBar=function(){const out=bb0.apply(this,arguments);try{X3.mark83();}catch(e){}return out;};
 const sp0=showPanel;showPanel=function(){const out=sp0.apply(this,arguments);try{X3.cap83();X3.prim83();}catch(e){}return out;};
+try{render();}catch(e){console.error(e);}
+})();
+
+/* ===== ux85: по критике v87 — модификатор в бою не сворачивается; «Состояние и ранения» в «Миссии»: на виду урон и лечение, ручная правка свёрнута ===== */
+(function(){
+/* модификатор тестов: в бою тот же вид, что вне боя (−, значение, +), а не плитка «Мод. 0», раскрывающаяся по касанию */
+X3.phone48=()=>false;
+X3.strip48=function(){document.querySelectorAll(".mstrip .x40mod").forEach(t=>{t.classList.add("x48open");const l=t.querySelector(".msl");if(l){l.removeAttribute("role");l.removeAttribute("aria-expanded");l.removeAttribute("tabindex");}});};
+
+/* «Состояние и ранения» под боем: ОЗ, штраф и «Получить урон / Вылечить» на виду; броня, трекеры, крит, штрафы — в «Исправить вручную» */
+X3.man85=false;
+X3.state85=function(){const sec=document.querySelector("#main .x83state details.sec");if(!sec||sec.querySelector(".x85man"))return;
+  const pick=[":scope > .defpanel",":scope > .trk",":scope > label.inline",":scope > div.inline.noprint",":scope > p.note"].map(s=>sec.querySelector(s)).filter(Boolean);if(!pick.length)return;
+  const d=document.createElement("details");d.className="x85man";d.open=X3.man85;d.innerHTML=`<summary>Исправить вручную <small>ОЗ, критическое ранение, штрафы, броня, «Полностью здоров»</small></summary>`;
+  pick.forEach(n=>d.appendChild(n));sec.appendChild(d);d.addEventListener("toggle",()=>{X3.man85=d.open;});};
+
+/* модификаторы названы по области действия: «Ко всем тестам» (полоса) и «± к характеристикам» (плитки характеристик) */
+const pl0=X3.pmLabel41;if(pl0)X3.pmLabel41=function(b){const out=pl0.apply(this,arguments);const s=b&&b.querySelector("span");if(s)s.textContent=X3.pmOn()?"Скрыть ± к характеристикам":"± к характеристикам";return out;};
+X3.mod85=function(){const l=document.querySelector(".mstrip .x40mod .msl");if(l){const f=l.querySelectorAll(".x3lf,.x3ls");if(f.length)f.forEach(x=>{x.textContent="Ко всем тестам";});else l.textContent="Ко всем тестам";}
+  const r=document.getElementById("rollMod"),lab=r&&r.closest("label");if(lab&&lab.firstChild&&lab.firstChild.nodeType===3)lab.firstChild.nodeValue="Модификатор ко всем тестам ";};
+
+/* «Бросить урон» после промаха этим оружием: не запрещено (мастер может разрешить), но сначала вопрос */
+X3.miss85=function(gid){const g=(C.gear||[]).find(x=>x.id===gid);if(!g||!g.name)return false;const c=CB();
+  const e=(C.cbLog||[]).find(x=>x.r===(c.round||0)&&x.t.includes(g.name)&&/попадан|промах/i.test(x.t));return !!e&&!/попадан/i.test(e.t);};
+let pass85=false;
+window.addEventListener("click",e=>{if(pass85||!e.target.closest)return;const b=e.target.closest("#main [data-dmg],#x3cbbar [data-dmg]");if(!b||!X3.miss85(b.dataset.dmg))return;
+  e.stopImmediatePropagation();e.preventDefault();askConfirm("Последняя атака этим оружием в этом раунде — промах. Урон бросают только при попадании. Всё равно бросить (например, мастер разрешил)?",()=>{pass85=true;try{b.click();}finally{pass85=false;}});
+  const y=document.getElementById("confirmYes"),d=document.getElementById("confirmDlg");if(y&&d){y.textContent="Бросить урон";const back=()=>{y.textContent="Подтвердить";d.removeEventListener("close",back);};d.addEventListener("close",back);}},true);
+
+/* «Выбор сделан» говорит, что выбрано: «Выбор сделан: Ассасин» */
+X3.chosen85=function(){const h=document.querySelector("#main .choicecard.ok .chttl");if(!h||h.dataset.x85)return;h.dataset.x85="1";
+  const t=[...h.closest(".choicecard").querySelectorAll(".pill[aria-pressed='true']")].map(p=>p.textContent.replace(/\s+/g," ").trim()).filter(Boolean);
+  if(t.length)h.textContent=`Выбор сделан: ${t.slice(0,3).join(", ")}${t.length>3?` и ещё ${t.length-3}`:""}`;};
+
+const after=()=>{try{X3.chosen85();X3.mod85();}catch(e){console.error(e);}if(STEP!==10)return;try{X3.state85();}catch(e){console.error(e);}
+  /* у «Миссии» нет видимого h2 — заголовки разделов (h3) шли сразу после h1; для чтения с экрана — скрытый h2 */
+  const m=document.getElementById("main");if(m&&!m.querySelector("h2"))m.insertAdjacentHTML("afterbegin",`<h2 class="x85sr">Миссия</h2>`);};
+const r0=render;render=function(){const out=r0.apply(this,arguments);after();return out;};
+try{render();}catch(e){console.error(e);}
+})();
+
+/* ===== ux86: «Миссия» в бою — вкладки вместо ленты в три экрана.
+   Наверху всегда полоса ОЗ/Судьба/«Ко всем тестам» и ряд вкладок: Ход · Урон · Таланты · Журнал · Лист.
+   На экране одна вкладка; вход в бой и «Новый ход» открывают «Ход», в остальное время помнится последняя. ===== */
+(function(){
+const E=s=>X3.esc(String(s==null?"":s));
+const TABS=[["hod","Ход"],["dmg","Урон"],["tal","Таланты"],["log","Журнал"],["sheet","Лист"]];
+const LS="x86tab";
+X3.tab86=(()=>{try{return localStorage.getItem(LS)||"hod";}catch(e){return "hod";}})();
+X3.seen86="";
+const fight=()=>STEP===10&&(CB().round||0)>0;
+const setTab=t=>{X3.tab86=t;try{localStorage.setItem(LS,t);}catch(e){}};
+const key=x=>x?`${x.r}|${x.t}`:"";
+
+/* какой блок «Миссии» к какой вкладке; всё незнакомое — во «Ход» */
+const tagOf=el=>{if(el.classList.contains("mstrip")||el.classList.contains("x86tabs")||el.classList.contains("x85sr"))return "all";
+  if(el.classList.contains("combat"))return "hod log";
+  if(el.classList.contains("x83state"))return "dmg";
+  if(el.classList.contains("x3tal"))return "tal";
+  if(el.matches('.x40fold[data-x40="more"]'))return "tal";
+  if(el.matches('.x40fold[data-x40="sheet"]')||el.classList.contains("misbar"))return "sheet";
+  return "hod";};
+
+X3.badge86=function(){const h=X3.hpNow39(),w=W(),bad=h.cur<h.max/2||(Number(w.crit)||0)>0||h.cur<=0;
+  const log=C.cbLog||[];let n=0;if(X3.tab86!=="log"){const i=log.findIndex(x=>key(x)===X3.seen86);n=i<0?log.length:i;}
+  return {dmg:`<span class="x86b ${bad?"bad":""}">${h.cur}/${h.max}</span>`,log:n?`<span class="x86b new" aria-label="новых записей: ${n}">${n}</span>`:""};};
+
+X3.tabs86=function(){const m=document.getElementById("main");document.body.classList.toggle("x86",!!(m&&fight()));if(!m||!fight()){if(m)delete m.dataset.x86t;return;}
+  if(X3.tab86==="log")X3.seen86=key((C.cbLog||[])[0]);
+  const t=X3.tab86,b=X3.badge86();
+  let bar=m.querySelector(".x86tabs");if(!bar){bar=document.createElement("nav");bar.className="x86tabs noprint";bar.setAttribute("role","tablist");bar.setAttribute("aria-label","Разделы боя");const s=m.querySelector(".mstrip");if(s)s.after(bar);else m.prepend(bar);}
+  bar.innerHTML=TABS.map(([k,l])=>`<button type="button" role="tab" class="x86t" data-x86tab="${k}" aria-selected="${k===t}">${E(l)}${b[k]||""}</button>`).join("");
+  [...m.children].forEach(el=>{el.dataset.x86=tagOf(el);});
+  m.dataset.x86t=t;
+  /* «Лист» и «Урон» сразу открыты: вкладка и есть «раскрыть»; «Ещё в бою» (навыки, Силы) на «Талантах» раскрывается сам игрок */
+  if(t==="sheet"){const f=m.querySelector('.x40fold[data-x40="sheet"]');if(f)f.open=true;}
+  if(t==="dmg"){const d=m.querySelector(".x83state details.sec");if(d)d.open=true;}
+  X3.card86(m);X3.top86();};
+
+/* карточка боя короче: «Инициатива не брошена» — одна строка с кнопкой броска; «Закончить бой» — вниз, к настройкам */
+X3.card86=function(m){const c=m.querySelector(".combat");if(!c||c.dataset.x86c)return;c.dataset.x86c="1";
+  const warn=c.querySelector(":scope > .cbwarn.top"),ini=c.querySelector(".cbhead [data-rollini]");
+  if(warn&&ini&&/Инициатива/.test(warn.textContent)){warn.classList.add("x86ini");warn.innerHTML=`<span>Инициатива не брошена</span>`;ini.setAttribute("aria-label",ini.textContent.trim());ini.textContent=ini.textContent.replace("Бросить инициативу","Бросить");warn.appendChild(ini);}
+  const end=c.querySelector(".cbhead [data-cbend]"),set=c.querySelector(":scope > .cbset");
+  if(end&&set){const row=document.createElement("div");row.className="x86end";row.appendChild(end);set.before(row);}};
+
+/* вкладки прилипают под полосой ОЗ: их отступ сверху = высота полосы */
+X3.top86=function(){const s=document.querySelector("#main .mstrip");if(s)document.documentElement.style.setProperty("--x86sh",s.offsetHeight+"px");};
+addEventListener("resize",()=>{try{X3.top86();}catch(e){}});
+
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-x86tab]");if(!b)return;setTab(b.dataset.x86tab);render();
+  const bar=document.querySelector("#main .x86tabs");if(bar){const y=bar.getBoundingClientRect().top+scrollY-(parseFloat(getComputedStyle(bar).top)||0);if(scrollY>y)scrollTo(0,y);}});
+/* стрелки по вкладкам с клавиатуры */
+document.addEventListener("keydown",e=>{const b=e.target.closest&&e.target.closest("[data-x86tab]");if(!b||(e.key!=="ArrowRight"&&e.key!=="ArrowLeft"))return;e.preventDefault();
+  const i=TABS.findIndex(x=>x[0]===b.dataset.x86tab),n=TABS[(i+(e.key==="ArrowRight"?1:TABS.length-1))%TABS.length][0];setTab(n);render();const nb=document.querySelector(`[data-x86tab="${n}"]`);if(nb)nb.focus();});
+/* начало боя и новый ход — к «Ходу» */
+window.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-cbturn]");if(b)setTab("hod");},true);
+/* «К разделу …» в бою: сначала показать нужную вкладку (без перерисовки — кнопка перехода сама прокрутит) */
+window.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-jumpsec]");if(!b||!fight())return;const t=b.dataset.jumpsec==="Состояние и ранения"?"dmg":"sheet";setTab(t);
+  const m=document.getElementById("main");m.dataset.x86t=t;m.querySelectorAll("[data-x86tab]").forEach(x=>x.setAttribute("aria-selected",String(x.dataset.x86tab===t)));
+  if(t==="sheet"){const f=m.querySelector('.x40fold[data-x40="sheet"]');if(f)f.open=true;}},true);
+
+const r0=render;render=function(){const out=r0.apply(this,arguments);try{X3.tabs86();}catch(e){console.error(e);}return out;};
+try{render();}catch(e){console.error(e);}
+})();
+
+/* ===== ux87: «Лист» — вкладки вместо 12 разделов подряд (до 6600 px).
+   Характ. · Состояние · Снаряж. · Таланты · Досье; вкладка помнится, разделы внутри открыты ===== */
+(function(){
+const E=s=>X3.esc(String(s==null?"":s));
+const TABS=[["char","Характ.","Характеристики"],["state","Состояние","Состояние"],["gear","Снаряж.","Снаряжение"],["tal","Таланты","Таланты"],["bio","Досье","Досье"]];
+const SEC={"Характеристики":"char","Состояние и ранения":"state","Трекеры":"state","Психические расстройства":"state",
+  "Снаряжение":"gear","Таланты":"tal","Благословения сил":"tal","Заслуги":"tal"};
+const LS="x87tab";
+X3.tab87=(()=>{try{return localStorage.getItem(LS)||"char";}catch(e){return "char";}})();
+const setTab=t=>{X3.tab87=t;try{localStorage.setItem(LS,t);}catch(e){}};
+const tabOf=name=>SEC[name]||"bio";
+
+X3.tabs87=function(){const sh=STEP===7&&document.getElementById("sheet");if(!sh)return;const secs=[...sh.querySelectorAll(":scope > details.sec")];if(!secs.length)return;
+  const t=X3.tab87;secs.forEach(d=>{d.dataset.x87=tabOf(d.dataset.sec||"");if(d.dataset.x87===t)d.open=true;});
+  sh.dataset.x87t=t;
+  const h=X3.hpNow39(),w=W(),bad=h.cur<h.max/2||(Number(w.crit)||0)>0||h.cur<=0;
+  const badge={state:`<span class="x86b ${bad?"bad":""}">${h.cur}/${h.max}</span>`};
+  let bar=document.querySelector("#main .x87tabs");if(!bar){bar=document.createElement("nav");bar.className="x87tabs noprint";bar.setAttribute("role","tablist");bar.setAttribute("aria-label","Разделы листа");sh.before(bar);}
+  bar.innerHTML=TABS.map(([k,l,full])=>`<button type="button" role="tab" class="x86t" data-x87tab="${k}" aria-selected="${k===t}"${l!==full?` aria-label="${E(full)}"`:""}>${E(l)}${badge[k]||""}</button>`).join("");};
+
+const scrollToBar=()=>{const bar=document.querySelector("#main .x87tabs");if(!bar)return;const y=bar.getBoundingClientRect().top+scrollY-(parseFloat(getComputedStyle(bar).top)||0);if(scrollY>y)scrollTo(0,y);};
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-x87tab]");if(!b)return;setTab(b.dataset.x87tab);render();scrollToBar();});
+document.addEventListener("keydown",e=>{const b=e.target.closest&&e.target.closest("[data-x87tab]");if(!b||(e.key!=="ArrowRight"&&e.key!=="ArrowLeft"))return;e.preventDefault();
+  const i=TABS.findIndex(x=>x[0]===b.dataset.x87tab),n=TABS[(i+(e.key==="ArrowRight"?1:TABS.length-1))%TABS.length][0];setTab(n);render();const nb=document.querySelector(`[data-x87tab="${n}"]`);if(nb)nb.focus();});
+/* «К разделу …» на «Листе»: сначала нужная вкладка (без перерисовки — переход сам прокрутит) */
+window.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-jumpsec]");if(!b||STEP!==7)return;const sh=document.getElementById("sheet");if(!sh)return;const t=tabOf(b.dataset.jumpsec);setTab(t);sh.dataset.x87t=t;
+  document.querySelectorAll("[data-x87tab]").forEach(x=>x.setAttribute("aria-selected",String(x.dataset.x87tab===t)));sh.querySelectorAll(`:scope > details.sec[data-x87="${t}"]`).forEach(d=>{d.open=true;});},true);
+
+const r0=render;render=function(){const out=r0.apply(this,arguments);try{X3.tabs87();}catch(e){console.error(e);}return out;};
+try{render();}catch(e){console.error(e);}
+})();
+
+/* ===== ux88: быстрый доступ во время игры.
+   1) в бою на «Миссии» (телефон) нижнее меню = вкладки боя: Ход · Урон · Таланты · Журнал · Ещё;
+   2) свайп влево/вправо листает вкладки («Миссия» в бою и «Лист»);
+   3) каждая вкладка помнит своё место прокрутки;
+   4) на «Ходе» строка характеристик: касание — тест;
+   5) метки: на «Ходе» — сколько действий осталось ===== */
+(function(){
+const E=s=>X3.esc(String(s==null?"":s));
+const fight=()=>STEP===10&&(CB().round||0)>0;
+X3.plain88=false;
+const on88=()=>fight()&&X3.isPhone()&&!X3.plain88;
+const I=d=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${d}"/></svg>`;
+const ICO={hod:"M14.5 17.5 3 6V3h3l11.5 11.5M13 19l6-6M16 16l4 4M19 21l2-2",
+  dmg:"M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10zM8.5 11.5h2l1-2 1.5 4 1-2h1.5",
+  tal:"M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z",
+  log:"M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01",
+  more:"M5 12h.01M12 12h.01M19 12h.01"};
+
+/* ---------- 5. метки вкладок боя (общие для верхнего ряда и нижнего меню) ---------- */
+X3.marks88=function(){const c=CB(),a=Number(c.act)||0,b=X3.badge86?X3.badge86():{};return {hod:`<span class="x86b ${a?"":"spent"}" aria-label="действий: ${a}">${a}</span>`,dmg:b.dmg||"",log:b.log||""};};
+const bd0=X3.badge86;if(bd0)X3.badge86=function(){const b=bd0.apply(this,arguments),a=Number(CB().act)||0;b.hod=`<span class="x86b ${a?"":"spent"}" aria-label="действий: ${a}">${a}</span>`;return b;};
+
+/* ---------- 1. нижнее меню в бою ---------- */
+const nav0=X3.bottomNav;
+X3.bottomNav=function(){const out=nav0.apply(this,arguments);document.body.classList.toggle("x88",on88());if(!on88())return out;
+  const el=document.getElementById("x3nav");if(!el)return out;const t=X3.tab86||"hod",m=X3.marks88();
+  const tab=(k,l)=>`<button type="button" class="x3nb x88nb ${t===k?"on":""}" data-x86tab="${k}" aria-current="${t===k?"page":"false"}">${I(ICO[k])}<span>${l}</span>${m[k]?`<i class="x88m">${m[k]}</i>`:""}</button>`;
+  const rest=[...document.querySelectorAll("#modeTabs button[data-go]")].map(b=>({go:b.dataset.go,label:((b.querySelector(".tshort")||b).textContent||"").trim()})).filter(x=>x.go!=="10"&&!/Создание/.test(x.label));
+  el.innerHTML=tab("hod","Ход")+tab("dmg","Урон")+tab("tal","Таланты")+tab("log","Журнал")+
+    `<button type="button" class="x3nb" data-x3more="1" aria-expanded="${X3.navOpen}" aria-label="Ещё: лист, кубы, комната, конец боя">${I(ICO.more)}<span>Ещё</span></button>`+
+    (X3.navOpen?`<div class="x3navmore" role="menu">
+      ${rest.map(x=>`<button type="button" class="x3nmi" data-go="${x.go}" role="menuitem">${X3.navIco(x.go)}<span>${E(x.label)}</span></button>`).join("")}
+      <button type="button" class="x3nmi" data-x88plain="1" role="menuitem">${I("M4 6h16M4 12h16M4 18h16")}<span>Обычное меню</span></button>
+      <button type="button" class="x3nmi x88end" data-x88end="1" role="menuitem">${I("M6 6l12 12M18 6 6 18")}<span>Закончить бой</span></button></div>`:"");
+  return out;};
+document.addEventListener("click",e=>{const p=e.target.closest&&e.target.closest("[data-x88plain],[data-x88end],#x3nav [data-x86tab]");if(!p)return;X3.navOpen=false;
+  if(p.dataset.x88plain){X3.plain88=true;render();return;}
+  if(p.dataset.x88end){const b=document.querySelector("#main [data-cbend]");if(b)b.click();else render();return;}
+  setTimeout(()=>{try{X3.bottomNav();}catch(_){}},0);});
+/* «Обычное меню» — до выхода из «Миссии» */
+let st88=STEP;const r0=render;render=function(){if(on88()&&X3.tab86==="sheet")X3.tab86="hod";if(STEP!==st88){if(st88===10)X3.plain88=false;st88=STEP;}const out=r0.apply(this,arguments);try{X3.stats88();}catch(e){console.error(e);}return out;};
+
+/* ---------- 3. место прокрутки у каждой вкладки ---------- */
+X3.pos88={};
+const cur=()=>STEP===10?"m:"+(X3.tab86||"hod"):STEP===7?"l:"+(X3.tab87||"char"):null;
+window.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-x86tab],[data-x87tab]");if(!b)return;const k=cur();if(k)X3.pos88[k]=scrollY;
+  const nk=b.dataset.x86tab?"m:"+b.dataset.x86tab:"l:"+b.dataset.x87tab;if(nk===k)return;
+  setTimeout(()=>{const y=X3.pos88[nk];scrollTo(0,y!=null?y:0);},0);},true);
+
+/* ---------- 2. свайп влево/вправо — соседняя вкладка ---------- */
+const ORD={m:["hod","dmg","tal","log","sheet"],l:["char","state","gear","tal","bio"]};
+let sw=null;
+const hScroll=(el,stop)=>{for(let n=el;n&&n!==stop;n=n.parentElement){if(n.scrollWidth>n.clientWidth+2&&/(auto|scroll)/.test(getComputedStyle(n).overflowX))return true;}return false;};
+document.addEventListener("touchstart",e=>{sw=null;if(e.touches.length!==1)return;const m=document.getElementById("main"),t=e.target;
+  if(!m||!m.contains(t)||!(STEP===7&&X3.tab87||fight()))return;if(t.closest("input,textarea,select,[contenteditable],.mstrip,.x86tabs,.x87tabs,[data-noswipe]")||hScroll(t,m))return;
+  sw={x:e.touches[0].clientX,y:e.touches[0].clientY,t:Date.now()};},{passive:true});
+document.addEventListener("touchend",e=>{if(!sw)return;const p=e.changedTouches[0],dx=p.clientX-sw.x,dy=p.clientY-sw.y,dt=Date.now()-sw.t;sw=null;
+  if(Math.abs(dx)<70||Math.abs(dx)<Math.abs(dy)*1.8||dt>600)return;
+  const pg=STEP===10?"m":"l",o=pg==="m"&&on88()?ORD.m.slice(0,4):ORD[pg],now=pg==="m"?(X3.tab86||"hod"):(X3.tab87||"char"),i=o.indexOf(now),n=o[i+(dx<0?1:-1)];if(!n)return;
+  const b=document.querySelector(pg==="m"?`[data-x86tab="${n}"]`:`[data-x87tab="${n}"]`);if(b)b.click();},{passive:true});
+
+/* ---------- 4. «Ход»: строка характеристик, касание — тест ---------- */
+const AB={rng:"ДБ",mel:"ББ",str:"С",agi:"Л",tou:"Ст",wil:"В",int:"Инт",wit:"Сооб",per:"Наб",cha:"Хар"};
+X3.stats88=function(){if(!fight())return;const c=document.querySelector("#main .combat");if(!c||c.querySelector(".x88stats"))return;
+  const tiles=[...document.querySelectorAll('#main .stile [data-roll]')].filter(b=>AB[b.dataset.roll]);if(!tiles.length)return;
+  const chips=tiles.map(b=>{const k=b.dataset.roll,v=(b.querySelector(".sval")||{}).textContent||"",n=LABEL[k]||k;
+    return `<button type="button" class="x88s" data-x88roll="${k}" aria-label="Тест: ${E(n)} ${E(v)}"><span>${AB[k]}</span><b>${E(v)}</b></button>`;}).join("");
+  const at=c.querySelector(":scope > .cbactrow")||c.querySelector(":scope > .cbhead");
+  at.insertAdjacentHTML("afterend",`<div class="x88stats"><div class="x88sh">Тест характеристики</div><div class="x88sg">${chips}</div></div>`);};
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-x88roll]");if(!b)return;const t=document.querySelector(`#main .stile [data-roll="${b.dataset.x88roll}"]`);if(t)t.click();});
+
 try{render();}catch(e){console.error(e);}
 })();
 </script>

@@ -2102,6 +2102,174 @@ header.top .titlerow #soundBtn{order:2}
   #x3cbbar .cbb:not(:last-child){flex:0 1 auto}
   #x3cbbar .cbb.x71nw{white-space:nowrap;hyphens:none;letter-spacing:-.01em}
 }
+
+/* ===== ux72: последствие крит-ранения под штампом ===== */
+#rollNow .x72crit{margin-top:10px;padding:10px 12px;border:1px solid var(--line);border-radius:var(--cbR,6px);background:var(--soft);font-size:15px;line-height:1.4}
+#rollNow .x72crit.x72bad{border-color:color-mix(in srgb,var(--warn) 55%,var(--line));background:color-mix(in srgb,var(--warn) 12%,var(--panel))}
+#rollNow .x72crit.x72bad .x72h>b{color:color-mix(in srgb,var(--warn) 82%,var(--ink))}
+#rollNow .x72crit.x72ok .x72h>b{color:var(--ok)}
+#rollNow .x72sum{margin:6px 0 0;font-size:14px}
+#rollNow .x72acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+#rollNow .x72acts .btn{min-height:44px;flex:1 1 auto}
+/* итог в карточке ранения — Тревогой, а не «Нормой» */
+.critblk .x72res{flex:1 1 100%;margin:4px 0;font-size:14px;line-height:1.35}
+
+/* ===== ux73: цвет по смыслу ===== */
+/* патроны — не золото Света: заполненные метки цветом текста */
+.ammo i.f{background:color-mix(in srgb,var(--ink) 72%,var(--panel))}
+.ammobar i{background:color-mix(in srgb,var(--ink) 60%,var(--panel))}
+/* предупреждение в бою с классом .top попадало под правило шапки: подложка прибора и тень. В потоке тени нет */
+.cbwarn.top{background:color-mix(in srgb,var(--warn) 10%,transparent)!important;border:1px solid color-mix(in srgb,var(--warn) 45%,transparent)!important;box-shadow:none!important}
+/* итог урона и лечения — нейтральная запись */
+.x73res{margin:10px 0;padding:8px 12px;border:1px solid var(--line);border-radius:var(--cbR,6px);background:var(--soft);font-size:14.5px;line-height:1.4}
+/* чей ход в отряде мастера: полная рамка вместо полосы сбоку */
+@media (max-width:560px){
+  .sqc.turn{box-shadow:inset 0 0 0 1px var(--accent);border-color:var(--accent)}
+}
+
+/* ===== ux74: узкие экраны ===== */
+/* прыжок прокрутки: перерисовка пересобирает экран, и «якорь прокрутки» браузера уводил страницу вниз при вводе */
+html,body{overflow-anchor:none}
+/* шапка: имя с многоточием */
+#hdrName .x74nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+/* бой: «Перебросить» уходит на свою строку, а не за край карточки */
+.cbini{flex-wrap:wrap;min-width:0;max-width:100%;row-gap:4px}
+.cbini .x51re{margin-left:auto}
+/* «Кубы»: тип теста — ширина по тексту, «Невозможный» не обрезается */
+.x38seg .pill{flex:1 1 auto;min-width:0}
+/* комната: подсказка в поле кода помещается */
+#rmCode::placeholder{letter-spacing:0;font-size:16px}
+/* Академия и шаги с ±: степпер не наезжает на итог, название не рвётся посреди слова */
+@media (max-width:420px){
+  .statrow[style*="120px"]{grid-template-columns:minmax(0,1fr) auto 30px!important;column-gap:6px}
+  .statrow .inline .btn.small{min-width:36px;padding-left:0;padding-right:0}
+  .statrow .inline input.inp[type=number]{width:44px!important;padding-left:2px;padding-right:2px}
+  .statrow>span:first-child{overflow-wrap:normal;hyphens:manual}
+}
+/* создание на узком: «Шаг готов» не занимает отдельную строку — готовность и так видна по «Далее» */
+@media (max-width:380px){
+  .navbtns .x42st.ok{display:none}
+}
+
+/* ===== ux75: «Миссия» разгружена ===== */
+.misjump .mj.x75off{display:none!important}
+/* журнал боя: видно три последних записи */
+.cblog ol.x75cut>li:nth-child(n+4){display:none}
+.cblog .x75more{margin-top:6px;min-height:44px}
+@media (max-width:560px){
+  /* в бою кнопка «наверх» закрывала «Перезарядить»; наверх ведёт шапка и ряд переходов */
+  body.mis #toTop{display:none!important}
+  /* пока открыта панель броска, шапка уезжает — под результат больше места */
+  body.panel-open header.top{transform:translateY(-100%)}
+}
+
+/* ===== ux76: выстрел в долг — обычная кнопка с рамкой Тревоги, не главное действие ===== */
+.x76debt{border-color:color-mix(in srgb,var(--warn) 55%,var(--line))!important;color:var(--ink)}
+
+/* ===== ux77: долг и «без сознания» ===== */
+.cbactrow .x77debt{flex:1 1 100%;margin-top:6px;font-size:14px;line-height:1.35;color:var(--ink)}
+.cbactrow .x77debt.x77all b{color:color-mix(in srgb,var(--warn) 82%,var(--ink))}
+/* без сознания: в доке вместо атак и реакций — одна надпись; «Новый ход» и «К карточке боя» остаются */
+#x3cbbar .cbb.x77off{display:none}
+#x3cbbar .x77dks{flex:1 1 auto;min-width:0;align-self:center;padding:0 6px;font-family:var(--narrow);font-weight:700;font-size:15px;line-height:1.2;color:color-mix(in srgb,var(--warn) 82%,var(--ink))}
+#x3cbbar .cbbi .x77bd{display:block;font-family:var(--narrow);font-size:12px;line-height:1.1;color:color-mix(in srgb,var(--warn) 82%,var(--ink));white-space:nowrap}
+.x77kob{margin:8px 0}
+.x77kob .x77koa{margin-top:8px}
+.x77kob .x77koa .btn{min-height:44px}
+.x77off{opacity:.45}
+.x77kom{display:block;margin-top:4px}
+
+/* ===== ux78: панель броска на телефоне ===== */
+@media (max-width:559px){
+  /* не больше ~40% экрана: над ней остаётся оружие и карточка боя */
+  .rollpanel{max-height:40vh!important}
+  #rollNow .x47w .rules.x78cut{max-height:96px;overflow:hidden;-webkit-mask-image:linear-gradient(#000 60%,transparent);mask-image:linear-gradient(#000 60%,transparent)}
+  #rollNow .x78more{min-height:44px}
+  /* сообщения — над открытой панелью, а не поверх её кнопок; касания проходят насквозь */
+  #toast{pointer-events:none}
+  body.panel-open.x3bar #toast{bottom:calc(var(--x38ph,120px) + 130px + env(safe-area-inset-bottom,0px))!important;top:auto!important}
+  body.panel-open:not(.x3bar) #toast{bottom:calc(var(--x38ph,120px) + 69px + env(safe-area-inset-bottom,0px))!important;top:auto!important}
+}
+
+/* ===== ux79: ошибка кода комнаты у поля; подписи иконок шапки на телефоне ===== */
+.x79err{margin:6px 0 10px!important}
+#rmCode[aria-invalid="true"]{border-color:var(--warn)}
+@media (max-width:559px){
+  header.top .iconbtn.lab{flex-direction:column;gap:0;justify-content:center}
+  header.top .iconbtn.lab .iblab{display:block!important;font-family:var(--narrow);font-size:12px;line-height:1;letter-spacing:0;margin-top:1px}
+  header.top .iconbtn.lab svg{width:20px;height:20px}
+}
+
+/* ===== ux80: создание персонажа ===== */
+/* значение сброшено перебросом — оранжевая метка «требует внимания» */
+.statrow.x80reset{box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--base) 55%,transparent);border-radius:var(--cbR,6px)}
+.statrow .x80r{grid-column:1/-1;color:var(--x44baseT,var(--base));font-size:13px}
+/* имя персонажа в итоге создания */
+.x80name{display:flex;flex-direction:column;gap:4px;margin:4px 0 12px;font-size:14px;color:var(--muted)}
+.x80name .inp{font-size:16px;min-height:44px}
+
+/* ===== ux81: итог Сложного теста; панель боя прячется у карточки боя ===== */
+#rollNow .verdict:has(.x81v){display:flex;flex-direction:column;gap:2px;min-width:0}
+#rollNow .x81v{font-size:17px;font-weight:700;line-height:1.25}
+#rollNow .x81sum{font-family:var(--narrow);font-size:14px;font-weight:400;color:var(--muted)}
+.x81how{margin-top:8px;font-size:14px;color:var(--muted)}
+.x81how>summary{display:inline-flex;align-items:center;min-height:44px;cursor:pointer;color:var(--accent);font-family:var(--narrow);font-size:15px}
+.x81how ol{margin:0 0 4px;padding-left:20px;display:grid;gap:4px;font-variant-numeric:tabular-nums}
+.x81how b{color:var(--ink)}
+/* DESIGN.md: нижняя панель боя скрыта, пока карточка боя видна (ux40 держал её всегда) */
+html body.x40fight.x3cbseen #x3cbbar{transform:translateY(110%)!important;opacity:0!important;pointer-events:none!important}
+
+/* ===== ux82: переброс под кубиками; эффект варианта рождения; мелочи ===== */
+.rollrow.x82rr{margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
+/* эффект варианта — второй строкой на кнопке */
+.opt .x82fx{display:block;margin-top:2px;font-family:var(--narrow);font-size:13px;font-weight:400;color:var(--muted);line-height:1.2}
+.opt[aria-pressed="true"] .x82fx{color:inherit;opacity:.85}
+/* отброшенный кубик: читается (контраст текста как у подписей), отличие — зачёркивание и пунктир */
+.chip.drop{opacity:1!important;color:var(--muted);background:transparent;text-decoration:line-through;text-decoration-thickness:2px;border-style:dashed}
+/* полоса «Миссии» в бою: подписи не меньше 12px */
+html body.x40fight .mstrip .msl{font-size:12px!important}
+.mstrip .msi.x40mod{cursor:pointer}
+/* без сознания: счётчик действий в нижней панели не показывает «4/4» */
+#x3cbbar:has(.x77dks) .cbbi{display:none}
+
+/* ===== ux83: «Миссия» разгружена, крит 8–9, единое «недоступно», мелочи ===== */
+/* «Состояние и ранения» под боем */
+.x83state{margin-top:16px}
+/* лента пунктов: лишнее под «Ещё», без стрелки прокрутки */
+.misjump .mj.x83h{display:none!important}
+.misbar.x83 .x67sc{display:none!important}
+.misbar.x83 .misjump{overflow-x:visible;flex-wrap:nowrap}
+html body .misbar.x83 .misjump{-webkit-mask-image:none!important;mask-image:none!important}
+.misbar.x83.x40 .misjump.x3row>.mj.mj{flex:1 1 0!important;min-width:0!important;max-width:none!important}
+.misbar.x83.x40 .misjump.x3row>.mj.mj.x83more{flex:0 0 auto!important;padding-left:8px;padding-right:8px}
+.misbar.x83 .misjump.x83all{flex-wrap:wrap}
+@media (max-width:360px){.misbar.x83 .misjump>.mj,.misbar.x83 .misjump>.mj span{font-size:13px!important;letter-spacing:0}}
+/* «Ранение» в полосе — целиком */
+@media (max-width:420px){.mstrip .msi.warn{flex:0 0 auto!important;min-width:0}.mstrip .msi.warn .msl{overflow:visible!important;text-overflow:clip!important;max-width:none!important;letter-spacing:0!important}}
+/* панель боя не стоит под открытой шторкой броска */
+html body.x40fight:has(#rollPanel:not([hidden])) #x3cbbar{transform:translateY(110%)!important;opacity:0!important;pointer-events:none!important}
+
+/* крит 8–9: блок с кнопкой для мастера */
+.combat .x54w{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;font-weight:400}
+.combat .x54w>span:first-child{flex:1 1 220px;font-weight:700}
+.combat .x54w .x83cnt{flex:1 0 100%;font-family:var(--narrow);font-size:15px}
+.combat .x54w .x83ok{min-height:44px}
+
+/* единое «недоступно»: пунктир, приглушённый текст, без заливки и без красной рамки «в долг» */
+.btn:disabled,.btn[aria-disabled="true"],.cbb:disabled,.cbb[aria-disabled="true"],.x83off,.x54off{border-style:dashed!important;border-color:var(--line)!important;color:var(--muted)!important;background:transparent!important;box-shadow:none!important}
+.btn.big.x83off .x83have,.btn .x83have{display:block;font-family:var(--narrow);font-size:13px;font-weight:400;color:var(--muted)}
+
+/* фишки действий — 26px, как в DESIGN.md */
+.combat .cbacts .apip,.combat .apip{width:26px!important;height:26px!important}
+
+/* «Перебросить все 11…» целиком */
+.rollrow.x82rr .btn{white-space:normal;text-align:left;max-width:100%}
+
+/* цвет фракции — квадратом у названия, а не полосой по скруглённому краю */
+.groups .group{border-top:1px solid var(--line)!important}
+.groups .group>h4::before{content:"";display:inline-block;width:10px;height:10px;margin-right:8px;border-radius:2px;background:var(--gc,var(--line));vertical-align:1px}
+.dossier{border-top:1px solid var(--line)!important}
+.dossier::before{content:"";position:absolute;top:12px;right:12px;width:10px;height:10px;border-radius:2px;background:var(--gc,var(--accent))}
 </style>
 </head>
 <body>
@@ -21431,6 +21599,517 @@ X3.dock71=()=>document.querySelectorAll("#x3cbbar .cbb").forEach(b=>b.classList.
 const bb0=X3.cbBar;if(bb0)X3.cbBar=function(){const out=bb0.apply(this,arguments);try{X3.dock71();}catch(e){}return out;};
 const r0=render;render=function(){const out=r0.apply(this,arguments);try{X3.stats71();}catch(e){}try{X3.scPos71();}catch(e){}try{X3.dock71();}catch(e){}return out;};
 const q0=renderRoom;renderRoom=function(){const out=q0.apply(this,arguments);try{X3.room71();}catch(e){}return out;};
+})();
+
+/* ===== ux72: восьмая критика — последствие крит-ранения под штампом, «Не применять» с подтверждением, итог Тревогой ===== */
+(function(){
+const E=s=>X3.esc(String(s==null?"":s)),M=v=>String(v).replace("-","−");
+
+/* сложный и невозможный тест: откуда число на штампе */
+X3.critSum72=function(n){const f=CRITFX[n];if(!f||f.test==="normal")return "";const R=compute(C),k=f.test==="hard"?2:3,v=R.tot.tou+(f.mod||0)+woundPen(R),T=(C.settings&&C.settings.hardT==="1"?1:k)*v;
+  return `${f.test==="hard"?"Сложный":"Невозможный"} тест: сумма ${k}d20 против Стойкости с учётом штрафов${k>1&&T!==v?` ×${k}`:""} (${M(T)}).${T<=0?" При таком значении пройти можно только критическим успехом.":""}`;};
+
+/* блок под штампом: что теперь и что сделать */
+X3.critPend72=function(){const w=W(),n=Number(w.crit),p=w.critPend;if(!p||p.lvl!==n||!CRITFX[n])return "";
+  const sum=X3.critSum72(n);
+  return `<div class="x72crit ${p.ok?"x72ok":"x72bad"}" role="status"><div class="x72h"><b>${p.ok?"Тест пройден":"Тест провален"}.</b> ${E(X3.critOut71(n,p.ok))}.</div>${sum?`<p class="note x72sum">${E(sum)}</p>`:""}<div class="x72acts"><button class="btn primary" data-x71apply="${n}">Применить последствия</button><button class="btn" data-x72skip="${n}">Не применять</button></div></div>`;};
+X3.critDone72=function(){const w=W(),n=Number(w.crit);if(w.critDone!==n)return "";
+  return `<div class="x72crit x72bad x72done" role="status"><div class="x72h"><b>Критическое ранение ${n}-е.</b> ${w.critMsg||"Последствия применены."}</div><div class="x72acts"><button class="btn" data-x72undo="${n}">Отменить применение</button></div></div>`;};
+X3.panelPut72=function(html){const box=$("#rollNow");if(!box)return;box.querySelectorAll(".x72crit").forEach(x=>x.remove());if(html)box.insertAdjacentHTML("beforeend",html);
+  try{LASTRES=box.innerHTML;}catch(_){}};
+const open72=()=>{const p=$("#rollPanel");return p&&!p.hidden;};
+
+/* в листе и шторке: «Отменить» → «Не применять», итог — Тревогой, а не «Нормой» */
+const cb0=X3.critBlock;
+X3.critBlock=function(R){let h=cb0.apply(this,arguments);if(!h)return h;
+  h=h.replace(/<button class="btn small" data-x71undo="(\d+)">Отменить<\/button>/,'<button class="btn small" data-x72skip="$1">Не применять</button>');
+  return h.replace('<div class="okbox x71res">','<div class="x71res x72res">');};
+const ca0=critActions;
+critActions=function(lvl){const h=ca0.apply(this,arguments);return h.replace('<div class="okbox">','<div class="warnbox x72res">');};
+
+/* после броска теста — блок под штампом; после применения — итог и отмена там же */
+document.addEventListener("click",e=>{const b=e.target.closest("[data-x71crit],[data-x71apply],[data-x72skip],[data-x72undo]");if(!b)return;const w=W(),n=Number(w.crit);
+  if(b.dataset.x71crit){if(open72())X3.panelPut72(X3.critPend72());return;}
+  if(b.dataset.x71apply){try{X3.lab52&&X3.lab52(`применение крит-ранения ${n}-е`);}catch(_){}
+    if(open72()&&b.closest("#rollNow"))X3.panelPut72(X3.critDone72());return;}
+  if(b.dataset.x72undo){X3.doUndo();setTimeout(()=>{if(open72())X3.panelPut72(X3.critPend72());},0);return;}
+  if(b.dataset.x72skip){const p=w.critPend;if(!p)return;
+    const drop=()=>{const w2=W();if(!w2.critPend)return;delete w2.critPend;pushLog(`Критическое ранение ${n}-е: последствия не применены`);save();render();
+      const box=$("#rollNow");if(open72()&&box){box.innerHTML=`<div class="big">Критическое ранение ${n}-е</div><p class="note" style="margin:4px 0 0">Последствия не применены, результат теста сброшен.</p>`;try{LASTRES=box.innerHTML;}catch(_){}}};
+    if(p.ok)drop();
+    else askConfirm(`Тест провален. Не применять последствия и сбросить результат теста? Сейчас последствия такие: ${X3.critOut71(n,false).replace(/^./,c=>c.toLowerCase())}.`,drop);}
+});
+try{render();}catch(e){console.error(e);}
+})();
+
+/* ===== ux73: цвет по смыслу — фракции не повторяют сигнальные цвета, итог урона нейтральный ===== */
+(function(){
+/* фракции: только холодные и приглушённые оттенки — без золота Света, Тревоги, Нормы, оранжевой метки и фиолета Тьмы */
+X3.GROUPC=["#4A8FB8","#A0569A","#5C9EA6","#8A9A48","#4A6FA8","#C2689A","#6F8C8A","#7A86B8","#8A7A6A","#7FA6C8"];
+/* цвет по порядку фракции в книге, а не по хешу: у разных фракций цвета не совпадают */
+const gc0=X3.groupColor;
+X3.groupColor=g=>{if(!g)return gc0(g);let L=[];try{L=[...new Set((BOOK.classes||[]).map(c=>c.group))];}catch(_){}const i=L.indexOf(g);return i<0?gc0(g):X3.GROUPC[i%X3.GROUPC.length];};
+/* итог урона и лечения в «Состоянии и ранениях» — запись, а не «успех» */
+const wu0=woundUI;
+woundUI=function(){const h=wu0.apply(this,arguments);return WMSG?h.replace(`<div class="okbox">${WMSG}</div>`,`<div class="x73res" role="status">${WMSG}</div>`):h;};
+try{render();}catch(e){console.error(e);}
+})();
+
+/* ===== ux74: узкие экраны и скорость — пересчёт персонажа один раз за перерисовку, переносы без словаря, короткие подписи ===== */
+(function(){
+/* --- скорость: compute(C) вызывался ~46 раз за одну перерисовку (каждый слой сам по себе).
+   На время перерисовки результат для одного и того же листа берётся из памяти; каждому вызову — своя копия,
+   чтобы правка результата одним слоем не задевала другой --- */
+const cp0=compute;let memo=null,depth=0;
+const clone=typeof structuredClone==="function"?structuredClone:o=>JSON.parse(JSON.stringify(o));
+compute=function(c){if(!memo||!c||typeof c!=="object")return cp0.apply(this,arguments);
+  let k;try{k=JSON.stringify(c);}catch(_){return cp0.apply(this,arguments);}
+  let R=memo.get(k);if(!R){R=cp0.apply(this,arguments);if(!R||typeof R!=="object")return R;try{memo.set(k,clone(R));}catch(_){return R;}return R;}
+  return clone(R);};
+/* поиск предмета в арсенале по названию (~0,5 мс, сотни раз за перерисовку) — запоминается; сброс, если арсенал изменился */
+if(typeof matchArsenal==="function"){const ma0=matchArsenal;let mc=new Map(),sig="";
+  matchArsenal=function(name){const s=ARS.length+"|"+(ARS[ARS.length-1]&&ARS[ARS.length-1].name);if(s!==sig){sig=s;mc=new Map();}
+    const k=String(name);if(mc.has(k))return mc.get(k);const r=ma0.apply(this,arguments);mc.set(k,r);return r;};}
+X3.memo74=function(fn){return function(){const top=!memo;if(top)memo=new Map();depth++;try{return fn.apply(this,arguments);}finally{depth--;if(top&&!depth)memo=null;}};};
+
+/* --- переносы: в Android WebView без словаря длинные слова не переносятся и вылезают из плиток.
+   Мягкий перенос по слогам ставится в коротких подписях (кнопки, плитки, ячейки), длинные тексты не трогаются --- */
+const SH="­",A="[абвгдеёжзийклмнопрстуфхцчшщъыьэюя]",G="[аеёиоуыэюя]",S="[бвгджзклмнпрстфхцчшщ]",Z="[йъь]";
+const RU=[[Z,A+A],[G,G+A],[G+S,S+G],[S+G,S+G],[G+S,S+S+G],[G+S+S,S+S+G]].map(([l,r])=>new RegExp(`(${l})(?=${r})`,"gi"));
+X3.hy74=function(w){if(w.length<12||w.indexOf(SH)>=0)return w;const cut=new Set();
+  RU.forEach(re=>{re.lastIndex=0;let m;while((m=re.exec(w))){cut.add(m.index+m[1].length);if(re.lastIndex===m.index)re.lastIndex++;}});
+  const at=[...cut].filter(i=>i>=3&&i<=w.length-3).sort((a,b)=>a-b);if(!at.length)return w;
+  let out="",p=0;at.forEach(i=>{out+=w.slice(p,i)+SH;p=i;});return out+w.slice(p);};
+const HYSEL="button,.opt,.kitopt,.pill,.basestat,.sname,.msl,.cbb,th,td,h4,label,.statrow>span:first-child,.dsrow";
+X3.shy74=function(root){if(!root)return;const tw=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:n=>n.nodeValue.length>=12&&/[А-Яа-яЁё]{12}/.test(n.nodeValue)?1:3});
+  const list=[];let n;while((n=tw.nextNode()))list.push(n);
+  list.forEach(n=>{const p=n.parentElement;if(!p||!p.closest(HYSEL)||p.closest("input,textarea,select,option,script,style,.rules,[contenteditable]"))return;
+    const v=n.nodeValue.replace(/[А-Яа-яЁё]{12,}/g,X3.hy74);if(v!==n.nodeValue)n.nodeValue=v;});};
+
+/* --- шапка: длинное имя с многоточием (у flex-контейнера многоточие не работает — текст в отдельный span) --- */
+X3.hdr74=function(){const h=document.getElementById("hdrName");if(!h)return;const t=[...h.childNodes].find(x=>x.nodeType===3&&x.nodeValue.trim());if(!t)return;
+  const s=document.createElement("span");s.className="x74nm";s.textContent=t.nodeValue;h.replaceChild(s,t);};
+
+/* --- док боя на узком: «Уклон.» и «Парир.» вместо переноса по слогам; полное имя — в aria-label --- */
+X3.dock74=function(){const nar=innerWidth<370;document.querySelectorAll("#x3cbbar .cbb[data-react]").forEach(b=>{if(b.children.length)return;
+  const full=b.dataset.x74full||(b.dataset.x74full=b.textContent.replace(/­/g,"").trim());
+  const short={"Уклонение":"Уклон.","Парирование":"Парир."}[full];if(!short)return;
+  if(nar&&b.textContent!==short){b.textContent=short;if(!b.getAttribute("aria-label"))b.setAttribute("aria-label",full);}
+  if(!nar&&b.textContent===short)b.textContent=full;});};
+
+/* --- прокрутка не прыгает после перерисовки: экран пересобирается целиком, и браузер сам сдвигал страницу
+   (якорь прокрутки и раскладка липкой панели). Позиция возвращается, если её не меняли ни жест, ни явная команда прокрутки --- */
+let apiT=0,userT=0;const now=()=>performance.now();
+["scrollTo","scrollBy","scroll"].forEach(n=>{const o=window[n];if(typeof o==="function")window[n]=function(){apiT=now();return o.apply(this,arguments);};});
+const siv=Element.prototype.scrollIntoView;Element.prototype.scrollIntoView=function(){apiT=now();return siv.apply(this,arguments);};
+const sTop=Object.getOwnPropertyDescriptor(Element.prototype,"scrollTop");
+const foc=HTMLElement.prototype.focus;HTMLElement.prototype.focus=function(o){if(!(o&&o.preventScroll))apiT=now();return foc.apply(this,arguments);};
+["touchmove","wheel"].forEach(ev=>addEventListener(ev,()=>{userT=now();},{passive:true,capture:true}));
+addEventListener("keydown",e=>{if(/^(PageUp|PageDown|ArrowUp|ArrowDown|Home|End| )$/.test(e.key)&&!/^(INPUT|TEXTAREA|SELECT)$/.test((e.target&&e.target.tagName)||""))userT=now();},{capture:true});
+const rootSet=y=>{const se=document.scrollingElement||document.documentElement;if(sTop&&sTop.set)sTop.set.call(se,y);else se.scrollTop=y;};
+X3.keepY74=function(y,st,t){const chk=()=>{if(STEP!==st||apiT>t||userT>t)return;const d=scrollY-y;if(Math.abs(d)<3)return;
+    const ae=document.activeElement,vv=window.visualViewport;
+    if(ae&&/^(INPUT|TEXTAREA|SELECT)$/.test(ae.tagName)&&vv){const r=ae.getBoundingClientRect(),top=r.top+d;if(top<0||r.bottom+d>vv.height)return;}
+    if(document.documentElement.scrollHeight<y+innerHeight-2)return;rootSet(y);};
+  requestAnimationFrame(()=>{chk();requestAnimationFrame(chk);});setTimeout(chk,150);};
+
+const after=()=>{try{X3.shy74(document.getElementById("main"));}catch(e){console.error(e);}try{X3.shy74(document.getElementById("x3cbbar"));}catch(e){}try{X3.hdr74();}catch(e){}try{X3.dock74();}catch(e){}};
+const r0=render;render=X3.memo74(function(){const top=!depth||depth===1,y=scrollY,st=STEP,t=now();const out=r0.apply(this,arguments);after();if(top)X3.keepY74(y,st,t);return out;});
+const q0=renderRoom;renderRoom=X3.memo74(function(){const out=q0.apply(this,arguments);try{X3.shy74(document.getElementById("roomView")||document.getElementById("main"));}catch(e){}return out;});
+const bb0=X3.cbBar;if(bb0)X3.cbBar=X3.memo74(function(){const out=bb0.apply(this,arguments);try{X3.dock74();}catch(e){}return out;});
+addEventListener("resize",()=>{try{X3.dock74();}catch(e){}});
+try{render();}catch(e){console.error(e);}
+})();
+
+/* ===== ux75: «Миссия» разгружена — переходы только нужные в ходе, общие состояния вместе, журнал боя короче ===== */
+(function(){
+/* --- ряд переходов: дубли шапки и меню (Блокнот, Комната), Судьбы (есть в полосе сверху) и разделов листа (есть в «Листе персонажа» ниже) убраны.
+   «Состояние» остаётся: туда ведёт ранение --- */
+X3.chips75=function(){document.querySelectorAll(".misjump .mj").forEach(b=>{const t=b.textContent.replace(/­/g,"").trim(),js=b.dataset.jumpsec;
+  const off=!!(b.dataset.notesopen||b.dataset.roomopen||/^Судьба\b/.test(t)||(js&&js!=="Состояние и ранения"));
+  b.classList.toggle("x75off",off);if(off)b.setAttribute("tabindex","-1");else b.removeAttribute("tabindex");});};
+
+/* --- «Таланты и снаряжение в бою»: «Цель под трассерами» доступна всем — к общим состояниям, а не под «Снайпер, поддержка, ассасин» --- */
+X3.tal75=function(){const box=document.getElementById("x3tal");if(!box)return;const secs=[...box.querySelectorAll(":scope > .x3tsec")];
+  const head=s=>(s.querySelector(".x3sub")||{}).textContent||"";
+  const st=secs.filter(s=>/^Состояни[ея]$/.test(head(s).trim()));if(!st.length)return;const main=st[0];
+  let row=main.querySelector(".x3cfrow");if(!row){row=document.createElement("div");row.className="x3cfrow";main.appendChild(row);}
+  st.slice(1).forEach(s=>{[...s.children].forEach(k=>{if(k.classList.contains("x3sub"))return;if(k.classList.contains("x3cfrow"))[...k.children].forEach(x=>row.appendChild(x));else row.appendChild(k);});s.remove();});
+  const tr=box.querySelector('[data-x3tt="tracer"]'),lab=tr&&tr.closest("label");
+  if(lab&&!main.contains(lab)){const from=lab.closest(".x3tsec");row.appendChild(lab);if(from&&!from.querySelector("button,input,select,.note"))from.remove();}
+  const h=main.querySelector(".x3sub");if(h&&h.textContent!=="Состояния")h.textContent="Состояния";};
+
+/* --- журнал боя: три последних записи, остальное по кнопке --- */
+X3.log75open=false;
+X3.log75=function(){const lg=document.querySelector("#main .cblog");if(!lg)return;const ol=lg.querySelector("ol");if(!ol)return;const n=ol.children.length;
+  let b=lg.querySelector(".x75more");if(n<=3){if(b)b.remove();ol.classList.remove("x75cut");return;}
+  ol.classList.toggle("x75cut",!X3.log75open);
+  if(!b){b=document.createElement("button");b.type="button";b.className="jump ph x75more";ol.after(b);}
+  b.textContent=X3.log75open?"Свернуть журнал":`Весь журнал (${n})`;b.setAttribute("aria-expanded",X3.log75open?"true":"false");};
+document.addEventListener("click",e=>{if(!e.target.closest(".x75more"))return;X3.log75open=!X3.log75open;X3.log75();});
+
+const r0=render;render=function(){const out=r0.apply(this,arguments);if(STEP===10){try{X3.chips75();}catch(e){}try{X3.tal75();}catch(e){}try{X3.log75();}catch(e){}}return out;};
+try{render();}catch(e){console.error(e);}
+})();
+
+/* ===== ux76: тексты — выстрел в долг виден до нажатия, отмена называет действие, без «Урон: Урон», два модификатора различимы, опечатки книги ===== */
+(function(){
+/* --- опечатки в тексте книги: правка при загрузке, src/data.json не меняется (сборка сверяет данные) --- */
+const FIX=[["Победу от поражения могут миллисекунды","Победу от поражения могут отделять миллисекунды"],["В самого начала обучения","С самого начала обучения"],["d5-1(но не менее","d5−1 (но не менее"],["Комунн","Коммун"]];
+(function walk(o,d){if(!o||d>8)return;for(const k in o){const v=o[k];if(typeof v==="string"){let s=v;FIX.forEach(([a,b])=>{if(s.indexOf(a)>=0)s=s.split(a).join(b);});if(s!==v)o[k]=s;}else if(v&&typeof v==="object")walk(v,d+1);}})(BOOK,0);
+
+/* --- выстрел, когда действий не хватает: не главная кнопка, на ней сказано «в долг» --- */
+X3.debt76=function(){let c;try{c=CB();}catch(_){return;}const live=c&&c.round>0,act=Number(c&&c.act)||0;
+  const costOf=id=>{const b=document.querySelector(`#main [data-shoot="${CSS.escape(id)}"]`);const m=b&&b.textContent.match(/·\s*(\d+)\s*д/);return m?Number(m[1]):null;};
+  document.querySelectorAll("[data-shoot]").forEach(b=>{const id=b.dataset.shoot,n=costOf(id);const debt=live&&n!=null&&act<n;
+    if(b.dataset.x76p==null)b.dataset.x76p=b.classList.contains("primary")?"1":"0";
+    b.classList.toggle("x76debt",debt);if(b.dataset.x76p==="1")b.classList.toggle("primary",!debt);
+    const dock=!!b.closest("#x3cbbar");
+    if(debt){const lab=dock?"В долг":`Стрелять в долг · ${n} д.`;if(b.textContent!==lab)b.textContent=lab;b.setAttribute("aria-label",`Стрелять в долг: не хватает ${n-act} д., они спишутся в следующем раунде`);}
+    else if(b.getAttribute("aria-label")&&/^Стрелять в долг/.test(b.getAttribute("aria-label"))){b.removeAttribute("aria-label");}});};
+
+/* --- отмена называет действие, а не кнопку («Отменить: Применить» → «Отменить: применение») --- */
+const NM={"Отменить":"отмена броска","Применить":"применение","Применить последствия":"применение последствий","Закрыть":"закрытие шторки","Да":"подтверждение","Подтвердить":"подтверждение","ОК":"подтверждение","Готово":"подтверждение","Сохранить":"сохранение"};
+const n0=X3.name52;if(n0)X3.name52=function(b){const s=n0.apply(this,arguments);return NM[s]||s.replace(/^В долг$/,"выстрел в долг").replace(/^Стрелять в долг$/,"выстрел в долг");};
+
+/* --- журнал: «Урон: Урон 12: …» → «Урон 12: …» --- */
+const pl0=pushLog;pushLog=function(x){return pl0.call(this,typeof x==="string"?x.replace(/^Урон: (Урон \d)/,"$1"):x);};
+
+/* --- после отмены из истории панели уходят броски отменённого действия --- */
+const u0=X3.doUndo;if(u0)X3.doUndo=function(){const out=u0.apply(this,arguments);try{const keep=new Set((C.rollLog||[]).slice(0,40).map(r=>r.x));
+    while(ROLLS.length&&!keep.has(String(ROLLS[0]).slice(0,400)))ROLLS.shift();
+    const ul=$("#rollLog");if(ul)ul.innerHTML=ROLLS.slice(0,7).map(x=>`<li>${esc(x)}</li>`).join("");}catch(e){console.error(e);}return out;};
+
+/* --- два модификатора: один — для этого теста, другой — для всех следующих (панель бросков) --- */
+X3.mods76=function(){const t=document.getElementById("tMod"),l=t&&t.closest("label");if(l&&l.firstChild&&l.firstChild.nodeType===3&&/^Модификатор \(бонус или штраф\)/.test(l.firstChild.nodeValue))l.firstChild.nodeValue="Модификатор этого теста ";
+  const r=document.getElementById("rollMod"),rl=r&&r.closest("label");if(rl&&rl.firstChild&&rl.firstChild.nodeType===3&&/^Модификатор следующих тестов/.test(rl.firstChild.nodeValue))rl.firstChild.nodeValue="Модификатор всех следующих тестов ";};
+
+const r0=render;render=function(){const out=r0.apply(this,arguments);try{X3.debt76();}catch(e){}try{X3.mods76();}catch(e){}return out;};
+const bb0=X3.cbBar;if(bb0)X3.cbBar=function(){const out=bb0.apply(this,arguments);try{X3.debt76();}catch(e){}return out;};
+try{render();}catch(e){console.error(e);}
+})();
+
+/* ===== ux77: бой — отмена только действий, долг на всех кнопках с ценой и предупреждение о сумме, «без сознания» после крита ===== */
+(function(){
+const E=s=>X3.esc(String(s==null?"":s)),RU=n=>n%10===1&&n%100!==11?"раунд":(n%10>=2&&n%10<=4&&(n%100<10||n%100>=20)?"раунда":"раундов");
+
+/* --- отмена: переходы по экранам, вкладки, раскрытие блоков не становятся «действием» («Отменить: Миссия») --- */
+const NAV="#x3nav,.misjump,[data-go],[data-step],[data-jumpsec],header.top,.x75more,summary,[data-x46tab],#modeTabs,[data-roomopen],[data-notesopen],.x67sc,#rollClose,[data-x3tocb],[data-clslist],.x42more,[data-sec]>summary";
+window.addEventListener("click",e=>{const t=e.target;if(!t||!t.closest)return;if(t.closest(NAV)&&!t.closest("[data-cbturn]"))X3.skip52=X3.tk52.n;},true);
+/* подпись — без цены и бонуса: «Прицелиться (1 д.): +4» → «Прицелиться» */
+const n0=X3.name52;if(n0)X3.name52=function(){return String(n0.apply(this,arguments)).replace(/\s*\(\d+\s*д\.?\)/g,"").replace(/\s*·\s*\d+\s*д\.?/g,"").replace(/:\s*[+−-]\s*\d+$/,"").replace(/\s+в долг$/,"").trim()||"действие";};
+
+/* --- долг: все кнопки с ценой «(N д.)» / «· N д.», когда действий не хватает --- */
+X3.debt77=function(){let c;try{c=CB();}catch(_){return;}if(!c)return;const live=c.round>0,act=Number(c.act)||0;
+  document.querySelectorAll("#main .combat button:not([data-shoot]),#x3cbbar button:not([data-shoot])").forEach(b=>{if(b.disabled)return;
+    const t=b.textContent,m=t.match(/\((\d+)\s*д\.?\)|·\s*(\d+)\s*д/);if(!m)return;const n=Number(m[1]||m[2]);const debt=live&&act<n;
+    b.classList.toggle("x76debt",debt);if(debt){b.classList.remove("primary");if(!/в долг/.test(t))b.textContent=t.replace(/\s*\((\d+)\s*д\.?\)/," в долг ($1 д.)");b.setAttribute("aria-label",`${b.textContent.trim()}: не хватает ${n-act} д., они спишутся в следующем раунде`);}});
+  /* сумма долга — рядом со счётчиком действий; если съедает весь следующий ход — говорим прямо */
+  const d=Number(c.debt)||0,row=document.querySelector("#main .combat .cbactrow");
+  if(row){let s=row.querySelector(".x77debt");if(!live||!d){if(s)s.remove();}else{if(!s){s=document.createElement("div");s.className="x77debt";s.setAttribute("role","status");row.appendChild(s);}
+    const all=d>=(Number(c.max)||4);const h=`Долг ${d} д.: ${all?"<b>следующий ход без действий</b>":`в следующем раунде действий ${Math.max(0,(Number(c.max)||4)-d)} из ${c.max}`}.`;if(s.innerHTML!==h)s.innerHTML=h;s.classList.toggle("x77all",all);}}
+  const bi=document.querySelector("#x3cbbar .cbbi");if(bi){let t=bi.querySelector(".x77bd");if(live&&d){if(!t){t=document.createElement("small");t.className="x77bd";bi.appendChild(t);}t.textContent=`долг ${d}`;}else if(t)t.remove();}};
+
+/* --- без сознания: после крит-ранения с «без сознания dN раундов» число раундов бросается, атаки и реакции недоступны --- */
+X3.ko77=()=>{const k=C&&C.ko77;return k&&Number(W().crit)===k.crit&&(k.left==null||k.left>0)?k:null;};
+const ca0=critApply;critApply=function(lvl,how){const out=ca0.apply(this,arguments);try{const w=W(),msg=String(w.critMsg||"");
+    if(w.critDone===lvl&&/без сознания/i.test(msg)){const m=msg.match(/без сознания\s+(d(\d+))(?:\s*[−-]\s*(\d+))?\s+раунд/i);let ko;
+      if(m){const r=rnd(Number(m[2])),sub=Number(m[3])||0,n=Math.max(1,r-sub),ex=m[1]+(sub?`−${sub}`:"");ko={crit:lvl,left:n,total:n,expr:ex,roll:r};
+        w.critMsg=msg+` <b class="x77kom">Без сознания: ${ex}${sub?` (${r}−${sub})`:""} = ${n} ${RU(n)}.</b>`;pushLog(`Без сознания: ${ex} = ${n} ${RU(n)}`);}
+      else ko={crit:lvl,left:null,total:null,expr:"до медпомощи"};
+      C.ko77=ko;}}catch(e){console.error(e);}return out;};
+/* раунд проходит — счётчик уменьшается (тот же «Новый ход» / раунд мастера, что и отсчёт ранения) */
+const tk0=X3.tick;if(tk0)X3.tick=function(tok){const prev=C&&C.tickTok,out=tk0.apply(this,arguments);try{const k=C&&C.ko77;
+    if(k&&C.tickTok!==prev&&k.left!=null&&k.left>0){k.left--;if(!k.left){toast("Вы пришли в себя");pushLog("Без сознания: пришли в себя");}}}catch(e){}return out;};
+const KOSEL="[data-shoot],[data-burst],[data-react],[data-throw],[data-act],[data-pip],[data-cbfree],[data-reload],[data-use],[data-dmg],[data-x35],[data-x30],[data-x3t]";
+window.addEventListener("click",e=>{const k=X3.ko77();if(!k||STEP!==10)return;const b=e.target.closest&&e.target.closest(KOSEL);if(!b)return;
+  e.preventDefault();e.stopImmediatePropagation();toast(k.left==null?"Без сознания: нужна медпомощь":`Без сознания: ещё ${k.left} ${RU(k.left)}`);},true);
+document.addEventListener("click",e=>{if(!e.target.closest("[data-x77wake]"))return;if(C.ko77){C.ko77.left=0;pushLog("Без сознания: пришли в себя (вручную)");save();render();}});
+X3.koUI77=function(){const k=X3.ko77();document.body.classList.toggle("x77ko",!!k&&STEP===10);
+  document.querySelectorAll(KOSEL.split(",").map(s=>"#main .combat "+s+",#x3cbbar "+s).join(",")).forEach(b=>{b.classList.toggle("x77off",!!k);if(k)b.setAttribute("aria-disabled","true");else if(b.classList.contains("x77off"))b.removeAttribute("aria-disabled");});
+  const bar=document.getElementById("x3cbbar");if(bar){let ds=bar.querySelector(".x77dks");
+    if(!k){if(ds)ds.remove();}else{if(!ds){ds=document.createElement("span");ds.className="x77dks";ds.setAttribute("role","status");const bi=bar.querySelector(".cbbi");if(bi)bi.after(ds);else bar.prepend(ds);}
+      const t=k.left==null?"Без сознания · до медпомощи":`Без сознания · ещё ${k.left} р.`;if(ds.textContent!==t)ds.textContent=t;}}
+  const card=document.querySelector("#main .combat");if(!card)return;let bn=card.querySelector(".x77kob");
+  if(!k){if(bn)bn.remove();return;}
+  const h=`<b>Без сознания${k.left==null?": до медпомощи":`: ещё ${k.left} ${RU(k.left)}`}</b>${k.left!=null?` <span class="note">(${E(k.expr)} = ${k.total})</span>`:""}. Атаки, реакции и предметы недоступны.<div class="x77koa"><button type="button" class="btn small" data-x77wake="1">Пришёл в себя</button></div>`;
+  if(!bn){bn=document.createElement("div");bn.className="warnbox x77kob";bn.setAttribute("role","status");const head=card.querySelector(".cbhead");if(head)head.after(bn);else card.prepend(bn);}
+  if(bn.innerHTML!==h)bn.innerHTML=h;};
+
+const after=()=>{try{X3.debt77();}catch(e){}try{X3.koUI77();}catch(e){}};
+const r0=render;render=function(){const out=r0.apply(this,arguments);after();return out;};
+const bb0=X3.cbBar;if(bb0)X3.cbBar=function(){const out=bb0.apply(this,arguments);after();return out;};
+try{render();}catch(e){console.error(e);}
+})();
+
+/* ===== ux78: панель броска на телефоне — короче, закрывается касанием мимо, текст книги свёрнут ===== */
+(function(){
+const MOB=()=>innerWidth<560;
+/* касание за пределами панели закрывает её; само касание проходит дальше (кнопка под пальцем срабатывает) */
+document.addEventListener("pointerdown",e=>{if(!MOB())return;const p=$("#rollPanel");if(!p||p.hidden)return;const t=e.target;
+  if(!t||!t.closest||t.closest("#rollPanel,#x3cbbar,#x3nav,dialog,#toast,.toast,header.top,.mstrip"))return;
+  if(t.closest("#main"))try{X3.rpClose();}catch(_){}},true);
+/* текст правила книги в шторке ранения — первые строки, остальное по кнопке */
+X3.clamp78=function(){if(!MOB())return;document.querySelectorAll("#rollNow .x47w .rules").forEach(r=>{if(r.dataset.x78)return;r.dataset.x78="1";
+  if(r.scrollHeight<=110)return;r.classList.add("x78cut");const b=document.createElement("button");b.type="button";b.className="jump ph x78more";b.textContent="Текст правила полностью";b.setAttribute("aria-expanded","false");
+  b.addEventListener("click",()=>{const on=r.classList.toggle("x78cut");b.textContent=on?"Текст правила полностью":"Свернуть текст";b.setAttribute("aria-expanded",on?"false":"true");});r.after(b);});};
+const sp0=showPanel;showPanel=function(){const out=sp0.apply(this,arguments);try{X3.clamp78();}catch(e){}return out;};
+const m47=X3.mark47;if(m47)X3.mark47=function(){const out=m47.apply(this,arguments);try{X3.clamp78();}catch(e){}return out;};
+})();
+
+/* ===== ux79: подписи и ошибки — одно название действия, кнопка подтверждения называет действие, одно имя-заглушка,
+   настоящий минус, ошибка кода у поля, сервер недоступен — сказано прямо ===== */
+(function(){
+/* --- «Применить» в карточке ранения = «Применить последствия», как в панели --- */
+const cb0=X3.critBlock;X3.critBlock=function(){const h=cb0.apply(this,arguments);return h?h.replace(/(data-x71apply="\d+">)Применить(<\/button>)/,"$1Применить последствия$2"):h;};
+
+/* --- подтверждение: кнопка повторяет действие («Не применять»), после закрытия — снова «Подтвердить» --- */
+const ac0=askConfirm;askConfirm=function(text,cb){const out=ac0.apply(this,arguments);try{if(/^Тест провален\. Не применять последствия/.test(String(text))){const y=$("#confirmYes"),d=$("#confirmDlg");if(y&&d){y.textContent="Не применять";const back=()=>{y.textContent="Подтвердить";d.removeEventListener("close",back);};d.addEventListener("close",back);}}}catch(_){}return out;};
+
+/* --- одно имя-заглушка: «Без имени», как в досье и списке персонажей --- */
+X3.name79=function(){const h=document.getElementById("hdrName");if(!h||C&&C.name)return;const s=h.querySelector(".x74nm")||h;if(s.textContent==="Новый оперативник")s.textContent="Без имени";};
+
+/* --- минус: «-5» → «−5» в коротких подписях, итогах и вариантах выбора (поля ввода не трогаются) --- */
+const MSEL="#main,#rollNow,#x3cbbar,.mstrip";
+X3.minus79=function(){document.querySelectorAll(MSEL).forEach(root=>{const tw=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:n=>n.nodeValue.indexOf("-")>=0?1:3});const L=[];let n;while((n=tw.nextNode()))L.push(n);
+  /* узел из одного числа («-2») может читаться кодом как число — его не трогаем, кроме вариантов списка */
+  L.forEach(n=>{const p=n.parentElement;if(!p||p.closest("input,textarea,script,style,[contenteditable]"))return;if(p.tagName!=="OPTION"&&/^\s*-\d+\s*$/.test(n.nodeValue))return;const v=n.nodeValue.replace(/(^|[\s(:=,;«])-(\d)/g,"$1−$2");if(v!==n.nodeValue)n.nodeValue=v;});});};
+
+/* --- комната: ошибка кода — у поля и исчезает при вводе; «Мои комнаты» — итог, а не тишина --- */
+X3.roomErr79=function(){const inp=document.getElementById("rmCode");if(!inp||!ROOM||!ROOM.err)return;const v=document.getElementById("roomView")||document.getElementById("main");
+  const box=[...v.querySelectorAll(".warnbox")].find(b=>b.textContent.indexOf(ROOM.err)===0);if(!box)return;const row=inp.closest(".inline,.row,label,div")||inp;if(row.nextElementSibling!==box){row.after(box);box.classList.add("x79err");}
+  inp.setAttribute("aria-invalid","true");};
+document.addEventListener("input",e=>{if(e.target&&e.target.id==="rmCode"&&ROOM&&ROOM.err){ROOM.err="";e.target.removeAttribute("aria-invalid");const b=document.querySelector(".x79err");if(b)b.remove();}});
+roomMine=async function(){try{const sb=await roomClient();const {data,error}=await sb.from("rooms").select("code,created_at").eq("gm",ROOM.uid).order("created_at",{ascending:false}).limit(10);if(error)throw error;ROOM.mine=data||[];ROOM.mineErr=null;}
+  catch(e){ROOM.mine=[];ROOM.mineErr=(typeof roomErr==="function"?roomErr(e):String(e&&e.message||e))||"нет связи";}roomRefresh();};
+const gr0=gmRoomsHTML;gmRoomsHTML=function(){const h=gr0.apply(this,arguments);if(h||!ROOM||!ROOM.mineErr)return h;
+  return `<div class="warnbox" style="margin-top:12px" role="status"><b>Сервер недоступен:</b> ваши комнаты не загружены (${X3.esc(ROOM.mineErr)}). Играть можно и без комнаты.<div style="margin-top:8px"><button type="button" class="btn small" data-x79retry="1">Повторить</button></div></div>`;};
+document.addEventListener("click",e=>{if(!e.target.closest("[data-x79retry]"))return;ROOM.mineErr=null;ROOM.mine=null;roomRefresh();});
+
+const after=()=>{try{X3.name79();}catch(e){}try{X3.minus79();}catch(e){}};
+const r0=render;render=function(){const out=r0.apply(this,arguments);after();return out;};
+const q0=renderRoom;renderRoom=function(){const out=q0.apply(this,arguments);try{X3.roomErr79();}catch(e){}try{X3.minus79();}catch(e){}return out;};
+const sp0=showPanel;showPanel=function(){const out=sp0.apply(this,arguments);try{X3.minus79();}catch(e){}return out;};
+try{render();}catch(e){console.error(e);}
+})();
+
+/* ===== ux80: создание персонажа — имя спрашивается, ОЗ и Очки судьбы не спрятаны, переброс говорит, что сбросил, «Далее» без класса не выглядит главным ===== */
+(function(){
+const E=s=>X3.esc(String(s==null?"":s));
+/* --- «Характеристики»: блок ОЗ и Очков судьбы сразу под кубами, а не под распределением (там его не видно) --- */
+X3.hp80=function(){if(STEP!==1)return;const m=document.getElementById("main");const cards=[...m.querySelectorAll(":scope > .card")];
+  const hp=cards.find(c=>/^Очки здоровья/.test((c.querySelector("h3")||{}).textContent||""));const dist=cards.find(c=>/^Распределение/.test((c.querySelector("h3")||{}).textContent||""));
+  if(hp&&dist&&hp.compareDocumentPosition(dist)&Node.DOCUMENT_POSITION_PRECEDING)dist.before(hp);};
+
+/* --- переброс кубов, который снял назначенное значение, — сказать, что именно сброшено --- */
+let snap=null;
+window.addEventListener("click",e=>{if(STEP!==1)return;const b=e.target.closest&&e.target.closest("button");if(!b||!/^Перебросить/.test(b.textContent.trim()))return;
+  snap={...((C.stats&&C.stats.assign)||{})};setTimeout(()=>{const now=(C.stats&&C.stats.assign)||{},gone=Object.keys(snap).filter(k=>snap[k]!=null&&now[k]==null);snap=null;if(!gone.length)return;
+    X3.reset80=gone;toast(`Сброшено: ${gone.map(k=>LABEL[k]).join(", ")} — назначьте заново`);render();},0);},true);
+X3.mark80=function(){if(STEP!==1||!X3.reset80)return;const left=X3.reset80.filter(k=>!(C.stats.assign||{})[k]);X3.reset80=left.length?left:null;
+  left.forEach(k=>{const s=document.querySelector(`#main [data-x42slot="${k}"],#main select[data-assign="${k}"]`);const row=s&&s.closest(".statrow");if(row&&!row.querySelector(".x80r")){row.classList.add("x80reset");row.insertAdjacentHTML("beforeend",`<span class="note x80r">значение сброшено перебросом</span>`);}});};
+
+/* --- выбор класса: без класса «Далее» не главная кнопка и говорит об этом --- */
+X3.next80=function(){if(STEP!==0)return;const b=document.querySelector('#main .navbtns [data-go="1"]');if(!b)return;const none=!(C.cls&&C.cls.i!=null);
+  b.classList.toggle("primary",!none);if(none){b.textContent="Далее без класса";b.setAttribute("aria-label","Далее без класса: класс не выбран");}};
+
+/* --- имя: в «Что получилось» на последнем шаге --- */
+X3.nameField80=function(){const fin=document.querySelector("#main .x3final");if(!fin||fin.querySelector(".x80name"))return;
+  const h=fin.querySelector("h3");const html=`<label class="x80name"><span>Имя персонажа</span><input class="inp" type="text" data-txt="name" value="${E(C.name||"")}" placeholder="Как зовут оперативника?" autocomplete="off" maxlength="60"></label>`;
+  if(h)h.insertAdjacentHTML("afterend",html);else fin.insertAdjacentHTML("afterbegin",html);};
+
+const after=()=>{try{X3.hp80();}catch(e){}try{X3.mark80();}catch(e){}try{X3.next80();}catch(e){}try{X3.nameField80();}catch(e){}};
+const r0=render;render=function(){const out=r0.apply(this,arguments);after();return out;};
+try{render();}catch(e){console.error(e);}
+})();
+
+/* ===== ux81: Сложный и Невозможный тест — один итог, расчёт свёрнут; нижнее меню с постоянными местами;
+   нижняя панель боя прячется, пока карточка боя на экране (DESIGN.md) ===== */
+(function(){
+const E=s=>X3.esc(String(s==null?"":s));
+const M=n=>(n<0?"−":"+")+Math.abs(n);
+
+/* --- multiTest: та же механика, понятные подписи. «18 + 19 = 37 против 60; куб 19: −3 к степеням» вместо «(19: 3 ст. провала)»,
+   «сумма считается как 19» уходит из итога: на исход влияют только зоны 1 и 20 --- */
+const ZONE={1:"Критический успех",20:"Критический провал"};
+const mt0=multiTest;
+multiTest=function(n,v,o){const m=mt0.apply(this,arguments);o=o||{};
+  const B={1:7,2:3,19:o.ind?0:-3,20:o.ind?-3:-7};
+  m.bonus=m.rs.filter(x=>B[x]).map(x=>({x,b:B[x]}));
+  m.zone=(HARDCRIT[n]||{})[m.crit]||null;
+  m.cl=ZONE[m.crit]||"";
+  m.txt=`${m.rs.join(" + ")} = ${m.S} против ${m.T}`+(m.bonus.length?`; ${m.bonus.map(q=>`куб ${q.x}: ${M(q.b)} к степеням`).join(", ")}`:"");
+  m.head=(m.crit===1?"Критический успех":m.crit===20?"Критический провал":m.ok?"Успех":"Провал")+", "+m.degs;
+  return m;};
+
+/* как считали — для свёрнутого блока под итогом */
+X3.how81=function(m,n,v,nm){const k=m.T===v?1:n,L=[];
+  L.push(`Кубы: ${m.rs.join(" + ")} = <b>${m.S}</b>`);
+  L.push(`Порог: ${E(nm)}${k>1?` × ${k}`:""} = <b>${m.T}</b>`);
+  L.push(`${m.T} − ${m.S} = ${M(m.T-m.S)}`);
+  m.bonus.forEach(q=>L.push(`Куб ${q.x}: ${M(q.b)} к степеням`));
+  if(m.bonus.length)L.push(`Итого: <b>${M(m.net)}</b>`);
+  if(m.zone)L.push(`Сумма ${m.zone[0]}–${m.zone[1]} у ${n===2?"Сложного":"Невозможного"} теста — как «${m.crit}» на одном кубе`+(ZONE[m.crit]?`: ${ZONE[m.crit].toLowerCase()} при любых степенях`:""));
+  L.push(`Больше нуля — степени успеха, меньше — степени провала.`);
+  return `<details class="x81how"><summary>Как считали</summary><ol>${L.map(x=>`<li>${x}</li>`).join("")}</ol></details>`;};
+
+/* --- runTest: Сложный и Невозможный — заголовок без чисел, на штампе сумма с подписью, один итог крупно --- */
+const rt0=runTest;
+runTest=function(R){if(TEST.type!=="hard"&&TEST.type!=="impossible")return rt0.apply(this,arguments);
+  const base=TEST.stat==="custom"?Number(TEST.custom)||0:R.tot[TEST.stat];const wp=TEST.stat==="custom"?0:woundPen(R);const v=base+(Number(TEST.mod)||0)+wp;
+  const nm=(TEST.stat==="custom"?"Значение":LABEL[TEST.stat])+` ${base}${TEST.mod?` (${sgn(Number(TEST.mod))})`:""}${wp?` (ранение ${sgn(wp)})`:""}`;
+  const n=TEST.type==="hard"?2:3,type=n===2?"Сложный":"Невозможный",m=multiTest(n,v);
+  pushLog(`${type} тест, ${nm}: ${m.txt} — ${m.head}`);fateOffer(m.crit);
+  const nmv=(TEST.stat==="custom"?"значение":LABEL[TEST.stat])+` ${v}`;
+  panel(`${type} тест: ${nm}`,m.S,`<b class="x81v">${E(m.head)}</b><span class="x81sum">сумма ${n}d20 · ${m.S} против ${m.T}</span>`,m.ok?"ok":"bad");
+  const rn=document.getElementById("rollNow");if(rn){rn.insertAdjacentHTML("beforeend",X3.how81(m,n,v,nmv));const st=rn.querySelector(".stamp");if(st)st.setAttribute("aria-label",`Сумма кубов ${m.S}`);}
+  try{X3.minus79&&X3.minus79();}catch(e){}};
+
+/* --- нижнее меню: пять постоянных мест. Лист · Миссия · Кубы · Комната · Ещё; «Создание», Лор, Кампейн — в «Ещё».
+   Состав и порядок не меняются после создания персонажа; в «Ещё» подписан открытый раздел --- */
+const MAIN=["7","10","9","11"];
+X3.bottomNav=function(){let el=document.getElementById("x3nav");const on=X3.isPhone();document.body.classList.toggle("x3hasnav",on);if(!on){if(el)el.remove();return;}
+  const tabs=[...document.querySelectorAll("#modeTabs button[data-go]")].map(b=>({go:b.dataset.go,label:((b.querySelector(".tshort")||b).textContent||"").trim(),sel:b.getAttribute("aria-selected")==="true"}));if(!tabs.length)return;
+  tabs.forEach(t=>{t.create=/Создание/.test(t.label);});
+  const main=MAIN.map(g=>tabs.find(t=>t.go===g&&!t.create)).filter(Boolean);const rest=tabs.filter(t=>!main.includes(t));const rs=rest.find(t=>t.sel);
+  if(!el){el=document.createElement("nav");el.id="x3nav";el.className="x3nav noprint";el.setAttribute("aria-label","Разделы");document.body.appendChild(el);}
+  const dots=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h.01M12 12h.01M19 12h.01"/></svg>`;
+  el.innerHTML=main.map(t=>`<button type="button" class="x3nb ${t.sel?"on":""}" data-go="${t.go}" aria-current="${t.sel?"page":"false"}">${X3.navIco(t.go)}<span>${E(t.label)}</span></button>`).join("")+
+    (rest.length?`<button type="button" class="x3nb ${rs?"on":""}" data-x3more="1" aria-expanded="${X3.navOpen}" aria-label="${rs?`Ещё: открыт раздел ${E(rs.label)}`:"Ещё разделы"}">${rs?X3.navIco(rs.create?"0":rs.go):dots}<span>${rs?E(rs.label):"Ещё"}</span></button>`:"")+
+    (X3.navOpen&&rest.length?`<div class="x3navmore" role="menu">${rest.map(t=>`<button type="button" class="x3nmi ${t.sel?"on":""}" data-go="${t.go}" role="menuitem">${X3.navIco(t.create?"0":t.go)}<span>${E(t.create?"Создание персонажа":t.label)}</span></button>`).join("")}</div>`:"");};
+try{X3.bottomNav();}catch(e){}
+})();
+
+/* ===== ux82: создание — переброс не под пальцем и с подтверждением, «Далее» на незаконченном шаге предупреждает,
+   эффект варианта рождения виден до выбора; мелочи «Миссии»: модификатор тестов нажимается целиком ===== */
+(function(){
+const E=s=>X3.esc(String(s==null?"":s));
+
+/* --- «Характеристики»: после броска кнопка переброса уходит под кубики (на месте «Бросить» больше не стоит) --- */
+X3.reroll82=function(){if(STEP!==1||!C.stats.pool.length)return;const b=document.getElementById("rollPool");if(!b)return;const row=b.closest(".rollrow"),card=row&&row.closest(".card");if(!card)return;
+  const undo=row.nextElementSibling&&row.nextElementSibling.classList.contains("x42undo")?row.nextElementSibling:null;
+  if(card.lastElementChild!==row&&card.lastElementChild!==undo){card.appendChild(row);if(undo)card.appendChild(undo);}
+  row.classList.add("x82rr");b.textContent="Перебросить все 11…";};
+/* переброс стирает отброшенный кубик и распределение — спросить; кнопка подтверждения называет действие */
+let pass=false;
+window.addEventListener("click",e=>{if(pass)return;const b=e.target.closest&&e.target.closest("#rollPool");if(!b||!C.stats.pool.length)return;
+  const s=C.stats,n=Object.values(s.assign||{}).filter(v=>v!=null&&v!=="").length;if(s.drop==null&&!n)return;
+  e.preventDefault();e.stopImmediatePropagation();
+  askConfirm(`Перебросить все 11 кубов? ${n?`Распределение (${n} из 10) и отброшенный кубик сбросятся.`:"Отброшенный кубик сбросится."} Вернуть прежние можно сразу после переброса.`,()=>{pass=true;try{b.click();}finally{pass=false;}});
+  const y=document.getElementById("confirmYes"),d=document.getElementById("confirmDlg");if(y&&d){y.textContent="Перебросить";const back=()=>{y.textContent="Подтвердить";d.removeEventListener("close",back);};d.addEventListener("close",back);}},true);
+
+/* --- «Далее» на незаконченном шаге: не главная кнопка, а при нажатии говорит, что осталось и где вернуться --- */
+X3.pend82=function(){if(STEP<1||STEP>6)return null;let R,st;try{R=compute(C);st=stepStatus(C,R,STEP);}catch(e){return null;}if(st!=="pending")return null;
+  const w=X3.why41?X3.why41(STEP,R):[];return w[0]||"выбор на шаге не сделан";};
+X3.next82=function(){if(STEP<1||STEP>6)return;const b=document.querySelector(`#main .navbtns [data-go="${STEP+1}"]`);if(!b)return;const p=X3.pend82();
+  b.classList.toggle("primary",!p);if(p){b.dataset.x82="1";b.setAttribute("aria-label",`Далее: шаг не закончен, осталось — ${p}`);}else{delete b.dataset.x82;b.removeAttribute("aria-label");}};
+window.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("#main .navbtns [data-x82]");if(!b)return;const p=X3.pend82();if(!p)return;
+  const h=document.querySelector("#main h2"),nm=(h&&h.textContent.trim())||"этот";const back=document.querySelector(`#main .navbtns [data-go="${STEP-1}"]`);
+  setTimeout(()=>toast(`Шаг «${nm}» не закончен: ${p.charAt(0).toLowerCase()+p.slice(1)}.${back?` Вернуться — «${back.textContent.trim()}».`:""}`),0);},true);
+
+/* --- «Место рождения»: на кнопке варианта — что он меняет («−1 Сила, +1 Ловкость», «и выбор») --- */
+const FX=new Map();
+X3.fxOf82=function(nat,i){const k=nat+"|"+i;if(FX.has(k))return FX.get(k);let t="";
+  try{const c=JSON.parse(JSON.stringify(C));c.birth=Object.assign({},c.birth,{nation:nat,variant:i,ans:{}});const R=compute(c),o=R.steps&&R.steps.birth;
+    if(o){const m=(o.mods||[]).map(x=>`${x.v<0?"−":"+"}${Math.abs(x.v)} ${LABEL[x.k]||x.k}`);const ch=(o.choices||[]).some(x=>x.type==="pick"||x.type==="opt");t=m.join(", ")+(ch?(m.length?", и выбор":"есть выбор"):"");}}catch(e){}
+  FX.set(k,t);return t;};
+X3.birth82=function(){if(STEP!==2||C.birth.nation==null)return;document.querySelectorAll("#main [data-var]").forEach(b=>{if(b.querySelector(".x82fx"))return;const t=X3.fxOf82(C.birth.nation,Number(b.dataset.var));
+  if(t){b.insertAdjacentHTML("beforeend",`<small class="x82fx">${E(t)}</small>`);b.setAttribute("aria-label",`${b.firstChild?b.firstChild.textContent.trim():""}: ${t}`);}});};
+
+/* --- «Миссия»: подпись «Мод. тестов» 24×13 — нажимается вся ячейка --- */
+document.addEventListener("click",e=>{const c=e.target.closest&&e.target.closest(".mstrip .msi.x40mod");if(!c||e.target.closest("button,[role=button]"))return;const l=c.querySelector('.msl[role="button"]');if(l)l.click();});
+
+const after=()=>{try{X3.reroll82();}catch(e){}try{X3.next82();}catch(e){}try{X3.birth82();}catch(e){}};
+const r0=render;render=function(){const out=r0.apply(this,arguments);after();return out;};
+try{render();}catch(e){console.error(e);}
+})();
+
+/* ===== ux83: «Миссия» разгружена; крит 8–9 закрывает действия («Мастер разрешил» открывает); урон отменяется и
+   смертельный спрашивает подтверждение; единый вид «недоступно»; одна главная кнопка на группу; мелочи ===== */
+(function(){
+const E=s=>X3.esc(String(s==null?"":s));
+const RU=n=>n%10===1&&n%100!==11?"раунд":(n%10>=2&&n%10<=4&&(n%100<10||n%100>=20)?"раунда":"раундов");
+
+/* ---------- 1. «Миссия»: раздел «Состояние и ранения» (урон, лечение) — сразу под боем, а не внутри свёрнутого листа ---------- */
+X3.state83=function(){if(STEP!==10)return;const m=document.getElementById("main");if(!m)return;const fold=m.querySelector('.x40fold[data-x40="sheet"]');if(!fold)return;
+  const sec=[...fold.querySelectorAll("details.sec")].find(d=>/^Состояние и ранения/.test(((d.querySelector("summary")||{}).textContent||"").trim()));if(!sec)return;
+  const anchor=m.querySelector(".card.combat")||m.querySelector(".misbar");if(!anchor)return;
+  const box=document.createElement("div");box.className="sheet x83state";box.appendChild(sec);anchor.after(box);
+  const sub=fold.querySelector("summary .x40sub,summary small,summary .note");if(sub&&/ранения/.test(sub.textContent))sub.textContent="характеристики, трекеры, снаряжение, таланты";};
+
+/* ---------- лента пунктов «Миссии»: четыре на виду, остальное под «Ещё»; в бою инициатива и начало/конец уходят в «Ещё» ---------- */
+X3.all83=false;
+const KEY=b=>b.matches("[data-rollini]")?"ini":b.id==="openMission"?"mis":b.id==="openInfl"?"infl":b.id==="openMc"?"mc":b.classList.contains("jump2")?"st":b.classList.contains("x40pm")?"pm":"z";
+X3.strip83=function(){if(STEP!==10)return;const bar=document.querySelector("#main .misbar"),row=bar&&bar.querySelector(".misjump");if(!row)return;
+  const fight=(CB().round||0)>0,P=fight?["st","mc","pm","infl","ini","mis"]:["ini","mis","st","mc","infl","pm"];
+  const bs=[...row.querySelectorAll(":scope > button.mj:not(.x83more)")].filter(b=>getComputedStyle(b).display!=="none"||b.classList.contains("x83h"));
+  const lim=innerWidth<400?3:4;
+  bs.sort((a,b)=>P.indexOf(KEY(a))-P.indexOf(KEY(b))).forEach((b,i)=>{b.style.order=String(i);b.classList.toggle("x83h",i>=lim&&!X3.all83);});
+  let more=row.querySelector(".x83more");const n=Math.max(0,bs.length-lim);
+  if(n&&!more){row.insertAdjacentHTML("beforeend",`<button type="button" class="mj x83more"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h.01M12 12h.01M19 12h.01"/></svg><span></span></button>`);more=row.querySelector(".x83more");}
+  if(more){more.style.order="99";more.hidden=!n;more.setAttribute("aria-expanded",String(X3.all83));more.querySelector("span").textContent=X3.all83?"Скрыть":`Ещё ${n}`;}
+  row.classList.toggle("x83all",X3.all83);bar.classList.add("x83");};
+document.addEventListener("click",e=>{if(!e.target.closest||!e.target.closest(".x83more"))return;X3.all83=!X3.all83;X3.strip83();});
+
+/* ---------- шторка броска закрывается при смене раздела ---------- */
+let lastStep=null;
+X3.panelStep83=function(){if(lastStep!==null&&STEP!==lastStep){const p=document.getElementById("rollPanel");if(p&&!p.hidden){const c=document.getElementById("rollClose");if(c)c.click();else p.hidden=true;}}lastStep=STEP;};
+
+/* ---------- 2. крит 8–9 «неспособен действовать»: действия закрыты, как после гибели; «Мастер разрешил» открывает на этот бой ---------- */
+X3.ok83=()=>{const c=CB();return !!(c&&c.gmOk83&&c.gmOk83===Number(W().crit));};
+X3.lock83=()=>STEP===10&&!!X3.out54()&&!X3.ok83()&&!(X3.dead50&&X3.dead50());
+/* только боевые действия: проверки характеристик, лечение, крит, счётчик действий остаются доступны */
+const SEL83=()=>"[data-shoot],[data-burst],[data-react],[data-throw],[data-cbfree],[data-reload],[data-x35],[data-x30],[data-dmg],[data-xdmg]";
+window.addEventListener("click",e=>{if(!X3.lock83()||!e.target.closest)return;const b=e.target.closest(SEL83());if(!b||!b.closest("#main,#x3cbbar,.misbar")||b.closest("dialog,#rollPanel .x38acts,[data-cbend],.x83state"))return;
+  e.stopImmediatePropagation();e.preventDefault();toast(`Неспособен действовать (крит ${X3.out54()}): действия закрыты. Если мастер разрешил — «Мастер разрешил» в карточке боя.`);},true);
+X3.mark83=function(){const on=X3.lock83();document.querySelectorAll("#main .x83off[data-x83m],#x3cbbar .x83off[data-x83m]").forEach(b=>{b.classList.remove("x83off");delete b.dataset.x83m;if(!b.classList.contains("x54off")&&!b.classList.contains("x41off")&&!b.matches(":disabled"))b.removeAttribute("aria-disabled");});
+  if(!on)return;const s=SEL83();document.querySelectorAll("#main "+s.split(",").join(",#main ")+",#x3cbbar "+s.split(",").join(",#x3cbbar ")).forEach(b=>{if(b.closest("dialog,.x83state,.misbar")||b.classList.contains("x83off"))return;b.classList.add("x83off");b.dataset.x83m="1";b.setAttribute("aria-disabled","true");});};
+X3.box83=function(){const n=X3.out54();if(STEP!==10||!n)return;const card=document.querySelector("#main .combat");const w=card&&card.querySelector(".x54w");if(!w||w.querySelector(".x83ok"))return;
+  const ko=C.ko77,cnt=ko&&ko.left!=null?`<span class="x83cnt">Отсчёт: ещё <b>${ko.left}</b> ${RU(ko.left)} из ${ko.total}</span>`:"";
+  w.innerHTML=X3.ok83()?`<span>Крит ${n}: мастер разрешил действовать в этом бою.</span>${cnt}<button type="button" class="btn small x83ok" data-x83no="1">Снова закрыть действия</button>`
+    :`<span>Неспособен действовать: критическое ранение ${n}. Действия закрыты, решает мастер.</span>${cnt}<button type="button" class="btn small x83ok" data-x83ok="1">Мастер разрешил</button>`;};
+document.addEventListener("click",e=>{const a=e.target.closest&&e.target.closest("[data-x83ok],[data-x83no]");if(!a)return;const c=CB();
+  if(a.dataset.x83ok){c.gmOk83=Number(W().crit);try{X3.log&&X3.log(`Крит ${c.gmOk83}: мастер разрешил действовать`);}catch(_){}}else{delete c.gmOk83;}save();render();});
+
+/* ---------- 3. урон: смертельный или с критом — сначала подтверждение; после — «Отменить: урон N» в шторке ---------- */
+X3.risk83=v=>{const w=W(),cur=Number(w.cur)||0;if(!(v>0))return "";if(cur<=0)return `ОЗ уже 0: урон ${v} даст критическое ранение и может убить персонажа.`;
+  if(v>=cur)return `Урон ${v} при ${cur} ОЗ может обнулить здоровье: будет критическое ранение, возможно смертельное (броня не учтена).`;return "";};
+let pass=false;
+const confirm83=(msg,go,label)=>{askConfirm(msg,()=>{pass=true;try{go();}finally{pass=false;}});const y=document.getElementById("confirmYes"),d=document.getElementById("confirmDlg");if(y&&d){y.textContent=label;const back=()=>{y.textContent="Подтвердить";d.removeEventListener("close",back);};d.addEventListener("close",back);}};
+window.addEventListener("click",e=>{if(pass||!e.target.closest)return;const b=e.target.closest("#wTake,#wHeal");if(!b)return;
+  if(b.id==="wHeal"){e.stopImmediatePropagation();e.preventDefault();confirm83("Снять всё: ОЗ до максимума, временные штрафы и критическое ранение? Отменить можно сразу после.",()=>b.click(),"Полностью здоров");return;}
+  const v=Number((document.getElementById("wDmg")||{}).value)||0,r=X3.risk83(v);if(!r)return;e.stopImmediatePropagation();e.preventDefault();confirm83(r,()=>b.click(),`Получить урон ${v}`);},true);
+const h0=X3.hpApply39;if(h0)X3.hpApply39=function(){const s=X3.hp39;if(pass||!s||s.mode!=="dmg")return h0.apply(this,arguments);const v=Number(s.v)||0,r=X3.risk83(v);if(!r)return h0.apply(this,arguments);
+  const self=this,args=arguments;confirm83(r,()=>h0.apply(self,args),`Получить урон ${v}`);};
+/* после урона шторка показывает «Отменить» (раньше кнопка не появлялась, если запись о действии пришла после показа) */
+X3.undoBtn83=function(){const p=document.getElementById("rollPanel"),n=document.getElementById("rollNow");if(!p||p.hidden||!n||n.querySelector(".x38acts"))return;const j=X3.j52;if(!j||!C||j.id!==C.id||!/^(урон|лечение|Полностью)/i.test(j.label||""))return;
+  if(!X3.last38||!X3.acts38)return;try{X3.acts38();const a=n.querySelector(".x38acts"),w=n.querySelector(".x47w");if(a&&w)w.before(a);}catch(e){}};
+const sy0=X3.sync52;X3.sync52=function(){const out=sy0.apply(this,arguments);try{setTimeout(X3.undoBtn83,0);}catch(e){}return out;};
+
+/* ---------- 4. единое «недоступно» и одна главная кнопка на группу ---------- */
+X3.prim83=function(){document.querySelectorAll("#main .combat, #rollPanel").forEach(root=>{const seen=new Set();root.querySelectorAll(".btn.primary,.cbb.primary").forEach(b=>{
+  if(b.matches(":disabled,[aria-disabled=true]")){b.classList.remove("primary");return;}const g=b.closest(".inline,.cbrow,.wpn,.entry,.cbacts,.x38acts,.card")||root;if(seen.has(g)){b.classList.remove("primary");b.classList.add("x83dem");}else seen.add(g);});});};
+/* карма: «За 5 светлой кармы» при нехватке — недоступна и говорит, сколько есть */
+X3.karma83=function(){[["fateLight","light"],["fateDark","dark"]].forEach(([id,k])=>{const b=document.getElementById(id);if(!b||!b.offsetParent)return;let have=0,cost=5;
+  try{const f=fateInfo();have=(f.R.extra[k]||0)+(C.adj[k]||0);cost=fateCost(k).c;}catch(e){return;}const lack=have<cost;b.classList.toggle("x83off",lack);if(lack)b.setAttribute("aria-disabled","true");else b.removeAttribute("aria-disabled");
+  let s=b.querySelector(".x83have");if(!s){b.insertAdjacentHTML("beforeend",`<small class="x83have"></small>`);s=b.querySelector(".x83have");}s.textContent=`есть ${have}`;});};
+document.addEventListener("click",()=>setTimeout(()=>{try{X3.karma83();}catch(e){}},0));
+
+/* ---------- мелочи ---------- */
+/* итог в шторке всегда с заглавной: «Промах, …», как «Провал, …» */
+X3.cap83=function(){const v=document.querySelector("#rollNow .verdict");if(!v)return;const tw=document.createTreeWalker(v,NodeFilter.SHOW_TEXT);let n;while((n=tw.nextNode())){const i=n.nodeValue.search(/\S/);if(i<0)continue;const ch=n.nodeValue[i];if(ch!==ch.toUpperCase())n.nodeValue=n.nodeValue.slice(0,i)+ch.toUpperCase()+n.nodeValue.slice(i+1);break;}};
+/* брошенный результат стоит — кнопка броска становится «Перебросить» и не главной */
+X3.reroll83=function(){if(STEP<2||STEP>6)return;document.querySelectorAll("#main .rollrow").forEach(r=>{if(!r.querySelector(".stamp"))return;const b=r.querySelector("#rollBirth,[data-table]");if(!b)return;b.classList.remove("primary");b.textContent=b.textContent.replace(/^Бросить/,"Перебросить");});};
+/* отмена: шторка уже говорит «Отменено: …» — тост не повторяет */
+const u0=X3.doUndo;X3.doUndo=function(){const p=document.getElementById("rollPanel"),open=p&&!p.hidden,t0=toast;if(open)toast=function(){};try{return u0.apply(this,arguments);}finally{toast=t0;}};
+
+/* вход в «Миссию»: лист свёрнут (урон и ранения теперь под боем); раскрыть можно, но до следующего входа */
+X3.fold83=function(){const f=document.querySelector('#main .x40fold[data-x40="sheet"]');if(f&&f.open)f.open=false;};
+const after=()=>{const ent=STEP===10&&lastStep!==10;try{X3.panelStep83();}catch(e){}if(ent)try{X3.fold83();}catch(e){}try{X3.state83();}catch(e){}try{X3.strip83();}catch(e){}try{X3.box83();}catch(e){}try{X3.mark83();}catch(e){}try{X3.prim83();}catch(e){}try{X3.reroll83();}catch(e){}};
+const r0=render;render=function(){const out=r0.apply(this,arguments);after();return out;};
+const bb0=X3.cbBar;if(bb0)X3.cbBar=function(){const out=bb0.apply(this,arguments);try{X3.mark83();}catch(e){}return out;};
+const sp0=showPanel;showPanel=function(){const out=sp0.apply(this,arguments);try{X3.cap83();X3.prim83();}catch(e){}return out;};
+try{render();}catch(e){console.error(e);}
 })();
 </script>
 </body>

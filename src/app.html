@@ -2664,6 +2664,61 @@ body.mis.x3pm #sheet .stile.haspm>.gmpm .gmb{height:40px;font-size:22px}
 
 /* --- ручка перетаскивания блоков не нужна под пальцем: её легко задеть --- */
 @media (pointer:coarse){.draghandle{display:none!important}}
+
+/* ===== ux99: крупный системный шрифт Android — подписи переносятся, а не режутся многоточием ===== */
+.misjump .mj span,.misjump.x3row .mj span,.misbar.x40 .misjump.x3row .mj span{max-width:100%;white-space:normal!important;overflow:visible!important;text-overflow:clip!important;overflow-wrap:break-word;hyphens:auto}
+/* плитки миссии: ширина в em растёт со шрифтом — при обычном 3 колонки (4 от ~410px), при крупном 2 или 1 */
+html body .misbar.x83 .misjump.x3row.x83all{font-size:13px;grid-template-columns:repeat(auto-fill,minmax(6.6em,1fr))}
+/* вкладки боя: не влезли — прокручиваются вбок, слова не рвутся */
+body.x86 .x86tabs{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:minmax(max-content,1fr);overflow-x:auto;scrollbar-width:none}
+body.x86 .x86tabs::-webkit-scrollbar{display:none}
+body.x86 .x86tabs .x86t{padding:0 8px}
+.x91sub .x86t{white-space:normal;overflow:visible;text-overflow:clip;text-align:center;line-height:1.1;overflow-wrap:break-word;hyphens:auto}
+/* нижнее меню: если все подписи помещаются в строку, кнопка не уже своей подписи (длинная забирает место у коротких);
+   если нет (узкий экран + огромный шрифт) — кнопки равные, подпись переносится, но все пять на экране.
+   8.6em ≈ сумма подписей (в em шрифта меню, растёт с системным шрифтом) + 70px отступов */
+.x3nav{container-type:inline-size}
+.x3nb span{overflow:visible;text-overflow:clip;white-space:normal;overflow-wrap:anywhere;text-align:center;line-height:1.05}
+@container (min-width:calc(8.6em + 70px)){.x3nb{min-width:max-content}.x3nb span{white-space:nowrap}}
+/* кнопки шапки с подписью растут по подписи, а не налезают друг на друга */
+header.top .iconbtn.lab{width:auto!important;min-width:44px;height:auto!important;min-height:44px;padding:0 4px}
+/* ux100: в «Миссии» без дублей — «Ранения» есть вкладкой, инициатива — кнопкой в карточке боя */
+.misjump .mj[data-rollini],.misjump .mj[data-jumpsec="Состояние и ранения"]{display:none!important}
+.x88sg .x88s{flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:1px!important;padding:4px 2px!important;min-width:0}
+.x88sg .x88s span{font-size:12px;line-height:1.1;white-space:normal;text-align:center;letter-spacing:0;max-width:100%}
+.x88sg .x88s b{line-height:1}
+/* пока миссия не начата, главная кнопка экрана одна — «Начать миссию» */
+body.mis99off .combat.x49pre button.cbini{background:var(--panel)!important;color:var(--ink)!important;border-color:var(--line)!important;font-weight:600}
+.opt .x100base{display:block;font-size:12.5px;line-height:1.2;color:var(--muted);font-weight:400;margin-top:2px}
+.opt[aria-pressed="true"] .x100base{color:inherit;opacity:.85}
+.x100fin{display:inline-flex;flex-wrap:wrap;gap:8px;justify-content:flex-end}
+#x100undo{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:60;display:flex;align-items:center;gap:12px;padding:8px 8px 8px 14px;border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.28);max-width:calc(100vw - 24px)}
+#x100undo[hidden]{display:none}
+/* ux100: узкий экран — имя персонажа не сжимается в точку: кнопки шапки остаются иконками (имя у них в aria-label) */
+@media (max-width:360px){
+  header.top #hdrName{min-width:5em;flex:1 1 auto}
+  html body header.top button.iconbtn.lab{flex:0 0 auto!important;min-width:40px!important;width:40px!important;padding:0!important}
+  html body header.top button.iconbtn.lab .iblab{display:none!important}
+}
+/* ux100: окно «Очки судьбы» при оплате переброса кармой — только способы оплаты */
+#fateDlg.x100rr #fateTest,#fateDlg.x100rr #fateUses,#fateDlg.x100rr details.hsec[data-hint="fate-gives"],#fateDlg.x100rr details.hsec[data-hint="fate-other"],#fateDlg.x100rr details.hsec[data-hint="fate-other"] ~ .bigbtns{display:none!important}
+/* ux100: шкала заголовков — подпись группы классов мельче кнопок, а не одного с ними размера */
+#clsList .group > h3{font-size:13px!important;line-height:1.2;text-transform:uppercase;letter-spacing:.06em;margin:0 0 8px!important}
+/* ux99: миссия — состояние, а не плитка */
+.mis99{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px 12px;align-items:center;margin:0 0 10px;padding:10px 12px;border:1px solid var(--line);border-radius:6px;background:var(--panel)}
+.mis99.off{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,var(--panel))}
+.mis99i{display:grid;place-items:center;width:36px;height:36px;border-radius:50%;color:var(--accent);background:color-mix(in srgb,var(--accent) 16%,transparent)}
+.mis99i .ico{width:20px;height:20px}
+.mis99.on .mis99i{color:var(--ok);background:color-mix(in srgb,var(--ok) 16%,transparent)}
+.mis99t{display:flex;flex-direction:column;gap:2px;min-width:0}
+.mis99t b{font-family:var(--narrow);font-size:17px;line-height:1.2;text-wrap:balance}
+.mis99t .note{line-height:1.35}
+.mis99 .btn{min-height:44px;white-space:normal}
+@media (max-width:560px){.mis99.off{grid-template-columns:auto minmax(0,1fr)}.mis99.off .btn{grid-column:1 / -1}.mis99.on .mis99t .note{display:none}}
+@media (max-width:360px){.mis99.on{grid-template-columns:auto minmax(0,1fr)}.mis99.on .btn{grid-column:1 / -1}}
+body.x40fight .mis99.on{display:none}
+[data-go="10"].mis99nav{position:relative}
+[data-go="10"].mis99nav::after{content:"";position:absolute;top:6px;right:calc(50% - 22px);width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 2px var(--bg)}
 </style>
 </head>
 <body>
@@ -2732,8 +2787,8 @@ body.mis.x3pm #sheet .stile.haspm>.gmpm .gmb{height:40px;font-size:22px}
   <p id="confirmText" style="font-size:16px;margin:4px 0 14px"></p>
   <div class="inline" style="justify-content:flex-end"><button class="btn" id="confirmNo">Отмена</button><button class="btn primary" id="confirmYes">Подтвердить</button></div>
 </dialog>
-<dialog id="missionDlg" style="max-width:min(600px,94vw)">
-  <div class="inline" style="justify-content:space-between"><h3 style="font-family:var(--narrow);margin:0">Миссия</h3><button class="btn" id="missionClose">Закрыть</button></div>
+<dialog id="missionDlg" aria-labelledby="missionTitle" style="max-width:min(600px,94vw)">
+  <div class="inline" style="justify-content:space-between"><h3 id="missionTitle" style="font-family:var(--narrow);margin:0">Миссия</h3><button class="btn" id="missionClose">Закрыть</button></div>
   <div id="missionBody"></div>
 </dialog>
 <dialog id="notesDlg" style="max-width:min(640px,96vw);width:640px">
@@ -14975,7 +15030,7 @@ function navBtns(){
   const i=CREATE.indexOf(STEP); if(i<0) return "";
   const prev=CREATE[i-1], next=CREATE[i+1];
   const sk=STEP<7?`<div class="skiprow noprint">${C.skip&&C.skip[STEP]?`<span class="note">Этап пропущен — лист открывается и без него.</span><button class="btn small" data-skipstep="${STEP}">Вернуть этап</button>`:`<button class="btn small" data-skipstep="${STEP}" title="Для переноса уже готового персонажа: этап не будет требоваться">Пропустить этап</button>`}${STEP===0?`<button class="btn small" data-skipall="1" title="Отметить все незаконченные этапы пропущенными и открыть лист">Пропустить всё и открыть лист</button><button class="btn small" data-legacy="1" title="Перенести готового персонажа и вписать его значения вручную">У меня уже есть персонаж</button>`:""}</div>`:"";
-  return sk+`<div class="navbtns noprint">${prev!=null?`<button class="btn" data-go="${prev}">Назад: ${STEPS[prev]}</button>`:"<span></span>"}${next!=null?`<button class="btn primary" data-go="${next}">Далее: ${STEPS[next]}</button>`:`<button class="btn primary" data-go="7">Открыть лист персонажа</button>`}</div>`;
+  return sk+`<div class="navbtns noprint">${prev!=null?`<button class="btn" data-go="${prev}">Назад: ${STEPS[prev]}</button>`:"<span></span>"}${STEP===6?`<span class="x100fin"><button class="btn" data-go="8" title="Необязательный этап: предметы и бонусы, которые выдаёт Мастер" aria-label="Академия, необязательный этап">Академия</button><button class="btn primary" data-go="7">Готово: открыть лист</button></span>`:next!=null?`<button class="btn primary" data-go="${next}">Далее: ${STEPS[next]}</button>`:`<button class="btn primary" data-go="7">Открыть лист персонажа</button>`}</div>`;
 }
 function stamp(v,key){const hit=LASTSTAMP===key;if(hit)LASTSTAMP=null;return `<span class="stamp ${hit?"hit":""}" aria-label="Результат броска ${esc(v)}">${esc(v)}</span>`;}
 function fxSummary(out){
@@ -15192,7 +15247,7 @@ function stClass(R){
     ${choicesUI(R.steps.cls,"cls")}${kitChoices()}${parseBase(C).choose?baseStatsUI(R,true):""}${fxSummary(R.steps.cls)}</div>`;
   }
   return `<h2>Класс</h2><p class="lead">Класс выбирается, а не бросается. Бонусы к характеристикам, снаряжение и таланты перенесутся в лист автоматически.</p>
-  <div class="card" id="clsList"><div class="groups">${groups.map(g=>`<div class="group"><h3>${esc(g.name)}</h3>${g.items.map(i=>{const c=BOOK.classes[i];const wip=/в разработке/i.test(c.feat+c.desc);return `<button class="opt" aria-pressed="${C.cls.i===i}" data-cls="${i}">${esc(c.name)}${wip?' <small>в разработке</small>':""}</button>`;}).join("")}</div>`).join("")}</div></div>${detail}`;
+  <div class="card" id="clsList"><div class="groups">${groups.map(g=>`<div class="group"><h3>${esc(g.name)}</h3>${g.items.map(i=>{const c=BOOK.classes[i];const wip=/в разработке/i.test(c.feat+c.desc);return `<button class="opt" aria-pressed="${C.cls.i===i}" data-cls="${i}">${esc(c.name)}${wip?' <small>в разработке</small>':""}${c.base?`<small class="x100base">опора: ${esc(String(c.base).toLowerCase())}</small>`:""}</button>`;}).join("")}</div>`).join("")}</div></div>${detail}`;
 }
 /* step 2 */
 function stStats(R){
@@ -15276,7 +15331,7 @@ function stSheet(R){
   const section=(title,obj,extra="",id="")=>obj?`<details class="entry" ${id?`id="det-${id}"`:""}><summary><h5 style="display:inline">${title}</h5></summary><div class="rules">${extra}${paras(obj)}</div></details>`:"";
   return `<div class="inline" style="justify-content:space-between;align-items:flex-end"><div><h2>Лист персонажа</h2></div>${isFinished(C)?"":`<button class="btn noprint" data-go="${C.lastStep??0}">Вернуться к созданию</button>`}</div>
   ${pend.length?`<div class="warnbox noprint">Не завершены шаги: ${pend.join(", ")}.</div>`:""}
-  <div class="noprint sheetacts"><button class="btn primary" id="openMission">Начало и конец миссии</button><button class="btn ${sheetEditOn()?"primary":""}" id="sheetEdit" aria-pressed="${sheetEditOn()}">${sheetEditOn()?"Готово":"Редактировать лист"}</button><details class="more"><summary class="btn">Ещё</summary><div class="morepop">${!C.legacy&&!isFinished(C)?`<button class="btn" data-legacy="1" title="Перенести готового персонажа: все этапы создания пропускаются, значения вписываются вручную">У меня уже есть персонаж</button>`:""}<button class="btn" data-roomopen="1">${roomBtnLabel()}</button>${NATIVE?"":`<button class="btn" id="printBtn">Печать или PDF</button>`}<button class="btn" id="dlSheet">${NATIVE?"Поделиться листом":"Скачать лист (.html)"}</button></div></details></div>
+  <div class="noprint sheetacts"><button class="btn primary" id="openMission">${misOn()?"Завершить миссию":"Начать миссию"}</button><button class="btn ${sheetEditOn()?"primary":""}" id="sheetEdit" aria-pressed="${sheetEditOn()}">${sheetEditOn()?"Готово":"Редактировать лист"}</button><details class="more"><summary class="btn">Ещё</summary><div class="morepop">${!C.legacy&&!isFinished(C)?`<button class="btn" data-legacy="1" title="Перенести готового персонажа: все этапы создания пропускаются, значения вписываются вручную">У меня уже есть персонаж</button>`:""}<button class="btn" data-roomopen="1">${roomBtnLabel()}</button>${NATIVE?"":`<button class="btn" id="printBtn">Печать или PDF</button>`}<button class="btn" id="dlSheet">${NATIVE?"Поделиться листом":"Скачать лист (.html)"}</button></div></details></div>
   ${sheetEditOn()?sheetEditPanel(R,res,ini):""}<div class="sheet" id="sheet">
   <h3>Общие сведения</h3>
   <div class="kv">
@@ -16053,7 +16108,7 @@ function stMission(R){
   const ini=2*R.tot.agi+(R.extra.ini||0); const f=C.stats.fate!=null?fateInfo():null;
   const sv=p=>`<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
   const mj=(attr,ico,lbl,cls="",title="")=>`<button class="mj ${cls}" ${attr} title="${esc(title||lbl.replace(/<[^>]+>/g,""))}">${ico}<span>${lbl}</span></button>`;
-  return `<div class="misbar noprint"><div class="misjump">
+  return misBanner()+`<div class="misbar noprint"><div class="misjump">
     ${mj(`data-rollini="${ini}"`,icon("agi"),"Инициатива","prim")}
     ${f?mj('id="openFate"',sv('<path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/>'),`Судьба ${f.left}/${f.tot}`,"","Очки судьбы"):""}
     ${mj('id="openInfl"',icon("infl"),"Запрос")}
@@ -16587,14 +16642,32 @@ function missionItems(){
 }
 function missionMid(){const R=compute(C),f=fateInfo(),bf=birthFate(R);const rt=ritualUI(R);
   return `<h4 style="font-family:var(--narrow);margin:16px 0 4px">Во время миссии</h4><div class="inline" style="gap:8px"><button class="btn small primary" data-misfate="1">Очки судьбы</button><span class="note">Доступно ${f.left} из ${f.tot}${bf?` · ${esc(bf.name)}: ${bf.kind==="tribal"?"d6 при трате очка":bf.kind==="prison"?"d20 при сжигании":bf.kind==="baikal"?"−d5 (лучший из двух) к карме":bf.kind==="tibet"?(C.tibetUsed?"восстановление уже использовано":"можно восстановить 1 очко"):"−1 Очко судьбы"}`:""}</span></div>${rt}`;}
+/* идёт ли миссия: номер текущей или 0. Старые сохранения: если остались следы миссии — считаем, что она идёт */
+function misOn(){if(C.misOn==null){const left=C.fateUsed||C.missionFate||C.tibetUsed||C.ritualUses||(C.missionMods||[]).length||Object.values(C.misAdj||{}).some(v=>Number(v));C.misOn=left?(C.missionCount||0)+1:0;}return C.misOn;}
+const FLAG99=`<svg class="ico" viewBox="-4 -4 40 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 29V4"/><path d="M7 5h17l-4 6 4 6H7"/></svg>`;
+function misBanner(){const n=misOn();
+  return n?`<div class="mis99 on noprint" role="status"><span class="mis99i">${FLAG99}</span><div class="mis99t"><b>Миссия №${n} идёт</b><span class="note">Когда задание закончено — завершите её здесь</span></div><button class="btn" id="openMission">Завершить миссию</button></div>`
+   :`<div class="mis99 off noprint"><span class="mis99i">${FLAG99}</span><div class="mis99t"><b>Миссия не начата</b><span class="note">Нажмите, когда группа выходит на задание. Завершить её можно будет здесь же</span></div><button class="btn primary" id="openMission">Начать миссию</button></div>`;}
+function misLeft(){const R=compute(C),w=W(),cur=w.cur==null?R.hp:Number(w.cur),br=(C.gear||[]).filter(g=>g.x3broken).map(g=>esc(g.name||"оружие")),L=[];
+  if(cur<R.hp)L.push(`ОЗ ${cur} из ${R.hp} — лечение по решению Мастера, вкладка «Состояние»`);if(br.length)L.push(`Сломано: ${br.join(", ")} — ремонт в карточке оружия`);
+  return L.length?`<div class="warnbox" style="margin:6px 0 8px"><b>Само не восстановится:</b><br>${L.join("<br>")}</div>`:"";}
+function openMissionDlg(){MISSION={res:[],ph:misOn()?"end":"start",n:misOn()||(C.missionCount||0)+1};renderMission();$("#missionDlg").showModal();}
 function renderMission(){
-  const it=missionItems(); MISSION.sel=MISSION.sel||{};
+  const it=missionItems(); MISSION.sel=MISSION.sel||{}; const ph=MISSION.ph||(misOn()?"end":"start"), n=MISSION.n||misOn()||(C.missionCount||0)+1;
   const row=(x)=>{if(MISSION.sel[x.key]==null)MISSION.sel[x.key]=x.def;return `<label class="inline note" style="gap:8px;margin:6px 0;align-items:flex-start;flex-wrap:nowrap"><input type="checkbox" data-mis="${x.key}" ${MISSION.sel[x.key]?"checked":""}> <span>${esc(x.label)}${x.num?` <input class="inp" type="number" min="0" value="${MISSION[x.key+"N"]||0}" data-misn="${x.key}" style="width:60px">`:""}${x.karma?` <select class="sel" data-misk="${x.key}"><option value="light">светлая</option><option value="dark" ${MISSION.kk==="dark"?"selected":""}>тёмная</option></select>`:""}${x.stat?` <select class="sel" data-miss="${x.key}">${STATS.map(([k,n])=>`<option value="${k}" ${MISSION.ks===k?"selected":""}>${n}</option>`).join("")}</select>`:""}</span></label>`;};
-  $("#missionBody").innerHTML=`<h4 style="font-family:var(--narrow);margin:10px 0 4px">Начало миссии</h4>${it.start.length?it.start.map(row).join("")+`<button class="btn small primary" id="misStart">Выполнить</button>`:`<p class="note">Перед миссией ничего делать не нужно.</p>`}
-  ${missionMid()}
-  <h4 style="font-family:var(--narrow);margin:16px 0 4px">Конец миссии</h4>${it.end.map(row).join("")}<button class="btn small primary" id="misEnd">Выполнить</button>
-  ${MISSION.res.length?`<div class="okbox" style="margin-top:12px">${MISSION.res.map(x=>`<div>${x}</div>`).join("")}</div>`:""}
-  <p class="note">Правила взяты из текстов характеров, недостатков, мест рождения и разделов о ранениях и расстройствах.</p>`;
+  $("#missionTitle").textContent=(ph==="start"?"Начало миссии №":"Конец миссии №")+n;
+  const L=ph==="start"?it.start:it.end;
+  const done=MISSION.res.length||MISSION.done;
+  $("#missionBody").innerHTML=done
+    ?`<div class="okbox" style="margin-top:12px">${MISSION.res.length?MISSION.res.map(x=>`<div>${x}</div>`).join(""):`<div>${ph==="start"?"Миссия начата.":"Миссия завершена."}</div>`}</div>
+      <p class="note">${ph==="start"?"Когда задание закончится, вернитесь на вкладку «Миссия» и нажмите «Завершить миссию».":"Следующую миссию начните на вкладке «Миссия»."}</p>
+      <div class="inline" style="margin-top:12px"><button class="btn primary" id="missionClose">Готово</button></div>`
+    :`<p class="note" style="margin:10px 0 4px">${ph==="start"
+        ?(L.length?"Персонаж получает это в начале задания. Снимите галочку, если Мастер решил иначе.":"У персонажа нет эффектов на начало миссии — начните её, чтобы в конце приложение вернуло Очки судьбы и сняло правки «на миссию».")
+        :"Это вернётся или снимется, когда задание закончено. Снимите галочку, если Мастер решил иначе."}</p>${ph==="end"?misLeft():""}
+    ${L.map(row).join("")}
+    <div class="inline" style="gap:8px;margin-top:12px"><button class="btn primary" id="${ph==="start"?"misStart":"misEnd"}">${ph==="start"?"Начать миссию":"Завершить миссию"}</button></div>
+    <p class="note">Правила взяты из текстов характеров, недостатков, мест рождения и разделов о ранениях и расстройствах.</p>`;
 }
 function missionRun(phase){
   const R=compute(C), res=[];
@@ -16627,7 +16700,8 @@ function missionRun(phase){
     if(MISSION.sel.klepto){const n=Number(MISSION.kleptoN)||0,r=rnd(10);C.adj.ins=(C.adj.ins||0)+r+n;res.push(`Клептомания: +${r+n} Безумия (d10 = ${r}, не украдено ${n}).`);}
     Object.keys(DIS).forEach(k=>{if(MISSION.sel["dis_"+k]){DISMSG="";disRoll(k);res.push(DISMSG.replace(/<[^>]+>/g,"")||`${DIS[k].n} расстройство: бросок сделан.`);}});
   }
-  res.forEach(x=>pushLog("Миссия: "+x)); MISSION.res=res; save();
+  if(phase==="start"){C.misOn=(C.missionCount||0)+1;pushLog(`Миссия №${C.misOn} начата`);}else{pushLog(`Миссия №${C.missionCount} завершена`);C.misOn=0;}
+  res.forEach(x=>pushLog("Миссия: "+x)); MISSION.res=res; MISSION.done=true; save();
 }
 /* ---------- получение ресурсов с учётом правил книги ---------- */
 const GAIN={k:"light",n:"",opp:false,fear:false,msg:""};
@@ -16952,10 +17026,10 @@ document.addEventListener("click",e=>{
     case "favRep": {const r=rnd(6);const el=document.getElementById("favRepRes");if(el)el.innerHTML=` выпало <b>${r}</b> (${r%2?"нечет":"чёт"})`;break;}
     case "confirmYes": {const cb=CONFIRM_CB;CONFIRM_CB=null;$("#confirmDlg").close();if(cb)cb();break;}
     case "confirmNo": CONFIRM_CB=null;$("#confirmDlg").close();break;
-    case "openMission": MISSION={res:[]};renderMission();$("#missionDlg").showModal();break;
+    case "openMission": openMissionDlg();break;
     case "missionClose": $("#missionDlg").close();break;
     case "misStart": missionRun("start");render();renderMission();break;
-    case "misEnd": missionRun("end");render();MISSION.sel={};renderMission();break;
+    case "misEnd": missionRun("end");render();renderMission();break;
     case "openFate": renderFate("");$("#fateUf").hidden=true;$("#fateDlg").showModal();break;
     case "fateUfRoll": ufRoll($("#fateUfForce").value);$("#fateUfRes").innerHTML=ufHtml();$("#fateUfRoll").disabled=true;break;
     case "fateClose": $("#fateDlg").close();break;
@@ -18073,7 +18147,7 @@ X3.missionCard=function(R){const defs=X3.chargeDefs(R),st=X3.charges(),fl=X3.fl(
   if(!rows&&!fr&&!asc&&!bf&&!rem&&!hasRev)return "";
   return `<div class="card x3card noprint"><div class="x3head"><h3>Заряды и особенности</h3>${ch?`<label class="note inline" style="gap:6px"><input type="checkbox" id="x3rev" ${X3.rev()?"checked":""}> Характер «${X3.esc(ch)}» раскрыт</label>`:""}</div>
     ${rows}${fr}${asc?`<div style="margin:6px 0">${asc}</div>`:""}${bf?`<h4 class="x3sub">Бонусы талантов</h4>${bf}`:""}${rem}
-    ${rows&&!Object.keys(st).length?`<p class="note" style="margin:6px 0 0">Заряды бросаются в «Начало миссии» (кнопка «Начало и конец миссии») или здесь по одному.</p>`:""}</div>`;};
+    ${rows&&!Object.keys(st).length?`<p class="note" style="margin:6px 0 0">Заряды бросаются сами, когда вы нажимаете «Начать миссию» на вкладке «Миссия», или здесь по одному.</p>`:""}</div>`;};
 document.addEventListener("click",e=>{const b=e.target.closest("[data-chguse],[data-chgback],[data-chgroll],[data-flawdec],[data-buffon],[data-buffoff]");if(!b)return;const d=b.dataset,st=X3.charges();
   if(d.chguse&&st[d.chguse]&&st[d.chguse].left>0){st[d.chguse].left--;pushLog("Заряд потрачен: "+d.chguse.replace(/^(ch_pot|ch_rev)$/,X3.ch()).replace(/^t_/,""));}
   else if(d.chgback&&st[d.chgback])st[d.chgback].left=Math.min(st[d.chgback].max,st[d.chgback].left+1);
@@ -18226,7 +18300,7 @@ document.addEventListener("click",e=>{if(e.target.closest("#x3undo"))X3.doUndo()
 
 X3.combatEnhance=function(R){const card=document.querySelector("#main .combat");if(!card||card.dataset.x3)return;card.dataset.x3="1";const c=CB(),on=c.round>0;
   const head=card.querySelector(".cbhead");const ttl=head&&head.querySelector(":scope > b");
-  if(ttl)ttl.outerHTML=`<div class="cbttl"><span class="cbk">${on?"Раунд "+c.round:"Бой не начат"}</span><b>${on?(c.act>0?"Ваш ход":"Действия закончились"):"Нажмите «Начать бой»"}</b></div>`;
+  if(ttl)ttl.outerHTML=`<div class="cbttl"><span class="cbk">${on?"Раунд "+c.round:"Бой не начат"}</span><b>${on?(c.act>0?(c.ini?"Ваш ход":"Ваши действия в раунде"):"Действия закончились"):"Нажмите «Начать бой»"}</b></div>`;
   const pips=card.querySelector(".actpips");if(pips)pips.querySelectorAll("i").forEach((el,i)=>{const b=document.createElement("button");b.type="button";b.className="apip"+(el.classList.contains("f")?" f":"");b.dataset.pip=i;b.setAttribute("aria-label",i<c.act?`Потратить действия, оставить ${i}`:`Вернуть действия до ${i+1}`);el.replaceWith(b);});
   const turn=card.querySelector("[data-cbturn]");if(turn&&on&&c.act===0){turn.classList.add("primary");card.classList.add("cbspent");
     head.insertAdjacentHTML("afterend",`<div class="cbbanner">Действия на этот раунд закончились. Когда начнётся ваш следующий ход, нажмите «Новый ход».${c.debt?` Долг ${c.debt} спишется в начале хода.`:""}</div>`);}
@@ -18329,7 +18403,7 @@ X3.fearRoll=function(lvl,stat,mod){const order=["normal","hard","impossible"];le
   try{runTest(compute(C));const h=$("#rollNow .big");if(h)h.insertAdjacentText("afterbegin",`Страх (${["Обычный","Парализующий","Инфернальный"][i]}${cow?", Трус":""}): `);}finally{Object.assign(TEST,saved);}};
 document.addEventListener("click",e=>{const b=e.target.closest("[data-ask]");if(!b)return;const [id,act]=b.dataset.ask.split("|");const a=(C.gmAsks||[]).find(x=>String(x.id)===id);const R=compute(C);
   if(act==="close"){X3.dropAsk(id);}
-  else if(act==="mission"&&a){X3.dropAsk(id);save();MISSION={res:[]};renderMission();$("#missionDlg").showModal();X3.renderAsks();return;}
+  else if(act==="mission"&&a){X3.dropAsk(id);save();openMissionDlg();X3.renderAsks();return;}
   else if(act==="fear"&&a){X3.fearRoll(a.lvl);X3.dropAsk(id);}
   else if(act==="curious"){const r=rnd(6);panel("Любопытство: d6",r,"Результат сверьте с текстом характера","");pushLog("Любопытство (внезапная атака): d6 = "+r);return;}
   else if(act==="radar"){showRoll("Система наблюдения: Наблюдательность",R.tot.per,rnd(20));X3.dropAsk(id);}
@@ -18731,7 +18805,7 @@ if(typeof roomFocusInside==="function"){const rf2=roomFocusInside;roomFocusInsid
 document.addEventListener("click",e=>{const b=e.target.closest("[data-rollini]");if(!b)return;setTimeout(()=>{try{const st=document.querySelector("#rollNow .stamp");const vd=document.querySelector("#rollNow .verdict");if(!st||!vd)return;const r=Number(st.dataset.d20||st.textContent);const m=vd.textContent.match(/Инициатива:\s*(-?\d+)/);if(!m)return;
   CB().ini={r,n:Number(m[1]),t:Date.now()};save();render();}catch(_){}} ,0);});
 (function(){const ce=X3.combatEnhance;X3.combatEnhance=function(R){ce.apply(this,arguments);try{const card=document.querySelector("#main .combat");if(!card||card.querySelector(".cbini"))return;const c=CB(),ini=2*R.tot.agi+(R.extra.ini||0);const x=c.ini;
-  const html=x?`<span class="cbini" title="Бросок инициативы в этом бою">Инициатива <b>${x.n}</b> <span class="note">(d20 = ${x.r}${x.r===1?", 8 действий":x.r===20?", 2 действия":""})</span></span>`:`<button class="btn small cbini" data-rollini="${ini}">Бросить инициативу (${ini})</button>`;
+  const html=x?`<span class="cbini" title="Бросок инициативы в этом бою">Инициатива <b>${x.n}</b> <span class="note">— у кого больше, тот ходит раньше (d20 = ${x.r}${x.r===1?", 8 действий":x.r===20?", 2 действия":""})</span></span>`:`<button class="btn small cbini" data-rollini="${ini}">Бросить инициативу (${ini})</button>`;
   const t=card.querySelector(".cbttl");if(t)t.insertAdjacentHTML("afterend",html);}catch(e){}};})();
 document.addEventListener("click",e=>{const b=e.target.closest("[data-cbturn]");if(b&&/Начать бой/.test(b.textContent)){try{CB().ini=null;}catch(_){}}},true);
 document.addEventListener("click",e=>{if(e.target.closest("[data-cbend]")){try{CB().ini=null;save();}catch(_){}}});
@@ -19183,7 +19257,7 @@ X3.ICO_FLAG=`<svg class="ico" viewBox="-4 -4 40 40" fill="none" stroke="currentC
 /* --- шапка листа: «Лист персонажа» + карандаш + «⋯» --- */
 X3.sheetHead=function(){if(STEP!==7)return;const acts=document.querySelector("#main .sheetacts");if(!acts||acts.dataset.x3h)return;acts.dataset.x3h="1";
     const pop=acts.querySelector(".morepop");const om=acts.querySelector("#openMission");
-  if(om&&pop){om.classList.remove("primary");om.textContent="Начало и конец миссии";pop.prepend(om);}
+  if(om&&pop){om.classList.remove("primary");pop.prepend(om);}
   const ed=acts.querySelector("#sheetEdit");if(ed){const on=ed.getAttribute("aria-pressed")==="true"||ed.classList.contains("primary");ed.setAttribute("aria-pressed",on?"true":"false");ed.classList.add("x3ib");ed.setAttribute("aria-label",on?"Готово, закончить правку листа":"Редактировать лист");ed.title=on?"Закончить правку":"Редактировать лист";
     ed.innerHTML=X3.ICO_PEN+`<span class="x3ibl">${on?"Готово":"Редактировать"}</span>`;}
   const sm=acts.querySelector("details.more>summary");if(sm){sm.classList.add("x3ib","x3ibmore");sm.setAttribute("aria-label","Ещё действия");sm.title="Ещё";sm.innerHTML=X3.ICO_MORE+`<span class="x3ibl">Ещё</span>`;}
@@ -19197,7 +19271,7 @@ X3.sheetHead=function(){if(STEP!==7)return;const acts=document.querySelector("#m
 document.addEventListener("click",e=>{const m=document.querySelector("#main .sheetacts details.more[open]");if(!m)return;if(!e.target.closest("details.more")||e.target.closest(".morepop button"))setTimeout(()=>{m.open=false;},0);});
 
 /* --- плитка «Начало и конец миссии» во вкладке «Миссия» --- */
-X3.misTile=function(){if(STEP!==10)return;const row=document.querySelector("#main .misjump");if(!row||row.querySelector("#openMission"))return;
+X3.misTile=function(){return;const row=document.querySelector("#main .misjump");if(!row||row.querySelector("#openMission"))return;
   const b=document.createElement("button");b.className="mj";b.id="openMission";b.title="Начало и конец миссии";b.innerHTML=X3.ICO_FLAG+"<span>Начало/<wbr>конец</span>";
   const first=row.querySelector(".mj");if(first&&first.nextSibling)row.insertBefore(b,first.nextSibling);else row.appendChild(b);};
 
@@ -19335,7 +19409,7 @@ X3.clsCard=function(){const R=compute(C),cl=X3.cls(R);if(!cl)return "";const cf=
         row(B("neuro","Проверить Нейролок",!fight||pen==null),F("neuroSkip","без Нейролока в следующем раунде"))+
         (sys.length?`<div class="x3cfsys">${sys.map(nm=>`<label class="x3cfsw"><input type="checkbox" data-x3cfsys="${E(nm)}" ${on[nm]?"checked":""}> ${E(nm.replace(/^Система /,""))}${X3.SYS[nm]?` <span class="note">(${X3.SYS[nm].map(([k,v])=>LABEL[k].slice(0,4)+" +"+v).slice(0,3).join(", ")}${X3.SYS[nm].length>3?"…":""})</span>`:nm==="Система принятия решений"?' <span class="note">(+1 действие)</span>':""}</label>`).join("")}</div>`:`<p class="note">Системы появятся здесь, когда вы купите их в талантах.</p>`);break;}
     case "Альтруист":case "Плут":case "Выживающий":{const o=X3.ORDER_FATE[cl],n=rankNum()*2,kk=karma(R),bl=blessings(R).find(b=>b.f===o.bl),okB=bl&&bl.tier>0,enough=Object.entries(o.cost).every(([k,v])=>kk[k]>=v);
-      h=`<p class="note">Перед миссией: +${n} ${o.k==="split"?"кармы пополам":o.k==="light"?"светлой кармы":"тёмной кармы"} (Ранг × 2). Начисляется в окне «Начало и конец миссии».</p>`+
+      h=`<p class="note">Перед миссией: +${n} ${o.k==="split"?"кармы пополам":o.k==="light"?"светлой кармы":"тёмной кармы"} (Ранг × 2). Начисляется кнопкой «Начать миссию» на вкладке «Миссия».</p>`+
         row(B("ordFate",`Вернуть Очко судьбы за ${o.k==="split"?"10 светлой + 10 тёмной":"20 "+(o.k==="light"?"светлой":"тёмной")} кармы`,!(C.fateUsed>0)||!okB||!enough,true))+
         (!okB?`<p class="note">Нужно любое Благословение ${o.t==="Сумрачной"?"Сумрака":o.t==="Светлой"?"Света":"Тьмы"}.</p>`:"");break;}
     case "Тёмный Поборник":{const k=Math.floor((R.tot.wil||0)/5)*(x.duelFate?2:1);
@@ -19605,7 +19679,7 @@ X3.talCard=function(){const R=compute(C),own=n=>X3.ownT(C,n),cf=X3.cf(),f=X3.fig
   /* Обеты: провал */
   {const h=[];if(own("Обет лишения жизни"))h.push(B("vowLife","Провал «Обета лишения жизни»: −3 ДБ и ББ"));if(own("Обет упорства"))h.push(B("vowPers",cf.persist2?"Снять «Обет упорства» (2 действия)":"Провал «Обета упорства»: 2 действия",false));
     if(own("Обет неприкосновенности"))h.push(B("vowUnt",cf.noReact?"Снять запрет реакций":"Провал «Обета неприкосновенности»: без реакций"));if(own("Клятва победы"))h.push(B("vowWin","Цель «Клятвы победы» выжила: −5 к Воле на час"));
-    if(h.length)sec("Если обет или клятва провалены",row(...h)+`<p class="note">Штрафы «до конца миссии» снимаются в окне «Начало и конец миссии».</p>`);}
+    if(h.length)sec("Если обет или клятва провалены",row(...h)+`<p class="note">Штрафы «до конца миссии» снимаются кнопкой «Завершить миссию» на вкладке «Миссия».</p>`);}
   /* Выбор для талантов */
   {const h=[];const wpn=(C.gear||[]).filter(g=>{const r=gearRef(g);return r!=null&&["Дальний бой","Ближний бой"].includes(ARS[r].sec);});
     if(own("Оружейный шедевр")&&!own("Создатель оружейных шедевров")){h.push(`<label class="x3cfsw">Оружейный шедевр <select class="sel" data-x3ts="master"><option value="">не выбран</option>${wpn.map(g=>`<option value="${E(g.id)}" ${cf.master===g.id?"selected":""} ${(g.mods||[]).length<5?"disabled":""}>${E(g.name)} (${(g.mods||[]).length} мод.)</option>`).join("")}</select></label>`);}
@@ -20036,7 +20110,7 @@ document.addEventListener("click",e=>{const b=e.target.closest('[data-x3npc="inc
 /* ===== ux29: оставшиеся правила книги — ресурсы классов, тяжёлое оружие, Террор, Коммандос и Агент, Орден, арсенал ===== */
 X3.own=n=>X3.ownT(C,n);
 X3.heavy=g=>X3.cat(g)==="Пулемёты";                 /* «Тяжёлое оружие» книги = пулемёты (толкование) */
-X3.dice=s=>{const m=String(s||"").match(/(\d+)\s*d\s*(\d+)/);if(!m)return 0;let v=0;for(let i=0;i<Number(m[1]);i++)v+=rnd(Number(m[2]));return v;};
+X3.dice=s=>{const m=String(s||"").match(/(\d*)\s*[dкд]\s*(\d+)\s*([+−-]\s*\d+)?/i);if(!m)return Number(s)||0;let v=0;for(let i=0;i<(Number(m[1])||1);i++)v+=rnd(Number(m[2]));if(m[3])v+=Number(m[3].replace(/[−\s]/g,c=>c==="−"?"-":""));return Math.max(0,v);};
 X3.note=(html,log)=>{const n=$("#rollNow");if(n)n.insertAdjacentHTML("beforeend",`<div class="note x3note" style="margin-top:6px">${html}</div>`);if(log!==false)pushLog(String(html).replace(/<[^>]+>/g,""));};
 X3.pistols=()=>(C.gear||[]).filter(g=>g.on!==false&&X3.cat(g)==="Пистолеты");
 X3.spendKarma=function(n){const R=compute(C),k=karma(R);if((k.light||0)+(k.dark||0)<n)return false;let a=Math.min(n,k.light||0),b=n-a;if(b>(k.dark||0)){b=k.dark||0;a=n-b;}C.adj.light=(C.adj.light||0)-a;C.adj.dark=(C.adj.dark||0)-b;return true;};
@@ -21121,7 +21195,7 @@ X3.reclick38=function(s){let b=document.querySelector(s.sel),tmp=null;
 document.addEventListener("click",e=>{const b=e.target.closest("[data-x38]");if(!b||b.disabled)return;const a=b.dataset.x38,s=X3.last38;
   if(a==="undo"){if(!s||s.id!==C.id){toast("Отменять нечего");return;}X3.restore38(s);X3.last38=null;try{X3.log&&CB().round>0&&X3.log("Отменено: "+s.label);}catch(_){}
     save();render();$("#rollNow").innerHTML=`<div class="big">Бросок отменён</div><p class="note" style="margin:4px 0 0">«${X3.esc(s.label)}» и всё, что он изменил, — действия, патроны, ресурсы — вернулось как было.</p>`;toast("Бросок отменён");return;}
-  if(a==="reroll"){if(!s||s.id!==C.id)return;X3.pend38={s,used:Number(C.fateUsed)||0};renderFate("Переброс: активируйте Очко судьбы любым способом — бросок повторится сам.");const u=$("#fateUf");if(u)u.hidden=true;$("#fateDlg").showModal();}});
+  if(a==="reroll"){if(!s||s.id!==C.id)return;X3.pend38={s,used:Number(C.fateUsed)||0};renderFate("Переброс: заплатите кармой — бросок повторится сам.");const u=$("#fateUf");if(u)u.hidden=true;$("#fateDlg").showModal();}});
 
 /* Очко судьбы активировано — откатываем бросок, сохраняя оплату Очка, и бросаем заново */
 (function(){const fa0=fateActivate;fateActivate=function(){const out=fa0.apply(this,arguments);try{const p=X3.pend38;if(p&&p.s.id===C.id&&(Number(C.fateUsed)||0)>p.used){X3.pend38=null;
@@ -22599,7 +22673,7 @@ X3.rq||(X3.rq=1,queueMicrotask(()=>{X3.rq=0;try{render();}catch(e){console.error
    На экране одна вкладка; вход в бой и «Новый ход» открывают «Ход», в остальное время помнится последняя. ===== */
 (function(){
 const E=s=>X3.esc(String(s==null?"":s));
-const TABS=[["hod","Ход"],["dmg","Урон"],["tal","Таланты"],["log","Журнал"],["sheet","Лист"]];
+const TABS=[["hod","Ход"],["dmg","Состояние"],["tal","Таланты"],["log","Журнал"],["sheet","Лист"]];
 const LS="x86tab";
 X3.tab86=(()=>{try{return localStorage.getItem(LS)||"hod";}catch(e){return "hod";}})();
 X3.seen86="";
@@ -22722,7 +22796,7 @@ X3.bottomNav=function(){const out=nav0.apply(this,arguments);document.body.class
   const el=document.getElementById("x3nav");if(!el)return out;const t=X3.tab86||"hod",m=X3.marks88();
   const tab=(k,l)=>`<button type="button" class="x3nb x88nb ${t===k?"on":""}" data-x86tab="${k}" aria-current="${t===k?"page":"false"}">${I(ICO[k])}<span>${l}</span>${m[k]?`<i class="x88m">${m[k]}</i>`:""}</button>`;
   const rest=[...document.querySelectorAll("#modeTabs button[data-go]")].map(b=>({go:b.dataset.go,label:((b.querySelector(".tshort")||b).textContent||"").trim()})).filter(x=>x.go!=="10"&&!/Создание/.test(x.label));
-  el.innerHTML=tab("hod","Ход")+tab("dmg","Урон")+tab("tal","Таланты")+tab("log","Журнал")+
+  el.innerHTML=tab("hod","Ход")+tab("dmg","Состояние")+tab("tal","Таланты")+tab("log","Журнал")+
     `<button type="button" class="x3nb" data-x3more="1" aria-expanded="${X3.navOpen}" aria-label="Ещё: лист, кубы, комната, конец боя">${I(ICO.more)}<span>Ещё</span></button>`+
     (X3.navOpen?`<div class="x3navmore" role="menu">
       ${rest.map(x=>`<button type="button" class="x3nmi" data-go="${x.go}" role="menuitem">${X3.navIco(x.go)}<span>${E(x.label)}</span></button>`).join("")}
@@ -22756,7 +22830,7 @@ document.addEventListener("touchend",e=>{if(!sw)return;const p=e.changedTouches[
   const b=document.querySelector(pg==="m"?`[data-x86tab="${n}"]`:`[data-x87tab="${n}"]`);if(b)b.click();},{passive:true});
 
 /* ---------- 4. «Ход»: строка характеристик, касание — тест ---------- */
-const AB={rng:"ДБ",mel:"ББ",str:"С",agi:"Л",tou:"Ст",wil:"В",int:"Инт",wit:"Сооб",per:"Наб",cha:"Хар"};
+const AB={rng:"Дальн. бой",mel:"Ближн. бой",str:"Сила",agi:"Ловк.",tou:"Стойк.",wil:"Воля",int:"Интел.",wit:"Сообр.",per:"Наблюд.",cha:"Харизма"};
 X3.stats88=function(){if(STEP!==10)return;const c=document.querySelector("#main .combat");if(!c||c.querySelector(".x88stats"))return;
   const tiles=[...document.querySelectorAll('#main .stile [data-roll]')].filter(b=>AB[b.dataset.roll]);if(!tiles.length)return;
   const chips=tiles.map(b=>{const k=b.dataset.roll,v=(b.querySelector(".sval")||{}).textContent||"",n=LABEL[k]||k;
@@ -22841,7 +22915,7 @@ X3.sheet90=function(){const m=document.getElementById("main");if(!m)return;if(ST
 document.addEventListener("click",e=>{if(STEP===7&&e.target.closest&&e.target.closest("[data-x87tab],[data-jumpsec]")){const m=document.getElementById("main");if(m)m.dataset.x90s=X3.tab87||"char";}},true);
 
 /* ---------- 2. «Кубы»: вкладки ---------- */
-const DT=[["test","Тест",/^(Тест|Взывание|Повреждение техники)/],["skill","Навыки",/^Навыки/],["fear","Страх",/^Тест на Страх/],["calc","Калькулятор",/^Калькулятор/],["hist","История",/^История бросков/]];
+const DT=[["test","Тесты",/^(Тест|Взывание|Повреждение техники)/],["skill","Навыки",/^Навыки/],["fear","Страх",/^Тест на Страх/],["calc","Калькулятор",/^Калькулятор/],["hist","История",/^История бросков/]];
 const LD="x90dice";
 X3.tab90=ls(LD)||"test";
 const h3=c=>((c.querySelector("h3")||{}).textContent||"").trim();
@@ -22945,7 +23019,7 @@ X3.tal91=function(){const sh=STEP===7&&document.getElementById("sheet");if(!sh)r
   if(row)row.outerHTML=html;else{const first=sh.querySelector(`:scope > details.sec[data-x87="${t}"]`);if(first)first.insertAdjacentHTML("beforebegin",html);}};
 
 /* ---------- 3. «Кубы» → «Тест» ---------- */
-const DICE=[["test","Тест",/^Тест/],["inv","Взывание",/^Взывание/],["tech","Техника",/^Повреждение техники/]];
+const DICE=[["test","Характеристика",/^Тест/],["inv","Взывание",/^Взывание/],["tech","Техника",/^Повреждение техники/]];
 X3.dice91=function(){const m=document.getElementById("main");if(!m||STEP!==9){if(m)delete m.dataset.x91d;return;}
   const cards=[...m.querySelectorAll(':scope > .card[data-x90d="test"]')];let row=m.querySelector(":scope > .x91dice");
   const have=DICE.filter(([k,,re])=>cards.some(c=>re.test(((c.querySelector("h3")||{}).textContent||"").trim())));
@@ -23132,6 +23206,56 @@ render=function(){const out=r0.apply(this,arguments);const f=fight();if(was93&&!
   for(const fn of [X3.dmg93,X3.terms93,X3.create93,X3.pend93])try{fn();}catch(e){console.error(e);}return out;};
 X3.rq||(X3.rq=1,queueMicrotask(()=>{X3.rq=0;try{render();}catch(e){console.error(e);}}));
 })();
+/* ux99: зелёная точка на «Миссии», пока миссия идёт — видно с любого экрана */
+(function(){const r0=render;render=function(){const out=r0.apply(this,arguments);try{const on=!!(C&&misOn());document.body.classList.toggle("mis99off",STEP===10&&!on);document.querySelectorAll('[data-go="10"]').forEach(b=>{if(b.closest("#main"))return;b.classList.toggle("mis99nav",on);if(on)b.setAttribute("aria-description","идёт миссия №"+misOn());else b.removeAttribute("aria-description");});}catch(e){console.error(e);}return out;};})();
+
+/* ===== ux100: переброс за Очко судьбы — честная кнопка, тест Воли сразу, без окна из девяти действий ===== */
+X3.acts38=function(){const n=$("#rollNow"),s=X3.last38;if(!n||!s)return;const old=n.querySelector(".x38acts");if(old)old.remove();
+  const test=!!n.querySelector(".verdict.ok,.verdict.bad");let left=0,hasFate=false,wil=0;try{const f=fateInfo();left=f.left;hasFate=C.stats&&C.stats.fate!=null;wil=f.R.tot.wil+woundPen(f.R);}catch(_){}
+  const rr=test&&hasFate?(left>0?`<button type="button" class="btn small" data-x100ask="${wil}" title="Сначала нужно активировать Очко судьбы">Переброс за Очко судьбы<span class="x38left">${left}</span></button>`:`<span class="note">Переброс: Очков судьбы не осталось</span>`):"";
+  n.insertAdjacentHTML("beforeend",`<div class="x38acts"><button type="button" class="btn small" data-x38="undo">Отменить</button><button type="button" class="btn small" data-x100again="1" title="Тот же бросок ещё раз">Ещё раз</button>${rr}</div>`);};
+document.addEventListener("click",e=>{if(!e.target.closest||!e.target.closest("[data-x100again]"))return;const s=X3.last38;if(!s||s.id!==C.id){toast("Повторять нечего");return;}X3.reclick38(s);});
+/* первый бой: как устроен ход — один раз, закрывается «Понятно» */
+(function(){const r0=render;render=function(){const out=r0.apply(this,arguments);try{if(STEP===10&&(CB().round||0)>0&&!C.seenTurnHelp){const c=document.querySelector("#main .combat");if(c&&!c.querySelector(".x100help")){const a=CB().act;c.insertAdjacentHTML("afterbegin",`<div class="x100help okbox" role="note"><b>Как сыграть ход.</b> Сейчас у вас ${a} ${a===1?"действие":a>1&&a<5?"действия":"действий"}: их тратят атаки, перезарядка и другие кнопки — цена написана на кнопке. Уклонение и парирование — реакции на чужие атаки. Когда снова ваша очередь — «Новый ход». <button type="button" class="btn small" data-x100help="1">Понятно</button></div>`);}}}catch(e){console.error(e);}return out;};})();
+document.addEventListener("click",e=>{if(!e.target.closest||!e.target.closest("[data-x100help]"))return;C.seenTurnHelp=true;save();render();});
+X3.ufNote100=()=>`<div class="note x100uf" style="margin-top:8px">Очко судьбы потрачено. По правилам теперь бросьте 2d6 на Безудержные Силы. <button type="button" class="btn small" data-x100uf="1">Бросить 2d6</button></div>`;
+/* шаг переброса: игрок сам выбирает, как активировать Очко, и сам бросает тест */
+document.addEventListener("click",e=>{const b=e.target.closest("[data-x100ask]");if(!b)return;const n=$("#rollNow");if(!n||n.querySelector(".x100ask"))return;b.disabled=true;
+  n.insertAdjacentHTML("beforeend",`<div class="x100ask note" style="margin-top:8px"><b>Чтобы перебросить, активируйте Очко судьбы.</b> Бросьте тест Воли (${b.dataset.x100ask}): при успехе Очко тратится и бросок повторяется. Или заплатите кармой — без теста.<div class="inline" style="gap:8px;margin-top:6px"><button type="button" class="btn small primary" data-x38="rwil">Бросить тест Воли</button><button type="button" class="btn small" data-x38="reroll">Заплатить кармой…</button></div></div>`);});
+document.addEventListener("click",e=>{const b=e.target.closest('[data-x38="rwil"]');if(!b||b.disabled)return;e.stopImmediatePropagation();const s=X3.last38;if(!s||s.id!==C.id)return;
+  X3.pend38={s,used:Number(C.fateUsed)||0};fateActivate("test");
+  if(X3.pend38){X3.pend38=null;const n=$("#rollNow");if(n)n.insertAdjacentHTML("beforeend",`<div class="note" style="margin-top:8px"><b>Тест Воли провален — Очко судьбы не потрачено, переброса нет.</b> Можно заплатить кармой вместо теста. <button type="button" class="btn small" data-x100karma="1">Заплатить кармой…</button></div>`);X3.last38v=s;}
+  else setTimeout(()=>{const n=$("#rollNow");if(n&&!n.querySelector(".x100uf"))n.insertAdjacentHTML("beforeend",X3.ufNote100());},60);},true);
+document.addEventListener("click",e=>{const b=e.target.closest("[data-x100karma]");if(!b)return;const s=X3.last38v;if(!s||s.id!==C.id)return;X3.last38=s;X3.pend38={s,used:Number(C.fateUsed)||0};renderFate("Переброс: заплатите кармой — бросок повторится сам.");const u=$("#fateUf");if(u)u.hidden=true;$("#fateDlg").showModal();});
+document.addEventListener("click",e=>{if(!e.target.closest("[data-x100uf]"))return;renderFate("");const u=$("#fateUf");if(u)u.hidden=false;const r=$("#fateUfRoll");if(r)r.disabled=false;const rr=$("#fateUfRes");if(rr)rr.innerHTML="";$("#fateDlg").showModal();});
+
+/* ===== ux100: итог создания и имя — на последнем обязательном шаге; без класса «Далее» не главная ===== */
+(function(){const r0=render;render=function(){const out=r0.apply(this,arguments);try{
+  const m=document.getElementById("main");
+  if(STEP===6&&m&&!m.querySelector(".x3final")){const nb=m.querySelector(".navbtns");const html=X3.finalCard(compute(C)).replace("<h3 style=\"margin-top:0\">Что получилось</h3>","<h3 style=\"margin-top:0\">Что получилось</h3><p class=\"note\" style=\"margin:0 0 8px\">Дайте персонажу имя — его увидит Мастер в Комнате.</p>");if(nb)nb.insertAdjacentHTML("beforebegin",html);try{X3.nameField80();}catch(_){}}
+  if(STEP===0&&!(C.cls&&C.cls.i!=null)){const b=m&&m.querySelector('.navbtns [data-go="1"]');if(b)b.classList.remove("primary");}
+  /* сначала то, что выпало или выбрано (описание класса, результат броска), потом — что из этого выбрать */
+  const box=m&&m.querySelector(":scope > .choicecard");if(box){let at=null;
+    if(STEP===0)at=m.querySelector(":scope > #clsDetail");
+    else{const st=[...m.querySelectorAll(":scope > .card")].filter(c=>c!==box&&c.querySelector(".stamp"));at=st[st.length-1]||null;}
+    if(at&&at.nextElementSibling!==box)at.after(box);}
+}catch(e){console.error(e);}return out;};})();
+
+/* ===== ux100: правка листа — «Отменить» после «Готово»; плитка характеристики честно говорит, что бросает d20 ===== */
+(function(){let snap=null,sid=null;
+  const bar=()=>{let el=document.getElementById("x100undo");if(!el){el=document.createElement("div");el.id="x100undo";el.className="noprint";el.setAttribute("role","status");el.hidden=true;document.body.appendChild(el);}return el;};
+  document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("#sheetEdit,#sheetEditDone");if(!b)return;
+    if(SHEETEDIT){snap=JSON.stringify(C);sid=C.id;return;}
+    if(!snap||sid!==C.id){snap=null;return;}const was=snap;snap=null;if(was===JSON.stringify(C))return;
+    const el=bar();el.innerHTML=`<span>Лист изменён</span><button type="button" class="btn small" data-x100undo="1">Отменить правку</button>`;el.hidden=false;el._snap=was;el._id=C.id;clearTimeout(el._t);el._t=setTimeout(()=>{el.hidden=true;},9000);},true);
+  document.addEventListener("click",e=>{if(!e.target.closest||!e.target.closest("[data-x100undo]"))return;const el=bar();if(!el._snap||el._id!==C.id){el.hidden=true;return;}
+    const o=JSON.parse(el._snap);Object.keys(C).forEach(k=>delete C[k]);Object.assign(C,o);el._snap=null;el.hidden=true;try{pushLog("Правка листа отменена");}catch(_){}save();render();toast("Правка отменена — лист как был");});
+  const r0=render;render=function(){const out=r0.apply(this,arguments);try{if(STEP===7){const t=document.querySelector('#main .stile [data-roll]'),g=t&&t.closest(".stile")&&t.closest(".stile").parentElement;if(g&&!g.previousElementSibling?.classList?.contains("x100tip"))g.insertAdjacentHTML("beforebegin",`<p class="note x100tip" style="margin:4px 0 8px">Нажмите на характеристику — бросок d20 против неё. Ошиблись — «Отменить» в панели броска.</p>`);}}catch(e){console.error(e);}return out;};
+})();
+
+/* ===== ux100: оплата переброса кармой — окно без «Сжечь», «Вернуть» и прочего ===== */
+document.addEventListener("click",e=>{if(!e.target.closest||!e.target.closest('[data-x38="reroll"],[data-x100karma]'))return;setTimeout(()=>{const d=$("#fateDlg");if(d&&d.open){d.classList.add("x100rr");const h=d.querySelector("h3");if(h)h.textContent="Переброс: оплата кармой";}},0);});
+document.addEventListener("close",e=>{if(e.target&&e.target.id==="fateDlg"){e.target.classList.remove("x100rr");const h=e.target.querySelector("h3");if(h)h.textContent="Очки судьбы";}},true);
 </script>
 </body>
 </html>

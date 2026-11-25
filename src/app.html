@@ -2428,6 +2428,155 @@ body.x86:not(.x88) #main .x89jump{top:calc(env(safe-area-inset-top,0px) + var(--
 #x90dlg .x38st b{font-size:20px;font-variant-numeric:tabular-nums}
 @media (prefers-reduced-motion:no-preference){#x90dlg[open]{animation:x90up .22s cubic-bezier(.23,1,.32,1)}}
 @keyframes x90up{from{transform:translateY(24px);opacity:.6}to{transform:none;opacity:1}}
+
+/* ===== ux91: телефон — без зазора наверху, плотнее «Ход», «Урон», характеристики, таланты; подвкладки ===== */
+
+/* --- 1, 2, 8: вкладки прилипают ровно под шапкой. Высота шапки (--x3hdrh) уже включает отступ под строку состояния,
+   поэтому env(safe-area-inset-top) второй раз не прибавлять; шапка уехала — вкладки встают под строку состояния --- */
+#main .x87tabs{top:max(var(--sat,0px),var(--x3hdrh,0px))}
+body.x86 .x86tabs{top:calc(max(var(--sat,0px),var(--x3hdrh,0px)) + var(--x86sh,64px))}
+#main .x89jump{top:max(var(--sat,0px),var(--x3hdrh,0px))}
+body.x86 #main .x89jump{top:calc(max(var(--sat,0px),var(--x3hdrh,0px)) + var(--x86sh,64px))}
+body.x86:not(.x88) #main .x89jump{top:calc(max(var(--sat,0px),var(--x3hdrh,0px)) + var(--x86sh,64px) + 53px)}
+@media (max-width:560px){
+  /* отступ под строку состояния уже есть у шапки — у страницы второй не нужен; и 10 px над шапкой тоже */
+  :root{padding-top:0!important}
+  .wrap{padding-top:0!important}
+  .mstrip{top:max(var(--sat,0px),var(--x3hdrh,0px))!important}
+  /* шапка и всё, что под ней прилипает, двигаются вместе — одинаковое время и кривая */
+  header.top,#main .x87tabs,body.x86 .x86tabs,#main .x89jump,.mstrip{transition-duration:.2s!important;transition-timing-function:cubic-bezier(.23,1,.32,1)!important}
+  /* «Кубы»: вступление — над вкладками только место занимает */
+  #main[data-x90d] > p.lead{display:none}
+  /* комната мастера: заголовок уже в шапке («Мастер · код») */
+  #main:has(> #roomView .x43code) > h2{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+}
+@media (prefers-reduced-motion:reduce){header.top,#main .x87tabs,body.x86 .x86tabs,#main .x89jump,.mstrip{transition:none!important}}
+
+/* --- подвкладки (Таланты · Заслуги · Благословения; Тест · Взывание · Техника) --- */
+.x91sub{display:grid;grid-template-columns:repeat(var(--x91n,3),minmax(0,1fr));gap:4px;margin:-4px 0 12px;padding:3px;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
+.x91sub .x86t{min-height:40px;font-size:14px;color:var(--ink);overflow:hidden;text-overflow:ellipsis}
+.x91sub .x86t[aria-selected="true"]{color:var(--accent-ink);background:var(--accent);border-color:var(--accent)}
+#sheet[data-x91="tal"] > details.sec[data-x91]:not([data-x91="tal"]),
+#sheet[data-x91="merit"] > details.sec[data-x91]:not([data-x91="merit"]),
+#sheet[data-x91="bless"] > details.sec[data-x91]:not([data-x91="bless"]){display:none!important}
+#main[data-x91d="test"] > .card[data-x91d]:not([data-x91d="test"]),
+#main[data-x91d="inv"] > .card[data-x91d]:not([data-x91d="inv"]),
+#main[data-x91d="tech"] > .card[data-x91d]:not([data-x91d="tech"]){display:none!important}
+@media print{.x91sub{display:none!important}#sheet[data-x91] > details.sec[data-x91],#main[data-x91d] > .card[data-x91d]{display:block!important}}
+
+/* раздел — единственный во вкладке: его заголовок повторяет вкладку */
+#sheet[data-x87t="char"] > details.sec[data-x87="char"] > summary,
+#sheet[data-x87t="gear"] > details.sec[data-x87="gear"] > summary,
+#sheet[data-x91] > details.sec[data-x91] > summary{display:none}
+#sheet[data-x87t="char"] > details.sec[data-x87="char"],
+#sheet[data-x87t="gear"] > details.sec[data-x87="gear"],
+#sheet[data-x91] > details.sec[data-x91]{padding-top:10px}
+
+/* --- 9: характеристики — 10 плиток на экран: подпись слева (переносится целиком), значение справа --- */
+@media (max-width:560px){
+  #sheet .stiles{gap:6px!important}
+  #sheet .stile .stbtn{min-height:50px!important;padding:6px 10px!important;grid-template-columns:18px minmax(0,1fr) auto!important;column-gap:6px!important;row-gap:0!important;align-items:center!important}
+  #sheet .stile .stbtn > svg{grid-column:1;grid-row:1;width:18px;height:18px}
+  #sheet .stile .sname{grid-column:2;grid-row:1;font-size:13px!important;line-height:1.15;letter-spacing:.01em!important;hyphens:auto;overflow-wrap:normal;min-width:0}
+  #sheet .stile .sval{grid-column:3;grid-row:1;font-size:24px!important;line-height:1!important;margin:0!important;font-variant-numeric:tabular-nums}
+  #sheet .stile .upbtn{top:auto!important;bottom:-6px!important;right:4px!important;min-height:0!important;padding:1px 6px!important;font-size:11px!important}
+  #sheet .stile .smods{font-size:12px}
+  /* производные: три в ряд */
+  #sheet details.sec[data-sec="Характеристики"] .dgrid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:6px!important}
+  #sheet details.sec[data-sec="Характеристики"] .dblk{padding:6px 8px!important;flex-direction:column!important;flex-wrap:nowrap!important;align-items:flex-start!important;justify-content:flex-start!important;gap:2px!important;min-height:0!important}
+  #sheet details.sec[data-sec="Характеристики"] .dblk > *{flex:none!important;width:auto!important;max-width:100%;margin:0!important;text-align:left!important;position:static!important}
+  #sheet details.sec[data-sec="Характеристики"] .dblk .dname{font-size:12px;line-height:1.15;hyphens:auto}
+  #sheet details.sec[data-sec="Характеристики"] .dblk .dval{font-size:18px;line-height:1.1}
+  #sheet details.sec[data-sec="Характеристики"] .dblk .note{font-size:12px;line-height:1.2}
+}
+
+/* самые узкие экраны: без значка — подпись целиком */
+@media (max-width:359px){
+  #sheet .stile .stbtn{grid-template-columns:minmax(0,1fr) auto!important;padding:6px 8px!important}
+  #sheet .stile .stbtn > svg{display:none}
+  #sheet .stile .sname{grid-column:1;letter-spacing:0!important}
+  #sheet .stile .sval{grid-column:2}
+}
+
+/* --- 4: «Миссия» — полоса ОЗ · Судьба · к тестам в одну строку (на 360 px и шире) --- */
+@media (min-width:360px) and (max-width:560px){
+  #main .mstrip{flex-wrap:nowrap!important;gap:4px!important;padding:3px!important}
+  #main .mstrip > .msi{min-height:46px!important;height:auto!important;padding:2px!important}
+  #main .mstrip > .mshp{flex:1.15 1 0!important;grid-template-columns:36px minmax(0,1fr) 36px!important}
+  #main .mstrip > .msfate{flex:.5 1 0!important;min-width:0!important}
+  #main .mstrip > .x40mod{flex:1.15 1 0!important;grid-template-columns:36px minmax(0,1fr) 36px!important;min-width:0!important}
+  #main .mstrip .msb{width:36px!important;min-width:36px!important;height:42px!important;min-height:42px!important}
+  #main .mstrip .msl{font-size:11px!important;letter-spacing:.02em}
+  #main .mstrip .x40mod .msl{font-size:0!important}
+  #main .mstrip .x40mod .msl > span{display:none!important}
+  #main .mstrip .x40mod .msl::before{content:"К тестам";font-size:11px;letter-spacing:0;white-space:nowrap}
+  #main .mstrip b{font-size:17px!important}
+}
+
+/* --- 4: «Ход» — действия одной строкой, кнопки оружия ниже и в ряд --- */
+@media (max-width:560px){
+  .combat .cbactrow{display:flex!important;flex-wrap:wrap;align-items:center;gap:6px 8px!important;padding:6px 8px!important}
+  .combat .cbactrow .cbacts{display:flex!important;align-items:center;gap:6px!important;flex:1 1 100%;flex-wrap:wrap!important;min-width:0}
+  .combat .cbactrow .cbacts .pm{width:40px!important;min-width:40px!important}
+  .combat .cbactrow .actpips{display:flex!important;flex:0 1 auto!important;order:0!important;gap:4px!important;margin:0 2px!important;flex-wrap:nowrap}
+  .combat .cbactrow .apip{width:18px!important;height:18px!important;min-width:18px!important;min-height:18px!important;padding:0!important;position:relative}
+  .combat .cbactrow .apip::after{content:"";position:absolute;inset:-11px -3px}
+  .combat .cbactrow .cbfree{flex:0 1 auto;min-height:36px!important;padding:4px 10px!important;font-size:14px!important;white-space:normal;line-height:1.15}
+  .cbw .cbwrow:not(.x90c) .cbwbtns{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px!important}
+  .cbw .cbwrow:not(.x90c) .cbwbtns .btn{min-height:44px!important;padding:4px 8px!important;margin:0!important;font-size:14.5px;line-height:1.15;white-space:normal;hyphens:manual}
+  .cbw .cbwrow .cbwhd{row-gap:2px}
+  .cbw .cbwrow .x35tag{display:inline-block!important;width:auto!important;max-width:100%;padding:2px 8px!important;font-size:13px!important;align-self:flex-start}
+}
+
+/* --- 5: «Урон» — плоско, форма в две колонки --- */
+.x83state > details.sec,#sheet > details.sec[data-sec="Состояние и ранения"]{--x91g:8px}
+.x83state > details.sec > .card.noprint,
+#sheet > details.sec[data-sec="Состояние и ранения"] > .card.noprint{border:0!important;background:none!important;box-shadow:none!important;padding:0!important;margin:8px 0 4px!important}
+.x91dmg{display:grid;grid-template-columns:1fr 1fr;gap:var(--x91g)}
+.x91dmg > label.note.inline{display:flex!important;flex-direction:column;align-items:stretch!important;gap:3px!important;margin:0!important;font-family:var(--narrow);font-size:12.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.x91dmg > label.note.inline .inp{width:100%!important;min-height:46px;font-size:20px;text-align:center;font-variant-numeric:tabular-nums;box-sizing:border-box}
+/* «игнорирует броню» / «Стойкость» — переключатели-плашки */
+.x91dmg > label.note.inline:has(input[type=checkbox]){flex-direction:row!important;align-items:center!important;gap:8px!important;min-height:44px;padding:4px 10px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--ink);text-transform:none;letter-spacing:0;font-family:var(--sans);font-size:14px;line-height:1.15;cursor:pointer}
+.x91dmg > label.note.inline:has(input:checked){border-color:var(--accent);background:color-mix(in srgb,var(--accent) 16%,var(--panel));color:var(--ink)}
+.x91dmg > label.note.inline:has(input[type=checkbox]){flex-wrap:nowrap!important}
+.x91dmg > label.note.inline input[type=checkbox]{width:20px!important;height:20px!important;min-width:20px;margin:0!important;flex:none!important;accent-color:var(--accent);display:inline-block!important}
+.x91dmg > .btn{grid-column:1 / -1;min-height:48px;margin:0!important;font-size:17px}
+.x91heal{display:grid!important;grid-template-columns:1fr 1fr;gap:var(--x91g);align-items:end;margin-top:12px!important;padding-top:12px;border-top:1px solid var(--line)}
+.x91heal > label.note.inline{display:flex!important;flex-direction:column;align-items:stretch!important;gap:3px!important;margin:0!important;font-family:var(--narrow);font-size:12.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.x91heal > label.note.inline .inp{width:100%!important;min-height:46px;font-size:20px;text-align:center;box-sizing:border-box}
+.x91heal > .btn{min-height:46px;margin:0!important}
+.x83state details.sec > p:first-of-type,#sheet > details.sec[data-sec="Состояние и ранения"] > p:first-of-type{font-size:15px;margin:6px 0 2px!important}
+.x83state details.sec > p:first-of-type .note,#sheet > details.sec[data-sec="Состояние и ранения"] > p:first-of-type .note{display:block;font-size:13px;line-height:1.3}
+/* «Урон» в бою: раздел — единственный, рамка в рамке не нужна */
+.sheet.x83state{border:0!important;background:none!important;padding:0!important;box-shadow:none!important}
+.sheet.x83state > details.sec{margin:0!important}
+.sheet.x83state > details.sec > summary{display:none}
+
+/* --- 6: «Таланты и снаряжение в бою» --- */
+.card.x3tal .x3tsec{margin:0!important;padding:10px 0!important;border-top:1px solid var(--line)}
+.card.x3tal .x3tsec:first-of-type{border-top:0;padding-top:0!important}
+.card.x3tal h4.x3sub{margin:0 0 6px!important;padding:0!important;font-family:var(--narrow);font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.card.x3tal .x3cfrow{display:grid!important;grid-template-columns:minmax(0,1fr);gap:6px!important;margin:0!important}
+@media (min-width:561px){.card.x3tal .x3cfrow{grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}}
+.card.x3tal .x3cfrow > .btn{justify-self:start;padding-left:16px;padding-right:16px}
+.card.x3tal .x3cfrow > .btn{margin:0!important;min-height:44px;justify-content:center}
+.card.x3tal .x3cfrow > .x3cfsw{display:flex!important;align-items:center;gap:10px;min-height:44px;margin:0!important;padding:6px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-size:14.5px;line-height:1.2;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:border-color .15s,background-color .15s}
+.card.x3tal .x3cfrow > .x3cfsw:has(input:checked){border-color:var(--accent);background:color-mix(in srgb,var(--accent) 16%,var(--bg))}
+.card.x3tal .x3cfrow > .x3cfsw{flex-wrap:nowrap!important;flex-direction:row!important}
+.card.x3tal .x3cfrow > .x3cfsw input[type=checkbox]{width:20px!important;height:20px!important;min-width:20px;margin:0!important;flex:none!important;accent-color:var(--accent);display:inline-block!important}
+.card.x3tal .x3cfrow > .note,.card.x3tal .x3tsec > p.note{grid-column:1 / -1;margin:6px 0 0!important;padding:6px 10px;background:color-mix(in srgb,var(--accent) 10%,transparent);border-radius:8px;font-size:14px;line-height:1.35;color:var(--ink)}
+.card.x3tal > h3{margin-bottom:10px!important}
+@media (prefers-reduced-motion:reduce){.card.x3tal .x3cfrow > .x3cfsw{transition:none}}
+
+/* --- 10, 11: комната мастера — код, связь, видимость бросков и выход одной карточкой --- */
+#roomView .x43code{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:stretch;gap:6px;padding:8px 10px!important}
+#roomView .x43code > .x43cr{grid-column:1 / -1}
+#roomView .x43code > .x46eye{grid-column:1;width:auto;margin:0!important;min-height:44px;padding:4px 8px;font-size:13.5px;line-height:1.15;text-align:left}
+#roomView .x91exit{display:contents}
+#roomView .x91exit .btn{min-height:44px;margin:0!important;padding:4px 12px;white-space:nowrap}
+#roomView .x91exit .btn.danger{font-weight:700}
+/* свёрнутый блок и карточка внутри с тем же заголовком — второй заголовок не нужен */
+#roomView details.x43fold > .x43in > h3:first-child{display:none}
 </style>
 </head>
 <body>
@@ -22662,6 +22811,80 @@ document.addEventListener("click",e=>{if(!e.target.closest)return;if(e.target.cl
 
 const r0=render;render=function(){const out=r0.apply(this,arguments);
   for(const f of [X3.sheet90,X3.dice90,X3.weap90,X3.state90,X3.hdr90])try{f();}catch(e){console.error(e);}return out;};
+X3.rq||(X3.rq=1,queueMicrotask(()=>{X3.rq=0;try{render();}catch(e){console.error(e);}}));
+})();
+/* ===== ux91: телефон — шапка и вкладки без зазоров, подвкладки вместо длинных столбцов.
+   1) --x3hdrh = 0, когда шапка уехала (прокрутка или шторка броска); пересчёт при смене размера шапки/полосы ОЗ;
+   2) «Лист» → «Таланты»: Таланты · Заслуги · Благословения — по кнопке;
+   3) «Кубы» → «Тест»: Тест · Взывание к Силам · Повреждение техники — по кнопке;
+   4) «Урон»: форма урона и лечения сеткой;
+   5) комната мастера: «Выйти» и «Закрыть комнату» — в карточке кода наверху, «События» открыты сразу ===== */
+(function(){
+const E=s=>X3.esc(String(s==null?"":s));
+const ls=(k,v)=>{try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v);}catch(e){}return null;};
+
+/* ---------- 1. шапка: место под неё только когда она на экране ---------- */
+X3.hdrSync=function(){const h=document.querySelector("header.top");if(!h)return;
+  const away=X3.hdr.hidden||(X3.isPhone()&&document.body.classList.contains("panel-open"));
+  document.documentElement.style.setProperty("--x3hdrh",(X3.isPhone()&&!away?h.offsetHeight:0)+"px");};
+const sync=()=>{X3.hdrSync();if(X3.top86)X3.top86();};
+new MutationObserver(sync).observe(document.body,{attributes:true,attributeFilter:["class"]});
+if(window.ResizeObserver){const ro=new ResizeObserver(sync);let seen=new WeakSet();
+  X3.watch91=()=>{for(const el of document.querySelectorAll("header.top,#main .mstrip"))if(!seen.has(el)){seen.add(el);ro.observe(el);}};}
+else X3.watch91=sync;
+
+/* ---------- подвкладки: общий ряд кнопок ---------- */
+const subRow=(cls,label,key,items,cur)=>`<nav class="x91sub noprint ${cls}" role="tablist" aria-label="${E(label)}" style="--x91n:${items.length}">${items.map(([k,l])=>`<button type="button" role="tab" class="x86t" data-x91="${key}:${k}" aria-selected="${k===cur}">${E(l)}</button>`).join("")}</nav>`;
+const S={tal:ls("x91tal")||"tal",dice:ls("x91dice")||"test"};
+
+/* ---------- 2. «Лист» → «Таланты» ---------- */
+const TAL=[["tal","Таланты","Таланты"],["merit","Заслуги","Заслуги"],["bless","Благословения","Благословения сил"]];
+X3.tal91=function(){const sh=STEP===7&&document.getElementById("sheet");if(!sh)return;let row=sh.querySelector(":scope > .x91tal");
+  if(X3.tab87!=="tal"){delete sh.dataset.x91;if(row)row.remove();return;}
+  const have=TAL.filter(([,,n])=>sh.querySelector(`:scope > details.sec[data-sec="${n}"]`));if(!have.length)return;
+  if(!have.some(([k])=>k===S.tal))S.tal=have[0][0];
+  have.forEach(([k,,n])=>{const d=sh.querySelector(`:scope > details.sec[data-sec="${n}"]`);d.dataset.x91=k;if(k===S.tal)d.open=true;});
+  sh.dataset.x91=S.tal;const html=subRow("x91tal","Таланты, заслуги, благословения","tal",have,S.tal);
+  if(row)row.outerHTML=html;else{const first=sh.querySelector(':scope > details.sec[data-x87="tal"]');if(first)first.insertAdjacentHTML("beforebegin",html);}};
+
+/* ---------- 3. «Кубы» → «Тест» ---------- */
+const DICE=[["test","Тест",/^Тест/],["inv","Взывание",/^Взывание/],["tech","Техника",/^Повреждение техники/]];
+X3.dice91=function(){const m=document.getElementById("main");if(!m||STEP!==9){if(m)delete m.dataset.x91d;return;}
+  const cards=[...m.querySelectorAll(':scope > .card[data-x90d="test"]')];let row=m.querySelector(":scope > .x91dice");
+  const have=DICE.filter(([k,,re])=>cards.some(c=>re.test(((c.querySelector("h3")||{}).textContent||"").trim())));
+  if(X3.tab90!=="test"||have.length<2){delete m.dataset.x91d;if(row)row.remove();return;}
+  cards.forEach(c=>{const t=((c.querySelector("h3")||{}).textContent||"").trim();const x=DICE.find(([k,,re])=>k!=="test"&&re.test(t))||DICE[0];c.dataset.x91d=x[0];});
+  if(!have.some(([k])=>k===S.dice))S.dice="test";
+  m.dataset.x91d=S.dice;cards.filter(c=>c.dataset.x91d===S.dice&&S.dice!=="test").forEach(c=>{const d=c.querySelector(":scope > details");if(d&&!d.open)d.open=true;});
+  const html=subRow("x91dice","Тест, Взывание, Повреждение техники","dice",have.map(([k,l])=>[k,l==="Техника"?"Повр. техники":l==="Взывание"?"Взывание к Силам":l]),S.dice);
+  if(row)row.outerHTML=html;else{const bar=m.querySelector(":scope > .x90dt");if(bar)bar.insertAdjacentHTML("afterend",html);}};
+
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-x91]");if(!b)return;const [k,v]=b.dataset.x91.split(":");S[k]=v;ls("x91"+k,v);
+  if(k==="tal")X3.tal91();else X3.dice91();
+  const bar=b.closest(".x91sub"),next=bar&&bar.nextElementSibling;
+  /* начало выбранного — под вкладками, если оно уехало выше */
+  const tabs=document.querySelector("#main .x87tabs:not(.x91sub)");if(next&&tabs){const lim=tabs.getBoundingClientRect().bottom;if(bar.getBoundingClientRect().top<lim)scrollBy(0,bar.getBoundingClientRect().top-lim-4);}
+  const nb=document.querySelector(`[data-x91="${k}:${v}"]`);if(nb&&document.activeElement===b)nb.focus();});
+
+/* ---------- «Урон»: форма урона и лечения — сетка (вид в ux91.css) ---------- */
+X3.dmg91=function(){document.querySelectorAll('#main details.sec[data-sec="Состояние и ранения"] > .card.noprint').forEach(c=>{
+  const rows=c.querySelectorAll(":scope > div.inline");if(rows[0]&&rows[0].querySelector("#wTake"))rows[0].classList.add("x91dmg");if(rows[1]&&rows[1].querySelector("#wDoHeal"))rows[1].classList.add("x91heal");});};
+
+/* ---------- 5. комната мастера ---------- */
+X3.room91=function(){const v=document.getElementById("roomView");if(!v)return;const card=v.querySelector(".x43code");
+  const close=v.querySelector('[data-room="close"]'),leave=v.querySelector('[data-room="leave"]');
+  if(card&&close&&!card.contains(close)){let r=card.querySelector(".x91exit");if(!r){r=document.createElement("div");r.className="x91exit";card.appendChild(r);}
+    if(leave){leave.textContent="Выйти";leave.title="Выйти — комната останется";leave.setAttribute("aria-label","Выйти из комнаты, комната останется");r.appendChild(leave);}
+    close.classList.add("danger");r.appendChild(close);}
+  /* видимость бросков — коротко, полный текст для чтения с экрана */
+  const eye=card&&card.querySelector(".x46eye > span");if(eye&&/^Мои броски/.test(eye.textContent)){const full=eye.textContent;eye.parentElement.setAttribute("aria-label",full);eye.parentElement.title=full;
+    eye.textContent=/скрыты/.test(full)?"Броски скрыты":"Броски видны";}
+  /* «События»: содержимое сразу, без лишнего касания */
+  if(X3.sub46==="ev")v.querySelectorAll('details.x43fold[data-x46="ev"]').forEach(d=>{if(!d.dataset.x91){d.dataset.x91="1";d.open=true;}});};
+
+const rr=renderRoom;renderRoom=function(){const out=rr.apply(this,arguments);try{X3.room91();}catch(e){console.error(e);}return out;};
+const r0=render;render=function(){const out=r0.apply(this,arguments);
+  for(const f of [X3.tal91,X3.dice91,X3.dmg91,X3.room91,X3.watch91,sync])try{f();}catch(e){console.error(e);}return out;};
 X3.rq||(X3.rq=1,queueMicrotask(()=>{X3.rq=0;try{render();}catch(e){console.error(e);}}));
 })();
 </script>

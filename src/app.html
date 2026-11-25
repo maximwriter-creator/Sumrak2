@@ -2242,7 +2242,10 @@ html body.x40fight .mstrip .msl{font-size:12px!important}
 html body .misbar.x83 .misjump{-webkit-mask-image:none!important;mask-image:none!important}
 .misbar.x83.x40 .misjump.x3row>.mj.mj{flex:1 1 0!important;min-width:0!important;max-width:none!important}
 .misbar.x83.x40 .misjump.x3row>.mj.mj.x83more{flex:0 0 auto!important;padding-left:8px;padding-right:8px}
-.misbar.x83 .misjump.x83all{flex-wrap:wrap}
+/* «Ещё» раскрыто: сеткой по 3 (по 4 на широком), а не все в одну строку */
+html body .misbar.x83 .misjump.x3row.x83all{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));overflow:visible!important}
+@media (min-width:400px){html body .misbar.x83 .misjump.x3row.x83all{grid-template-columns:repeat(4,minmax(0,1fr))}}
+html body .misbar.x83 .misjump.x83all>.mj.mj{margin-right:0!important;white-space:normal;overflow-wrap:anywhere;hyphens:auto}
 @media (max-width:360px){.misbar.x83 .misjump>.mj,.misbar.x83 .misjump>.mj span{font-size:13px!important;letter-spacing:0}}
 /* «Ранение» в полосе — целиком */
 @media (max-width:420px){.mstrip .msi.warn{flex:0 0 auto!important;min-width:0}.mstrip .msi.warn .msl{overflow:visible!important;text-overflow:clip!important;max-width:none!important;letter-spacing:0!important}}
@@ -2369,6 +2372,62 @@ body.x88 #main .x86tabs{display:none!important}
 .x88s:active{background:color-mix(in srgb,var(--accent) 16%,var(--panel));border-color:var(--accent)}
 .x88s:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 @media (max-width:359px){.x88s span{font-size:11.5px}.x88s b{font-size:16px}}
+
+/* ===== ux89: ряд быстрого доступа («Миссия» вне боя, «Кубы и тесты»); вид кнопок общий с вкладками ux86/ux87 ===== */
+#main .x89jump{display:grid;position:sticky;z-index:14;top:calc(env(safe-area-inset-top,0px) + var(--x3hdrh,0px));
+  grid-template-columns:repeat(var(--x89n,4),minmax(0,1fr));gap:2px;margin:0 0 12px;padding:4px;background:var(--bg);border-bottom:1px solid var(--line);transition:top .22s cubic-bezier(.23,1,.32,1)}
+/* в бою под прилипшей полосой ОЗ (ux86) */
+body.x86 #main .x89jump{top:calc(env(safe-area-inset-top,0px) + var(--x3hdrh,0px) + var(--x86sh,64px))}
+body.x86:not(.x88) #main .x89jump{top:calc(env(safe-area-inset-top,0px) + var(--x3hdrh,0px) + var(--x86sh,64px) + 53px)}
+#main .x89jump .x86t{color:var(--ink);background:var(--panel);border-color:var(--line)}
+#main .x89jump .x86t:active{background:color-mix(in srgb,var(--accent) 14%,transparent);color:var(--accent)}
+/* лента действий «Миссии»: без «Ещё», всё на виду */
+.misjump .mj.x83more{display:none!important}
+@media print{#main .x89jump{display:none!important}}
+
+/* ===== ux90: вкладки наверху везде, оружие строкой, «Тест» в шапке ===== */
+/* «Лист»: досье только во вкладке «Досье»; «Создание не закончено» — одной строкой */
+#main[data-x90s]:not([data-x90s="bio"]) > .dossier{display:none!important}
+#main[data-x90s] > .x41pend{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;padding:10px 12px}
+#main[data-x90s] > .x41pend .x41ph{margin:0;flex:1 1 12em;min-width:0}
+#main[data-x90s] > .x41pend .x41list{display:contents}
+#main[data-x90s] > .x41pend .x41list li{list-style:none}
+#main[data-x90s] > .x41pend .x41rs,#main[data-x90s] > .x41pend .x41back{display:none!important}
+
+/* «Состояние»: ОЗ, урон и лечение — первым, трекеры ниже */
+#sheet[data-x87t="state"]{display:flex;flex-direction:column}
+#sheet[data-x87t="state"] > details.sec[data-sec="Состояние и ранения"]{order:-1}
+
+/* «Кубы»: вкладки (вид — ux86/ux87) */
+#main .x90dt{grid-template-columns:repeat(var(--x90n,5),minmax(0,1fr))}
+#main[data-x90d="test"] > .card[data-x90d]:not([data-x90d="test"]),
+#main[data-x90d="skill"] > .card[data-x90d]:not([data-x90d="skill"]),
+#main[data-x90d="fear"] > .card[data-x90d]:not([data-x90d="fear"]),
+#main[data-x90d="calc"] > .card[data-x90d]:not([data-x90d="calc"]),
+#main[data-x90d="hist"] > .card[data-x90d]:not([data-x90d="hist"]){display:none!important}
+@media print{#main[data-x90d] > .card[data-x90d]{display:block!important}}
+
+/* оружие: не в руках — одна строка, касание берёт в руки */
+.cbw .cbwrow.x90c > :not(.cbwhd){display:none!important}
+.cbw .cbwrow.x90c{padding-top:0;padding-bottom:0}
+.cbw .cbwrow.x90c .cbwhd{min-height:44px;display:flex;flex-direction:row;align-items:center;justify-content:flex-start;flex-wrap:wrap;gap:2px 10px;text-align:left;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;padding:6px 0;box-sizing:border-box}
+.cbw .cbwrow.x90c .cbwhd::after{content:"Взять";margin-left:auto;font-family:var(--narrow);font-size:15px;font-weight:700;color:var(--accent)}
+.cbw .cbwrow.x90c .cbwhd:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+
+/* «Тест» в шапке и шторка */
+#x90testBtn[hidden]{display:none!important}
+#x90dlg{width:min(440px,100vw);max-width:100vw;margin:auto auto 0;padding:14px 16px calc(16px + env(safe-area-inset-bottom,0px));border:1px solid var(--line);border-bottom:0;border-radius:16px 16px 0 0;background:var(--panel);color:var(--ink)}
+@media (min-width:600px){#x90dlg{margin:auto;border-bottom:1px solid var(--line);border-radius:16px}}
+#x90dlg::backdrop{background:color-mix(in srgb,#000 55%,transparent)}
+#x90dlg .x90dhd{display:flex;align-items:center;justify-content:space-between;gap:8px}
+#x90dlg h3{margin:0;font-family:var(--narrow);font-size:21px}
+#x90dlg .x90dn{margin:4px 0 12px}
+#x90dlg .x90dg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+#x90dlg .x38st{min-height:52px;display:flex;align-items:center;justify-content:space-between;gap:8px;text-align:left}
+#x90dlg .x38st span{min-width:0;hyphens:auto;overflow-wrap:anywhere}
+#x90dlg .x38st b{font-size:20px;font-variant-numeric:tabular-nums}
+@media (prefers-reduced-motion:no-preference){#x90dlg[open]{animation:x90up .22s cubic-bezier(.23,1,.32,1)}}
+@keyframes x90up{from{transform:translateY(24px);opacity:.6}to{transform:none;opacity:1}}
 </style>
 </head>
 <body>
@@ -21498,7 +21557,8 @@ X3.open40=function(){const d=document.querySelector('#main .x40fold[data-x40="sh
 (function(){try{const v=JSON.parse(localStorage.getItem("x55:sec")||"{}");Object.keys(v).forEach(k=>{if(SEC[k]==null)SEC[k]=!!v[k];});}catch(_){}})();
 window.addEventListener("toggle",e=>{const d=e.target;if(!d||!d.classList||!d.classList.contains("sec"))return;setTimeout(()=>{try{localStorage.setItem("x55:sec",JSON.stringify(SEC));}catch(_){}},0);},true);
 /* первая отрисовка идёт до слоёв: без этого Миссия при запуске открывалась без раскладки */
-try{render();}catch(e){console.error(e);}
+/* одна перерисовка после всех слоёв, а не по одной на слой (старт был в 15 раз дольше) */
+X3.rq||(X3.rq=1,queueMicrotask(()=>{X3.rq=0;try{render();}catch(e){console.error(e);}}));
 
 /* ===== ux56: модификатор — ненулевой подсвечен, сброс отдельной кнопкой, касание числа ничего не делает ===== */
 (function(){const m0=X3.mod40;X3.mod40=function(main){m0.apply(this,arguments);const t=main.querySelector(".mstrip .x40mod");if(!t||t.dataset.x56)return;t.dataset.x56="1";const b=t.querySelector(":scope > b"),v=Number(ROLLMOD)||0;
@@ -21760,7 +21820,8 @@ document.addEventListener("click",e=>{const b=e.target.closest("[data-x71crit],[
     if(p.ok)drop();
     else askConfirm(`Тест провален. Не применять последствия и сбросить результат теста? Сейчас последствия такие: ${X3.critOut71(n,false).replace(/^./,c=>c.toLowerCase())}.`,drop);}
 });
-try{render();}catch(e){console.error(e);}
+/* одна перерисовка после всех слоёв, а не по одной на слой (старт был в 15 раз дольше) */
+X3.rq||(X3.rq=1,queueMicrotask(()=>{X3.rq=0;try{render();}catch(e){console.error(e);}}));
 })();
 
 /* ===== ux73: цвет по смыслу — фракции не повторяют сигнальные цвета, итог урона нейтральный ===== */
@@ -21773,7 +21834,8 @@ X3.groupColor=g=>{if(!g)return gc0(g);let L=[];try{L=[...new Set((BOOK.classes||
 /* итог урона и лечения в «Состоянии и ранениях» — запись, а не «успех» */
 const wu0=woundUI;
 woundUI=function(){const h=wu0.apply(this,arguments);return WMSG?h.replace(`<div class="okbox">${WMSG}</div>`,`<div class="x73res" role="status">${WMSG}</div>`):h;};
-try{render();}catch(e){console.error(e);}
+/* одна перерисовка после всех слоёв, а не по одной на слой (старт был в 15 раз дольше) */
+X3.rq||(X3.rq=1,queueMicrotask(()=>{X3.rq=0;try{render();}catch(e){console.error(e);}}));
 })();
 
 /* ===== ux74: узкие экраны и скорость — пересчёт персонажа один раз за перерисовку, переносы без словаря, короткие подписи ===== */
@@ -21839,7 +21901,8 @@ const r0=render;render=X3.memo74(function(){const top=!depth||depth===1,y=scroll
 const q0=renderRoom;renderRoom=X3.memo74(function(){const out=q0.apply(this,arguments);try{X3.shy74(document.getElementById("roomView")||document.getElementById("main"));}catch(e){}return out;});
 const bb0=X3.cbBar;if(bb0)X3.cbBar=X3.memo74(function(){const out=bb0.apply(this,arguments);try{X3.dock74();}catch(e){}return out;});
 addEventListener("resize",()=>{try{X3.dock74();}catch(e){}});
-try{render();}catch(e){console.error(e);}
+/* одна перерисовка после всех слоёв, а не по одной на слой (старт был в 15 раз дольше) */
+X3.rq||(X3.rq=1,queueMicrotask(()=>{X3.rq=0;try{render();}catch(e){console.error(e);}}));
 })();
 
 /* ===== ux75: «Миссия» разгружена — переходы только нужные в ходе, общие состояния вместе, журнал боя короче ===== */
@@ -21870,7 +21933,8 @@ X3.log75=function(){const lg=document.querySelector("#main .cblog");if(!lg)retur
 document.addEventListener("click",e=>{if(!e.target.closest(".x75more"))return;X3.log75open=!X3.log75open;X3.log75();});
 
 const r0=render;render=function(){const out=r0.apply(this,arguments);if(STEP===10){try{X3.chips75();}catch(e){}try{X3.tal75();}catch(e){}try{X3.log75();}catch(e){}}return out;};
-try{render();}catch(e){console.error(e);}
+/* одна перерисовка после всех слоёв, а не по одной на слой (старт был в 15 раз дольше) */
+X3.rq||(X3.rq=1,queueMicrotask(()=>{X3.rq=0;try{render();}catch(e){console.error(e);}}));
 })();
 
 /* ===== ux76: тексты — выстрел в долг виден до нажатия, отмена называет действие, без «Урон: Урон», два модификатора различимы, опечатки книги ===== */
@@ -21907,7 +21971,8 @@ X3.mods76=function(){const t=document.getElementById("tMod"),l=t&&t.closest("lab
 
 const r0=render;render=function(){const out=r0.apply(this,arguments);try{X3.debt76();}catch(e){}try{X3.mods76();}catch(e){}return out;};
 const bb0=X3.cbBar;if(bb0)X3.cbBar=function(){const out=bb0.apply(this,arguments);try{X3.debt76();}catch(e){}return out;};
-try{render();}catch(e){console.error(e);}
+/* одна перерисовка после всех слоёв, а не по одной на слой (старт был в 15 раз дольше) */
+X3.rq||(X3.rq=1,queueMicrotask(()=>{X3.rq=0;try{render();}catch(e){console.error(e);}}));
 })();
 
 /* ===== ux77: бой — отмена только действий, долг на всех кнопках с ценой и предупреждение о сумме, «без сознания» после крита ===== */
@@ -21960,7 +22025,8 @@ X3.koUI77=function(){const k=X3.ko77();document.body.classList.toggle("x77ko",!!
 const after=()=>{try{X3.debt77();}catch(e){}try{X3.koUI77();}catch(e){}};
 const r0=render;render=function(){const out=r0.apply(this,arguments);after();return out;};
 const bb0=X3.cbBar;if(bb0)X3.cbBar=function(){const out=bb0.apply(this,arguments);after();return out;};
-try{render();}catch(e){console.error(e);}
+/* одна перерисовка после всех слоёв, а не по одной на слой (старт был в 15 раз дольше) */
+X3.rq||(X3.rq=1,queueMicrotask(()=>{X3.rq=0;try{render();}catch(e){console.error(e);}}));
 })();
 
 /* ===== ux78: панель броска на телефоне — короче, закрывается касанием мимо, текст книги свёрнут ===== */
@@ -22011,7 +22077,8 @@ const after=()=>{try{X3.name79();}catch(e){}try{X3.minus79();}catch(e){}};
 const r0=render;render=function(){const out=r0.apply(this,arguments);after();return out;};
 const q0=renderRoom;renderRoom=function(){const out=q0.apply(this,arguments);try{X3.roomErr79();}catch(e){}try{X3.minus79();}catch(e){}return out;};
 const sp0=showPanel;showPanel=function(){const out=sp0.apply(this,arguments);try{X3.minus79();}catch(e){}return out;};
-try{render();}catch(e){console.error(e);}
+/* одна перерисовка после всех слоёв, а не по одной на слой (старт был в 15 раз дольше) */
+X3.rq||(X3.rq=1,queueMicrotask(()=>{X3.rq=0;try{render();}catch(e){console.error(e);}}));
 })();
 
 /* ===== ux80: создание персонажа — имя спрашивается, ОЗ и Очки судьбы не спрятаны, переброс говорит, что сбросил, «Далее» без класса не выглядит главным ===== */
@@ -22041,7 +22108,8 @@ X3.nameField80=function(){const fin=document.querySelector("#main .x3final");if(
 
 const after=()=>{try{X3.hp80();}catch(e){}try{X3.mark80();}catch(e){}try{X3.next80();}catch(e){}try{X3.nameField80();}catch(e){}};
 const r0=render;render=function(){const out=r0.apply(this,arguments);after();return out;};
-try{render();}catch(e){console.error(e);}
+/* одна перерисовка после всех слоёв, а не по одной на слой (старт был в 15 раз дольше) */
+X3.rq||(X3.rq=1,queueMicrotask(()=>{X3.rq=0;try{render();}catch(e){console.error(e);}}));
 })();
 
 /* ===== ux81: Сложный и Невозможный тест — один итог, расчёт свёрнут; нижнее меню с постоянными местами;
@@ -22146,7 +22214,8 @@ document.addEventListener("click",e=>{const c=e.target.closest&&e.target.closest
 
 const after=()=>{try{X3.reroll82();}catch(e){}try{X3.next82();}catch(e){}try{X3.birth82();}catch(e){}};
 const r0=render;render=function(){const out=r0.apply(this,arguments);after();return out;};
-try{render();}catch(e){console.error(e);}
+/* одна перерисовка после всех слоёв, а не по одной на слой (старт был в 15 раз дольше) */
+X3.rq||(X3.rq=1,queueMicrotask(()=>{X3.rq=0;try{render();}catch(e){console.error(e);}}));
 })();
 
 /* ===== ux83: «Миссия» разгружена; крит 8–9 закрывает действия («Мастер разрешил» открывает); урон отменяется и
@@ -22241,7 +22310,8 @@ const after=()=>{const ent=STEP===10&&lastStep!==10;try{X3.panelStep83();}catch(
 const r0=render;render=function(){const out=r0.apply(this,arguments);after();return out;};
 const bb0=X3.cbBar;if(bb0)X3.cbBar=function(){const out=bb0.apply(this,arguments);try{X3.mark83();}catch(e){}return out;};
 const sp0=showPanel;showPanel=function(){const out=sp0.apply(this,arguments);try{X3.cap83();X3.prim83();}catch(e){}return out;};
-try{render();}catch(e){console.error(e);}
+/* одна перерисовка после всех слоёв, а не по одной на слой (старт был в 15 раз дольше) */
+X3.rq||(X3.rq=1,queueMicrotask(()=>{X3.rq=0;try{render();}catch(e){console.error(e);}}));
 })();
 
 /* ===== ux85: по критике v87 — модификатор в бою не сворачивается; «Состояние и ранения» в «Миссии»: на виду урон и лечение, ручная правка свёрнута ===== */
@@ -22279,7 +22349,8 @@ const after=()=>{try{X3.chosen85();X3.mod85();}catch(e){console.error(e);}if(STE
   /* у «Миссии» нет видимого h2 — заголовки разделов (h3) шли сразу после h1; для чтения с экрана — скрытый h2 */
   const m=document.getElementById("main");if(m&&!m.querySelector("h2"))m.insertAdjacentHTML("afterbegin",`<h2 class="x85sr">Миссия</h2>`);};
 const r0=render;render=function(){const out=r0.apply(this,arguments);after();return out;};
-try{render();}catch(e){console.error(e);}
+/* одна перерисовка после всех слоёв, а не по одной на слой (старт был в 15 раз дольше) */
+X3.rq||(X3.rq=1,queueMicrotask(()=>{X3.rq=0;try{render();}catch(e){console.error(e);}}));
 })();
 
 /* ===== ux86: «Миссия» в бою — вкладки вместо ленты в три экрана.
@@ -22301,14 +22372,15 @@ const tagOf=el=>{if(el.classList.contains("mstrip")||el.classList.contains("x86t
   if(el.classList.contains("x83state"))return "dmg";
   if(el.classList.contains("x3tal"))return "tal";
   if(el.matches('.x40fold[data-x40="more"]'))return "tal";
-  if(el.matches('.x40fold[data-x40="sheet"]')||el.classList.contains("misbar"))return "sheet";
+  if(el.classList.contains("misbar"))return fight()?"sheet":"hod";
+  if(el.matches('.x40fold[data-x40="sheet"]'))return "sheet";
   return "hod";};
 
 X3.badge86=function(){const h=X3.hpNow39(),w=W(),bad=h.cur<h.max/2||(Number(w.crit)||0)>0||h.cur<=0;
   const log=C.cbLog||[];let n=0;if(X3.tab86!=="log"){const i=log.findIndex(x=>key(x)===X3.seen86);n=i<0?log.length:i;}
   return {dmg:`<span class="x86b ${bad?"bad":""}">${h.cur}/${h.max}</span>`,log:n?`<span class="x86b new" aria-label="новых записей: ${n}">${n}</span>`:""};};
 
-X3.tabs86=function(){const m=document.getElementById("main");document.body.classList.toggle("x86",!!(m&&fight()));if(!m||!fight()){if(m)delete m.dataset.x86t;return;}
+X3.tabs86=function(){const m=document.getElementById("main");document.body.classList.toggle("x86",!!(m&&STEP===10));if(!m||STEP!==10){if(m)delete m.dataset.x86t;return;}
   if(X3.tab86==="log")X3.seen86=key((C.cbLog||[])[0]);
   const t=X3.tab86,b=X3.badge86();
   let bar=m.querySelector(".x86tabs");if(!bar){bar=document.createElement("nav");bar.className="x86tabs noprint";bar.setAttribute("role","tablist");bar.setAttribute("aria-label","Разделы боя");const s=m.querySelector(".mstrip");if(s)s.after(bar);else m.prepend(bar);}
@@ -22339,12 +22411,13 @@ document.addEventListener("keydown",e=>{const b=e.target.closest&&e.target.close
 /* начало боя и новый ход — к «Ходу» */
 window.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-cbturn]");if(b)setTab("hod");},true);
 /* «К разделу …» в бою: сначала показать нужную вкладку (без перерисовки — кнопка перехода сама прокрутит) */
-window.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-jumpsec]");if(!b||!fight())return;const t=b.dataset.jumpsec==="Состояние и ранения"?"dmg":"sheet";setTab(t);
+window.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-jumpsec]");if(!b||STEP!==10)return;const t=b.dataset.jumpsec==="Состояние и ранения"?"dmg":"sheet";setTab(t);
   const m=document.getElementById("main");m.dataset.x86t=t;m.querySelectorAll("[data-x86tab]").forEach(x=>x.setAttribute("aria-selected",String(x.dataset.x86tab===t)));
   if(t==="sheet"){const f=m.querySelector('.x40fold[data-x40="sheet"]');if(f)f.open=true;}},true);
 
 const r0=render;render=function(){const out=r0.apply(this,arguments);try{X3.tabs86();}catch(e){console.error(e);}return out;};
-try{render();}catch(e){console.error(e);}
+/* одна перерисовка после всех слоёв, а не по одной на слой (старт был в 15 раз дольше) */
+X3.rq||(X3.rq=1,queueMicrotask(()=>{X3.rq=0;try{render();}catch(e){console.error(e);}}));
 })();
 
 /* ===== ux87: «Лист» — вкладки вместо 12 разделов подряд (до 6600 px).
@@ -22376,7 +22449,8 @@ window.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("
   document.querySelectorAll("[data-x87tab]").forEach(x=>x.setAttribute("aria-selected",String(x.dataset.x87tab===t)));sh.querySelectorAll(`:scope > details.sec[data-x87="${t}"]`).forEach(d=>{d.open=true;});},true);
 
 const r0=render;render=function(){const out=r0.apply(this,arguments);try{X3.tabs87();}catch(e){console.error(e);}return out;};
-try{render();}catch(e){console.error(e);}
+/* одна перерисовка после всех слоёв, а не по одной на слой (старт был в 15 раз дольше) */
+X3.rq||(X3.rq=1,queueMicrotask(()=>{X3.rq=0;try{render();}catch(e){console.error(e);}}));
 })();
 
 /* ===== ux88: быстрый доступ во время игры.
@@ -22433,7 +22507,7 @@ const ORD={m:["hod","dmg","tal","log","sheet"],l:["char","state","gear","tal","b
 let sw=null;
 const hScroll=(el,stop)=>{for(let n=el;n&&n!==stop;n=n.parentElement){if(n.scrollWidth>n.clientWidth+2&&/(auto|scroll)/.test(getComputedStyle(n).overflowX))return true;}return false;};
 document.addEventListener("touchstart",e=>{sw=null;if(e.touches.length!==1)return;const m=document.getElementById("main"),t=e.target;
-  if(!m||!m.contains(t)||!(STEP===7&&X3.tab87||fight()))return;if(t.closest("input,textarea,select,[contenteditable],.mstrip,.x86tabs,.x87tabs,[data-noswipe]")||hScroll(t,m))return;
+  if(!m||!m.contains(t)||!(STEP===7&&X3.tab87||STEP===10))return;if(t.closest("input,textarea,select,[contenteditable],.mstrip,.x86tabs,.x87tabs,[data-noswipe]")||hScroll(t,m))return;
   sw={x:e.touches[0].clientX,y:e.touches[0].clientY,t:Date.now()};},{passive:true});
 document.addEventListener("touchend",e=>{if(!sw)return;const p=e.changedTouches[0],dx=p.clientX-sw.x,dy=p.clientY-sw.y,dt=Date.now()-sw.t;sw=null;
   if(Math.abs(dx)<70||Math.abs(dx)<Math.abs(dy)*1.8||dt>600)return;
@@ -22442,7 +22516,7 @@ document.addEventListener("touchend",e=>{if(!sw)return;const p=e.changedTouches[
 
 /* ---------- 4. «Ход»: строка характеристик, касание — тест ---------- */
 const AB={rng:"ДБ",mel:"ББ",str:"С",agi:"Л",tou:"Ст",wil:"В",int:"Инт",wit:"Сооб",per:"Наб",cha:"Хар"};
-X3.stats88=function(){if(!fight())return;const c=document.querySelector("#main .combat");if(!c||c.querySelector(".x88stats"))return;
+X3.stats88=function(){if(STEP!==10)return;const c=document.querySelector("#main .combat");if(!c||c.querySelector(".x88stats"))return;
   const tiles=[...document.querySelectorAll('#main .stile [data-roll]')].filter(b=>AB[b.dataset.roll]);if(!tiles.length)return;
   const chips=tiles.map(b=>{const k=b.dataset.roll,v=(b.querySelector(".sval")||{}).textContent||"",n=LABEL[k]||k;
     return `<button type="button" class="x88s" data-x88roll="${k}" aria-label="Тест: ${E(n)} ${E(v)}"><span>${AB[k]}</span><b>${E(v)}</b></button>`;}).join("");
@@ -22450,7 +22524,145 @@ X3.stats88=function(){if(!fight())return;const c=document.querySelector("#main .
   at.insertAdjacentHTML("afterend",`<div class="x88stats"><div class="x88sh">Тест характеристики</div><div class="x88sg">${chips}</div></div>`);};
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-x88roll]");if(!b)return;const t=document.querySelector(`#main .stile [data-roll="${b.dataset.x88roll}"]`);if(t)t.click();});
 
-try{render();}catch(e){console.error(e);}
+/* одна перерисовка после всех слоёв, а не по одной на слой (старт был в 15 раз дольше) */
+X3.rq||(X3.rq=1,queueMicrotask(()=>{X3.rq=0;try{render();}catch(e){console.error(e);}}));
+})();
+
+/* ===== ux89: доступ без прокрутки.
+   1) вкладки «Листа» и боя, «К разделу …»: экран сразу встаёт на начало блока, без плавной прокрутки;
+   2) «Миссия», вкладка «Лист»: ряд Характ. · Трекеры · Снаряж. · Таланты; лента действий — вся на виду, без «Ещё» ===== */
+(function(){
+const E=s=>X3.esc(String(s==null?"":s));
+const fight=()=>STEP===10&&(CB().round||0)>0;
+const hdrNow=()=>parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--x3hdrh"))||0;
+const vis=el=>!!el&&el.getClientRects().length>0;
+/* прилипшая полоса страницы (вкладки или ряд быстрого доступа) */
+const bar=()=>[...document.querySelectorAll("#main .x87tabs,#main .x86tabs,#main .x89jump")].filter(vis).pop()||null;
+
+/* поставить el сразу под прилипшей полосой. Шапка на телефоне прячется при прокрутке вниз (ux19) — учесть, где она окажется */
+X3.go89=function(el,keep){if(!el)return;const b=bar(),hh=hdrNow();
+  const stick=b?(parseFloat(getComputedStyle(b).top)||0)-hh+b.offsetHeight:0;
+  /* keep — место, где вкладку оставили (ux88): если оно глубже начала блока, остаться там */
+  /* (заметно глубже: разница в высоту шапки — это ещё «начало») */
+  const y0=el.getBoundingClientRect().top+scrollY-stick-8,y=keep>y0+120?keep:y0;
+  const hides=X3.isPhone()&&(Math.abs(y-scrollY)<6?X3.hdr.hidden:(y>scrollY&&y>120));
+  const hd=document.querySelector("header.top"),full=hd&&X3.isPhone()?hd.getBoundingClientRect().height:0;
+  scrollTo({top:Math.max(0,hides?y:y-full),behavior:"instant"});};
+
+/* «К разделу …» и плитки строки состояния: мгновенно и под полосой */
+X3.jumpSec=function(name){if(X3.open40)X3.open40();const d=document.querySelector(`#main details.sec[data-sec="${name}"]`);if(!d)return false;if(!d.open)d.open=true;X3.go89(d);return true;};
+/* кнопки «К разделу …» (data-jumpsec): основной обработчик и ux3 прокручивают, не видя вкладок; кадр спустя — поправить начисто */
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-jumpsec]");if(!b)return;const s=b.dataset.jumpsec;
+  requestAnimationFrame(()=>{const d=document.querySelector(`#main details.sec[data-sec="${CSS.escape(s)}"]`);if(vis(d))X3.go89(d);});});
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-x89s]");if(b)X3.jumpSec(b.dataset.x89s);});
+
+/* вкладка выбрана — начало её содержимого сразу под вкладками; после ux88, который вернул бы к верху страницы */
+document.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest("[data-x87tab],[data-x86tab]");if(!t)return;
+  setTimeout(()=>{const b=bar();if(!b)return;let n=b.nextElementSibling;
+    if(n&&n.id==="sheet")n=[...n.children].filter(c=>vis(c)&&c.matches("details.sec")).sort((x,y)=>x.getBoundingClientRect().top-y.getBoundingClientRect().top)[0]||n; /* порядок на экране (ux90 ставит «Состояние» первым) */
+    while(n&&!vis(n))n=n.nextElementSibling;
+    const k=STEP===7?"l:"+X3.tab87:"m:"+X3.tab86;if(n)X3.go89(n,(X3.pos88||{})[k]);},0);});
+
+/* ---------- ряд быстрого доступа: «Миссия» → вкладка «Лист» (длинный лист целиком); «Состояние» — своя вкладка «Урон» ---------- */
+const MIS=[["Характ.","Характеристики"],["Трекеры","Трекеры"],["Снаряж.","Снаряжение"],["Таланты","Таланты"]];
+X3.jump89=function(){const m=document.getElementById("main");if(!m)return;let row=m.querySelector(".x89jump");
+  const items=STEP===10&&(X3.tab86||"hod")==="sheet"?MIS.filter(([,s])=>m.querySelector(`details.sec[data-sec="${s}"]`)).map(([l,s])=>`<button type="button" class="x86t" data-x89s="${E(s)}"${l!==s?` aria-label="${E(s)}"`:""}>${E(l)}</button>`):[];
+  if(!items.length){if(row)row.remove();return;}
+  if(!row){row=document.createElement("nav");row.className="x89jump noprint";row.dataset.noswipe="1";row.dataset.x86="sheet";row.setAttribute("aria-label","Быстрый переход по листу");
+    const h=m.querySelector(":scope > .x86tabs")||m.querySelector(":scope > .mstrip");if(h)h.after(row);else m.prepend(row);}
+  row.style.setProperty("--x89n",String(items.length));row.innerHTML=items.join("");};
+
+/* лента действий «Миссии» — вся на виду */
+X3.all83=true;
+
+const r0=render;render=function(){const out=r0.apply(this,arguments);try{X3.jump89();}catch(e){console.error(e);}return out;};
+X3.rq||(X3.rq=1,queueMicrotask(()=>{X3.rq=0;try{render();}catch(e){console.error(e);}}));
+})();
+
+/* ===== ux90: одна схема на всех страницах — вкладки наверху, внутри вкладки почти не листать.
+   1) «Лист»: вкладки сразу под шапкой, досье — во вкладке «Досье», «Создание не закончено» — одной строкой;
+   2) «Кубы»: вкладки Тест · Навыки · Страх · Калькулятор · История;
+   3) «Миссия» вне боя — те же вкладки, что в бою (ux86, ux88);
+   4) оружие: развёрнуто только то, что в руках, остальное — строкой;
+   5) «Состояние» в листе: ОЗ, урон и лечение на виду, ручная правка свёрнута (как в «Миссии», ux85);
+   6) «Тест» в шапке: 10 характеристик одним касанием с любой страницы ===== */
+(function(){
+const E=s=>X3.esc(String(s==null?"":s));
+const ls=(k,v)=>{try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v);}catch(e){}return null;};
+
+/* ---------- 1. «Лист»: вкладки наверху ---------- */
+X3.sheet90=function(){const m=document.getElementById("main");if(!m)return;if(STEP!==7){delete m.dataset.x90s;return;}
+  const bar=m.querySelector(":scope > .x87tabs");if(!bar)return;m.dataset.x90s=X3.tab87||"char";
+  const first=m.querySelector(":scope > .x41pend")||m.querySelector(":scope > .dossier");if(first&&first.previousElementSibling!==bar)first.before(bar);
+  /* досье — первым во вкладке «Досье» */
+  const dos=m.querySelector(":scope > .dossier"),sh=m.querySelector(":scope > #sheet");if(dos&&sh&&dos.nextElementSibling!==sh)sh.before(dos);};
+/* смена вкладки без перерисовки (ux87 «К разделу …») — досье следом */
+document.addEventListener("click",e=>{if(STEP===7&&e.target.closest&&e.target.closest("[data-x87tab],[data-jumpsec]")){const m=document.getElementById("main");if(m)m.dataset.x90s=X3.tab87||"char";}},true);
+
+/* ---------- 2. «Кубы»: вкладки ---------- */
+const DT=[["test","Тест",/^(Тест|Взывание|Повреждение техники)/],["skill","Навыки",/^Навыки/],["fear","Страх",/^Тест на Страх/],["calc","Калькулятор",/^Калькулятор/],["hist","История",/^История бросков/]];
+const LD="x90dice";
+X3.tab90=ls(LD)||"test";
+const h3=c=>((c.querySelector("h3")||{}).textContent||"").trim();
+const kind=c=>{const t=h3(c);const x=DT.find(([k,,re])=>k!=="test"&&re.test(t))||(DT[0][2].test(t)?DT[0]:null);return x?x[0]:null;};
+X3.dice90=function(){const m=document.getElementById("main");if(!m)return;if(STEP!==9){delete m.dataset.x90d;return;}
+  const cards=[...m.querySelectorAll(":scope > .card")];const have=new Set();cards.forEach(c=>{const k=kind(c);if(k){c.dataset.x90d=k;have.add(k);}});
+  const tabs=DT.filter(([k])=>have.has(k));if(!tabs.length)return;if(!have.has(X3.tab90))X3.tab90=tabs[0][0];const t=X3.tab90;
+  let bar=m.querySelector(":scope > .x90dt");if(!bar){bar=document.createElement("nav");bar.className="x87tabs x90dt noprint";bar.setAttribute("role","tablist");bar.setAttribute("aria-label","Разделы кубов");
+    const at=m.querySelector(":scope > .x3quick")||m.querySelector(":scope > h2");if(at)at.after(bar);else m.prepend(bar);}
+  bar.style.setProperty("--x90n",String(tabs.length));
+  bar.innerHTML=tabs.map(([k,l])=>`<button type="button" role="tab" class="x86t" data-x90tab="${k}" aria-selected="${k===t}">${E(l)}</button>`).join("");
+  m.dataset.x90d=t;cards.filter(c=>c.dataset.x90d===t).forEach(c=>{const d=c.querySelector(":scope > details");if(d&&!d.open&&t!=="test")d.open=true;});};
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-x90tab]");if(!b)return;X3.tab90=b.dataset.x90tab;ls(LD,X3.tab90);X3.dice90();
+  const m=document.getElementById("main"),c=m&&m.querySelector(`:scope > .card[data-x90d="${X3.tab90}"]`);if(c&&X3.go89)X3.go89(c);});
+document.addEventListener("keydown",e=>{const b=e.target.closest&&e.target.closest("[data-x90tab]");if(!b||(e.key!=="ArrowRight"&&e.key!=="ArrowLeft"))return;e.preventDefault();
+  const all=[...b.parentElement.children],i=all.indexOf(b),n=all[(i+(e.key==="ArrowRight"?1:all.length-1))%all.length];n.click();n.focus();});
+
+/* ---------- 3. «Миссия» вне боя: полоса ОЗ может отсутствовать — вкладкам не держать под неё место ---------- */
+const top0=X3.top86;X3.top86=function(){const s=document.querySelector("#main .mstrip");if(!s||!s.getClientRects().length){document.documentElement.style.setProperty("--x86sh","0px");return;}return top0&&top0.apply(this,arguments);};
+
+/* ---------- 4. оружие: развёрнуто одно ---------- */
+const LW="x90w";
+const wkey=r=>{const b=r.querySelector("[data-shoot],[data-dmg],[data-reload],[data-burst]");return b?(b.dataset.shoot||b.dataset.dmg||b.dataset.reload||b.dataset.burst):((r.querySelector(".cbwhd b")||{}).textContent||"");};
+X3.weap90=function(){if(STEP!==10)return;document.querySelectorAll("#main .cbw").forEach(box=>{const rows=[...box.querySelectorAll(":scope > .cbwrow")];if(rows.length<2)return;
+  const want=ls(LW),on=rows.find(r=>wkey(r)===want)||rows[0];
+  rows.forEach(r=>{const c=r!==on;r.classList.toggle("x90c",c);const hd=r.querySelector(".cbwhd");if(!hd)return;
+    if(c){hd.setAttribute("role","button");hd.tabIndex=0;hd.dataset.x90w=wkey(r);hd.setAttribute("aria-label",`Взять в руки: ${hd.textContent.replace(/\s+/g," ").trim()}`);}
+    else{hd.removeAttribute("role");hd.removeAttribute("tabindex");delete hd.dataset.x90w;hd.removeAttribute("aria-label");}});
+  if(on!==rows[0])rows[0].before(on);});};
+const pickW=h=>{ls(LW,h.dataset.x90w);X3.weap90();};
+document.addEventListener("click",e=>{const h=e.target.closest&&e.target.closest("[data-x90w]");if(h)pickW(h);});
+document.addEventListener("keydown",e=>{const h=e.target.closest&&e.target.closest("[data-x90w]");if(h&&(e.key==="Enter"||e.key===" ")){e.preventDefault();pickW(h);}});
+
+/* ---------- 5. «Состояние» в листе: как в «Миссии» ---------- */
+X3.state90=function(){if(STEP!==7)return;const sec=document.querySelector('#sheet > details.sec[data-sec="Состояние и ранения"]');if(!sec||sec.querySelector(".x85man"))return;
+  const pick=[":scope > .defpanel",":scope > .trk",":scope > label.inline",":scope > div.inline.noprint",":scope > p.note"].map(s=>sec.querySelector(s)).filter(Boolean);if(!pick.length)return;
+  const d=document.createElement("details");d.className="x85man";d.open=!!X3.man85;d.innerHTML=`<summary>Исправить вручную <small>ОЗ, критическое ранение, штрафы, броня, «Полностью здоров»</small></summary>`;
+  pick.forEach(n=>d.appendChild(n));sec.appendChild(d);d.addEventListener("toggle",()=>{X3.man85=d.open;});};
+
+/* ---------- 6. «Тест» в шапке: шторка с 10 характеристиками ---------- */
+const DICE='<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.8 20 7.4v9.2L12 21.2 4 16.6V7.4z"/><path d="M4 7.4 12 12l8-4.6M12 12v9.2"/></svg>';
+X3.hdr90=function(){const ok=!!(C&&C.cls&&C.cls.i!=null);let b=document.getElementById("x90testBtn");
+  if(!b){const row=document.querySelector("header.top .titlerow");const snd=document.getElementById("soundBtn");if(!row)return;
+    row.insertAdjacentHTML("beforeend",`<button type="button" class="iconbtn lab" id="x90testBtn" title="Тест характеристики" aria-label="Тест характеристики" aria-haspopup="dialog">${DICE}<span class="iblab">Тест</span></button>`);
+    b=document.getElementById("x90testBtn");const first=row.querySelector(".iconbtn:not(#x90testBtn)");if(first)first.before(b);}
+  b.hidden=!ok;};
+X3.testDlg90=function(){let R;try{R=compute(C);}catch(e){toast("Сначала выберите класс и бросьте характеристики");return;}
+  let d=document.getElementById("x90dlg");if(!d){document.body.insertAdjacentHTML("beforeend",`<dialog id="x90dlg" aria-labelledby="x90dh"></dialog>`);d=document.getElementById("x90dlg");
+    d.addEventListener("click",e=>{if(e.target===d)d.close();});}
+  const mod=Number(ROLLMOD)||0;
+  d.innerHTML=`<div class="x90dhd"><h3 id="x90dh">Тест характеристики</h3><button type="button" class="iconbtn" data-x90close aria-label="Закрыть"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+    <p class="note x90dn">d20 против значения${mod?` · модификатор ко всем тестам ${mod>0?"+":""}${mod}`:""}. Сложные и встречные тесты — в «Кубах».</p>
+    <div class="x90dg">${STATS.map(([k,n])=>`<button type="button" class="btn x38st" data-roll="${k}" aria-label="Тест: ${E(n)} ${E(R.tot[k])}"><span>${E(n)}</span><b>${E(R.tot[k])}</b></button>`).join("")}</div>`;
+  d.showModal();const f=d.querySelector("[data-roll]");if(f)f.focus();};
+document.addEventListener("click",e=>{if(!e.target.closest)return;if(e.target.closest("#x90testBtn")){X3.testDlg90();return;}
+  const d=document.getElementById("x90dlg");if(!d||!d.open)return;if(e.target.closest("[data-x90close]")){d.close();return;}
+  /* бросок делает общий обработчик [data-roll]; шторку закрыть после него, чтобы итог был виден */
+  if(e.target.closest("#x90dlg [data-roll]"))setTimeout(()=>d.close(),0);});
+
+const r0=render;render=function(){const out=r0.apply(this,arguments);
+  for(const f of [X3.sheet90,X3.dice90,X3.weap90,X3.state90,X3.hdr90])try{f();}catch(e){console.error(e);}return out;};
+X3.rq||(X3.rq=1,queueMicrotask(()=>{X3.rq=0;try{render();}catch(e){console.error(e);}}));
 })();
 </script>
 </body>

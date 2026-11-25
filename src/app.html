@@ -1837,8 +1837,7 @@ body.x40fight.x3cbseen .x3cbbar{transform:none!important;opacity:1!important;poi
 
   /* шторка в бою: модификатор уже в полосе, отступы плотнее; расшифровка остаётся открытой */
   body.x40fight #rollPanel label:has(#rollMod){display:none}
-  body.x40fight #rollPanel .x38acts{margin-top:6px;padding-top:6px;width:calc(100% + 40px);flex-wrap:nowrap}
-  body.x40fight #rollPanel .x38acts .btn{white-space:nowrap}
+  body.x40fight #rollPanel .x38acts{margin-top:6px;padding-top:6px;width:100%;flex-wrap:wrap}
   body.x40fight #toTop{display:none!important}
 }
 /* совсем узко: число вместо фишек, кнопки ± остаются */
@@ -2719,6 +2718,16 @@ body.mis99off .combat.x49pre button.cbini{background:var(--panel)!important;colo
 body.x40fight .mis99.on{display:none}
 [data-go="10"].mis99nav{position:relative}
 [data-go="10"].mis99nav::after{content:"";position:absolute;top:6px;right:calc(50% - 22px);width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 2px var(--bg)}
+/* ux101: «Миссия» по фазам. Вне миссии — только плашка, ОЗ/Судьба и разделы; до боя — без счётчика действий и реакций */
+body.mis99off #main[data-x86t="hod"] > [data-x86~="hod"]:not(.mis99):not(.x101off){display:none!important}
+.x101off{margin:0 0 10px;padding:10px 12px;border:1px dashed var(--line);border-radius:6px;font-size:14px;line-height:1.4}
+body:not(.mis99off) .x101off,#main:not([data-x86t="hod"]) > .x101off{display:none!important}
+body.x101pre #main .combat .cbactrow,body.x101pre #main .combat .cbreact{display:none!important}
+/* ux101: крупный системный шрифт — переносить, а не резать */
+body.x86 #main .x86tabs{display:flex!important;flex-wrap:wrap;overflow:visible}
+body.x86 #main .x86tabs .x86t{flex:1 1 auto}
+.mstrip .msl{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;hyphens:auto!important}
+#x3cbbar .cbb{white-space:normal!important;hyphens:manual!important;overflow-wrap:anywhere}
 </style>
 </head>
 <body>
@@ -2783,7 +2792,7 @@ body.x40fight .mis99.on{display:none}
   <div class="inline" style="justify-content:space-between"><h3 style="font-family:var(--narrow);margin:0">Звуки</h3><button class="btn" id="soundClose">Закрыть</button></div>
   <div id="soundBody"></div>
 </dialog>
-<dialog id="confirmDlg" style="max-width:min(420px,92vw)">
+<dialog id="confirmDlg" aria-label="Подтверждение" aria-describedby="confirmText" style="max-width:min(420px,92vw)">
   <p id="confirmText" style="font-size:16px;margin:4px 0 14px"></p>
   <div class="inline" style="justify-content:flex-end"><button class="btn" id="confirmNo">Отмена</button><button class="btn primary" id="confirmYes">Подтвердить</button></div>
 </dialog>
@@ -14836,7 +14845,7 @@ function stepStatus(c,R,i){
   switch(i){
     case 0: return c.cls.i==null?"":(P("cls")||(parseBase(c).choose&&parseBase(c).keys.length<2)||c.gear.some(g=>g.src==="class"&&g.opts&&!g.picked)||c.talents.some(t=>t.src==="class"&&t.opts&&!t.picked)||c.gear.some(g=>g.src==="class"&&g.kit&&!g.picked)||c.talents.some(t=>t.src==="class"&&t.kit&&!t.picked)?"pending":"done");
     case 1: { const kept=keptPool(c); const assigned=SKEYS.filter(k=>c.stats.assign[k]!=null).length;
-      if(!c.stats.pool.length) return ""; const fv=kept.filter(v=>Number(v)===5).length; return (assigned===10&&c.stats.hp!=null&&c.stats.fate!=null&&poolValid(c)&&!(c.settings.fives&&fv>2))?"done":"pending"; }
+      if(!c.stats.pool.length) return ""; const fv=kept.filter(v=>Number(v)===5).length; return (assigned===10&&c.stats.hp!=null&&c.stats.fate!=null&&poolValid(c)&&!(c.settings.fives&&!c.stats.fv5&&fv>2))?"done":"pending"; }
     case 2: return c.birth.nation==null?"":(c.birth.variant==null||P("birth")?"pending":"done");
     case 3: return c.parents.i==null?"":(P("parents")||(BOOK.parents[c.parents.i].name==="Новая аристократия"&&!(c.parents.ans.aristoMid&&c.merits.some(m=>m.id===c.parents.ans.aristoMid)))?"pending":"done");
     case 4: return c.char.i==null?"":(P("char")?"pending":"done");
@@ -15029,7 +15038,7 @@ function renderInner(){
 function navBtns(){
   const i=CREATE.indexOf(STEP); if(i<0) return "";
   const prev=CREATE[i-1], next=CREATE[i+1];
-  const sk=STEP<7?`<div class="skiprow noprint">${C.skip&&C.skip[STEP]?`<span class="note">Этап пропущен — лист открывается и без него.</span><button class="btn small" data-skipstep="${STEP}">Вернуть этап</button>`:`<button class="btn small" data-skipstep="${STEP}" title="Для переноса уже готового персонажа: этап не будет требоваться">Пропустить этап</button>`}${STEP===0?`<button class="btn small" data-skipall="1" title="Отметить все незаконченные этапы пропущенными и открыть лист">Пропустить всё и открыть лист</button><button class="btn small" data-legacy="1" title="Перенести готового персонажа и вписать его значения вручную">У меня уже есть персонаж</button>`:""}</div>`:"";
+  const sk=STEP<6?`<div class="skiprow noprint">${C.skip&&C.skip[STEP]?`<span class="note">Этап пропущен — лист открывается и без него.</span><button class="btn small" data-skipstep="${STEP}">Вернуть этап</button>`:`<button class="btn small" data-skipstep="${STEP}" title="Для переноса уже готового персонажа: этап не будет требоваться">Пропустить этап</button>`}${STEP===0?`<button class="btn small" data-skipall="1" title="Отметить все незаконченные этапы пропущенными и открыть лист">Пропустить всё и открыть лист</button><button class="btn small" data-legacy="1" title="Перенести готового персонажа и вписать его значения вручную">У меня уже есть персонаж</button>`:""}</div>`:"";
   return sk+`<div class="navbtns noprint">${prev!=null?`<button class="btn" data-go="${prev}">Назад: ${STEPS[prev]}</button>`:"<span></span>"}${STEP===6?`<span class="x100fin"><button class="btn" data-go="8" title="Необязательный этап: предметы и бонусы, которые выдаёт Мастер" aria-label="Академия, необязательный этап">Академия</button><button class="btn primary" data-go="7">Готово: открыть лист</button></span>`:next!=null?`<button class="btn primary" data-go="${next}">Далее: ${STEPS[next]}</button>`:`<button class="btn primary" data-go="7">Открыть лист персонажа</button>`}</div>`;
 }
 function stamp(v,key){const hit=LASTSTAMP===key;if(hit)LASTSTAMP=null;return `<span class="stamp ${hit?"hit":""}" aria-label="Результат броска ${esc(v)}">${esc(v)}</span>`;}
@@ -15255,16 +15264,16 @@ function stStats(R){
   const fives = kept.filter(v=>Number(v)===5).length;
   const avail={};kept.forEach(v=>avail[v]=(avail[v]||0)+1);
   SKEYS.forEach(k=>{const v=s.assign[k];if(v!=null)avail[v]=(avail[v]||0)-1;});
-  const poolUI = s.pool.length?`<div class="chips" role="group" aria-label="Результаты бросков">${s.pool.map((v,i)=>`<button class="chip ${i===s.drop?"drop":""} ${Number(v)===5?"five":""}" data-drop="${i}" aria-pressed="${i===s.drop}" title="${i===s.drop?"Отброшен":"Нажмите, чтобы отбросить"}">${v}</button>`).join("")}</div>
+  const poolUI = s.pool.length?`<div class="chips" role="group" aria-label="Результаты бросков">${s.pool.map((v,i)=>`<button class="chip ${i===s.drop?"drop":""} ${Number(v)===5?"five":""}" data-drop="${i}" aria-pressed="${i===s.drop}" aria-label="Кубик ${i+1}: ${v}${i===s.drop?", отброшен":""}" title="${i===s.drop?"Отброшен":"Нажмите, чтобы отбросить"}">${v}</button>`).join("")}</div>
     <p class="note">Нажмите на кубик, чтобы отбросить его. Остаются 10 результатов. Значения можно исправить, если бросали свои кубы.</p>
     <details><summary>Ввести свои результаты</summary><div class="chips">${s.pool.map((v,i)=>`<span class="chip"><input type="number" min="1" max="5" value="${v}" data-poolv="${i}" aria-label="Куб ${i+1}"></span>`).join("")}</div></details>`:"";
   let fiveUI="";
-  if(s.pool.length&&s.drop!=null&&fives>2) fiveUI = C.settings.fives?`<div class="fivebox"><div><b>Среди оставленных ${fives} пятёрки.</b> По правилу пятёрки сверх двух перебрасываются, повторная пятёрка остаётся.</div><button class="btn primary bigbtn" id="rerollFives">Перебросить ${fives-2} ${fives-2===1?"пятёрку":"пятёрки"}</button></div>`:`<div class="note">Пятёрок больше двух, переброс отключён в правилах группы.</div>`;
+  if(s.pool.length&&s.drop!=null&&fives>2&&!s.fv5) fiveUI = C.settings.fives?`<div class="fivebox"><div><b>Среди оставленных ${fives} пятёрки.</b> По правилу пятёрки сверх двух перебрасываются, повторная пятёрка остаётся.</div><button class="btn primary bigbtn" id="rerollFives">Перебросить ${fives-2} ${fives-2===1?"пятёрку":"пятёрки"}</button></div>`:`<div class="note">Пятёрок больше двух, переброс отключён в правилах группы.</div>`;
   const opts=(k)=>{const cur=s.assign[k];const vals=[1,2,3,4,5].filter(v=>(avail[v]||0)>0||Number(cur)===v);return `<select class="sel" data-assign="${k}" aria-label="${LABEL[k]}" ${s.drop==null?"disabled":""}><option value="">—</option>${vals.map(v=>`<option ${Number(cur)===v?"selected":""}>${v}</option>`).join("")}</select>`;};
   const left=Object.entries(avail).filter(([,n])=>n>0).map(([v,n])=>n>1?`${v}×${n}`:v).join(", ");
   const dropWarn=s.pool.length&&s.drop==null?`<div class="warnbox orange">Сначала отбросьте один из 11 кубиков: нажмите на него. Без этого распределять значения нельзя.</div>`:"";
   return `<h2>Характеристики</h2><p class="lead">Бросьте 11 кубов d10/2 с округлением вверх, отбросьте один и распределите 10 результатов. База каждой характеристики ${R.base}.</p>
-  <div class="card"><div class="rollrow"><button class="btn primary" id="rollPool">${s.pool.length?"Перебросить все 11":"Бросить 11 кубов"}</button></div>${dropWarn}${poolUI}${fiveUI}</div>
+  <div class="card"><div class="rollrow"><button class="btn primary" id="rollPool">${s.pool.length?"Перебросить все 11":"Бросить кубы, ОЗ и Судьбу"}</button>${s.pool.length?`<button class="btn" id="autoAssign" title="Отбросить меньший кубик, большие значения — в опору класса">Распределить по классу</button>`:""}</div>${dropWarn}${poolUI}${fiveUI}</div>
   ${s.pool.length?`<div class="card"><h3>Распределение</h3><p class="note">${s.drop==null?"Сначала отбросьте один кубик.":(left?"Осталось распределить: "+left:"Все результаты распределены.")}</p>
   <div class="statgrid">${STATS.map(([k,n,t])=>`<div class="statrow ${s.drop!=null?(s.assign[k]!=null?"asg":"unasg"):""}"><span class="${baseKeys.includes(k)?"basestat":""}" ${baseKeys.includes(k)?'title="Базовая характеристика класса"':""}>${icon(k)} ${n}</span>${opts(k)}<span class="tot" title="С учётом всех модификаторов">${R.tot[k]}</span></div>`).join("")}</div>
   <p class="note">Справа итог с учётом класса и уже выбранных шагов.</p>${baseStatsUI(R)}</div>`:""}
@@ -15286,7 +15295,7 @@ function stBirth(R){
     if(R.vr) body+=`<div class="card"><h3>${esc(R.vr.name)}</h3>${birthBlocks(vrText(R,false))}${choicesUI(R.steps.birth,"birth")}${fxSummary(R.steps.birth)}</div>`;
   }
   return `<h2>Место рождения</h2><p class="lead">Бросьте 2d6 и запишите выпавшие цифры подряд: первый кубик — десятки, второй — единицы. Например, 2 и 3 дают 23.</p>
-  <div class="card"><div class="rollrow">${b.d66?stamp(b.d66.join(""),"d66")+`<span class="note">${b.d66[0]} и ${b.d66[1]}</span>`:""}<button class="btn primary" id="rollBirth">Бросить 2d6</button><select class="sel" id="natSel"><option value="">или выбрать…</option>${natOpts}</select></div></div>${body}`;
+  <div class="card"><div class="rollrow">${b.d66?stamp(b.d66.join(""),"d66")+`<span class="note">${b.d66[0]} и ${b.d66[1]}</span>`:""}<button class="btn primary" id="rollBirth">Бросить 2d6</button><select class="sel" id="natSel" aria-label="Место рождения: выбрать из списка"><option value="">или выбрать…</option>${natOpts}</select></div></div>${body}`;
 }
 /* generic table step */
 function tableStep(title,lead,list,st,dice,scope,R,label){
@@ -15324,14 +15333,14 @@ function stSheet(R){
   const bk=parseBase(C).keys;
   const TILE_ORDER=["rng","mel","str","agi","wil","tou","int","wit","per","cha"];
   const statRows = sheetEditOn()?sheetEditTiles(R,TILE_ORDER):TILE_ORDER.map(k=>{const n=LABEL[k];const ms=modsFor(R,k);const base=bk.includes(k);
-    return `<div data-ik="s:${k}" class="stile ${base?"isbase":""}" style="--len:${Math.max(n.length,11)}"><button class="stbtn" data-roll="${k}" title="Бросить d20 на ${n}${base?" (базовая характеристика класса)":""}">${icon(k,"ico sico")}<span class="sname">${n}</span><span class="sval">${R.tot[k]}</span></button>
+    return `<div data-ik="s:${k}" class="stile ${base?"isbase":""}" style="--len:${Math.max(n.length,11)}"><button class="stbtn" data-roll="${k}" aria-label="${n} ${R.tot[k]}${base?", базовая для класса":""}. Бросить d20" title="Бросить d20 на ${n}${base?" (базовая характеристика класса)":""}">${icon(k,"ico sico")}<span class="sname">${n}</span><span class="sval">${R.tot[k]}</span></button>
     ${upBtn(R,k,n)}
     ${ms.length||statLevel(k)?`<div class="smods mods">${ms.map(m=>`<span class="${m.v>0?"pos":"neg"}">${sgn(m.v)} (${esc(m.src)})</span>`).join(" ")}${statLevel(k)?` <button class="jump ph noprint" data-unstat="${k}">отменить прокачку</button>`:""}</div>`:""}</div>`;}).join("");
   const sectionH=(title,html,id="")=>html?`<details class="entry" ${id?`id="det-${id}"`:""}><summary><h5 style="display:inline">${title}</h5></summary><div class="secin">${html}</div></details>`:"";
   const section=(title,obj,extra="",id="")=>obj?`<details class="entry" ${id?`id="det-${id}"`:""}><summary><h5 style="display:inline">${title}</h5></summary><div class="rules">${extra}${paras(obj)}</div></details>`:"";
   return `<div class="inline" style="justify-content:space-between;align-items:flex-end"><div><h2>Лист персонажа</h2></div>${isFinished(C)?"":`<button class="btn noprint" data-go="${C.lastStep??0}">Вернуться к созданию</button>`}</div>
   ${pend.length?`<div class="warnbox noprint">Не завершены шаги: ${pend.join(", ")}.</div>`:""}
-  <div class="noprint sheetacts"><button class="btn primary" id="openMission">${misOn()?"Завершить миссию":"Начать миссию"}</button><button class="btn ${sheetEditOn()?"primary":""}" id="sheetEdit" aria-pressed="${sheetEditOn()}">${sheetEditOn()?"Готово":"Редактировать лист"}</button><details class="more"><summary class="btn">Ещё</summary><div class="morepop">${!C.legacy&&!isFinished(C)?`<button class="btn" data-legacy="1" title="Перенести готового персонажа: все этапы создания пропускаются, значения вписываются вручную">У меня уже есть персонаж</button>`:""}<button class="btn" data-roomopen="1">${roomBtnLabel()}</button>${NATIVE?"":`<button class="btn" id="printBtn">Печать или PDF</button>`}<button class="btn" id="dlSheet">${NATIVE?"Поделиться листом":"Скачать лист (.html)"}</button></div></details></div>
+  <div class="noprint sheetacts"><button class="btn primary" id="openMission">${misOn()?"Завершить миссию":"Начать миссию"}</button><button class="btn ${sheetEditOn()?"primary":""}" id="sheetEdit" aria-pressed="${sheetEditOn()}">${sheetEditOn()?"Готово":"Редактировать лист"}</button><details class="more"><summary class="btn">Ещё</summary><div class="morepop">${!C.legacy&&!isFinished(C)?`<button class="btn" data-legacy="1" title="Перенести готового персонажа: все этапы создания пропускаются, значения вписываются вручную">У меня уже есть персонаж</button>`:""}<button class="btn" id="settingsBtn">Правила группы и настройки</button>${NATIVE?"":`<button class="btn" id="printBtn">Печать или PDF</button>`}<button class="btn" id="dlSheet">${NATIVE?"Поделиться листом":"Скачать лист (.html)"}</button></div></details></div>
   ${sheetEditOn()?sheetEditPanel(R,res,ini):""}<div class="sheet" id="sheet">
   <h3>Общие сведения</h3>
   <div class="kv">
@@ -16108,7 +16117,7 @@ function stMission(R){
   const ini=2*R.tot.agi+(R.extra.ini||0); const f=C.stats.fate!=null?fateInfo():null;
   const sv=p=>`<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
   const mj=(attr,ico,lbl,cls="",title="")=>`<button class="mj ${cls}" ${attr} title="${esc(title||lbl.replace(/<[^>]+>/g,""))}">${ico}<span>${lbl}</span></button>`;
-  return misBanner()+`<div class="misbar noprint"><div class="misjump">
+  return misBanner()+(misOn()?"":`<div class="x101off note noprint">Бой, тесты и Взывание к Силам появятся здесь, когда миссия начнётся. Вне миссии характеристику можно проверить на Листе.</div>`)+`<div class="misbar noprint"><div class="misjump">
     ${mj(`data-rollini="${ini}"`,icon("agi"),"Инициатива","prim")}
     ${f?mj('id="openFate"',sv('<path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/>'),`Судьба ${f.left}/${f.tot}`,"","Очки судьбы"):""}
     ${mj('id="openInfl"',icon("infl"),"Запрос")}
@@ -16623,7 +16632,7 @@ function missionItems(){
     if(f[1]==="duskfate"){const k=karma(R);it.start.push({key:"df_"+m.id,label:`${m.title}: d3 дополнительных Очков судьбы, пока светлой и тёмной кармы поровну (сейчас ${k.light}/${k.dark})`,def:k.light===k.dark});}});
   if(R.mark&&R.mark.name==="Душа единения") it.start.push({key:"soul",label:"Душа единения: d3+1 Очков судьбы для союзников",def:true});
   const act=R.temps.filter(t=>t.active).length;
-  it.end.push({key:"temps",label:`Временные эффекты одолжений: уменьшить срок на 1 миссию${act?` (активных: ${act})`:" (активных нет)"}`,def:act>0});
+  if(act)it.end.push({key:"temps",label:`Временные эффекты одолжений: уменьшить срок на 1 миссию (активных: ${act})`,def:true});
   if((C.missionMods||[]).length) it.end.push({key:"mmods",label:"Снять бонусы «до конца миссии» ("+C.missionMods.map(m=>LABEL[m.k]+" "+sgn(m.v)).join(", ")+")",def:true});
   if(ch==="Патриот"){const n=(C.missionCount||0)+1;it.end.push({key:"patriot",label:`Патриот: миссия №${n}${n%5===0?" — бросок d6 на одолжение своей страны":" (бросок на одолжение каждые 5 миссий)"}`,def:n%5===0});}
   if(C.fateUsed) it.end.push({key:"fate",label:`Вернуть активированные Очки судьбы (${C.fateUsed})`,def:true});
@@ -16649,7 +16658,7 @@ function misBanner(){const n=misOn();
   return n?`<div class="mis99 on noprint" role="status"><span class="mis99i">${FLAG99}</span><div class="mis99t"><b>Миссия №${n} идёт</b><span class="note">Когда задание закончено — завершите её здесь</span></div><button class="btn" id="openMission">Завершить миссию</button></div>`
    :`<div class="mis99 off noprint"><span class="mis99i">${FLAG99}</span><div class="mis99t"><b>Миссия не начата</b><span class="note">Нажмите, когда группа выходит на задание. Завершить её можно будет здесь же</span></div><button class="btn primary" id="openMission">Начать миссию</button></div>`;}
 function misLeft(){const R=compute(C),w=W(),cur=w.cur==null?R.hp:Number(w.cur),br=(C.gear||[]).filter(g=>g.x3broken).map(g=>esc(g.name||"оружие")),L=[];
-  if(cur<R.hp)L.push(`ОЗ ${cur} из ${R.hp} — лечение по решению Мастера, вкладка «Состояние»`);if(br.length)L.push(`Сломано: ${br.join(", ")} — ремонт в карточке оружия`);
+  if(cur<R.hp)L.push(`ОЗ ${cur} из ${R.hp} — лечение по решению Мастера, вкладка «Состояние»`);if(br.length)L.push(`Сломано: ${br.join(", ")} — ремонт в карточке оружия`);{const A=armorInfo(R);if(A.total>0&&w.dur!=null&&w.dur<A.total)L.push(`Прочность брони ${w.dur} из ${A.total} — ремонт по решению Мастера, вкладка «Состояние»`);}
   return L.length?`<div class="warnbox" style="margin:6px 0 8px"><b>Само не восстановится:</b><br>${L.join("<br>")}</div>`:"";}
 function openMissionDlg(){MISSION={res:[],ph:misOn()?"end":"start",n:misOn()||(C.missionCount||0)+1};renderMission();$("#missionDlg").showModal();}
 function renderMission(){
@@ -17003,8 +17012,9 @@ document.addEventListener("click",e=>{
     askConfirm(msg,()=>{const idx=C.buys.map(b=>b.tid).lastIndexOf(i);if(idx>=0)C.buys.splice(idx,1);render();toast(bs.length>1?"Уровень снят":"Талант убран");});return;}
   if(d.addle){const id=uid();C[d.addle].push({id,title:"",text:""});EDITG.add(id);render();const el=document.querySelector(`input[data-le="${d.addle}|${id}|title"]`);if(el)el.focus();return;}
   switch(t.id){
-    case "rollPool": C.stats.pool=Array.from({length:11},()=>Math.ceil(rnd(10)/2));C.stats.drop=null;C.stats.assign={};render();break;
-    case "rerollFives":{let seen=0;const k=keptPool(C);let idx=C.stats.pool.map((v,i)=>i).filter(i=>i!==C.stats.drop);idx.forEach(i=>{if(Number(C.stats.pool[i])===5){seen++;if(seen>2)C.stats.pool[i]=Math.ceil(rnd(10)/2);}});pruneAssign();render();toast("Лишние пятёрки переброшены");break;}
+    case "rollPool":{const P=Array.from({length:11},()=>Math.ceil(rnd(10)/2));const msg=[];if(C.settings.fives){let seen=0;const was=[];P.forEach((v,i)=>{if(v===5&&++seen>2){P[i]=Math.ceil(rnd(10)/2);was.push(P[i]);}});if(was.length)msg.push(`лишние пятёрки (${was.length}) переброшены: ${was.join(", ")}`);}C.stats.pool=P;C.stats.fv5=true;C.stats.drop=null;C.stats.assign={};if(C.stats.hp==null){C.stats.hp=rnd(5)+10;msg.push("ОЗ "+C.stats.hp);}if(C.stats.fate==null){C.stats.fate=rnd(3)+3;msg.push("Очки судьбы "+C.stats.fate);}render();if(msg.length)toast("Брошено: "+msg.join("; "));break;}
+    case "autoAssign":{const st=C.stats;if(st.drop==null){let m=0;st.pool.forEach((v,i)=>{if(Number(v)<Number(st.pool[m]))m=i;});st.drop=m;}const vals=keptPool(C).map(Number).sort((a,b)=>b-a),bk=parseBase(C).keys,ord=[...bk,...SKEYS.filter(k=>!bk.includes(k))];st.assign={};ord.forEach((k,i)=>st.assign[k]=vals[i]);render();toast("Распределено: большие значения — в опору класса. Любое можно поменять.");break;}
+    case "rerollFives":{let seen=0;const k=keptPool(C);let idx=C.stats.pool.map((v,i)=>i).filter(i=>i!==C.stats.drop);idx.forEach(i=>{if(Number(C.stats.pool[i])===5){seen++;if(seen>2)C.stats.pool[i]=Math.ceil(rnd(10)/2);}});C.stats.fv5=true;pruneAssign();render();toast("Лишние пятёрки переброшены");break;}
     case "rollHp": C.stats.hp=rnd(5)+10;LASTSTAMP="hp";render();break;
     case "rollFate": C.stats.fate=rnd(3)+3;LASTSTAMP="fate";render();break;
     case "rollBirth":{const a=rnd(6),b=rnd(6);C.birth={d66:[a,b],nation:nationByD66(a,b),variant:null,ans:{}};LASTSTAMP="d66";render();break;}
@@ -17028,8 +17038,7 @@ document.addEventListener("click",e=>{
     case "confirmNo": CONFIRM_CB=null;$("#confirmDlg").close();break;
     case "openMission": openMissionDlg();break;
     case "missionClose": $("#missionDlg").close();break;
-    case "misStart": missionRun("start");render();renderMission();break;
-    case "misEnd": missionRun("end");render();renderMission();break;
+    case "misStart": case "misEnd":{const ph=t.id==="misStart"?"start":"end";missionRun(ph);$("#missionDlg").close();render();toast((ph==="start"?`Миссия №${C.misOn} начата`:"Миссия завершена")+(MISSION.res.length?". "+MISSION.res.join(" ").replace(/<[^>]+>/g,"")+" (записано в Журнал)":""));break;}
     case "openFate": renderFate("");$("#fateUf").hidden=true;$("#fateDlg").showModal();break;
     case "fateUfRoll": ufRoll($("#fateUfForce").value);$("#fateUfRes").innerHTML=ufHtml();$("#fateUfRoll").disabled=true;break;
     case "fateClose": $("#fateDlg").close();break;
@@ -17162,7 +17171,7 @@ document.addEventListener("keydown",e=>{const d=e.target.dataset;if(d&&d.txt&&(e
 $("#charSel").addEventListener("change",e=>{
   if(e.target.value==="__new"){const c=blank();DB.chars.push(c);C=c;STEP=0;render();scrollTo(0,0);toast("Создан новый персонаж");return;}
   C=DB.chars.find(c=>c.id===e.target.value);STEP=C.step||0;render();});
-(document.getElementById("settingsBtn")||document.createElement("i")).addEventListener("click",()=>{$("#reopenBox").hidden=!isFinished(C);$("#setBase").value=C.settings.base;$("#setFives").checked=!!C.settings.fives;$("#setHardT").value=C.settings.hardT||"n";$("#setReload").value=C.settings.reload??2;$("#settingsDlg").showModal();});
+document.addEventListener("click",e=>{if(!e.target.closest||!e.target.closest("#settingsBtn"))return;const mo=e.target.closest("details.more");if(mo)mo.open=false;$("#reopenBox").hidden=!isFinished(C);$("#setBase").value=C.settings.base;$("#setFives").checked=!!C.settings.fives;$("#setHardT").value=C.settings.hardT||"n";$("#setReload").value=C.settings.reload??2;$("#settingsDlg").showModal();});
 $("#reopenCreate").addEventListener("click",()=>{C.finished=false;C.reopen=true;$("#settingsDlg").close();STEP=C.lastStep??0;render();scrollTo(0,0);});
 $("#setClose").addEventListener("click",()=>{C.settings.base=Number($("#setBase").value)||0;C.settings.fives=$("#setFives").checked;C.settings.hardT=$("#setHardT").value;C.settings.reload=Math.max(0,Number($("#setReload").value)||0);$("#settingsDlg").close();render();});
 $("#ioBtn").addEventListener("click",()=>{$("#pasteIn").value="";VAULT.list=null;VAULT.other=null;vaultUI();$("#reopenBox2").hidden=!isFinished(C);$("#ioDlg").showModal();});
@@ -17953,7 +17962,7 @@ function renderRoomInner(body){ROOM.dirty=false;
   let h="";
   if(!roomCfgOk()||ROOM.editCfg) h=cfgForm;
   else if(!st) h=`<p class="lead">Игроки заходят в комнату по коду. Мастер видит их листы и может добавлять модификаторы на миссию.</p>
-    <div class="card"><h3 style="margin-top:0">Я игрок</h3><div class="note">Войдёт текущий персонаж: <b>${esc(C.name||"Без имени")}</b></div><div class="inline" style="gap:6px;margin-top:8px"><input class="inp" id="rmCode" placeholder="Код комнаты" maxlength="8" style="width:150px;text-transform:uppercase;font-size:18px;letter-spacing:2px" autocomplete="off"><button class="btn primary" data-room="join" ${ROOM.busy?"disabled":""}>Войти</button></div></div>
+    <div class="card"><h3 style="margin-top:0">Я игрок</h3><div class="note">Войдёт текущий персонаж: <b>${esc(C.name||"Без имени")}</b></div><div class="inline" style="gap:6px;margin-top:8px"><input class="inp" id="rmCode" aria-label="Код комнаты" placeholder="Код комнаты" maxlength="8" style="width:150px;text-transform:uppercase;font-size:18px;letter-spacing:2px" autocomplete="off"><button class="btn primary" data-room="join" ${ROOM.busy?"disabled":""}>Войти</button></div></div>
     <div class="card"><h3 style="margin-top:0">Я мастер</h3><button class="btn primary" data-room="create" ${ROOM.busy?"disabled":""}>Создать комнату</button>${gmRoomsHTML()}</div>
     <button class="jump ph" data-room="cfgedit" style="margin-top:8px">настройки сервера</button>`;
   else if(st.role==="player"){const c=roomChar();const mods=(c&&c.gmMods)||[];
@@ -18276,7 +18285,7 @@ X3.after=function(){const main=document.getElementById("main");if(!main||typeof 
     const calc=[...main.children].find(n=>/^\s*Калькулятор/.test((n.querySelector("summary,h3")||{}).textContent||""));const hist=[...main.children].find(n=>/История бросков/.test(n.textContent.slice(0,60)));
     const uf=[...main.children].find(n=>/Безудержные Силы/.test((n.querySelector("summary,h3")||{}).textContent||""));if(uf)uf.insertAdjacentHTML("afterend",X3.fearCard(R));else if(hist)hist.insertAdjacentHTML("beforebegin",X3.fearCard(R));{const fd=main.querySelector(".x3fear details");if(fd)fd.addEventListener("toggle",()=>{SEC["Тест на Страх"]=fd.open;});}
     if(calc&&hist)hist.before(calc);}
-  if(STEP===1&&!main.querySelector(".x3prev")&&document.getElementById("rollPool")&&/Бросить 11/.test(document.getElementById("rollPool").textContent)){const c=document.getElementById("rollPool").closest(".card");if(c)c.insertAdjacentHTML("afterend",X3.statsPreview());}
+  if(STEP===1&&!main.querySelector(".x3prev")&&document.getElementById("rollPool")&&/Бросить кубы/.test(document.getElementById("rollPool").textContent)){const c=document.getElementById("rollPool").closest(".card");if(c)c.insertAdjacentHTML("afterend",X3.statsPreview());}
   if(STEP===0)main.querySelectorAll(".group").forEach(g=>{const h=g.querySelector("h4");if(h)g.style.setProperty("--gc",X3.groupColor(h.textContent.trim()));});
 };
 try{X3.after();}catch(e){}
@@ -18802,8 +18811,8 @@ if(typeof initCard==="function"){const ic1=initCard;initCard=function(){const h=
 if(typeof roomFocusInside==="function"){const rf2=roomFocusInside;roomFocusInside=function(){const a=document.activeElement;return rf2.apply(this,arguments)||!!(a&&a.closest&&a.closest(".gmhits")&&a.matches("select"));};}
 
 /* --- 2. инициатива в карточке боя --- */
-document.addEventListener("click",e=>{const b=e.target.closest("[data-rollini]");if(!b)return;setTimeout(()=>{try{const st=document.querySelector("#rollNow .stamp");const vd=document.querySelector("#rollNow .verdict");if(!st||!vd)return;const r=Number(st.dataset.d20||st.textContent);const m=vd.textContent.match(/Инициатива:\s*(-?\d+)/);if(!m)return;
-  CB().ini={r,n:Number(m[1]),t:Date.now()};save();render();}catch(_){}} ,0);});
+document.addEventListener("click",e=>{const b=e.target.closest("[data-rollini]");if(!b)return;setTimeout(()=>{try{const st=document.querySelector("#rollNow .stamp");const vd=document.querySelector("#rollNow .verdict");if(!st||!vd)return;const r=Number(st.dataset.d20||st.textContent);const m=vd.textContent.match(/Инициатива:\s*([-−]?\d+)/);if(!m)return;
+  CB().ini={r,n:Number(m[1].replace("−","-")),t:Date.now()};save();render();}catch(_){}} ,0);});
 (function(){const ce=X3.combatEnhance;X3.combatEnhance=function(R){ce.apply(this,arguments);try{const card=document.querySelector("#main .combat");if(!card||card.querySelector(".cbini"))return;const c=CB(),ini=2*R.tot.agi+(R.extra.ini||0);const x=c.ini;
   const html=x?`<span class="cbini" title="Бросок инициативы в этом бою">Инициатива <b>${x.n}</b> <span class="note">— у кого больше, тот ходит раньше (d20 = ${x.r}${x.r===1?", 8 действий":x.r===20?", 2 действия":""})</span></span>`:`<button class="btn small cbini" data-rollini="${ini}">Бросить инициативу (${ini})</button>`;
   const t=card.querySelector(".cbttl");if(t)t.insertAdjacentHTML("afterend",html);}catch(e){}};})();
@@ -21408,7 +21417,7 @@ X3.why41=function(i,R){const c=C,out=[];
   if(i===1){const s=c.stats,kept=keptPool(c),as=SKEYS.filter(k=>s.assign[k]!=null).length,fv=kept.filter(v=>Number(v)===5).length;
     if(s.pool.length>10&&s.drop==null)out.push(`Отбросить один из ${s.pool.length} кубиков`);
     if(as<10)out.push(as?`Распределить по характеристикам ещё ${10-as} из 10 значений`:"Распределить 10 значений по характеристикам");else if(!poolValid(c))out.push("Значения не совпадают с выпавшими кубиками — проверьте распределение");
-    if(c.settings.fives&&fv>2)out.push(`Перебросить пятёрки сверх двух (сейчас ${fv})`);
+    if(c.settings.fives&&!c.stats.fv5&&fv>2)out.push(`Перебросить пятёрки сверх двух (сейчас ${fv})`);
     if(s.hp==null)out.push("Бросить ОЗ");if(s.fate==null)out.push("Бросить Очки судьбы");return out;}
   out.push(...X3.needQ41(i,R));
   if(i===0&&!out.length){const pb=parseBase(c);if(pb.choose&&pb.keys.length<2)out.push("Выбрать базовые характеристики класса");}
@@ -22506,9 +22515,9 @@ window.addEventListener("click",e=>{if(pass)return;const b=e.target.closest&&e.t
 X3.pend82=function(){if(STEP<1||STEP>6)return null;let R,st;try{R=compute(C);st=stepStatus(C,R,STEP);}catch(e){return null;}if(st!=="pending")return null;
   const w=X3.why41?X3.why41(STEP,R):[];return w[0]||"выбор на шаге не сделан";};
 X3.next82=function(){if(STEP<1||STEP>6)return;const b=document.querySelector(`#main .navbtns [data-go="${STEP+1}"]`);if(!b)return;const p=X3.pend82();
-  b.classList.toggle("primary",!p);if(p){b.dataset.x82="1";b.setAttribute("aria-label",`Пропустить шаг: не закончен, осталось — ${p}`);
+  b.classList.toggle("primary",!p);if(p){b.dataset.x82="1";b.setAttribute("aria-label",`${b.textContent.trim()} — шаг не закончен`);
     /* два состояния словами: «Далее» — шаг готов, «Пропустить» — можно идти дальше, но шаг не закончен */
-    const tw=document.createTreeWalker(b,NodeFilter.SHOW_TEXT);let n;while((n=tw.nextNode()))if(/^\s*Далее/.test(n.nodeValue)){n.nodeValue=n.nodeValue.replace("Далее","Пропустить");break;}}
+}
   else{delete b.dataset.x82;b.removeAttribute("aria-label");}};
 window.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("#main .navbtns [data-x82]");if(!b)return;const p=X3.pend82();if(!p)return;
   const h=document.querySelector("#main h2"),nm=(h&&h.textContent.trim())||"этот";
@@ -22673,9 +22682,9 @@ X3.rq||(X3.rq=1,queueMicrotask(()=>{X3.rq=0;try{render();}catch(e){console.error
    На экране одна вкладка; вход в бой и «Новый ход» открывают «Ход», в остальное время помнится последняя. ===== */
 (function(){
 const E=s=>X3.esc(String(s==null?"":s));
-const TABS=[["hod","Ход"],["dmg","Состояние"],["tal","Таланты"],["log","Журнал"],["sheet","Лист"]];
+const TABS=[["hod","Ход"],["dmg","Состояние"],["tal","Таланты"],["log","Журнал"]];
 const LS="x86tab";
-X3.tab86=(()=>{try{return localStorage.getItem(LS)||"hod";}catch(e){return "hod";}})();
+X3.tab86=(()=>{try{const t=localStorage.getItem(LS);return t&&t!=="sheet"?t:"hod";}catch(e){return "hod";}})();
 X3.seen86="";
 const fight=()=>STEP===10&&(CB().round||0)>0;
 const setTab=t=>{X3.tab86=t;try{localStorage.setItem(LS,t);}catch(e){}};
@@ -22687,8 +22696,8 @@ const tagOf=el=>{if(el.classList.contains("mstrip")||el.classList.contains("x86t
   if(el.classList.contains("x83state"))return "dmg";
   if(el.classList.contains("x3tal"))return "tal";
   if(el.matches('.x40fold[data-x40="more"]'))return "tal";
-  if(el.classList.contains("misbar"))return fight()?"sheet":"hod";
-  if(el.matches('.x40fold[data-x40="sheet"]'))return "sheet";
+  if(el.classList.contains("misbar"))return fight()?"tal":"hod";
+  if(el.matches('.x40fold[data-x40="sheet"]'))return "none";
   return "hod";};
 
 X3.badge86=function(){const h=X3.hpNow39(),w=W(),bad=h.cur<h.max/2||(Number(w.crit)||0)>0||h.cur<=0;
@@ -23207,13 +23216,18 @@ render=function(){const out=r0.apply(this,arguments);const f=fight();if(was93&&!
 X3.rq||(X3.rq=1,queueMicrotask(()=>{X3.rq=0;try{render();}catch(e){console.error(e);}}));
 })();
 /* ux99: зелёная точка на «Миссии», пока миссия идёт — видно с любого экрана */
-(function(){const r0=render;render=function(){const out=r0.apply(this,arguments);try{const on=!!(C&&misOn());document.body.classList.toggle("mis99off",STEP===10&&!on);document.querySelectorAll('[data-go="10"]').forEach(b=>{if(b.closest("#main"))return;b.classList.toggle("mis99nav",on);if(on)b.setAttribute("aria-description","идёт миссия №"+misOn());else b.removeAttribute("aria-description");});}catch(e){console.error(e);}return out;};})();
+(function(){const r0=render;render=function(){const out=r0.apply(this,arguments);try{const on=!!(C&&misOn());document.body.classList.toggle("mis99off",STEP===10&&!on);{const n=document.querySelector("#main > .x101off"),tb=document.querySelector("#main > .x86tabs");if(n&&tb&&tb.nextElementSibling!==n)tb.after(n);}const u=document.getElementById("x100undo");if(u&&!u.hidden&&u._step!==STEP)u.hidden=true;document.body.classList.toggle("x101pre",STEP===10&&on&&!((CB().round||0)>0));document.querySelectorAll('[data-go="10"]').forEach(b=>{if(b.closest("#main"))return;b.classList.toggle("mis99nav",on);if(on)b.setAttribute("aria-description","идёт миссия №"+misOn());else b.removeAttribute("aria-description");});}catch(e){console.error(e);}return out;};})();
+
+/* ux101: у каждого окна — имя из его заголовка, чтобы TalkBack называл окно, а не «диалог» */
+X3.name101=d=>{if(!d||d.hasAttribute("aria-label")||d.hasAttribute("aria-labelledby"))return;const h=d.querySelector("h1,h2,h3,h4");if(!h)return;if(!h.id)h.id="dlgT"+Math.random().toString(36).slice(2,8);d.setAttribute("aria-labelledby",h.id);};
+document.querySelectorAll("dialog").forEach(X3.name101);
+{const sm=HTMLDialogElement.prototype.showModal;HTMLDialogElement.prototype.showModal=function(){try{X3.name101(this);}catch(_){}return sm.apply(this,arguments);};}
 
 /* ===== ux100: переброс за Очко судьбы — честная кнопка, тест Воли сразу, без окна из девяти действий ===== */
 X3.acts38=function(){const n=$("#rollNow"),s=X3.last38;if(!n||!s)return;const old=n.querySelector(".x38acts");if(old)old.remove();
   const test=!!n.querySelector(".verdict.ok,.verdict.bad");let left=0,hasFate=false,wil=0;try{const f=fateInfo();left=f.left;hasFate=C.stats&&C.stats.fate!=null;wil=f.R.tot.wil+woundPen(f.R);}catch(_){}
   const rr=test&&hasFate?(left>0?`<button type="button" class="btn small" data-x100ask="${wil}" title="Сначала нужно активировать Очко судьбы">Переброс за Очко судьбы<span class="x38left">${left}</span></button>`:`<span class="note">Переброс: Очков судьбы не осталось</span>`):"";
-  n.insertAdjacentHTML("beforeend",`<div class="x38acts"><button type="button" class="btn small" data-x38="undo">Отменить</button><button type="button" class="btn small" data-x100again="1" title="Тот же бросок ещё раз">Ещё раз</button>${rr}</div>`);};
+  n.insertAdjacentHTML("beforeend",`<div class="x38acts"><button type="button" class="btn small" data-x38="undo">Отменить</button>${test?"":`<button type="button" class="btn small" data-x100again="1" title="Тот же бросок ещё раз">Ещё раз</button>`}${rr}</div>`);};
 document.addEventListener("click",e=>{if(!e.target.closest||!e.target.closest("[data-x100again]"))return;const s=X3.last38;if(!s||s.id!==C.id){toast("Повторять нечего");return;}X3.reclick38(s);});
 /* первый бой: как устроен ход — один раз, закрывается «Понятно» */
 (function(){const r0=render;render=function(){const out=r0.apply(this,arguments);try{if(STEP===10&&(CB().round||0)>0&&!C.seenTurnHelp){const c=document.querySelector("#main .combat");if(c&&!c.querySelector(".x100help")){const a=CB().act;c.insertAdjacentHTML("afterbegin",`<div class="x100help okbox" role="note"><b>Как сыграть ход.</b> Сейчас у вас ${a} ${a===1?"действие":a>1&&a<5?"действия":"действий"}: их тратят атаки, перезарядка и другие кнопки — цена написана на кнопке. Уклонение и парирование — реакции на чужие атаки. Когда снова ваша очередь — «Новый ход». <button type="button" class="btn small" data-x100help="1">Понятно</button></div>`);}}}catch(e){console.error(e);}return out;};})();
@@ -23247,7 +23261,8 @@ document.addEventListener("click",e=>{if(!e.target.closest("[data-x100uf]"))retu
   document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("#sheetEdit,#sheetEditDone");if(!b)return;
     if(SHEETEDIT){snap=JSON.stringify(C);sid=C.id;return;}
     if(!snap||sid!==C.id){snap=null;return;}const was=snap;snap=null;if(was===JSON.stringify(C))return;
-    const el=bar();el.innerHTML=`<span>Лист изменён</span><button type="button" class="btn small" data-x100undo="1">Отменить правку</button>`;el.hidden=false;el._snap=was;el._id=C.id;clearTimeout(el._t);el._t=setTimeout(()=>{el.hidden=true;},9000);},true);
+    const el=bar();el.innerHTML=`<span>Лист изменён</span><button type="button" class="btn small" data-x100undo="1">Отменить правку</button><button type="button" class="btn small" data-x101hide="1">Скрыть</button>`;el.hidden=false;el._snap=was;el._id=C.id;el._step=STEP;clearTimeout(el._t);},true);
+  document.addEventListener("click",e=>{if(e.target.closest&&e.target.closest("[data-x101hide]"))bar().hidden=true;});
   document.addEventListener("click",e=>{if(!e.target.closest||!e.target.closest("[data-x100undo]"))return;const el=bar();if(!el._snap||el._id!==C.id){el.hidden=true;return;}
     const o=JSON.parse(el._snap);Object.keys(C).forEach(k=>delete C[k]);Object.assign(C,o);el._snap=null;el.hidden=true;try{pushLog("Правка листа отменена");}catch(_){}save();render();toast("Правка отменена — лист как был");});
   const r0=render;render=function(){const out=r0.apply(this,arguments);try{if(STEP===7){const t=document.querySelector('#main .stile [data-roll]'),g=t&&t.closest(".stile")&&t.closest(".stile").parentElement;if(g&&!g.previousElementSibling?.classList?.contains("x100tip"))g.insertAdjacentHTML("beforebegin",`<p class="note x100tip" style="margin:4px 0 8px">Нажмите на характеристику — бросок d20 против неё. Ошиблись — «Отменить» в панели броска.</p>`);}}catch(e){console.error(e);}return out;};

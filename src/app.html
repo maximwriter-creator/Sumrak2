@@ -2456,9 +2456,7 @@ body.x86:not(.x88) #main .x89jump{top:calc(max(var(--sat,0px),var(--x3hdrh,0px))
 .x91sub{display:grid;grid-template-columns:repeat(var(--x91n,3),minmax(0,1fr));gap:4px;margin:-4px 0 12px;padding:3px;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
 .x91sub .x86t{min-height:40px;font-size:14px;color:var(--ink);overflow:hidden;text-overflow:ellipsis}
 .x91sub .x86t[aria-selected="true"]{color:var(--accent-ink);background:var(--accent);border-color:var(--accent)}
-#sheet[data-x91="tal"] > details.sec[data-x91]:not([data-x91="tal"]),
-#sheet[data-x91="merit"] > details.sec[data-x91]:not([data-x91="merit"]),
-#sheet[data-x91="bless"] > details.sec[data-x91]:not([data-x91="bless"]){display:none!important}
+#sheet[data-x91] > details.sec[data-x91]:not(.x91on){display:none!important}
 #main[data-x91d="test"] > .card[data-x91d]:not([data-x91d="test"]),
 #main[data-x91d="inv"] > .card[data-x91d]:not([data-x91d="inv"]),
 #main[data-x91d="tech"] > .card[data-x91d]:not([data-x91d="tech"]){display:none!important}
@@ -2577,6 +2575,71 @@ body.x86:not(.x88) #main .x89jump{top:calc(max(var(--sat,0px),var(--x3hdrh,0px))
 #roomView .x91exit .btn.danger{font-weight:700}
 /* свёрнутый блок и карточка внутри с тем же заголовком — второй заголовок не нужен */
 #roomView details.x43fold > .x43in > h3:first-child{display:none}
+
+/* ===== ux92: миссия — кнопки ± у Устойчивости и Инициативы; трекеры в две колонки; «Получить» и опыт ===== */
+
+/* --- «Лист» в миссии: временные ± у производных — только когда включены, как у характеристик, и под значением, а не поверх --- */
+body.mis:not(.x3pm) .dwrap.haspm>.gmpm{display:none!important}
+#sheet .dgrid>.dwrap.haspm{display:flex;flex-direction:column;min-width:0}
+#sheet .dgrid>.dwrap.haspm>.dblk{flex:1 1 auto;width:100%}
+body.mis.x3pm #sheet .dwrap.haspm>.dblk{padding-bottom:52px!important}
+body.mis.x3pm #sheet details.sec[data-sec="Характеристики"] .dgrid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+body.mis.x3pm #sheet .dwrap.haspm>.gmpm{left:4px;right:4px;bottom:4px;gap:3px}
+body.mis.x3pm #sheet .dwrap.haspm>.gmpm .gmb{height:40px;font-size:22px}
+body.mis.x3pm #sheet .dwrap.haspm>.gmpm .gmv{min-width:26px;font-size:14px}
+/* у плиток характеристик (ux91 сделал их ниже) — то же место под ±, когда они включены */
+body.mis.x3pm #sheet .stile.haspm .stbtn{padding-bottom:50px!important}
+body.mis.x3pm #sheet .stile.haspm>.gmpm{left:4px;right:4px;bottom:4px;gap:3px}
+body.mis.x3pm #sheet .stile.haspm>.gmpm .gmb{height:40px;font-size:22px}
+
+/* --- опыт в «Талантах» --- */
+.x92xp{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:12px;margin:0 0 12px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
+.x92xpn{display:flex;align-items:center;gap:6px;font-family:var(--narrow)}
+.x92xpn b{font-size:30px;line-height:1;font-variant-numeric:tabular-nums;color:var(--accent)}
+.x92xpn span{font-size:11.5px;line-height:1.15;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.x92xpn.neg b{color:var(--warn)}
+.x92xpr{display:grid;gap:6px;min-width:0}
+.x92xpbar{display:flex;height:8px;border-radius:4px;overflow:hidden;background:color-mix(in srgb,var(--ink) 12%,transparent)}
+.x92xpbar i{display:block;height:100%}
+.x92xp i.t{background:var(--accent)}
+.x92xp i.s{background:color-mix(in srgb,var(--accent) 45%,var(--panel))}
+.x92xpl{display:flex;flex-wrap:wrap;gap:2px 12px;font-size:13px;color:var(--muted)}
+.x92xpl span{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.x92xpl b{color:var(--ink);font-variant-numeric:tabular-nums}
+.x92xpl i{width:8px;height:8px;border-radius:2px}
+
+/* --- «Получить»: строка − число + [Получить], тип над ней --- */
+.gainbox:has(.x92gain){border:1px solid var(--line)!important;border-radius:10px!important;background:var(--panel);padding:10px!important}
+.x92gain{display:grid!important;grid-template-columns:44px minmax(44px,1fr) 44px minmax(0,1.5fr);gap:6px!important;align-items:stretch}
+.x92gain>.note:first-child{display:none}
+.x92gain>select{order:-1;grid-column:1 / -1;width:100%;min-height:44px}
+.x92gain>#gainN{width:100%!important;min-width:0;min-height:44px;padding:4px 2px;text-align:center;font-family:var(--narrow);font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;-moz-appearance:textfield;box-sizing:border-box}
+.x92gain>#gainN::-webkit-outer-spin-button,.x92gain>#gainN::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.x92gain>.pm{min-height:44px;font-size:20px;padding:0}
+.x92gain>#gainGo{min-height:44px;margin:0;font-size:16px}
+.gainbox:has(.x92gain) .okbox{margin:8px 0 0}
+
+@media (max-width:560px){
+  /* --- трекеры: две колонки, подпись сверху, − число + снизу --- */
+  #sheet .trk{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important}
+  #sheet .trk>.trkl{display:flex!important;flex-direction:column;align-items:stretch!important;justify-content:space-between;gap:4px;padding:6px 6px 6px 8px!important;min-width:0;border-radius:8px}
+  #sheet .trk>.trkl>span:first-child{display:flex!important;flex-wrap:nowrap!important;justify-content:flex-start!important;text-align:left;align-items:center;gap:4px!important;min-height:30px;min-width:0}
+  #sheet .trk>.trkl>span:first-child>span{white-space:nowrap!important;overflow:hidden;text-overflow:ellipsis;font-size:13.5px!important;min-width:0}
+  #sheet .trk>.trkl>span:first-child>.btn{margin-left:auto!important;min-height:30px!important;padding:0 8px!important;font-size:13px;flex:none}
+  #sheet .trk>.trkl>.trkrow{grid-column:auto;width:auto!important;display:grid!important;grid-template-columns:40px minmax(0,1fr) 40px;gap:4px!important}
+  #sheet .trk>.trkl>.trkrow>button.pm:first-of-type{order:-1}
+  #sheet .trk .trkrow input,#sheet .trk .trkrow .fateval{width:100%!important;flex:none!important;min-width:0!important;min-height:40px;box-sizing:border-box}
+  #sheet .trk .trkrow .fateval{display:flex;align-items:center;justify-content:center}
+  #sheet .trk .trkrow>.pm{flex:none!important;width:auto;min-height:40px!important}
+  #sheet .trk .trkrow>input:only-child{grid-column:1 / -1}
+  /* карма — цветом силы; судьба — во всю ширину и первой: её трогают чаще всего */
+  #sheet .trk>[data-ik="t:light"] input{color:var(--light)}
+  #sheet .trk>[data-ik="t:dark"] input{color:var(--dark)}
+  #sheet .trk>[data-ik="t:fate"]{grid-column:1 / -1;order:-1}
+  #sheet .trk>[data-ik="t:fate"]>span:first-child>span{font-size:14px!important;overflow:visible}
+  #sheet .trk>[data-ik="t:fate"]>.trkrow{grid-template-columns:48px minmax(0,1fr) 48px;width:100%!important;justify-self:stretch}
+}
+@media (max-width:359px){#sheet .trk>.trkl>span:first-child svg{display:none}}
 </style>
 </head>
 <body>
@@ -18980,7 +19043,7 @@ try{X3.bottomNav();}catch(e){}
 X3.hdr={last:0,hidden:false};
 X3.hdrSync=function(){const h=document.querySelector("header.top");if(!h)return;document.documentElement.style.setProperty("--x3hdrh",(X3.isPhone()&&!X3.hdr.hidden?h.getBoundingClientRect().height:0)+"px");};
 addEventListener("scroll",()=>{if(!X3.isPhone()){if(X3.hdr.hidden){X3.hdr.hidden=false;document.body.classList.remove("x3hdrhide");X3.hdrSync();}return;}
-  const y=scrollY,d=y-X3.hdr.last;if(Math.abs(d)<6)return;X3.hdr.last=y;const hide=d>0&&y>120;
+  const y=scrollY,d=y-X3.hdr.last;if(X3.hdr.lock>Date.now()){X3.hdr.last=y;return;}if(Math.abs(d)<6)return;X3.hdr.last=y;const hide=d>0&&y>120;
   if(hide!==X3.hdr.hidden&&!document.body.classList.contains("x3typing")){X3.hdr.hidden=hide;document.body.classList.toggle("x3hdrhide",hide);X3.hdrSync();}},{passive:true});
 addEventListener("resize",()=>X3.hdrSync());
 
@@ -21795,15 +21858,17 @@ const r0=render;render=function(){const out=r0.apply(this,arguments);try{const t
    Записи без имени (пустое имя или «Без имени»: так vault_put подписывает безымянных) уходят в свёрнутую область внизу списка.
    Открыть, взять, скачать и удалить их можно так же, как остальных (индексы data-vbopen прежние). */
 (function(){
+X3.test66=r=>/(^|[^а-яёa-z])(тест|test)/i.test(String((r&&r.name)||""));
 X3.noName66=r=>{const n=String((r&&r.name)||"").trim().toLowerCase();return !n||n==="без имени";};
 const card=([r,i])=>`<button class="vbcard" data-vbopen="${i}"><span class="vbn">${esc(r.name||"Без имени")}</span><span class="note">${esc(vbCls(r)||"класс не выбран")}${r.rank_lvl?` · ранг ${r.rank_lvl}`:""}</span><span class="note vbd">обновлён ${agoTxt(r.updated_at)}</span></button>`;
 vbItems=function(){const q=VB.q.trim().toLowerCase();const L=(VB.list||[]).map((r,i)=>[r,i]).filter(([r])=>!q||(r.name||"").toLowerCase().includes(q)||vbCls(r).toLowerCase().includes(q));
   if(!L.length)return `<p class="note">${VB.list&&VB.list.length?"Никого не нашлось.":"В базе пока нет персонажей."}</p>`;
-  const A=L.filter(([r])=>!X3.noName66(r)),B=L.filter(([r])=>X3.noName66(r));
+  const B=L.filter(([r])=>X3.noName66(r)),T=L.filter(([r])=>!X3.noName66(r)&&X3.test66(r)),A=L.filter(([r])=>!X3.noName66(r)&&!X3.test66(r));
   let h=A.map(card).join("")||`<p class="note x66none">${q?"С именем никого не нашлось.":"Персонажей с именем пока нет."}</p>`;
+  if(T.length){const open=VB.x66topen||(q&&!A.length);h+=`<details class="x66nn x66test"${open?" open":""}><summary><span>Тестовые</span><span class="note">${T.length}</span></summary><p class="note">Персонажи, в имени которых есть «тест» или «test». Работать с ними можно так же, как с остальными.</p><div class="vbgrid">${T.map(card).join("")}</div></details>`;}
   if(B.length){const open=VB.x66open||(q&&!A.length);h+=`<details class="x66nn"${open?" open":""}><summary><span>Без имени</span><span class="note">${B.length}</span></summary><p class="note">Персонажи, которым не дали имя. Их можно открыть, взять на устройство, скачать или удалить, как остальных.</p><div class="vbgrid">${B.map(card).join("")}</div></details>`;}
   return h;};
-document.addEventListener("toggle",e=>{const d=e.target;if(d&&d.classList&&d.classList.contains("x66nn"))VB.x66open=d.open;},true);
+document.addEventListener("toggle",e=>{const d=e.target;if(d&&d.classList&&d.classList.contains("x66nn")){if(d.classList.contains("x66test"))VB.x66topen=d.open;else VB.x66open=d.open;}},true);
 })();
 
 /* ===== ux67: бой на узком экране — предупреждение «Неспособен действовать» не повторяется =====
@@ -22837,15 +22902,20 @@ else X3.watch91=sync;
 const subRow=(cls,label,key,items,cur)=>`<nav class="x91sub noprint ${cls}" role="tablist" aria-label="${E(label)}" style="--x91n:${items.length}">${items.map(([k,l])=>`<button type="button" role="tab" class="x86t" data-x91="${key}:${k}" aria-selected="${k===cur}">${E(l)}</button>`).join("")}</nav>`;
 const S={tal:ls("x91tal")||"tal",dice:ls("x91dice")||"test"};
 
-/* ---------- 2. «Лист» → «Таланты» ---------- */
-const TAL=[["tal","Таланты","Таланты"],["merit","Заслуги","Заслуги"],["bless","Благословения","Благословения сил"]];
-X3.tal91=function(){const sh=STEP===7&&document.getElementById("sheet");if(!sh)return;let row=sh.querySelector(":scope > .x91tal");
-  if(X3.tab87!=="tal"){delete sh.dataset.x91;if(row)row.remove();return;}
-  const have=TAL.filter(([,,n])=>sh.querySelector(`:scope > details.sec[data-sec="${n}"]`));if(!have.length)return;
-  if(!have.some(([k])=>k===S.tal))S.tal=have[0][0];
-  have.forEach(([k,,n])=>{const d=sh.querySelector(`:scope > details.sec[data-sec="${n}"]`);d.dataset.x91=k;if(k===S.tal)d.open=true;});
-  sh.dataset.x91=S.tal;const html=subRow("x91tal","Таланты, заслуги, благословения","tal",have,S.tal);
-  if(row)row.outerHTML=html;else{const first=sh.querySelector(':scope > details.sec[data-x87="tal"]');if(first)first.insertAdjacentHTML("beforebegin",html);}};
+/* ---------- 2. «Лист» → «Таланты» и «Досье»: разделы вкладки — по кнопке ---------- */
+const SUBS={tal:[["tal","Таланты","Таланты"],["merit","Заслуги","Заслуги"],["bless","Благословения","Благословения сил"]],
+  bio:[["gen","Общее","Общие сведения"],["det","Детали","Детали и особенности"],["games","Игры","Прошедшие игры"],["hist","История","История изменений"]]};
+const LBL={tal:"Таланты, заслуги, благословения",bio:"Общие сведения, детали, прошедшие игры, история"};
+S.bio=ls("x91bio")||"gen";
+X3.tal91=function(){const sh=STEP===7&&document.getElementById("sheet");if(!sh)return;const t=X3.tab87,L=SUBS[t];
+  sh.querySelectorAll(":scope > .x91sub").forEach(r=>{if(!r.classList.contains("x91"+t))r.remove();});
+  sh.querySelectorAll(":scope > details.sec.x91on").forEach(d=>d.classList.remove("x91on"));
+  if(!L){delete sh.dataset.x91;return;}
+  const have=L.filter(([,,n])=>sh.querySelector(`:scope > details.sec[data-sec="${n}"]`));if(have.length<2){delete sh.dataset.x91;const r=sh.querySelector(":scope > .x91sub");if(r)r.remove();return;}
+  if(!have.some(([k])=>k===S[t]))S[t]=have[0][0];
+  have.forEach(([k,,n])=>{const d=sh.querySelector(`:scope > details.sec[data-sec="${n}"]`);d.dataset.x91=k;if(k===S[t]){d.open=true;d.classList.add("x91on");}});
+  sh.dataset.x91=S[t];const html=subRow("x91"+t,LBL[t],t,have,S[t]);const row=sh.querySelector(":scope > .x91sub");
+  if(row)row.outerHTML=html;else{const first=sh.querySelector(`:scope > details.sec[data-x87="${t}"]`);if(first)first.insertAdjacentHTML("beforebegin",html);}};
 
 /* ---------- 3. «Кубы» → «Тест» ---------- */
 const DICE=[["test","Тест",/^Тест/],["inv","Взывание",/^Взывание/],["tech","Техника",/^Повреждение техники/]];
@@ -22860,7 +22930,7 @@ X3.dice91=function(){const m=document.getElementById("main");if(!m||STEP!==9){if
   if(row)row.outerHTML=html;else{const bar=m.querySelector(":scope > .x90dt");if(bar)bar.insertAdjacentHTML("afterend",html);}};
 
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-x91]");if(!b)return;const [k,v]=b.dataset.x91.split(":");S[k]=v;ls("x91"+k,v);
-  if(k==="tal")X3.tal91();else X3.dice91();
+  if(k==="dice")X3.dice91();else X3.tal91();
   const bar=b.closest(".x91sub"),next=bar&&bar.nextElementSibling;
   /* начало выбранного — под вкладками, если оно уехало выше */
   const tabs=document.querySelector("#main .x87tabs:not(.x91sub)");if(next&&tabs){const lim=tabs.getBoundingClientRect().bottom;if(bar.getBoundingClientRect().top<lim)scrollBy(0,bar.getBoundingClientRect().top-lim-4);}
@@ -22885,6 +22955,78 @@ X3.room91=function(){const v=document.getElementById("roomView");if(!v)return;co
 const rr=renderRoom;renderRoom=function(){const out=rr.apply(this,arguments);try{X3.room91();}catch(e){console.error(e);}return out;};
 const r0=render;render=function(){const out=r0.apply(this,arguments);
   for(const f of [X3.tal91,X3.dice91,X3.dmg91,X3.room91,X3.watch91,sync])try{f();}catch(e){console.error(e);}return out;};
+X3.rq||(X3.rq=1,queueMicrotask(()=>{X3.rq=0;try{render();}catch(e){console.error(e);}}));
+})();
+/* ===== ux92: вкладки без рывков, свайп между вкладками, «Получить» и опыт — компактно.
+   1) смена вкладки: шапка не выезжает, страница не укорачивается (браузер не прыгает вверх);
+   2) свайп влево/вправо — соседняя вкладка и в «Кубах», и в «Комнате» (в «Листе» и «Миссии» это уже делает ux88);
+   3) «Получить» карму/опыт: − число + и кнопка в одну строку;
+   4) опыт в «Талантах»: число «доступно» и полоса, на что потрачено ===== */
+(function(){
+const TABQ="[data-x86tab],[data-x87tab],[data-x90tab],[data-x91],[data-x46tab]";
+
+/* ---------- 1. смена вкладки без рывка ----------
+   Прилипшая строка вкладок остаётся на месте: новая вкладка — с начала или с места, где её оставили (ux88), но не выше начала.
+   Строка ещё не прилипла — страница не двигается. Шапка на это время не выезжает и не прячется. */
+const showHdr=()=>{if(X3.hdr.hidden&&scrollY<=4){X3.hdr.hidden=false;document.body.classList.remove("x3hdrhide");X3.hdrSync();}};
+/* прокрутка, при которой строка прилипает: её место в потоке минус top */
+const stickY=bar=>{const p=bar.style.position;bar.style.position="static";const y=bar.getBoundingClientRect().top+scrollY;bar.style.position=p;
+  return y-(parseFloat(getComputedStyle(bar).top)||0);};
+/* ux89 после смены вкладки ставит экран на начало содержимого всегда — даже когда строка вкладок ещё не прилипла; здесь это решает ux92 */
+const go=X3.go89;if(go)X3.go89=function(){if(X3.sw92>Date.now())return;return go.apply(this,arguments);};
+addEventListener("click",e=>{const b=e.target.closest&&e.target.closest(TABQ);if(!b)return;
+  X3.hdr.lock=Date.now()+600;setTimeout(showHdr,650);
+  const m=document.getElementById("main");if(!m)return;
+  m.style.minHeight=m.offsetHeight+"px"; /* пока рисуется новая вкладка, страница не короче прежней — браузер не сдёргивает прокрутку */
+  const bar=b.closest('[role="tablist"]'),cls=bar&&!bar.classList.contains("x91sub")&&getComputedStyle(bar).position==="sticky"?bar.classList[0]:null;
+  const before=scrollY,stuck=cls?before>=stickY(bar)-2:false;
+  if(cls)X3.sw92=Date.now()+150;
+  setTimeout(()=>{ /* после перерисовки и после ux88 (его таймер поставлен раньше) */
+    const nb=cls&&document.querySelector("."+cls);const kept=scrollY;m.style.minHeight="";
+    let to=before;if(nb){const y1=stickY(nb),max=document.documentElement.scrollHeight-innerHeight;to=stuck?Math.max(y1,Math.min(kept,max)):before;}else to=kept;
+    const need=to+innerHeight-document.documentElement.scrollHeight;if(need>0)m.style.minHeight=Math.ceil(m.offsetHeight+need)+"px";
+    if(Math.abs(scrollY-to)>1)scrollTo({top:to,behavior:"instant"});},0);},true);
+let step92=null;
+
+/* ---------- 2. свайп между вкладками ---------- */
+const bar92=()=>[...document.querySelectorAll('[role="tablist"]:not(.x91sub)')].find(n=>n.getClientRects().length&&n.querySelector('[aria-selected="true"]'));
+const noSwipe=el=>{for(let n=el;n&&n!==document.body;n=n.parentElement){if(n.matches&&n.matches("input,textarea,select,dialog,[contenteditable],.scroll,.ktrack,.itrack"))return true;
+  if(n.scrollWidth>n.clientWidth+2){const o=getComputedStyle(n).overflowX;if(o==="auto"||o==="scroll")return true;}}return false;};
+let T0=null;
+addEventListener("touchstart",e=>{T0=null;if(e.touches.length!==1||!X3.isPhone())return;const t=e.touches[0];
+  if(t.clientX<24||t.clientX>innerWidth-24)return; /* края — системный жест «назад» */
+  if(STEP===7||STEP===10)return; /* «Лист» и «Миссию» листает ux88 */
+  if(document.body.classList.contains("panel-open")||document.querySelector("dialog[open]")||noSwipe(e.target))return;
+  T0={x:t.clientX,y:t.clientY,t:Date.now()};},{passive:true});
+addEventListener("touchend",e=>{if(!T0)return;const t=e.changedTouches[0],dx=t.clientX-T0.x,dy=t.clientY-T0.y,dt=Date.now()-T0.t;T0=null;
+  if(dt>700||Math.abs(dx)<70||Math.abs(dx)<2.5*Math.abs(dy))return;
+  const sel=window.getSelection&&String(getSelection()).trim();if(sel)return;
+  const bar=bar92();if(!bar)return;const tabs=[...bar.querySelectorAll('[role="tab"]')].filter(x=>x.getClientRects().length);
+  const i=tabs.findIndex(x=>x.getAttribute("aria-selected")==="true"),n=tabs[i+(dx<0?1:-1)];if(i<0||!n)return;
+  n.click();},{passive:true});
+
+/* ---------- 3. «Получить»: − число + ---------- */
+X3.gain92=function(){const n=document.getElementById("gainN");if(!n||n.dataset.x92)return;n.dataset.x92="1";
+  n.setAttribute("aria-label","Сколько получить");n.setAttribute("inputmode","numeric");
+  n.insertAdjacentHTML("beforebegin",'<button type="button" class="pm x92gm" data-x92g="-1" aria-label="Меньше">−</button>');
+  n.insertAdjacentHTML("afterend",'<button type="button" class="pm x92gp" data-x92g="1" aria-label="Больше">+</button>');
+  const row=n.parentElement;if(row)row.classList.add("x92gain");};
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-x92g]");if(!b)return;const n=document.getElementById("gainN");if(!n)return;
+  const v=Math.max(0,(parseInt(n.value,10)||0)+Number(b.dataset.x92g));n.value=v;GAIN.n=String(v);});
+
+/* ---------- 4. опыт в «Талантах» ---------- */
+X3.xp92=function(){const sh=document.getElementById("sheet");if(!sh)return;
+  const p=[...sh.querySelectorAll('details.sec[data-sec="Таланты"] p.note')].find(x=>/потрачено на таланты/.test(x.textContent));if(!p)return;
+  const v=[...p.querySelectorAll("b")].map(b=>parseInt(b.textContent,10)||0);if(v.length<3)return;const [tal,st,av]=v,free=Math.max(0,av),sum=tal+st+free||1;
+  const pc=x=>(x/sum*100).toFixed(2)+"%";
+  p.outerHTML=`<div class="x92xp" role="group" aria-label="Опыт: доступно ${av}, потрачено на таланты ${tal}, на прокачку характеристик ${st}">
+<div class="x92xpn ${av<0?"neg":""}"><b>${av}</b><span>EXP<br>доступно</span></div>
+<div class="x92xpr"><div class="x92xpbar" aria-hidden="true"><i class="t" style="width:${pc(tal)}"></i><i class="s" style="width:${pc(st)}"></i></div>
+<div class="x92xpl" aria-hidden="true"><span><i class="t"></i>таланты <b>${tal}</b></span><span><i class="s"></i>характеристики <b>${st}</b></span></div></div></div>`;};
+
+const r0=render;render=function(){const out=r0.apply(this,arguments);
+  if(step92!==STEP){step92=STEP;const m=document.getElementById("main");if(m)m.style.minHeight="";}
+  for(const f of [X3.gain92,X3.xp92])try{f();}catch(e){console.error(e);}return out;};
 X3.rq||(X3.rq=1,queueMicrotask(()=>{X3.rq=0;try{render();}catch(e){console.error(e);}}));
 })();
 </script>

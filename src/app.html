@@ -2640,6 +2640,30 @@ body.mis.x3pm #sheet .stile.haspm>.gmpm .gmb{height:40px;font-size:22px}
   #sheet .trk>[data-ik="t:fate"]>.trkrow{grid-template-columns:48px minmax(0,1fr) 48px;width:100%!important;justify-self:stretch}
 }
 @media (max-width:359px){#sheet .trk>.trkl>span:first-child svg{display:none}}
+
+/* ===== ux93: урон у кнопки, один вид «выбрано», непрозрачные панели, расшифровка сокращений ===== */
+
+/* --- итог урона сразу под «Получить урон» --- */
+.x93res{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin:10px 0 0!important;padding:10px 12px!important;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--ink);font-size:15px;line-height:1.4}
+.x93res .x93abs{display:block;flex:1 1 100%;color:var(--ok);font-weight:700}
+.x93res .x93undo{margin-left:auto;min-height:40px}
+
+/* --- «выбрано» — подкраска и рамка; заливка акцентом остаётся только у главной кнопки --- */
+.x91sub .x86t[aria-selected="true"]{color:var(--ink);font-weight:700;background:color-mix(in srgb,var(--accent) 16%,var(--panel));border-color:var(--accent)}
+.x38seg .pill[aria-pressed="true"]{color:var(--ink);background:color-mix(in srgb,var(--accent) 16%,var(--panel));box-shadow:inset 0 0 0 1.5px var(--accent)}
+.navbtns .btn.x93dem{background:var(--panel);color:var(--ink);border-color:var(--line)}
+
+/* --- панели внизу непрозрачные: текст страницы под ними не просвечивает --- */
+#x3nav,#x3cbbar{background:var(--panel)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+
+/* --- сокращения у тестов на «Ходе» --- */
+.x93abbr{margin:6px 0 0;font-size:13.5px;color:var(--muted)}
+.x93abbr summary{cursor:pointer;min-height:32px;display:flex;align-items:center;color:var(--accent);width:max-content}
+.x93abbr p{display:flex;flex-wrap:wrap;gap:2px 12px;margin:4px 0 0}
+.x93abbr b{color:var(--ink);font-family:var(--narrow)}
+
+/* --- ручка перетаскивания блоков не нужна под пальцем: её легко задеть --- */
+@media (pointer:coarse){.draghandle{display:none!important}}
 </style>
 </head>
 <body>
@@ -16682,7 +16706,7 @@ document.addEventListener("click",e=>{
   if(d.skipall){const R=compute(C);C.skip=C.skip||{};[0,1,2,3,4,5,6].forEach(i=>{if(stepStatus(C,R,i)!=="done")C.skip[i]=true;});C.reopen=false;C.finished=true;STEP=7;render();scrollTo(0,0);toast("Незаконченные этапы пропущены");return;}
   if(d.manstat){return;}
   if(d.go!=null){const g=Number(d.go);if(g===7&&CREATE.includes(STEP)){C.reopen=false;if(isFinished(C))C.finished=true;}STEP=g;render();scrollTo(0,0);return;}
-  if(d.cls!=null){const i=Number(d.cls);const chg=C.cls.i!==i;if(chg){C.cls={i,ans:{}};applyClassKit(C);}render();if(chg)scrollSoft(document.getElementById("clsDetail"));return;}
+  if(d.cls!=null){const i=Number(d.cls);const chg=C.cls.i!==i;if(chg){C.cls={i,ans:{}};applyClassKit(C);}render();if(chg)scrollSoft(document.querySelector("#main .choicecard:not(.ok)")||document.getElementById("clsDetail"));return;}
   if(d.drop!=null){C.stats.drop=Number(d.drop);pruneAssign();render();return;}
   if(d.pick){const [sc,p,k,n]=d.pick.split("|");const o=scopeObj(sc);let a=(o.ans[p]||[]).slice();if(a.includes(k))a=a.filter(x=>x!==k);else{a.push(k);if(a.length>Number(n))a.shift();}o.ans[p]=a;if(a.length===Number(n))EDITG.delete(sc+"|"+p);render();return;}
   if(d.tempstart){const [sc,p,dur]=d.tempstart.split("|");const left=durRoll(dur);scopeObj(sc).ans[p]={left,total:left};render();toast(dur==="1"?"Эффект действует на следующую миссию":"Длительность: "+left+" миссий");return;}
@@ -17153,6 +17177,7 @@ renderSoundBtn();
 render();
 if(NATIVE&&window.Capacitor.Plugins.App){
   window.Capacitor.Plugins.App.addListener("backButton",()=>{
+    if(typeof X3!=="undefined"&&X3.close93&&X3.close93())return; /* ux93: верхний слой — меню, шторки, диалог */
     const dlg=document.querySelector("dialog[open]"); if(dlg){dlg.close();return;}
     if(!$("#rollPanel").hidden){$("#rollPanel").hidden=true;document.body.classList.remove("panel-open");return;}
     const i=CREATE.indexOf(STEP);
@@ -21177,7 +21202,7 @@ X3.hpRender39=function(){const d=X3.hpDlg39(),s=X3.hp39,h=X3.hpNow39(),E=X3.esc,
   <div class="x38seg x39seg" role="radiogroup" aria-label="Что делаем">${[["dmg","Урон"],["heal","Лечение"]].map(([k,l])=>`<button type="button" class="pill" role="radio" data-x39="mode|${k}" aria-checked="${s.mode===k}" aria-pressed="${s.mode===k}">${l}</button>`).join("")}</div>
   <div class="x39disp ${dmg?"dmg":"heal"}" aria-live="polite"><span class="x39num">${s.v||"0"}</span><span class="x39unit">${dmg?"урона":"ОЗ"}</span></div>
   <p class="x39prev note">${v?(dmg?`По ОЗ ≈ <b>${pv.d}</b>${pv.parts.length?` (${E(pv.parts.join(", "))})`:""} → останется <b>${after}</b>${h.cur-pv.d<0?`, урон сверх ОЗ — критическое ранение`:""}`:(h.crit&&h.cur<=0?`Критическое ранение ${h.crit} → <b>${Math.max(0,h.crit-Math.floor(v/2))||"снято"}</b> (на 1 за каждые 2 ОЗ лечения)`:`ОЗ ${h.cur} → <b>${after}</b>`)):(dmg?`Броня ${pv.A.armor}, прочность ${pv.dur}/${pv.A.total}, Устойчивость ${pv.res}.`:`Наберите, сколько ОЗ восстановить.`)}${dmg&&fld?`<br>Поле «${E(fld.name)}» (${fld.st.cur}) проверится первым.`:""}</p>
-  ${dmg?`<div class="x39opts">${T("ignA",s.ignA,"Без брони")}${T("ignT",s.ignT,"Без Стойкости")}<span class="x39ap" ${s.ignA?"hidden":""}><span class="note">ББ</span><button type="button" class="btn small" data-x39="ap|-1" aria-label="Бронебойность −1" ${s.ap?"":"disabled"}>−</button><b>${s.ap}</b><button type="button" class="btn small" data-x39="ap|1" aria-label="Бронебойность +1">+</button></span></div>`:""}
+  ${dmg?`<div class="x39opts">${T("ignA",s.ignA,"Без брони")}${T("ignT",s.ignT,"Без Стойкости")}<span class="x39ap" ${s.ignA?"hidden":""}><span class="note">Пробитие</span><button type="button" class="btn small" data-x39="ap|-1" aria-label="Бронебойность −1" ${s.ap?"":"disabled"}>−</button><b>${s.ap}</b><button type="button" class="btn small" data-x39="ap|1" aria-label="Бронебойность +1">+</button></span></div>`:""}
   ${dmg&&last&&last.v?`<button type="button" class="btn x39last" data-x39="last">Как в прошлый раз: ${last.v}${last.ignA?", без брони":""}${last.ignT?", без Стойкости":""}${last.ap?`, ББ ${last.ap}`:""}</button>`:""}
   <div class="x39keys">${keys}</div>
   <button type="button" class="btn primary x39go ${dmg?"dmg":""}" data-x39="go" ${v?"":"disabled"}>${v?(dmg?`Получить ${v} урона`:`Вылечить ${v} ОЗ`):(dmg?"Наберите урон":"Наберите лечение")}</button>`;};
@@ -21193,7 +21218,7 @@ X3.hpApply39=function(){const s=X3.hp39,v=Number(s.v)||0;if(!v)return;const h0=X
   const st=dmg?`<span class="stamp dmg hit" aria-label="Потеряно ОЗ: ${-diff}">${diff<0?"−"+(-diff):critCh?h1.crit:"0"}</span>`:`<span class="stamp heal hit" aria-label="${diff?`Восстановлено ОЗ: ${diff}`:critTxt}">${diff?"+"+diff:critCh?(h1.crit||"0"):"+0"}</span>`;
   const verdict=[(diff||!critCh)?`ОЗ ${h0.cur} → ${h1.cur}`:"",critCh?critTxt:""].filter(Boolean).join(", ");
   save();$("#x39hp").close();render();
-  $("#rollNow").innerHTML=`<div class="big">${dmg?`Получен урон ${v}${s.ignA?", без брони":""}${s.ignT?", без Стойкости":""}${s.ap?`, ББ ${s.ap}`:""}`:`Лечение ${v}`}</div><div class="inline" style="margin-top:4px">${st}<span class="verdict x39v ${dmg&&diff<0?"hurt":""}">${verdict}</span></div>${notes.length?`<p class="note x3note">${notes.map(E).join("<br>")}</p>`:""}${WMSG?`<p class="note x39why">${E(WMSG)}</p>`:""}`;
+  $("#rollNow").innerHTML=`<div class="big">${dmg?`Получен урон ${v}${s.ignA?", без брони":""}${s.ignT?", без Стойкости":""}${s.ap?`, пробитие ${s.ap}`:""}`:`Лечение ${v}`}</div><div class="inline" style="margin-top:4px">${st}<span class="verdict x39v ${dmg&&diff<0?"hurt":""}">${verdict}</span></div>${notes.length?`<p class="note x3note">${notes.map(E).join("<br>")}</p>`:""}${WMSG?`<p class="note x39why">${E(WMSG)}</p>`:""}`;
   showPanel();X3.fin38();const t=$("#rollNow .stamp.hit");if(t)setTimeout(()=>t.classList.remove("hit"),400);toast(verdict);};
 
 document.addEventListener("click",e=>{const k=e.target.closest("[data-x39k]");if(k){X3.hpKey39(k.dataset.x39k);return;}
@@ -21321,7 +21346,9 @@ X3.pendHTML41=function(L,head){return `<p class="x41ph">${head}</p><ul class="x4
 X3.pend41=function(R){
   if(STEP===7){const w=[...document.querySelectorAll("#main > .warnbox")].find(x=>/Не завершены шаги/.test(x.textContent));if(w&&!w.dataset.x41){const L=X3.pendList41(R);if(!L.length)return;
     const btns=[...w.querySelectorAll("button")];w.dataset.x41="1";w.className="x41pend noprint";w.setAttribute("role","region");w.setAttribute("aria-label","Создание не закончено");
-    w.innerHTML=X3.pendHTML41(L,L.length===1?"Создание не закончено: остался один шаг":`Создание не закончено: осталось шагов — ${L.length}`);
+    /* не начатые шаги тоже остались — счёт честный, в списке только начатые */
+    const U=STEPS.slice(0,7).filter((s,i)=>{try{return stepStatus(C,R,i)==="";}catch(e){return false;}}).length,N=L.length+U;
+    w.innerHTML=X3.pendHTML41(L,N===1?"Создание не закончено: остался один шаг":`Создание не закончено: осталось шагов — ${N}${U?` (не начато ${U})`:""}`);
     btns.filter(b=>b.dataset.go!=null).forEach(b=>{b.classList.remove("x3warnbtn","primary");b.classList.add("x41back");w.appendChild(b);});}}
   if(STEP===8){const w=document.querySelector("#main .x3final .warnbox");if(w&&!w.dataset.x41&&/Не закончены шаги/.test(w.textContent)){const L=X3.pendList41(R);if(!L.length)return;w.dataset.x41="1";w.className="x41pend";
     w.innerHTML=X3.pendHTML41(L,"Не закончены шаги");}}};
@@ -21430,7 +21457,7 @@ X3.squad43=function(card){if(card.dataset.x43)return;card.dataset.x43="1";
   const ps=ROOM.players||[];if(ps.length<2)return;[...X3.tg43].forEach(k=>{if(!ps.some(p=>rmKey(p)===k))X3.tg43.delete(k);});const M=X3.md43,n=X3.tg43.size;
   card.insertAdjacentHTML("beforeend",`<div class="x43md" role="group" aria-label="Урон нескольким игрокам"><h4 class="x3sub">Урон нескольким</h4>
     <div class="x43tg">${ps.map(p=>{const k=rmKey(p),on=X3.tg43.has(k);return `<button type="button" class="x43t" data-x43t="${X3.esc(k)}" aria-pressed="${on}">${X3.esc(p.name||"Без имени")}</button>`;}).join("")}<button type="button" class="x43t x43all" data-x43t="*" aria-pressed="${n===ps.length}">Все</button></div>
-    <div class="x43row"><label class="x43f"><span class="sqcl">Урон</span><input class="inp" type="number" min="0" inputmode="numeric" data-x43m="v" value="${X3.esc(M.v)}"></label><label class="x43f"><span class="sqcl">ББ</span><input class="inp" type="number" min="0" inputmode="numeric" data-x43m="ap" value="${X3.esc(M.ap)}"></label>
+    <div class="x43row"><label class="x43f"><span class="sqcl">Урон</span><input class="inp" type="number" min="0" inputmode="numeric" data-x43m="v" value="${X3.esc(M.v)}"></label><label class="x43f"><span class="sqcl">Пробитие</span><input class="inp" type="number" min="0" inputmode="numeric" data-x43m="ap" value="${X3.esc(M.ap)}"></label>
       <label class="note inline x43c"><input type="checkbox" data-x43m="ia" ${M.ia?"checked":""}> без брони</label><label class="note inline x43c"><input type="checkbox" data-x43m="it" ${M.it?"checked":""}> без Стойкости</label></div>
     <button type="button" class="btn primary x43go" data-x43go="1" ${n?"":"disabled"}>${n?`Отправить урон: ${n} ${n===1?"игроку":"игрокам"}`:"Выберите, кому урон"}</button>
     <p class="note" style="margin:6px 0 0">Каждый получит урон у себя: броня, Стойкость и поля посчитаются по его листу.</p></div>`);};
@@ -21646,7 +21673,7 @@ X3.gmRender51=function(){const d=X3.gmDlg51(),G=X3.gm51,E=X3.esc,v=Number(G.v)||
   d.innerHTML=`<div class="x39top"><h3 id="x51t">Урон: ${E(P.name)} <small>· ОЗ ${P.cur}/${P.max}${P.crit?` · крит ${P.crit}`:""}</small></h3><button type="button" class="btn" data-x51="close">Закрыть</button></div>
   <div class="x39disp dmg" aria-live="polite"><span class="x39num">${G.v||"0"}</span><span class="x39unit">урона</span></div>
   <p class="x39prev note">${v?`По ОЗ ≈ <b>${P.pv.d}</b>${P.pv.parts.length?` (${E(P.pv.parts.join(", "))})`:""} → останется <b>${after}</b>${fate?`, ${fate}`:""}`:`Броня ${P.pv.A.armor}, прочность ${P.pv.dur}/${P.pv.A.total}, Устойчивость ${P.pv.res}.`}${P.fld?`<br>Поле «${E(P.fld.name)}» (${P.fld.st.cur}) проверится у игрока первым.`:""}</p>
-  <div class="x39opts">${T("ignA",G.ignA,"Без брони")}${T("ignT",G.ignT,"Без Стойкости")}<span class="x39ap" ${G.ignA?"hidden":""}><span class="note">ББ</span><button type="button" class="btn small" data-x51="ap|-1" aria-label="Бронебойность −1" ${G.ap?"":"disabled"}>−</button><b>${G.ap}</b><button type="button" class="btn small" data-x51="ap|1" aria-label="Бронебойность +1">+</button></span></div>
+  <div class="x39opts">${T("ignA",G.ignA,"Без брони")}${T("ignT",G.ignT,"Без Стойкости")}<span class="x39ap" ${G.ignA?"hidden":""}><span class="note">Пробитие</span><button type="button" class="btn small" data-x51="ap|-1" aria-label="Бронебойность −1" ${G.ap?"":"disabled"}>−</button><b>${G.ap}</b><button type="button" class="btn small" data-x51="ap|1" aria-label="Бронебойность +1">+</button></span></div>
   ${L?`<button type="button" class="btn x39last" data-x51="last">Как в прошлый раз: ${L.v}${L.ignA?", без брони":""}${L.ignT?", без Стойкости":""}${L.ap?`, ББ ${L.ap}`:""}</button>`:""}
   <div class="x39keys">${keys}</div>
   <button type="button" class="btn primary x39go dmg" data-x51="go" ${v?"":"disabled"}>${v?`Отправить ${v} урона: ${E(P.name)}`:"Наберите урон"}</button>`;};
@@ -23027,6 +23054,82 @@ X3.xp92=function(){const sh=document.getElementById("sheet");if(!sh)return;
 const r0=render;render=function(){const out=r0.apply(this,arguments);
   if(step92!==STEP){step92=STEP;const m=document.getElementById("main");if(m)m.style.minHeight="";}
   for(const f of [X3.gain92,X3.xp92])try{f();}catch(e){console.error(e);}return out;};
+X3.rq||(X3.rq=1,queueMicrotask(()=>{X3.rq=0;try{render();}catch(e){console.error(e);}}));
+})();
+/* ===== ux93: по критике v97.
+   1) урон: отчёт сразу под кнопкой «Получить урон», с «Отменить»; «броня поглотила весь урон» словами;
+   2) термины: «Пробитие» вместо «ББ» в формах урона, расшифровка сокращений у тестов, кнопка подтверждения называет действие;
+   3) навигация: нижнее меню одно и то же и в бою (вкладки боя — наверху «Миссии»), один слой поверх экрана,
+      «назад» и Esc закрывают верхний слой, шторка броска закрывается при смене вкладки и в конце боя;
+   4) создание: после выбора класса — к обязательному выбору; «Пропустить этап» на готовом шаге не показываем;
+      одна главная кнопка на шаге; баннер «Создание не закончено» — только на «Характ.» ===== */
+(function(){
+const E=s=>X3.esc(String(s==null?"":s));
+const fight=()=>STEP===10&&(CB().round||0)>0;
+
+/* ---------- 1. урон: итог и отмена у кнопки ---------- */
+const UNDO_RX=/^(урон|лечение|Полностью)/i;
+X3.dmg93=function(){const take=document.getElementById("wTake");if(!take||!take.getClientRects().length)return;
+  const sec=take.closest("details.sec,.sheet,.card")||document.getElementById("main");
+  const box=[...sec.querySelectorAll(".x73res,.okbox")].find(n=>/^\s*(Урон|Лечение|Очко судьбы|Прочность)/.test(n.textContent));if(!box)return;
+  const row=take.closest(".inline")||take.parentElement;if(row&&row.nextElementSibling!==box)row.after(box);
+  box.classList.add("x93res");box.setAttribute("role","status");
+  if(!box.dataset.x93){box.dataset.x93="1";
+    /* «Устойчивость» в итоге — та же защита, что «Стойкость» в книге и в флажке */
+    const tw=document.createTreeWalker(box,NodeFilter.SHOW_TEXT);let t;while((t=tw.nextNode()))t.nodeValue=t.nodeValue.replace(/Устойчивость −/g,"Устойчивость (Стойкость) −");
+    if(/По ОЗ: 0\./.test(box.textContent))box.insertAdjacentHTML("afterbegin",'<b class="x93abs">Защита поглотила весь урон.</b> ');}
+  const j=X3.j52,can=j&&C&&j.id===C.id&&UNDO_RX.test(j.label||"");let u=box.querySelector("[data-x93undo]");
+  if(can&&!u)box.insertAdjacentHTML("beforeend",`<button type="button" class="btn small x93undo" data-x93undo="1">Отменить ${E(j.label)}</button>`);
+  else if(!can&&u)u.remove();};
+document.addEventListener("click",e=>{if(!e.target.closest||!e.target.closest("[data-x93undo]"))return;X3.doUndo();});
+
+/* ---------- 2. термины ---------- */
+X3.terms93=function(){const ap=document.getElementById("wAP");if(ap){const l=ap.closest("label");const t=l&&[...l.childNodes].find(n=>n.nodeType===3&&/ББ/.test(n.nodeValue));if(t)t.nodeValue=t.nodeValue.replace("ББ","Пробитие");}
+  /* расшифровка сокращений у строки тестов на «Ходе» */
+  document.querySelectorAll("#main .x88stats").forEach(s=>{if(s.querySelector(".x93abbr"))return;
+    const L=[...s.querySelectorAll(".x88s")].map(b=>{const k=(b.querySelector("span")||{}).textContent,a=(b.getAttribute("aria-label")||"").replace(/^Тест:\s*/,"").replace(/\s*\d+$/,"");return k&&a&&k!==a?`<span><b>${E(k)}</b> ${E(a.toLowerCase())}</span>`:"";}).filter(Boolean);
+    if(L.length)s.insertAdjacentHTML("beforeend",`<details class="x93abbr"><summary>Что значат сокращения</summary><p>${L.join("")}</p></details>`);});};
+/* кнопка «Подтвердить» называет действие */
+const NAME93=[[/^Закончить бой\?/,"Закончить бой"],[/^Удалить/,"Удалить"],[/^Перебросить/,"Перебросить"],[/^Сбросить/,"Сбросить"]];
+const ac0=askConfirm;askConfirm=function(text){const out=ac0.apply(this,arguments);const y=document.getElementById("confirmYes"),d=document.getElementById("confirmDlg");
+  const m=NAME93.find(([rx])=>rx.test(String(text||"")));if(y&&d&&m&&y.textContent.trim()==="Подтвердить"){y.textContent=m[1];const back=()=>{y.textContent="Подтвердить";d.removeEventListener("close",back);};d.addEventListener("close",back);}
+  X3.top93("confirm");return out;};
+
+/* ---------- 3. навигация ---------- */
+/* нижнее меню не подменяется в бою: вкладки боя остаются наверху «Миссии» (ux86), «Закончить бой» — в карточке боя */
+try{Object.defineProperty(X3,"plain88",{get:()=>true,set(){},configurable:true});}catch(e){X3.plain88=true;}
+const panel=()=>document.getElementById("rollPanel");
+X3.hidePanel93=function(){const p=panel();if(p&&!p.hidden){p.hidden=true;document.body.classList.remove("panel-open");return true;}return false;};
+/* один слой поверх экрана: открылся новый — прежние закрываются */
+X3.top93=function(keep){if(keep!=="nav"&&X3.navOpen){X3.navOpen=false;try{X3.bottomNav();}catch(e){}}
+  if(keep!=="chars"&&document.getElementById("x3chars")&&X3.charSheet)try{X3.charSheet(false);}catch(e){}
+  if(keep!=="panel"&&keep!=="confirm")X3.hidePanel93();};
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-x3more]");if(!b)return;setTimeout(()=>{if(X3.navOpen)X3.top93("nav");},0);});
+if(panel())new MutationObserver(()=>{const p=panel();if(p&&!p.hidden&&X3.navOpen){X3.navOpen=false;try{X3.bottomNav();}catch(e){}}}).observe(panel(),{attributes:true,attributeFilter:["hidden"]});
+/* смена вкладки — шторка броска закрывается (смену раздела уже закрывает ux85) */
+addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-x86tab],[data-x87tab],[data-x90tab],[data-x91],[data-x46tab]");if(b&&b.getAttribute("aria-selected")!=="true")X3.hidePanel93();},true);
+/* верхний слой: что закрывать на «назад» и Esc. true — закрыли */
+X3.close93=function(){const d=document.querySelector("dialog[open]");if(d){d.close();return true;}
+  if(X3.navOpen){X3.navOpen=false;try{X3.bottomNav();}catch(e){}return true;}
+  if(document.getElementById("x3chars")&&X3.charSheet){X3.charSheet(false);return true;}
+  const m=document.querySelector("details.more[open]");if(m){m.open=false;return true;}
+  return X3.hidePanel93();};
+document.addEventListener("keydown",e=>{if(e.key!=="Escape"||e.defaultPrevented)return;if(document.querySelector("dialog[open]"))return; /* диалог закрывает браузер */
+  if(X3.close93())e.preventDefault();});
+
+/* ---------- 4. создание ---------- */
+X3.create93=function(){if(STEP<0||STEP>8)return;const m=document.getElementById("main");if(!m)return;const nav=m.querySelector(".navbtns");
+  const done=!!(nav&&nav.querySelector(".x42st.ok"));
+  m.querySelectorAll(".skiprow").forEach(r=>{const s=r.querySelector("[data-skipstep]");if(s)s.hidden=done;r.hidden=done&&![...r.children].some(c=>!c.hidden);});
+  /* одна главная кнопка: пока на шаге есть своё главное действие (бросок, выбор), «Далее» — обычная */
+  if(nav){const other=[...m.querySelectorAll(".btn.primary")].some(b=>!nav.contains(b)&&b.getClientRects().length&&!b.matches(":disabled,[aria-disabled=true]"));
+    nav.querySelectorAll(".btn.primary,.btn.x93dem").forEach(b=>{b.classList.toggle("primary",!other);b.classList.toggle("x93dem",other);});}};
+/* «Создание не закончено» — только на первой вкладке «Листа» */
+X3.pend93=function(){if(STEP!==7)return;const w=document.querySelector("#main > .x41pend");if(w)w.hidden=!!(X3.tab87&&X3.tab87!=="char");};
+
+const r0=render;let was93=false;
+render=function(){const out=r0.apply(this,arguments);const f=fight();if(was93&&!f)X3.hidePanel93();was93=f;
+  for(const fn of [X3.dmg93,X3.terms93,X3.create93,X3.pend93])try{fn();}catch(e){console.error(e);}return out;};
 X3.rq||(X3.rq=1,queueMicrotask(()=>{X3.rq=0;try{render();}catch(e){console.error(e);}}));
 })();
 </script>
